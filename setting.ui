@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TabSetting</class>
+ <widget class="QWidget" name="TabSetting">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>664</width>
+    <height>539</height>
+   </rect>
+  </property>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

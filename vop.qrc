@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/HotLine.png</file>
+        <file>images/Logo.png</file>
+        <file>images/Promotion.png</file>
+        <file>images/Update.png</file>
+        <file>translations/vop_zh.qm</file>
+        <file>images/about.png</file>
+        <file>images/LENOVO.png</file>
+        <file>images/printer_184X171.ico</file>
+        <file>images/roundIDCopy.png</file>
+        <file>images/squareCopy.png</file>
+        <file>images/squareCopyAlt.png</file>
+        <file>images/squareCopyDisabled.png</file>
+    </qresource>
+</RCC>
