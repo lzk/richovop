@@ -12,7 +12,8 @@
 #include <QDesktopServices>
 #include<QUrl>
 
-#include<QPrinterInfo>
+#include <QBitmap>
+//#include<QPrinterInfo>
 
 //#include "sys_sys/sys_sys.h"
 MainWidget::MainWidget(QWidget *parent) :
@@ -60,12 +61,14 @@ void MainWidget::initializeUi()
 //    }
 //#endif
     ui->comboBox_deviceList->insertItems(0 ,printerNames);
+    ui->tabWidget->setBackgroundRole(QPalette::Button);
 
 //    tc->toolButton_idCardCopy->setIconSize(QPixmap(":/images/roundIDCopy.png").size());
 //    tc->toolButton_copy->setIconSize(QPixmap(":/images/squareCopyAlt.png").size());
-    tc->toolButton_idCardCopy->setIconSize(QSize(100,100));
-    tc->toolButton_copy->setIconSize(QSize(100,100));
+//    tc->toolButton_idCardCopy->setIconSize(QSize(100,100));
+//    tc->toolButton_copy->setIconSize(QSize(100,100));
 
+//    ta->label->setMask(QPixmap(QString::fromUtf8(":/images/about.png")).mask());
     ta->label->installEventFilter(this);
 //    ps = new QProcess(this);
 

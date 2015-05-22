@@ -6,9 +6,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>459</width>
+    <width>413</width>
     <height>133</height>
    </rect>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QComboBox{min-width:250px;max-width:250px}
+QWidget #tab_3,#tab_4,#tab_5{
+	background-color: rgb(239, 237, 234);
+}
+QTabWidget::tab-bar{alignment:center}
+#QTabWidget::pane{position:absolute;top:-0.5em}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -40,14 +48,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QComboBox" name="comboBox_deviceList">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
+        <widget class="QComboBox" name="comboBox_deviceList"/>
        </item>
        <item>
         <widget class="QPushButton" name="pushButton_refresh">

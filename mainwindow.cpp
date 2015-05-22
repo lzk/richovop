@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(mainWidget);
     ui->mainToolBar->hide();
     statusBar()->hide();
-    setFixedSize(800,650);
+    setFixedSize(880,630);
 }
 
 MainWindow::~MainWindow()

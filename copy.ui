@@ -6,15 +6,79 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>636</width>
-    <height>620</height>
+    <width>538</width>
+    <height>543</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#scaling,#scaningMode,#density,#copies{
+background-color: rgb(219, 219, 219);
+min-width:250px;
+max-width:250px;
+min-height:120px;
+max-height:120px;
+}
+QWidget#horizontalWidget{
+min-width:130px;
+max-width:130px;
+min-height:50px;
+max-height:50px;
+}
+
+
+QComboBox{
+min-width:180px;
+max-width:180px;
+}
+
+QLabel#label_density1,#label_density2,#label_density3{
+background-color:gray;
+}
+QLabel#label_density4,#label_density5{
+background-color:white;
+}
+
+QToolButton{
+border:none;
+width:100px;
+height:100px;
+}
+QToolButton#toolButton_idCardCopy{
+	image: url(:/images/roundIDCopy.png);
+}
+QToolButton::pressed#toolButton_idCardCopy{
+	image: none;
+}
+QToolButton#toolButton_copy{   
+	image: url(:/images/squareCopy.png);
+} 
+QToolButton#toolButton_copy::pressed{   
+	image: url(:/images/squareCopyAlt.png);
+}   
+QToolButton#toolButton_copy::disabled{   
+	image: url(:/images/squareCopyDisabled.png);
+}   </string>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
-   <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item alignment="Qt::AlignHCenter">
     <widget class="QWidget" name="widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -33,27 +97,24 @@
           <number>0</number>
          </property>
          <property name="horizontalSpacing">
-          <number>10</number>
+          <number>20</number>
          </property>
          <property name="verticalSpacing">
-          <number>5</number>
+          <number>10</number>
          </property>
          <item row="2" column="0">
-          <widget class="QWidget" name="verticalWidget_3" native="true">
+          <widget class="QWidget" name="density" native="true">
            <property name="minimumSize">
             <size>
-             <width>140</width>
+             <width>250</width>
              <height>120</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>16777215</width>
+             <width>250</width>
              <height>120</height>
             </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(219, 219, 219);</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
             <property name="spacing">
@@ -106,18 +167,6 @@
             </item>
             <item alignment="Qt::AlignHCenter">
              <widget class="QWidget" name="horizontalWidget" native="true">
-              <property name="minimumSize">
-               <size>
-                <width>130</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>130</width>
-                <height>50</height>
-               </size>
-              </property>
               <layout class="QHBoxLayout" name="horizontalLayout_2">
                <property name="spacing">
                 <number>0</number>
@@ -154,12 +203,6 @@
                    <height>10</height>
                   </size>
                  </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color: rgb(128, 128, 128);</string>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
                 </widget>
                </item>
                <item alignment="Qt::AlignBottom">
@@ -181,12 +224,6 @@
                    <width>20</width>
                    <height>20</height>
                   </size>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color: rgb(128, 128, 128);</string>
-                 </property>
-                 <property name="text">
-                  <string/>
                  </property>
                 </widget>
                </item>
@@ -210,12 +247,6 @@
                    <height>30</height>
                   </size>
                  </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color: rgb(128, 128, 128);</string>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
                 </widget>
                </item>
                <item alignment="Qt::AlignBottom">
@@ -238,12 +269,6 @@
                    <height>40</height>
                   </size>
                  </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color: rgb(255, 255, 255);</string>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
                 </widget>
                </item>
                <item alignment="Qt::AlignBottom">
@@ -265,12 +290,6 @@
                    <width>20</width>
                    <height>50</height>
                   </size>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color: rgb(255, 255, 255);</string>
-                 </property>
-                 <property name="text">
-                  <string/>
                  </property>
                 </widget>
                </item>
@@ -338,21 +357,18 @@
           </widget>
          </item>
          <item row="0" column="0">
-          <widget class="QWidget" name="verticalWidget_5" native="true">
+          <widget class="QWidget" name="scaling" native="true">
            <property name="minimumSize">
             <size>
-             <width>140</width>
+             <width>250</width>
              <height>120</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>16777215</width>
+             <width>250</width>
              <height>120</height>
             </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(219, 219, 219);</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
             <property name="spacing">
@@ -452,22 +468,7 @@
           </widget>
          </item>
          <item row="0" column="2">
-          <widget class="QWidget" name="verticalWidget_4" native="true">
-           <property name="minimumSize">
-            <size>
-             <width>140</width>
-             <height>120</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>120</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(219, 219, 219);</string>
-           </property>
+          <widget class="QWidget" name="scaningMode" native="true">
            <layout class="QVBoxLayout" name="verticalLayout_6">
             <property name="spacing">
              <number>5</number>
@@ -528,22 +529,7 @@
           </widget>
          </item>
          <item row="2" column="2">
-          <widget class="QWidget" name="verticalWidget_2" native="true">
-           <property name="minimumSize">
-            <size>
-             <width>140</width>
-             <height>120</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>120</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(219, 219, 219);</string>
-           </property>
+          <widget class="QWidget" name="copies" native="true">
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <property name="spacing">
              <number>5</number>
@@ -657,24 +643,6 @@
           </item>
           <item>
            <widget class="QComboBox" name="comboBox_documentType">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>150</width>
-              <height>16777215</height>
-             </size>
-            </property>
             <item>
              <property name="text">
               <string>Plain</string>
@@ -711,24 +679,6 @@
           </item>
           <item>
            <widget class="QComboBox" name="comboBox_documentSize">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>150</width>
-              <height>16777215</height>
-             </size>
-            </property>
             <item>
              <property name="text">
               <string>Letter (8.5 * 11&quot;)</string>
@@ -765,24 +715,6 @@
           </item>
           <item>
            <widget class="QComboBox" name="comboBox_outputSize">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>150</width>
-              <height>16777215</height>
-             </size>
-            </property>
             <item>
              <property name="text">
               <string>Letter (8.5 * 11&quot;)</string>
@@ -829,24 +761,6 @@
           </item>
           <item>
            <widget class="QComboBox" name="comboBox_nIn1Copy">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>150</width>
-              <height>16777215</height>
-             </size>
-            </property>
             <item>
              <property name="text">
               <string>1</string>
@@ -878,24 +792,6 @@
           </item>
           <item>
            <widget class="QComboBox" name="comboBox_dpi">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>150</width>
-              <height>16777215</height>
-             </size>
-            </property>
             <item>
              <property name="text">
               <string>300 * 300</string>
@@ -911,7 +807,7 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_10" stretch="0,0">
+         <layout class="QVBoxLayout" name="verticalLayout_10">
           <item alignment="Qt::AlignVCenter">
            <widget class="QWidget" name="widget1" native="true">
             <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -929,25 +825,7 @@
               </spacer>
              </item>
              <item alignment="Qt::AlignRight">
-              <widget class="QToolButton" name="toolButton_idCardCopy">
-               <property name="styleSheet">
-                <string notr="true">border:none;</string>
-               </property>
-               <property name="icon">
-                <iconset>
-                 <normalon>:/images/roundIDCopy.png</normalon>
-                </iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>50</width>
-                 <height>50</height>
-                </size>
-               </property>
-               <property name="checkable">
-                <bool>true</bool>
-               </property>
-              </widget>
+              <widget class="QToolButton" name="toolButton_idCardCopy"/>
              </item>
              <item>
               <spacer name="horizontalSpacer_2">
@@ -963,22 +841,7 @@
               </spacer>
              </item>
              <item alignment="Qt::AlignRight">
-              <widget class="QToolButton" name="toolButton_copy">
-               <property name="styleSheet">
-                <string notr="true">border:none;</string>
-               </property>
-               <property name="icon">
-                <iconset resource="vop.qrc">
-                 <normaloff>:/images/squareCopy.png</normaloff>
-                 <normalon>:/images/squareCopyAlt.png</normalon>:/images/squareCopy.png</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>50</width>
-                 <height>50</height>
-                </size>
-               </property>
-              </widget>
+              <widget class="QToolButton" name="toolButton_copy"/>
              </item>
             </layout>
            </widget>
@@ -1016,8 +879,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="vop.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
