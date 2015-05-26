@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>648</width>
-    <height>545</height>
+    <width>696</width>
+    <height>563</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,20 +18,47 @@
 background-color: rgb(219, 219, 219);
 min-width:250px;
 max-width:250px;
-min-height:110px;
-max-height:110px;
+min-height:120px;
+max-height:120px;
 }
 #label_scaling,#label_scaningMode,#label_density,#label_copies{
 font: 20px;
 padding-left:1px;
 max-height:1em;
 }
-#Scaling,#Copies{font:bold 40px}
+#Scaling,#Copies{font:40px}
 #Density{
-min-width:120px;
-max-width:120px;
-min-height:50px;
-max-height:50px;
+min-width:130px;
+max-width:130px;
+min-height:52px;
+max-height:52px;
+}
+#density1,#density2,#density3,
+#density4,#density5{
+min-width:20;
+max-width:20;
+min-height:10;
+max-height:10;
+background-color:gray;
+border:1px solid gray;
+}
+#density2{
+min-height:20;
+max-height:20;
+}
+#density3{
+min-height:30;
+max-height:30;
+}
+#density4{
+min-height:40;
+max-height:40;
+background-color:white;
+}
+#density5{
+min-height:50;
+max-height:50;
+background-color:white;
 }
 
 QComboBox{
@@ -39,64 +66,56 @@ min-width:180px;
 max-width:180px;
 }
 
-#density1,#density2,#density3,
-#density4,#density5{
-border:1px solid black
-}
-#density1,#density2,#density3{
-background-color:gray;
-}
-/*#density4,#density5{
-background-color:white;
-}*/
 
 QToolButton{
- border-radius: 40px;
-min-width:80px;
-max-width:80px;
-min-height:80px;
-max-height:80px;
-	background-color: darkgray; border: none;
-font:bold 15px;
+ border-radius: 50px;
+min-width:100px;
+max-width:100px;
+min-height:100px;
+max-height:100px;
+	background-color: #f0eeeb; border: none;
+font:15px;
 }
 
-QToolButton:hover{
-border: 2px solid red;
-}
-
-#IDCardCopy:checked{
-	background-color:green;
+#IDCardCopy:pressed{
+	background-color:gray;
 }
 
 #Copy{
-min-width:90px;
-max-width:90px;
+min-width:110px;
+max-width:110px;
  border-radius: 10px;
-font:bold 20px;
+font:20px;
 }
 
 #Copy:!enabled{
-	background-color:gray;
+	background-color:#9d9b98;
 }
 #Copy:enabled{
-	background-color:green;
+	background-color:#faaf40;
 }
 #Copy:pressed{
-	background-color:blue;
+	background-color:#71c2cd;
 }
 
 QPushButton{
-	max-width:50px;
-	font:20px;
-	max-height:20;
+	min-width:80;
+	max-width:80;
+min-height:2em;
+	max-height:2em;
 }
+
 #Default{
-max-width:100px;
-	font:15px;
-	max-height:1em;
+max-width:100;
+	min-width:100;
+	min-height:2em;
+	max-height:2em;
 }</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <spacer name="horizontalSpacer_4">
      <property name="orientation">
@@ -132,23 +151,11 @@ max-width:100px;
           <number>20</number>
          </property>
          <property name="verticalSpacing">
-          <number>5</number>
+          <number>10</number>
          </property>
-         <item row="2" column="0">
-          <widget class="QWidget" name="bg_density" native="true">
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>110</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>250</width>
-             <height>110</height>
-            </size>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item row="2" column="2">
+          <widget class="QWidget" name="bg_copies" native="true">
+           <layout class="QVBoxLayout" name="verticalLayout_4">
             <property name="spacing">
              <number>5</number>
             </property>
@@ -165,173 +172,23 @@ max-width:100px;
              <number>5</number>
             </property>
             <item>
-             <widget class="QLabel" name="label_density">
+             <widget class="QLabel" name="label_copies">
               <property name="text">
-               <string>Density</string>
+               <string>Copies</string>
               </property>
              </widget>
-            </item>
-            <item>
-             <spacer name="verticalSpacer">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
             </item>
             <item alignment="Qt::AlignHCenter">
-             <widget class="QWidget" name="Density" native="true">
-              <layout class="QHBoxLayout" name="horizontalLayout_2">
-               <property name="spacing">
-                <number>5</number>
-               </property>
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <item alignment="Qt::AlignBottom">
-                <widget class="QLabel" name="density1">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>20</width>
-                   <height>10</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>10</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item alignment="Qt::AlignBottom">
-                <widget class="QLabel" name="density2">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>20</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item alignment="Qt::AlignBottom">
-                <widget class="QLabel" name="density3">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>20</width>
-                   <height>30</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>30</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item alignment="Qt::AlignBottom">
-                <widget class="QLabel" name="density4">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item alignment="Qt::AlignBottom">
-                <widget class="QLabel" name="density5">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>20</width>
-                   <height>50</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>50</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+             <widget class="QLabel" name="Copies">
+              <property name="text">
+               <string>1</string>
+              </property>
              </widget>
             </item>
             <item>
-             <spacer name="verticalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
               <item>
-               <spacer name="horizontalSpacer_7">
+               <spacer name="horizontalSpacer_11">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -344,21 +201,21 @@ max-width:100px;
                </spacer>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_density_minus">
+               <widget class="QPushButton" name="pushButton_copies_minus">
                 <property name="text">
                  <string>-</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_density_plus">
+               <widget class="QPushButton" name="pushButton_copies_plus">
                 <property name="text">
                  <string>+</string>
                 </property>
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer_8">
+               <spacer name="horizontalSpacer_12">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -380,13 +237,13 @@ max-width:100px;
            <property name="minimumSize">
             <size>
              <width>250</width>
-             <height>110</height>
+             <height>120</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>250</width>
-             <height>110</height>
+             <height>120</height>
             </size>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -466,6 +323,247 @@ max-width:100px;
            </layout>
           </widget>
          </item>
+         <item row="2" column="0">
+          <widget class="QWidget" name="bg_density" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>250</width>
+             <height>120</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>250</width>
+             <height>120</height>
+            </size>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <property name="spacing">
+             <number>5</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>5</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_density">
+              <property name="text">
+               <string>Density</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item alignment="Qt::AlignHCenter">
+             <widget class="QWidget" name="Density" native="true">
+              <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <property name="spacing">
+                <number>5</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item alignment="Qt::AlignBottom">
+                <widget class="QLabel" name="density1">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>22</width>
+                   <height>12</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>22</width>
+                   <height>12</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignBottom">
+                <widget class="QLabel" name="density2">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>22</width>
+                   <height>22</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>22</width>
+                   <height>22</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignBottom">
+                <widget class="QLabel" name="density3">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>22</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>22</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignBottom">
+                <widget class="QLabel" name="density4">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>22</width>
+                   <height>42</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>22</width>
+                   <height>42</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignBottom">
+                <widget class="QLabel" name="density5">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>22</width>
+                   <height>52</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>22</width>
+                   <height>52</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <spacer name="horizontalSpacer_7">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_density_minus">
+                <property name="text">
+                 <string>-</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_density_plus">
+                <property name="text">
+                 <string>+</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_8">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
          <item row="0" column="2">
           <widget class="QWidget" name="bg_scaningMode" native="true">
            <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -511,6 +609,9 @@ max-width:100px;
                  <property name="text">
                   <string>Photo</string>
                  </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -522,85 +623,6 @@ max-width:100px;
                </item>
               </layout>
              </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <widget class="QWidget" name="bg_copies" native="true">
-           <layout class="QVBoxLayout" name="verticalLayout_4">
-            <property name="spacing">
-             <number>5</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>5</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="label_copies">
-              <property name="text">
-               <string>Copies</string>
-              </property>
-             </widget>
-            </item>
-            <item alignment="Qt::AlignHCenter">
-             <widget class="QLabel" name="Copies">
-              <property name="text">
-               <string>1</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_5">
-              <item>
-               <spacer name="horizontalSpacer_11">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_copies_minus">
-                <property name="text">
-                 <string>-</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_copies_plus">
-                <property name="text">
-                 <string>+</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_12">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
             </item>
            </layout>
           </widget>
@@ -822,9 +844,6 @@ max-width:100px;
               <property name="text">
                <string>ID Card
 Copy</string>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
               </property>
              </widget>
             </item>

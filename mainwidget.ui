@@ -6,12 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>413</width>
-    <height>133</height>
+    <width>928</width>
+    <height>177</height>
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget{font:12px}
+   <string notr="true">QWidget{font:13px;}
+
+#logo{
+min-height:28;
+max-height:28;
+
+}
+#refresh{min-width:100;
+max-width:100;}
 QComboBox{min-width:250px;max-width:250px}
 QWidget #tab_3,#tab_4,#tab_5{
 //	background-color: rgb(239, 237, 234);
@@ -21,6 +29,18 @@ QTabWidget::tab-bar{alignment:center}
 #QTabWidget::pane{position:absolute;top:-0.5em}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="leftMargin">
+    <number>17</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>17</number>
+   </property>
+   <property name="bottomMargin">
+    <number>17</number>
+   </property>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
@@ -39,9 +59,12 @@ QTabWidget::tab-bar{alignment:center}
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="logo">
          <property name="pixmap">
-          <pixmap resource="vop.qrc">:/images/Logo.png</pixmap>
+          <pixmap resource="vop.qrc">:/images/LENOVO.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -53,7 +76,7 @@ QTabWidget::tab-bar{alignment:center}
         <widget class="QComboBox" name="comboBox_deviceList"/>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_refresh">
+        <widget class="QPushButton" name="refresh">
          <property name="text">
           <string>Refresh</string>
          </property>
