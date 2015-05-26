@@ -11,9 +11,11 @@
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true">QComboBox{min-width:250px;max-width:250px}
+   <string notr="true">QWidget{font:12px}
+QComboBox{min-width:250px;max-width:250px}
 QWidget #tab_3,#tab_4,#tab_5{
-	background-color: rgb(239, 237, 234);
+//	background-color: rgb(239, 237, 234);
+	//background-color: rgb(67, 96, 137);
 }
 QTabWidget::tab-bar{alignment:center}
 #QTabWidget::pane{position:absolute;top:-0.5em}</string>
@@ -75,7 +77,7 @@ QTabWidget::tab-bar{alignment:center}
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab_3">
         <attribute name="title">

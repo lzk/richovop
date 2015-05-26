@@ -3,6 +3,7 @@
 #include "ui_copy.h"
 #include "ui_setting.h"
 #include "ui_about.h"
+#include "newwidget.h"
 
 #include <QMouseEvent>
 //#include <QProcess>
@@ -20,6 +21,7 @@ MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainWidget),
     tc(new Ui::TabCopy),
+//    tc(new NewWidget),
     ts(new Ui::TabSetting),
     ta(new Ui::TabAbout)
 {

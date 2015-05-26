@@ -6,79 +6,111 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>538</width>
-    <height>543</height>
+    <width>648</width>
+    <height>545</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget#scaling,#scaningMode,#density,#copies{
+   <string notr="true">#bg_scaling,#bg_scaningMode,#bg_density,#bg_copies{
 background-color: rgb(219, 219, 219);
 min-width:250px;
 max-width:250px;
-min-height:120px;
-max-height:120px;
+min-height:110px;
+max-height:110px;
 }
-QWidget#horizontalWidget{
-min-width:130px;
-max-width:130px;
+#label_scaling,#label_scaningMode,#label_density,#label_copies{
+font: 20px;
+padding-left:1px;
+max-height:1em;
+}
+#Scaling,#Copies{font:bold 40px}
+#Density{
+min-width:120px;
+max-width:120px;
 min-height:50px;
 max-height:50px;
 }
-
 
 QComboBox{
 min-width:180px;
 max-width:180px;
 }
 
-QLabel#label_density1,#label_density2,#label_density3{
+#density1,#density2,#density3,
+#density4,#density5{
+border:1px solid black
+}
+#density1,#density2,#density3{
 background-color:gray;
 }
-QLabel#label_density4,#label_density5{
+/*#density4,#density5{
 background-color:white;
-}
+}*/
 
 QToolButton{
-border:none;
-width:100px;
-height:100px;
+ border-radius: 40px;
+min-width:80px;
+max-width:80px;
+min-height:80px;
+max-height:80px;
+	background-color: darkgray; border: none;
+font:bold 15px;
 }
-QToolButton#toolButton_idCardCopy{
-	image: url(:/images/roundIDCopy.png);
+
+QToolButton:hover{
+border: 2px solid red;
 }
-QToolButton::pressed#toolButton_idCardCopy{
-	image: none;
+
+#IDCardCopy:checked{
+	background-color:green;
 }
-QToolButton#toolButton_copy{   
-	image: url(:/images/squareCopy.png);
-} 
-QToolButton#toolButton_copy::pressed{   
-	image: url(:/images/squareCopyAlt.png);
-}   
-QToolButton#toolButton_copy::disabled{   
-	image: url(:/images/squareCopyDisabled.png);
-}   </string>
+
+#Copy{
+min-width:90px;
+max-width:90px;
+ border-radius: 10px;
+font:bold 20px;
+}
+
+#Copy:!enabled{
+	background-color:gray;
+}
+#Copy:enabled{
+	background-color:green;
+}
+#Copy:pressed{
+	background-color:blue;
+}
+
+QPushButton{
+	max-width:50px;
+	font:20px;
+	max-height:20;
+}
+#Default{
+max-width:100px;
+	font:15px;
+	max-height:1em;
+}</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
-   <property name="spacing">
-    <number>0</number>
-   </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
-   <item alignment="Qt::AlignHCenter">
+   <item>
+    <spacer name="horizontalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
     <widget class="QWidget" name="widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -100,20 +132,20 @@ QToolButton#toolButton_copy::disabled{
           <number>20</number>
          </property>
          <property name="verticalSpacing">
-          <number>10</number>
+          <number>5</number>
          </property>
          <item row="2" column="0">
-          <widget class="QWidget" name="density" native="true">
+          <widget class="QWidget" name="bg_density" native="true">
            <property name="minimumSize">
             <size>
              <width>250</width>
-             <height>120</height>
+             <height>110</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>250</width>
-             <height>120</height>
+             <height>110</height>
             </size>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -133,20 +165,7 @@ QToolButton#toolButton_copy::disabled{
              <number>5</number>
             </property>
             <item>
-             <widget class="QLabel" name="label_5">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
+             <widget class="QLabel" name="label_density">
               <property name="text">
                <string>Density</string>
               </property>
@@ -166,10 +185,10 @@ QToolButton#toolButton_copy::disabled{
              </spacer>
             </item>
             <item alignment="Qt::AlignHCenter">
-             <widget class="QWidget" name="horizontalWidget" native="true">
+             <widget class="QWidget" name="Density" native="true">
               <layout class="QHBoxLayout" name="horizontalLayout_2">
                <property name="spacing">
-                <number>0</number>
+                <number>5</number>
                </property>
                <property name="leftMargin">
                 <number>0</number>
@@ -184,7 +203,7 @@ QToolButton#toolButton_copy::disabled{
                 <number>0</number>
                </property>
                <item alignment="Qt::AlignBottom">
-                <widget class="QLabel" name="label_density1">
+                <widget class="QLabel" name="density1">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -206,7 +225,7 @@ QToolButton#toolButton_copy::disabled{
                 </widget>
                </item>
                <item alignment="Qt::AlignBottom">
-                <widget class="QLabel" name="label_density2">
+                <widget class="QLabel" name="density2">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -228,7 +247,7 @@ QToolButton#toolButton_copy::disabled{
                 </widget>
                </item>
                <item alignment="Qt::AlignBottom">
-                <widget class="QLabel" name="label_density3">
+                <widget class="QLabel" name="density3">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -250,7 +269,7 @@ QToolButton#toolButton_copy::disabled{
                 </widget>
                </item>
                <item alignment="Qt::AlignBottom">
-                <widget class="QLabel" name="label_density4">
+                <widget class="QLabel" name="density4">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -272,7 +291,7 @@ QToolButton#toolButton_copy::disabled{
                 </widget>
                </item>
                <item alignment="Qt::AlignBottom">
-                <widget class="QLabel" name="label_density5">
+                <widget class="QLabel" name="density5">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -357,17 +376,17 @@ QToolButton#toolButton_copy::disabled{
           </widget>
          </item>
          <item row="0" column="0">
-          <widget class="QWidget" name="scaling" native="true">
+          <widget class="QWidget" name="bg_scaling" native="true">
            <property name="minimumSize">
             <size>
              <width>250</width>
-             <height>120</height>
+             <height>110</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>250</width>
-             <height>120</height>
+             <height>110</height>
             </size>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -387,34 +406,14 @@ QToolButton#toolButton_copy::disabled{
              <number>5</number>
             </property>
             <item>
-             <widget class="QLabel" name="label_2">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
+             <widget class="QLabel" name="label_scaling">
               <property name="text">
                <string>Scaling</string>
               </property>
              </widget>
             </item>
             <item alignment="Qt::AlignHCenter">
-             <widget class="QLabel" name="label_scaling">
-              <property name="font">
-               <font>
-                <pointsize>30</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
+             <widget class="QLabel" name="Scaling">
               <property name="text">
                <string>100%</string>
               </property>
@@ -468,7 +467,7 @@ QToolButton#toolButton_copy::disabled{
           </widget>
          </item>
          <item row="0" column="2">
-          <widget class="QWidget" name="scaningMode" native="true">
+          <widget class="QWidget" name="bg_scaningMode" native="true">
            <layout class="QVBoxLayout" name="verticalLayout_6">
             <property name="spacing">
              <number>5</number>
@@ -486,28 +485,27 @@ QToolButton#toolButton_copy::disabled{
              <number>5</number>
             </property>
             <item>
-             <widget class="QLabel" name="label_4">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
+             <widget class="QLabel" name="label_scaningMode">
               <property name="text">
                <string>Scaning Mode</string>
               </property>
              </widget>
             </item>
             <item alignment="Qt::AlignHCenter">
-             <widget class="QWidget" name="widget3" native="true">
+             <widget class="QWidget" name="ScaningMode" native="true">
               <layout class="QVBoxLayout" name="verticalLayout">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
                <item>
                 <widget class="QRadioButton" name="radioButton_photo">
                  <property name="text">
@@ -529,7 +527,7 @@ QToolButton#toolButton_copy::disabled{
           </widget>
          </item>
          <item row="2" column="2">
-          <widget class="QWidget" name="copies" native="true">
+          <widget class="QWidget" name="bg_copies" native="true">
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <property name="spacing">
              <number>5</number>
@@ -547,34 +545,14 @@ QToolButton#toolButton_copy::disabled{
              <number>5</number>
             </property>
             <item>
-             <widget class="QLabel" name="label_7">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
+             <widget class="QLabel" name="label_copies">
               <property name="text">
                <string>Copies</string>
               </property>
              </widget>
             </item>
             <item alignment="Qt::AlignHCenter">
-             <widget class="QLabel" name="label_copies">
-              <property name="font">
-               <font>
-                <pointsize>30</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
+             <widget class="QLabel" name="Copies">
               <property name="text">
                <string>1</string>
               </property>
@@ -631,7 +609,7 @@ QToolButton#toolButton_copy::disabled{
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1">
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
@@ -808,43 +786,69 @@ QToolButton#toolButton_copy::disabled{
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_10">
-          <item alignment="Qt::AlignVCenter">
-           <widget class="QWidget" name="widget1" native="true">
-            <layout class="QHBoxLayout" name="horizontalLayout_8">
-             <item>
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item alignment="Qt::AlignRight">
-              <widget class="QToolButton" name="toolButton_idCardCopy"/>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item alignment="Qt::AlignRight">
-              <widget class="QToolButton" name="toolButton_copy"/>
-             </item>
-            </layout>
-           </widget>
+          <item>
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <property name="spacing">
+             <number>50</number>
+            </property>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QToolButton" name="IDCardCopy">
+              <property name="text">
+               <string>ID Card
+Copy</string>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="Copy">
+              <property name="text">
+               <string>Copy</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -862,7 +866,7 @@ QToolButton#toolButton_copy::disabled{
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_default">
+             <widget class="QPushButton" name="Default">
               <property name="text">
                <string>Default</string>
               </property>
@@ -876,6 +880,19 @@ QToolButton#toolButton_copy::disabled{
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <spacer name="horizontalSpacer_5">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

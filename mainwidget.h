@@ -9,6 +9,7 @@ class TabCopy;
 class TabSetting;
 class TabAbout;
 }
+class NewWidget;
 
 //class QProcess;
 
@@ -23,6 +24,7 @@ public:
 private:
     Ui::MainWidget *ui;
     Ui::TabCopy *tc;
+//    NewWidget* tc;
     Ui::TabSetting *ts;
     Ui::TabAbout *ta;
 
