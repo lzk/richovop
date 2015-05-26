@@ -22,11 +22,11 @@ max-height:28;
 max-width:100;}
 QComboBox{min-width:250px;max-width:250px}
 QWidget #tab_3,#tab_4,#tab_5{
-//	background-color: rgb(239, 237, 234);
-	//background-color: rgb(67, 96, 137);
+/*	background-color: rgb(239, 237, 234);
+	background-color: rgb(67, 96, 137);*/
 }
 QTabWidget::tab-bar{alignment:center}
-#QTabWidget::pane{position:absolute;top:-0.5em}</string>
+QTabWidget::pane{position:absolute;top:-0.5em}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="leftMargin">
