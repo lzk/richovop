@@ -16,22 +16,20 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     mainwidget.cpp \
     app/vop_protocol.cpp \
-    app/vop_device.cpp \
-    app/device.cpp \
-    newwidget.cpp
+    app/devicemanager.cpp \
+    app/vop_device.cpp
 
 HEADERS  += mainwindow.h \
     mainwidget.h \
+    app/devicemanager.h \
     app/vop_protocol.h \
-    app/device.h \
-    newwidget.h
+    app/vop_device.h
 
 FORMS    += mainwindow.ui \
     setting.ui \
     mainwidget.ui \
     copy.ui \
-    about.ui \
-    newwidget.ui
+    about.ui
 
 RESOURCES += \
     vop.qrc

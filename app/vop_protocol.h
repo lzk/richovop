@@ -19,6 +19,8 @@ typedef struct _copycmdset
         UINT8 mediaType       ; // 7  -   0: plain paper 1: Recycled paper 2: Thick paper 3: Thin paper 4: Label
         UINT16 scale          ; // 8  -   25~400, disabled for 2/4/9up
 } copycmdset;
+
+void vop_setDeviceName(const char* _device_name);
 int vop_copy(copycmdset* pcopycmd);
 
 #endif // VOP_PROTOCOL

@@ -1,5 +1,6 @@
 #include <string.h>
 #include "vop_protocol.h"
+#include "devicemanager.h"
 
 #pragma pack(1)
 typedef struct _COMM_HEADER
@@ -43,7 +44,7 @@ typedef enum _CMD_ID
 #define     MAGIC_NUM           0x1A2B3C4D
 static const unsigned char INIT_VALUE = 0xfe;
 
-extern int device_cmd(char* buffer ,int len);
+static char device_name[256];
 static int vop_cmd(CMD_ID cmd ,int sub_cmd, void* data ,int data_size)
 {
     int result = 0;
@@ -70,8 +71,14 @@ static int vop_cmd(CMD_ID cmd ,int sub_cmd, void* data ,int data_size)
     ppkg->subcmd = sub_cmd;   // set copy command
 
     memcpy(buffer + sizeof(COMM_HEADER) ,data ,data_size);
-//    result = device_cmd(buffer ,device_cmd_len);
+    result = DeviceManager::device_cmd(device_name ,buffer ,device_cmd_len);
     return result;
+}
+
+void vop_setDeviceName(const char* _device_name)
+{
+//    device_name = _device_name;
+    strcpy(device_name ,_device_name);
 }
 
 int vop_copy(copycmdset* pcopycmd)

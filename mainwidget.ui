@@ -6,17 +6,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>928</width>
-    <height>177</height>
+    <width>448</width>
+    <height>139</height>
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget{font:13px;}
+   <string notr="true">QWidget{font:13px; color:#4c4c4c}
 
 #logo{
 min-height:28;
 max-height:28;
-
+font:bold italic 28px  &quot;Times New Roman&quot;;
 }
 #refresh{min-width:100;
 max-width:100;}
@@ -60,11 +60,8 @@ QTabWidget::pane{position:absolute;top:-0.5em}</string>
        </item>
        <item>
         <widget class="QLabel" name="logo">
-         <property name="pixmap">
-          <pixmap resource="vop.qrc">:/images/LENOVO.png</pixmap>
-         </property>
-         <property name="scaledContents">
-          <bool>true</bool>
+         <property name="text">
+          <string>lenovo</string>
          </property>
         </widget>
        </item>
@@ -73,10 +70,17 @@ QTabWidget::pane{position:absolute;top:-0.5em}</string>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QComboBox" name="comboBox_deviceList"/>
+        <widget class="QComboBox" name="comboBox_deviceList">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="refresh">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
          <property name="text">
           <string>Refresh</string>
          </property>
@@ -99,6 +103,9 @@ QTabWidget::pane{position:absolute;top:-0.5em}</string>
      </item>
      <item>
       <widget class="QTabWidget" name="tabWidget">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="currentIndex">
         <number>0</number>
        </property>
@@ -124,8 +131,6 @@ QTabWidget::pane{position:absolute;top:-0.5em}</string>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="vop.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

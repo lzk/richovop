@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "mainwidget.h"
+#include <QDesktopWidget>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->hide();
     statusBar()->hide();
     setFixedSize(926,660);
+    move((QApplication::desktop()->width() - width())/2,
+         (QApplication::desktop()->height() - height())/2);
 }
 
 MainWindow::~MainWindow()

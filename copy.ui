@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>676</width>
+    <width>658</width>
     <height>561</height>
    </rect>
   </property>
@@ -68,23 +68,27 @@ max-width:180px;
 
 
 QToolButton{
- border-radius: 50px;
-min-width:100px;
-max-width:100px;
-min-height:100px;
-max-height:100px;
+ border-radius: 45px;
+min-width:90px;
+max-width:90px;
+min-height:90px;
+max-height:90px;
 	background-color: #f0eeeb; 
-border: 1px solid gray;
+border: 1px solid #c8c8c8;
 font:20px;
+/*	color: #4c4c4c;*/
 }
 
 #IDCardCopy:pressed{
 	background-color:gray;
 }
+#IDCardCopy:!enabled{
+	background-color:gray;
+}
 
 #copy{
-min-width:110px;
-max-width:110px;
+min-width:100px;
+max-width:100px;
  border-radius: 10px;
 border:none;
 }
@@ -92,11 +96,12 @@ border:none;
 #copy:!enabled{
 	background-color:#9d9b98;
 }
-#copy:enabled{
+#copy:enabled:!pressed{
 	background-color:#faaf40;
 }
 #copy:pressed{
-	background-color:#71c2cd;
+/*	background-color:#71c2cd;*/
+	background-color:#9d9b98;
 }
 
 QPushButton{
@@ -106,7 +111,7 @@ QPushButton{
 	max-height:25;
 }
 
-#default{
+#btn_default{
 	min-width:100;
 	max-width:100;
 	min-height:32;
@@ -203,15 +208,27 @@ QPushButton{
               </item>
               <item>
                <widget class="QPushButton" name="copies_minus">
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
                 <property name="text">
                  <string>-</string>
+                </property>
+                <property name="autoRepeat">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="copies_plus">
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
                 <property name="text">
                  <string>+</string>
+                </property>
+                <property name="autoRepeat">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -293,16 +310,28 @@ QPushButton{
                </spacer>
               </item>
               <item>
-               <widget class="QPushButton" name="minus">
+               <widget class="QPushButton" name="scaling_minus">
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
                 <property name="text">
                  <string>-</string>
+                </property>
+                <property name="autoRepeat">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_scaling_plus">
+               <widget class="QPushButton" name="scaling_plus">
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
                 <property name="text">
                  <string>+</string>
+                </property>
+                <property name="autoRepeat">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -535,15 +564,27 @@ QPushButton{
               </item>
               <item>
                <widget class="QPushButton" name="density_minus">
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
                 <property name="text">
                  <string>-</string>
+                </property>
+                <property name="autoRepeat">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="density_plus">
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
                 <property name="text">
                  <string>+</string>
+                </property>
+                <property name="autoRepeat">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -607,6 +648,9 @@ QPushButton{
                </property>
                <item>
                 <widget class="QRadioButton" name="photo">
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
                  <property name="text">
                   <string>Photo</string>
                  </property>
@@ -617,6 +661,9 @@ QPushButton{
                </item>
                <item>
                 <widget class="QRadioButton" name="text">
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
                  <property name="text">
                   <string>Text</string>
                  </property>
@@ -643,7 +690,10 @@ QPushButton{
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="documentType">
+           <widget class="QComboBox" name="combo_documentType">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <item>
              <property name="text">
               <string>Plain</string>
@@ -679,7 +729,10 @@ QPushButton{
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="documentSize">
+           <widget class="QComboBox" name="combo_documentSize">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <item>
              <property name="text">
               <string>Letter (8.5 * 11&quot;)</string>
@@ -715,7 +768,10 @@ QPushButton{
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="outputSize">
+           <widget class="QComboBox" name="combo_outputSize">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <item>
              <property name="text">
               <string>Letter (8.5 * 11&quot;)</string>
@@ -729,6 +785,11 @@ QPushButton{
             <item>
              <property name="text">
               <string>A5 (148 * 210mm)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>A6 (105 * 148mm)</string>
              </property>
             </item>
             <item>
@@ -761,7 +822,10 @@ QPushButton{
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="nIn1Copy">
+           <widget class="QComboBox" name="combo_nIn1Copy">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <item>
              <property name="text">
               <string>1</string>
@@ -792,7 +856,10 @@ QPushButton{
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="dpi">
+           <widget class="QComboBox" name="combo_dpi">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <item>
              <property name="text">
               <string>300 * 300</string>
@@ -842,6 +909,9 @@ QPushButton{
             </item>
             <item>
              <widget class="QToolButton" name="IDCardCopy">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="text">
                <string>ID Card
 Copy</string>
@@ -850,6 +920,9 @@ Copy</string>
             </item>
             <item>
              <widget class="QToolButton" name="copy">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="text">
                <string>Copy</string>
               </property>
@@ -886,7 +959,10 @@ Copy</string>
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="default_2">
+             <widget class="QPushButton" name="btn_default">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="text">
                <string>Default</string>
               </property>
