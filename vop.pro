@@ -29,7 +29,11 @@ FORMS    += mainwindow.ui \
     setting.ui \
     mainwidget.ui \
     copy.ui \
-    about.ui
+    about.ui \
+    pagewifisetup.ui \
+    pagemodifypassword.ui \
+    pagesearchwifi.ui \
+    pagemanualsetup.ui
 
 RESOURCES += \
     vop.qrc

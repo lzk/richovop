@@ -3,6 +3,10 @@
 #include "ui_copy.h"
 #include "ui_setting.h"
 #include "ui_about.h"
+#include "ui_pagemanualsetup.h"
+#include "ui_pagemodifypassword.h"
+#include "ui_pagesearchwifi.h"
+#include "ui_pagewifisetup.h"
 
 //#include <QProcess>
 #include <QAction>
@@ -18,6 +22,10 @@ MainWidget::MainWidget(QWidget *parent) :
     tc(new Ui::TabCopy),
     ts(new Ui::TabSetting),
     ta(new Ui::TabAbout),
+    pws(new Ui::PageWifiSetup),
+    pmp(new Ui::PageModifyPassword),
+    psw(new Ui::PageSearchWifi),
+    pms(new Ui::PageManualSetup),
     deviceManager(new DeviceManager),
     status(0)
 {
@@ -38,6 +46,10 @@ MainWidget::~MainWidget()
     delete tc;
     delete ts;
     delete ta;
+    delete pms;
+    delete pmp;
+    delete psw;
+    delete pws;
 }
 
 void MainWidget::retranslateUi()
@@ -65,7 +77,7 @@ void MainWidget::initializeUi()
     //copy initialize
     initializeTabCopy();
     //setting initialize
-    ts->setupUi(ui->tab_4);
+    initializeTabSetting();
     //about initialize
     initializeTabAbout();
  }
@@ -471,4 +483,37 @@ void MainWidget::slots_copy_default()
 {
     deviceManager->setDefaultCopyParameter();
     updateUi();
+}
+
+//////////////////////////tab setting///////////////////
+/// \brief MainWidget::initializeTabSetting
+///
+void MainWidget::initializeTabSetting()
+{
+    ts->setupUi(ui->tab_4);
+    pws->setupUi(ts->page);
+    psw->setupUi(pws->page);
+    pms->setupUi(pws->page_2);
+    pmp->setupUi(ts->page_2);
+
+    connect(pws->radioButton_searchWifi ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_setting_radiobutton(bool)));
+//    connect(pws->radioButton_manualSetup ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_setting_radiobutton(bool)));
+    pws->radioButton_searchWifi->setChecked(true);
+    pws->stackedWidget->setCurrentIndex(0);
+}
+
+void MainWidget::slots_setting_radiobutton(bool toggle)
+{
+    QAbstractButton* ab = qobject_cast<QAbstractButton*>(sender( ));
+    if(!ab)
+        return;
+    if(ab == pws->radioButton_searchWifi)
+    {
+        if(toggle)
+        {
+            pws->stackedWidget->setCurrentIndex(0);
+        }else{
+            pws->stackedWidget->setCurrentIndex(1);
+        }
+    }
 }

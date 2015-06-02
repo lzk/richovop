@@ -8,6 +8,10 @@ class MainWidget;
 class TabCopy;
 class TabSetting;
 class TabAbout;
+class PageWifiSetup;
+class PageModifyPassword;
+class PageSearchWifi;
+class PageManualSetup;
 }
 //class QProcess;
 class DeviceManager;
@@ -28,6 +32,10 @@ private:
     Ui::TabCopy *tc;
     Ui::TabSetting *ts;
     Ui::TabAbout *ta;
+    Ui::PageWifiSetup *pws;
+    Ui::PageModifyPassword *pmp;
+    Ui::PageSearchWifi *psw;
+    Ui::PageManualSetup *pms;
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
@@ -64,6 +72,9 @@ private:
     void initializeTabCopy();
     void updateCopy();
 
+    //////////////////////////tab setting///////////////////
+    void initializeTabSetting();
+
 private slots:
     //////////////////tab about///////////////////////////
     void slots_about_update();
@@ -77,6 +88,8 @@ private slots:
     void on_refresh_clicked();
     void on_comboBox_deviceList_activated(int index);
 
+    //////////////////////////tab setting///////////////////
+    void slots_setting_radiobutton(bool);
 };
 
 #endif // MAINWIDGET_H

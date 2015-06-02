@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PageManualSetup</class>
+ <widget class="QWidget" name="PageManualSetup">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>377</width>
+    <height>198</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QLineEdit,QComboBox{
+min-width:200;
+max-width:200;
+}
+
+#keyIndexComboBox{
+min-width:100;
+max-width:100;
+}
+/*
+#PageManualSetup{
+min-width:500;
+max-width:500;
+min-height:200;
+max-height:200;
+}*/</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QFormLayout" name="formLayout_2">
+     <property name="labelAlignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+     <property name="formAlignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="horizontalSpacing">
+      <number>50</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>30</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>SSID</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="encryptionTypeLabel">
+       <property name="text">
+        <string>Encryption Type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="encryptionTypeComboBox"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="wEPKeyLabel">
+       <property name="text">
+        <string>WEP Key</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="wEPKeyLineEdit"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="keyIndexLabel">
+       <property name="text">
+        <string>Key Index</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QComboBox" name="keyIndexComboBox"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="sSIDLineEdit"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
