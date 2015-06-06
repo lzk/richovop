@@ -23,6 +23,8 @@ public:
     ~VopDevice();
 
     VopCopy* getVopCopy();
+    static int isValidDevice(const char* printer_info);
+    static int writeThenRead(const char* device_uri ,const char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize);
 private:
     VopCopy* vopCopy;
 };

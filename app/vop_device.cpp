@@ -45,6 +45,11 @@ copycmdset VopCopy::getCopyParameter()
     return *copy_parameter;
 }
 
+//////////////////////////VopDevice////////////////////////////
+/// \brief VopDevice::VopDevice
+///
+//#include <cups/cups.h>
+#include <QtCore>
 VopDevice::VopDevice()
     : vopCopy(new VopCopy)
 {
@@ -59,4 +64,75 @@ VopDevice::~VopDevice()
 VopCopy* VopDevice::getVopCopy()
 {
     return vopCopy;
+}
+
+int VopDevice::isValidDevice(const char* printer_info)
+{
+    int valid = false;
+    QString str(printer_info);
+    if(str.startsWith("Lenovo M7208W"))
+    {
+        valid = true;
+    }else if(str.startsWith("Lenovo M7208")){
+        valid = true;
+    }else if(str.startsWith("Lenovo LJ2208W")){
+        valid = true;
+    }else if(str.startsWith("Lenovo LJ2208")){
+        valid = true;
+    }
+    return valid;
+}
+
+extern "C"{
+//#include "lib/usb.h"
+int openPrinter(char* printerURI);
+void closePrinter(void);
+int USBWrite(char *buffer, size_t bufsize);
+int USBRead(char *buffer, size_t bufsize);
+int get_device_id(char *buffer, size_t bufsize);
+//#include "lib/NetDevice.h"
+int connetToNetDevice(char* devURI);
+int get_device_id(char *buffer, size_t bufsize);
+int wirteToNetDevice(void *buffer, int len);
+int readFromNetDevice(void *buffer, int len);
+void closeSocket(void);
+}
+static int usbWriteThenRead(const char* device_uri ,const char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize)
+{
+    int err = openPrinter((char*)device_uri);
+    if(err)        return err;
+    err = USBWrite((char*)wrBuffer ,wrSize);
+    if(err)         goto ERR;
+    err = USBRead(rdBuffer ,rdSize);
+    if(err)         goto ERR;
+    ERR:
+    closePrinter();
+    return err;
+}
+
+static int networkWriteThenRead(const char* device_uri ,const char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize)
+{
+    int err = connetToNetDevice((char*)device_uri);
+    if(err)        return err;
+    err = wirteToNetDevice((char*)wrBuffer ,wrSize);
+    if(err)         goto ERR;
+    err = readFromNetDevice(rdBuffer ,rdSize);
+    if(err)         goto ERR;
+    ERR:
+    closeSocket();
+    return err;
+}
+
+int VopDevice::writeThenRead(const char* device_uri ,const char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize)
+{
+    return -1;
+    int err = -1;
+    QString _device_uri = QString(device_uri);
+    if(_device_uri.startsWith("usb://"))
+    {
+        usbWriteThenRead(device_uri ,wrBuffer ,wrSize ,rdBuffer ,rdSize);
+    }else{
+        networkWriteThenRead(device_uri ,wrBuffer ,wrSize ,rdBuffer ,rdSize);
+    }
+    return err;
 }

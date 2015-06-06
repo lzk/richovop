@@ -23,23 +23,24 @@ HEADERS  += mainwindow.h \
     mainwidget.h \
     app/devicemanager.h \
     app/vop_protocol.h \
-    app/vop_device.h
+    app/vop_device.h \
+    lib/usb.h \
+    lib/NetDevice.h
 
 FORMS    += mainwindow.ui \
     setting.ui \
     mainwidget.ui \
     copy.ui \
-    about.ui \
-    pagewifisetup.ui \
-    pagemodifypassword.ui \
-    pagesearchwifi.ui \
-    pagemanualsetup.ui
+    about.ui
 
 RESOURCES += \
     vop.qrc
 
 TRANSLATIONS = translations/vop_zh.ts
 
-INCLUDEPATH += /opt/cups-2.0.2/include
+INCLUDEPATH += cups
 
-LIBS += -lcups -L/opt/cups-2.0.2/lib64
+LIBS += \
+    -lvopusb -L/home/jacky/workspace/ricoh/vop/source/vop/lib/ \
+    -lsocket \
+    -lcups -L/usr/lib/i386-linux-gnu/  \

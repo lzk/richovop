@@ -15,12 +15,6 @@ DeviceManager::~DeviceManager()
     delete device;
 }
 
-int DeviceManager::isDeviceValid(const char* value)
-{
-    (void)value;
-    return true;
-}
-
 void DeviceManager::slots_device_status()
 {
     static int status = 0;
@@ -37,9 +31,8 @@ void DeviceManager::slots_copy()
     mutex.unlock();
     if(current_devicename == QString())
         return;
-    vop_setDeviceName(current_devicename.toLatin1());
     copycmdset cpcmd = getCopyParameter();
-    vop_copy(&cpcmd);
+    vop_copy(&cpcmd ,sizeof(cpcmd));
 }
 
 void DeviceManager::setCopyParameter(copycmdset* p)
@@ -72,20 +65,28 @@ void DeviceManager::selectDevice(int selected_device)
         selected_devicename = QString();
     }
 }
-const char* DeviceManager::getCurrentDeviceURI()
+
+QString DeviceManager::getDeviceURI(const QString& devicename)
+{
+    cups_dest_t *dests;
+    int num_dests;
+    num_dests = cupsGetDests(&dests);
+    cups_dest_t* dest;
+    dest = cupsGetDest(devicename.toLatin1() ,NULL ,num_dests ,dests);
+    if(!dest)
+        return NULL;
+    QString device_uri =  cupsGetOption("device-uri", dest->num_options, dest->options);
+    cupsFreeDests(num_dests ,dests);
+    return device_uri;
+}
+
+QString DeviceManager::getCurrentDeviceURI()
 {
     mutex.lock();
     current_devicename = selected_devicename;
     mutex.unlock();
 
-    cups_dest_t *dests;
-    int num_dests;
-    num_dests = cupsGetDests(&dests);
-    cups_dest_t* dest;
-    dest = cupsGetDest(current_devicename.toLatin1() ,NULL ,num_dests ,dests);
-    if(!dest)
-        return NULL;
-    return  cupsGetOption("device-uri", dest->num_options, dest->options);
+    return getDeviceURI(current_devicename);
 }
 
 //#include<QPrinterInfo>
@@ -125,7 +126,7 @@ int DeviceManager::getDeviceList(QStringList& printerInfo)
        if (dest->instance == NULL)
        {
             value = cupsGetOption("printer-info", dest->num_options, dest->options);
-            if(isDeviceValid(value))
+            if(VopDevice::isValidDevice(value))
             {
                 devices << dest->name;
                 printerInfo << value;
@@ -139,6 +140,16 @@ int DeviceManager::getDeviceList(QStringList& printerInfo)
                     selected_printer = devices.indexOf(dest->name);
                     selected = true;
                 }
+
+                //debug display all printer options
+                qDebug()<<dest->name;
+               cups_option_t* option;
+                int j;
+               for(j=0,option=dest->options ;j < dest->num_options ;j++,option++)
+                {
+                    qDebug()<<option->name<<option->value;
+                }
+               qDebug()<<"";
             }
        }
    }
@@ -148,14 +159,14 @@ int DeviceManager::getDeviceList(QStringList& printerInfo)
        return -1;
    }
 
-   if(!selected && -1 != default_printer)
+   if(selected)
+       qDebug()<<"the selected printer is founded";
+   else if(-1 != default_printer)
    {
            selected_printer =default_printer;
            selected = true;
            qDebug()<<"select the default printer";
 
-   }else{
-       qDebug()<<"the selected printer is founded";
    }
 
    if(!selected)
@@ -168,30 +179,15 @@ int DeviceManager::getDeviceList(QStringList& printerInfo)
    return selected_printer;
 }
 
-int DeviceManager::device_cmd(const char* device_name ,char* buffer ,int len)
+QString DeviceManager::current_devicename = QString();
+int DeviceManager::device_writeThenRead(const char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize)
 {
-    int err = 0;
-
-    cups_dest_t *dests;
-    int num_dests;
-    num_dests = cupsGetDests(&dests);
-    cups_dest_t* dest;
-    dest = cupsGetDest(device_name ,NULL ,num_dests ,dests);
-    if(!dest)
+    if(!current_devicename.count())
         return -1;
-
-    //debug display all printer options
-    qDebug()<<dest->name;
-    cups_option_t* option;
-    int j;
-    for(j=0,option=dest->options ;j < dest->num_options ;j++,option++)
-    {
-        qDebug()<<option->name<<option->value;
-    }
-
-    cupsFreeDests(num_dests ,dests);
-    (void)buffer;
-    (void)len;
+    int err = 0;
+    QString device_uri = getDeviceURI(current_devicename);
+    qDebug()<<"device-uri"<<device_uri;
+    err = VopDevice::writeThenRead(device_uri.toLatin1() ,wrBuffer ,wrSize ,rdBuffer ,rdSize);
     return err;
 }
 

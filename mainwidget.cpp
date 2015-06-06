@@ -3,12 +3,7 @@
 #include "ui_copy.h"
 #include "ui_setting.h"
 #include "ui_about.h"
-#include "ui_pagemanualsetup.h"
-#include "ui_pagemodifypassword.h"
-#include "ui_pagesearchwifi.h"
-#include "ui_pagewifisetup.h"
 
-//#include <QProcess>
 #include <QAction>
 #include <QDebug>
 #include <QMainWindow>
@@ -22,10 +17,6 @@ MainWidget::MainWidget(QWidget *parent) :
     tc(new Ui::TabCopy),
     ts(new Ui::TabSetting),
     ta(new Ui::TabAbout),
-    pws(new Ui::PageWifiSetup),
-    pmp(new Ui::PageModifyPassword),
-    psw(new Ui::PageSearchWifi),
-    pms(new Ui::PageManualSetup),
     deviceManager(new DeviceManager),
     status(0)
 {
@@ -46,10 +37,6 @@ MainWidget::~MainWidget()
     delete tc;
     delete ts;
     delete ta;
-    delete pms;
-    delete pmp;
-    delete psw;
-    delete pws;
 }
 
 void MainWidget::retranslateUi()
@@ -68,17 +55,13 @@ void MainWidget::initialize()
     connect(&timer ,SIGNAL(timeout()) ,this ,SIGNAL(signals_device_status()));
 //    timer.setInterval(1000);
     timer.start(1000);
-    //    ps = new QProcess(this);
 }
 
 void MainWidget::initializeUi()
 {
     on_refresh_clicked();
-    //copy initialize
     initializeTabCopy();
-    //setting initialize
     initializeTabSetting();
-    //about initialize
     initializeTabAbout();
  }
 
@@ -124,11 +107,11 @@ bool MainWidget::eventFilter(QObject *obj, QEvent *event)
 void MainWidget::updateUi()
 {
     updateCopy();
-    const char* device_uri = deviceManager->getCurrentDeviceURI();
+    QString device_uri = deviceManager->getCurrentDeviceURI();
     QMainWindow* mainWindow = qobject_cast<QMainWindow*>(parent());
     if(mainWindow)
     {
-        if(device_uri)
+        if(device_uri.count())
         {
             QString title;
             title = ui->comboBox_deviceList->currentText() + " - " + device_uri;
@@ -176,7 +159,6 @@ void MainWidget::initializeTabAbout()
 //#include<QUrl>
 void MainWidget::slots_about_update()
 {
-//    ps->start(QLatin1String(sys_open) + "http://www.lenovo.com");
     QDesktopServices::openUrl(QUrl("http://www.lenovo.com"));
 }
 
@@ -263,6 +245,7 @@ void MainWidget::slots_copy_combo(int value)
     else if(qb == tc->combo_documentSize)
     {
         pCopyPara->orgSize = value;
+        //document size setting can change scaling
         if(!pCopyPara->nUp)
             GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
     }
@@ -491,15 +474,26 @@ void MainWidget::slots_copy_default()
 void MainWidget::initializeTabSetting()
 {
     ts->setupUi(ui->tab_4);
-    pws->setupUi(ts->page);
-    psw->setupUi(pws->page);
-    pms->setupUi(pws->page_2);
-    pmp->setupUi(ts->page_2);
+    ts->listWidget->setCurrentRow(0);
+    ts->stackedWidget->setCurrentIndex(0);
+    ts->radioButton_searchWifi->setChecked(true);
+    ts->stackedWidget_2->setCurrentIndex(0);
+    ts->cb_encryptionType->setCurrentIndex(2);
+    ts->stackedWidget_3->setCurrentIndex(2);
 
-    connect(pws->radioButton_searchWifi ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_setting_radiobutton(bool)));
-//    connect(pws->radioButton_manualSetup ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_setting_radiobutton(bool)));
-    pws->radioButton_searchWifi->setChecked(true);
-    pws->stackedWidget->setCurrentIndex(0);
+    QRegExp regexp("^[\\x0020-\\x007e]{1,32}$");
+    QValidator *validator = new QRegExpValidator(regexp, this);
+    ts->le_ssid->setValidator(validator);
+
+    ts->btn_apply_ws->setEnabled(false);
+
+    connect(ts->radioButton_searchWifi ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_setting_radiobutton(bool)));
+    connect(ts->le_ssid,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_setting_lineedit_textChanged(QString)));
+    connect(ts->le_wepkey,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_setting_lineedit_textChanged(QString)));
+    connect(ts->le_passphrase_wpa,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_setting_lineedit_textChanged(QString)));
+    connect(ts->le_passphrase_psk,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_setting_lineedit_textChanged(QString)));
+
+    connect(ts->cb_encryptionType,SIGNAL(activated(QString)) ,this ,SLOT(slots_setting_lineedit_textChanged(QString)));
 }
 
 void MainWidget::slots_setting_radiobutton(bool toggle)
@@ -507,13 +501,57 @@ void MainWidget::slots_setting_radiobutton(bool toggle)
     QAbstractButton* ab = qobject_cast<QAbstractButton*>(sender( ));
     if(!ab)
         return;
-    if(ab == pws->radioButton_searchWifi)
+    if(ab == ts->radioButton_searchWifi)
     {
         if(toggle)
         {
-            pws->stackedWidget->setCurrentIndex(0);
+            ts->stackedWidget_2->setCurrentIndex(0);
         }else{
-            pws->stackedWidget->setCurrentIndex(1);
+            ts->stackedWidget_2->setCurrentIndex(1);
         }
     }
+}
+
+void MainWidget::slots_setting_lineedit_textChanged(const QString &arg1)
+{
+//    QLineEdit* le = qobject_cast<QLineEdit*>(sender( ));
+//    if(!le)
+//        return;
+    validateSsidPassword("" ,"");
+}
+
+void MainWidget::validateSsidPassword(const QString& ssid ,const QString& password)
+{
+    QRegExp regexp;
+    QString str = ts->le_ssid->text();
+    QString toValidateStr = QString();
+    bool validPattern = false;
+
+    switch(ts->cb_encryptionType->currentIndex())
+    {
+    case 1://wep
+    {
+        regexp.setPattern("^(?:.{5,5}|.{13,13}|[0-9a-fA-F]{10,10}|[0-9a-fA-F]{26,26})$");
+        toValidateStr = ts->le_wepkey->text();
+        break;
+    }
+    case 2://wpa2-psk-aes
+    {
+        regexp.setPattern("^(?:.{8,63}|[0-9a-fA-F]{64,64})$");
+        toValidateStr = ts->le_passphrase_wpa->text();
+        break;
+    }
+    case 3://mixed mode psk
+    {
+        regexp.setPattern("^(?:.{8,63}|[0-9a-fA-F]{64,64})$");
+        toValidateStr = ts->le_passphrase_psk->text();
+        break;
+    }
+    default:
+        break;
+    }
+
+    if(str.count() && toValidateStr.count() && -1 != regexp.indexIn(toValidateStr))
+        validPattern = true;
+    ts->btn_apply_ws->setEnabled(validPattern);
 }

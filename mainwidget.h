@@ -8,10 +8,6 @@ class MainWidget;
 class TabCopy;
 class TabSetting;
 class TabAbout;
-class PageWifiSetup;
-class PageModifyPassword;
-class PageSearchWifi;
-class PageManualSetup;
 }
 //class QProcess;
 class DeviceManager;
@@ -32,16 +28,11 @@ private:
     Ui::TabCopy *tc;
     Ui::TabSetting *ts;
     Ui::TabAbout *ta;
-    Ui::PageWifiSetup *pws;
-    Ui::PageModifyPassword *pmp;
-    Ui::PageSearchWifi *psw;
-    Ui::PageManualSetup *pms;
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
 private:
-//    QProcess* ps;
 //    QAction* action_refresh;
     DeviceManager* deviceManager;
     QThread deviceManageThread;
@@ -74,6 +65,7 @@ private:
 
     //////////////////////////tab setting///////////////////
     void initializeTabSetting();
+    void validateSsidPassword(const QString& ,const QString&);
 
 private slots:
     //////////////////tab about///////////////////////////
@@ -90,6 +82,7 @@ private slots:
 
     //////////////////////////tab setting///////////////////
     void slots_setting_radiobutton(bool);
+    void slots_setting_lineedit_textChanged(const QString &arg1);
 };
 
 #endif // MAINWIDGET_H

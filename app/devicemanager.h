@@ -16,23 +16,23 @@ public:
     explicit DeviceManager(QObject *parent = 0);
     ~DeviceManager();
 
+    static QString current_devicename;
+
     int getDeviceList(QStringList& printerInfo);
     void selectDevice(int selected_device);
     void setDefaultCopyParameter();
     void setCopyParameter(copycmdset* p);
     copycmdset getCopyParameter();
-    const char* getCurrentDeviceURI();
+    QString getCurrentDeviceURI();
 
-    static int device_cmd(const char* device_name  ,char* buffer ,int len);
+    static QString getDeviceURI(const QString&);
+    static int device_writeThenRead(const char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize);
 
 private:
     QMutex mutex;
     VopDevice* device;
     QStringList devices;
     QString selected_devicename;
-    QString current_devicename;
-
-    int isDeviceValid(const char* value);
 
 signals:
     void signals_device_status(int);
