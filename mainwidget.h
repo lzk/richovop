@@ -1,3 +1,8 @@
+/////////////////////////////////////////
+/// File:mainwidget.h
+/// Author:Jacky Liang
+/// Version:
+/////////////////////////////////////////
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
@@ -9,11 +14,12 @@ class TabCopy;
 class TabSetting;
 class TabAbout;
 }
-//class QProcess;
+
+class QProgressDialog;
 class DeviceManager;
-class QStringList;
 #include<QThread>
 #include <QTimer>
+#include "app/vop_protocol.h"
 
 class MainWidget : public QWidget
 {
@@ -37,7 +43,9 @@ private:
     DeviceManager* deviceManager;
     QThread deviceManageThread;
     QTimer timer;
-    int status;
+    QProgressDialog* progressDialog;
+    bool device_status;
+    int cmd_status;
 
     void initializeUi();
     void retranslateUi();
@@ -45,17 +53,21 @@ private:
     void updateUi();
     void initialize();
 
+    void emit_cmd(int);
 signals:
-   void  signals_device_status();
-   void signals_copy();
+   void signals_cmd(int);
 
 public slots:
-    void slots_device_status(int);
+   void slots_cmd_result(int ,int);
+   void slots_cmd();
+   void slots_timeout();
+   void slots_progressBar(int);
 
 private:
     ///////////////////////////tab about//////////////////////
 //    QAction* action_about_update;
     void initializeTabAbout();
+    void slots_about_update();
 
     ///////////////////////////tab copy///////////////////
     //    QAction* action_copy_default;
@@ -64,25 +76,43 @@ private:
     void updateCopy();
 
     //////////////////////////tab setting///////////////////
+    int wifi_encryptionType;
+    QString wifi_ssid;
+    QString wifi_password;
+    int wifi_wepIndex;
+    QString wifi_ms_password;
+    QString wifi_sw_password;
+    int wifi_ms_wepIndex;
+    int wifi_sw_wepIndex;
+    int wifi_sw_encryptionType[NUM_OF_APLIST];
+
+    bool passwd_checked;
+    QString passwd;
     void initializeTabSetting();
-    void validateSsidPassword(const QString& ,const QString&);
+    bool wifi_validate_ssidPassword();
+    void wifi_update_encryptionType();
+    void wifi_update_Data();
+    void wifi_update();
+    void slots_wifi_applyDo();
+    void slots_wifi_applyDone();
+    void slots_passwd_setDo();
+    void slots_passwd_setDone();
 
 private slots:
     //////////////////tab about///////////////////////////
-    void slots_about_update();
     /////////////////tab copy///////////////////////////////
-    void slots_copy_minus_plus();
-    void slots_copy_scaningMode();
     void slots_copy_combo(int);
-    void slots_copy_default();
+    void slots_copy_pushbutton();
+    void slots_copy_radio(bool);
 
 private slots:
     void on_refresh_clicked();
     void on_comboBox_deviceList_activated(int index);
 
     //////////////////////////tab setting///////////////////
-    void slots_setting_radiobutton(bool);
-    void slots_setting_lineedit_textChanged(const QString &arg1);
+    void slots_wifi_radiobutton(bool);
+    void slots_wifi_textChanged(const QString &arg1);
+    void slots_wifi_checkbox(bool);
 };
 
 #endif // MAINWIDGET_H

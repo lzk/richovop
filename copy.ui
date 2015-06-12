@@ -21,6 +21,9 @@ max-width:250px;
 min-height:120px;
 max-height:120px;
 }
+#bg_scaling:!enabled{
+background-color: rgb(190, 190, 190);
+}
 #label_scaling,#label_scaningMode,#label_density,#label_copies{
 font: 20px;
 padding-left:1px;

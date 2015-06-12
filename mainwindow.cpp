@@ -1,3 +1,8 @@
+/////////////////////////////////////////
+/// File:mainwindow.cpp
+/// Author:Jacky Liang
+/// Version:
+/////////////////////////////////////////
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "mainwidget.h"
@@ -8,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    mainWidget = new MainWidget;
+    mainWidget = new MainWidget(this);
     setCentralWidget(mainWidget);
     ui->mainToolBar->hide();
     statusBar()->hide();

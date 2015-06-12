@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = vop
 TEMPLATE = app
@@ -40,7 +40,17 @@ TRANSLATIONS = translations/vop_zh.ts
 
 INCLUDEPATH += cups
 
+PLATFORM = $$system(uname -i)
+contains(PLATFORM, x86_64){
 LIBS += \
-    -lvopusb -L/home/jacky/workspace/ricoh/vop/source/vop/lib/ \
-    -lsocket \
-    -lcups -L/usr/lib/i386-linux-gnu/  \
+    /usr/lib/x86_64-linux-gnu/libcups.so.2
+}else{
+LIBS += \
+    /usr/lib/i386-linux-gnu/libcups.so.2 \
+   -ldl
+
+  #  -lcups -L/usr/lib/i386-linux-gnu/  \
+
+DEFINES += DEVICE_LIB_SUPPORT
+}
+

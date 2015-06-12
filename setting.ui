@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>804</width>
-    <height>465</height>
+    <width>894</width>
+    <height>665</height>
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true">QListView{
+   <string notr="true">QListView#listWidget{
 min-width:130;
 max-width:130;
 min-height:90;
@@ -20,31 +20,12 @@ max-height:90;
 }
 
 QStackedWidget,#pageWidget,#page2Widget{
-min-width:550;
-max-width:550;
-min-height:300;
-max-height:300;
+min-width:600;
+max-width:600;
+min-height:320;
+max-height:320;
 }
-#stackedWidget_2{
-min-height:200;
-max-height:200;
-}
-#page3Widget,#page4Widget{
-min-width:550;
-max-width:550;
-min-height:200;
-max-height:200;
-}
-#stackedWidget_3{
-min-height:100;
-max-height:100;
-}
-#page6Widget,#page7Widget,#page8Widget{
-min-width:550;
-max-width:550;
-min-height:100;
-max-height:100;
-}
+
 QLabel{
 min-width:150;
 max-width:150;
@@ -64,6 +45,10 @@ max-width:270;
 
 QPushButton{
 min-width:100;
+max-width:100;
+}
+
+QCheckBox{
 max-width:100;
 }</string>
   </property>
@@ -121,377 +106,340 @@ max-width:100;
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>550</width>
-           <height>300</height>
+           <width>600</width>
+           <height>320</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <layout class="QFormLayout" name="formLayout">
-            <property name="horizontalSpacing">
-             <number>50</number>
+           <widget class="QCheckBox" name="checkBox">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
             </property>
-            <property name="leftMargin">
-             <number>9</number>
+            <property name="text">
+             <string>WLAN</string>
             </property>
-            <property name="topMargin">
-             <number>9</number>
-            </property>
-            <property name="rightMargin">
-             <number>9</number>
-            </property>
-            <property name="bottomMargin">
-             <number>9</number>
-            </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="wIFISetupLabel">
-              <property name="text">
-               <string>WIFI Setup</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_2">
-              <item>
-               <widget class="QRadioButton" name="radioButton_searchWifi">
-                <property name="focusPolicy">
-                 <enum>Qt::NoFocus</enum>
-                </property>
-                <property name="text">
-                 <string>Search WIFI</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="radioButton_manualSetup">
-                <property name="focusPolicy">
-                 <enum>Qt::NoFocus</enum>
-                </property>
-                <property name="text">
-                 <string>Manual Setup</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
+           </widget>
           </item>
           <item>
-           <widget class="QStackedWidget" name="stackedWidget_2">
-            <widget class="QWidget" name="page_3">
-             <widget class="QWidget" name="page3Widget" native="true">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>550</width>
-                <height>200</height>
-               </rect>
-              </property>
-              <layout class="QFormLayout" name="formLayout_2">
-               <property name="labelAlignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-               </property>
-               <property name="formAlignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-               </property>
+           <widget class="QFrame" name="frame">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <item>
+              <layout class="QFormLayout" name="formLayout">
                <property name="horizontalSpacing">
                 <number>50</number>
                </property>
                <property name="verticalSpacing">
                 <number>20</number>
                </property>
-               <item row="0" column="0">
-                <widget class="QLabel" name="sSIDLabel">
-                 <property name="text">
-                  <string>SSID</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <layout class="QHBoxLayout" name="horizontalLayout_4">
-                 <property name="spacing">
-                  <number>30</number>
-                 </property>
-                 <item>
-                  <widget class="QComboBox" name="cb_ssid">
-                   <property name="focusPolicy">
-                    <enum>Qt::NoFocus</enum>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="btn_refresh">
-                   <property name="focusPolicy">
-                    <enum>Qt::NoFocus</enum>
-                   </property>
-                   <property name="text">
-                    <string>Refresh</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="passphraseLabel">
-                 <property name="text">
-                  <string>Passphrase</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QLineEdit" name="le_passphrase">
-                 <property name="inputMethodHints">
-                  <set>Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText|Qt::ImhSensitiveData</set>
-                 </property>
-                 <property name="echoMode">
-                  <enum>QLineEdit::Password</enum>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </widget>
-            <widget class="QWidget" name="page_4">
-             <widget class="QWidget" name="page4Widget" native="true">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>550</width>
-                <height>200</height>
-               </rect>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_6">
-               <property name="spacing">
-                <number>0</number>
-               </property>
                <property name="leftMargin">
                 <number>0</number>
                </property>
                <property name="topMargin">
-                <number>0</number>
+                <number>7</number>
                </property>
                <property name="rightMargin">
                 <number>0</number>
                </property>
                <property name="bottomMargin">
-                <number>0</number>
+                <number>7</number>
                </property>
-               <item>
-                <widget class="QWidget" name="widget_7" native="true">
-                 <layout class="QFormLayout" name="formLayout_13">
-                  <property name="horizontalSpacing">
-                   <number>50</number>
+               <item row="0" column="0">
+                <widget class="QLabel" name="wIFISetupLabel">
+                 <property name="text">
+                  <string>WIFI Setup</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                 <item>
+                  <widget class="QRadioButton" name="radioButton_searchWifi">
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
+                   </property>
+                   <property name="text">
+                    <string>Search WIFI</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="radioButton_manualSetup">
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
+                   </property>
+                   <property name="text">
+                    <string>Manual Setup</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QWidget" name="manualSetupWidget" native="true">
+               <layout class="QFormLayout" name="formLayout_13">
+                <property name="horizontalSpacing">
+                 <number>50</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>20</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>7</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>7</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_5">
+                  <property name="text">
+                   <string>SSID</string>
                   </property>
-                  <property name="verticalSpacing">
-                   <number>18</number>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="le_ssid"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="encryptionTypeLabel">
+                  <property name="text">
+                   <string>Encryption Type</string>
                   </property>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_5">
-                    <property name="text">
-                     <string>SSID</string>
-                    </property>
-                   </widget>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QComboBox" name="cb_encryptionType">
+                  <property name="focusPolicy">
+                   <enum>Qt::NoFocus</enum>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>No Security</string>
+                   </property>
                   </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="encryptionTypeLabel">
-                    <property name="text">
-                     <string>Encryption Type</string>
-                    </property>
-                   </widget>
+                  <item>
+                   <property name="text">
+                    <string>WEP</string>
+                   </property>
                   </item>
-                  <item row="1" column="1">
-                   <widget class="QComboBox" name="cb_encryptionType">
+                  <item>
+                   <property name="text">
+                    <string>WPA2-PSK-AES</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Mixed Mode PSK</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="searchWifiWidget" native="true">
+               <layout class="QFormLayout" name="formLayout_2">
+                <property name="labelAlignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                </property>
+                <property name="formAlignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>50</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>20</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>7</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>7</number>
+                </property>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="sSIDLabel">
+                  <property name="text">
+                   <string>SSID</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_4">
+                  <property name="spacing">
+                   <number>30</number>
+                  </property>
+                  <item>
+                   <widget class="QComboBox" name="cb_ssid">
                     <property name="focusPolicy">
                      <enum>Qt::NoFocus</enum>
                     </property>
-                    <item>
-                     <property name="text">
-                      <string>No Security</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>WEP</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>WPA2-PSK-AES</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Mixed Mode PSK</string>
-                     </property>
-                    </item>
                    </widget>
                   </item>
-                  <item row="0" column="1">
-                   <widget class="QLineEdit" name="le_ssid"/>
+                  <item>
+                   <widget class="QPushButton" name="btn_refresh">
+                    <property name="focusPolicy">
+                     <enum>Qt::NoFocus</enum>
+                    </property>
+                    <property name="text">
+                     <string>Refresh</string>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
-                </widget>
-               </item>
-               <item>
-                <widget class="QStackedWidget" name="stackedWidget_3">
-                 <widget class="QWidget" name="page_5"/>
-                 <widget class="QWidget" name="page_6">
-                  <widget class="QWidget" name="page6Widget" native="true">
-                   <property name="geometry">
-                    <rect>
-                     <x>0</x>
-                     <y>0</y>
-                     <width>550</width>
-                     <height>100</height>
-                    </rect>
-                   </property>
-                   <layout class="QFormLayout" name="formLayout_14">
-                    <property name="horizontalSpacing">
-                     <number>50</number>
-                    </property>
-                    <property name="verticalSpacing">
-                     <number>18</number>
-                    </property>
-                    <item row="0" column="0">
-                     <widget class="QLabel" name="wEPKeyLabel_9">
-                      <property name="text">
-                       <string>WEP Key</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QLineEdit" name="le_wepkey">
-                      <property name="echoMode">
-                       <enum>QLineEdit::Password</enum>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="keyIndexLabel">
-                      <property name="text">
-                       <string>Key Index</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="1">
-                     <widget class="QComboBox" name="cb_keyIndex">
-                      <property name="focusPolicy">
-                       <enum>Qt::NoFocus</enum>
-                      </property>
-                      <item>
-                       <property name="text">
-                        <string>1</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>2</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>3</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>4</string>
-                       </property>
-                      </item>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="wepWidget" native="true">
+               <layout class="QFormLayout" name="formLayout_14">
+                <property name="horizontalSpacing">
+                 <number>50</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>20</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>7</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>7</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="wEPKeyLabel_9">
+                  <property name="text">
+                   <string>WEP Key</string>
+                  </property>
                  </widget>
-                 <widget class="QWidget" name="page_7">
-                  <widget class="QWidget" name="page7Widget" native="true">
-                   <property name="geometry">
-                    <rect>
-                     <x>0</x>
-                     <y>0</y>
-                     <width>550</width>
-                     <height>100</height>
-                    </rect>
-                   </property>
-                   <layout class="QFormLayout" name="formLayout_15">
-                    <property name="horizontalSpacing">
-                     <number>50</number>
-                    </property>
-                    <item row="0" column="0">
-                     <widget class="QLabel" name="wEPKeyLabel_10">
-                      <property name="text">
-                       <string>Passphrase</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QLineEdit" name="le_passphrase_wpa">
-                      <property name="echoMode">
-                       <enum>QLineEdit::Password</enum>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="le_wepkey">
+                  <property name="echoMode">
+                   <enum>QLineEdit::Password</enum>
+                  </property>
                  </widget>
-                 <widget class="QWidget" name="page_8">
-                  <widget class="QWidget" name="page8Widget" native="true">
-                   <property name="geometry">
-                    <rect>
-                     <x>0</x>
-                     <y>0</y>
-                     <width>550</width>
-                     <height>100</height>
-                    </rect>
-                   </property>
-                   <layout class="QFormLayout" name="formLayout_16">
-                    <property name="horizontalSpacing">
-                     <number>50</number>
-                    </property>
-                    <item row="0" column="0">
-                     <widget class="QLabel" name="wEPKeyLabel_11">
-                      <property name="text">
-                       <string>Passphrase</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QLineEdit" name="le_passphrase_psk">
-                      <property name="echoMode">
-                       <enum>QLineEdit::Password</enum>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="keyIndexLabel">
+                  <property name="text">
+                   <string>Key Index</string>
+                  </property>
                  </widget>
-                </widget>
-               </item>
-               <item>
-                <spacer name="verticalSpacer_4">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </widget>
-            </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QComboBox" name="cb_keyIndex">
+                  <property name="focusPolicy">
+                   <enum>Qt::NoFocus</enum>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>1</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>2</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>3</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>4</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="passphraseWidget" native="true">
+               <layout class="QFormLayout" name="formLayout_16">
+                <property name="horizontalSpacing">
+                 <number>50</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>20</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>7</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>7</number>
+                </property>
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="le_passphrase">
+                  <property name="echoMode">
+                   <enum>QLineEdit::Password</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="wEPKeyLabel_11">
+                  <property name="text">
+                   <string>Passphrase</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>28</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </widget>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <property name="rightMargin">
-             <number>50</number>
-            </property>
             <item>
              <spacer name="horizontalSpacer_2">
               <property name="orientation">
@@ -526,8 +474,8 @@ max-width:100;
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>550</width>
-           <height>300</height>
+           <width>600</width>
+           <height>320</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -670,14 +618,12 @@ max-width:100;
   <tabstop>radioButton_manualSetup</tabstop>
   <tabstop>cb_ssid</tabstop>
   <tabstop>btn_refresh</tabstop>
-  <tabstop>le_passphrase</tabstop>
   <tabstop>cb_encryptionType</tabstop>
   <tabstop>le_ssid</tabstop>
   <tabstop>listWidget</tabstop>
   <tabstop>le_wepkey</tabstop>
   <tabstop>cb_keyIndex</tabstop>
-  <tabstop>le_passphrase_wpa</tabstop>
-  <tabstop>le_passphrase_psk</tabstop>
+  <tabstop>le_passphrase</tabstop>
   <tabstop>btn_apply_ws</tabstop>
   <tabstop>le_newPassword</tabstop>
   <tabstop>le_confirmPassword</tabstop>
@@ -698,22 +644,6 @@ max-width:100;
     <hint type="destinationlabel">
      <x>398</x>
      <y>269</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cb_encryptionType</sender>
-   <signal>activated(int)</signal>
-   <receiver>stackedWidget_3</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>505</x>
-     <y>261</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>444</x>
-     <y>458</y>
     </hint>
    </hints>
   </connection>

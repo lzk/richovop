@@ -1,3 +1,8 @@
+/////////////////////////////////////////
+/// File:mainwidget.cpp
+/// Author:Jacky Liang
+/// Version:
+/////////////////////////////////////////
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
 #include "ui_copy.h"
@@ -7,9 +12,9 @@
 #include <QAction>
 #include <QDebug>
 #include <QMainWindow>
+#include <QProgressDialog>
 
 #include "app/devicemanager.h"
-#include "app/vop_protocol.h"
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
@@ -17,15 +22,16 @@ MainWidget::MainWidget(QWidget *parent) :
     tc(new Ui::TabCopy),
     ts(new Ui::TabSetting),
     ta(new Ui::TabAbout),
-    deviceManager(new DeviceManager),
-    status(0)
+    deviceManager (new DeviceManager),
+    device_status(0),
+    cmd_status(DeviceManager::CMD_STATUS_COMPLETE)
 {
     ui->setupUi(this);
     createActions();
     initializeUi();
     retranslateUi();
+
     initialize();
-    updateUi();
 }
 
 MainWidget::~MainWidget()
@@ -41,25 +47,175 @@ MainWidget::~MainWidget()
 
 void MainWidget::retranslateUi()
 {
-    setWindowTitle(tr("vop"));
 } // retranslateUi
 
 void MainWidget::initialize()
 {
     deviceManager->moveToThread(&deviceManageThread);
-    connect(this ,SIGNAL(signals_copy()) ,deviceManager ,SLOT(slots_copy()));
-    connect(this ,SIGNAL(signals_device_status()) ,deviceManager ,SLOT(slots_device_status()));
-    connect(deviceManager ,SIGNAL(signals_device_status(int)) ,this ,SLOT(slots_device_status(int)));
+    connect(this ,SIGNAL(signals_cmd(int)) ,deviceManager ,SLOT(slots_cmd(int)));
+    connect(deviceManager ,SIGNAL(signals_cmd_result(int,int)) ,this ,SLOT(slots_cmd_result(int ,int)));
+    connect(deviceManager ,SIGNAL(signals_setProgress(int)) ,this ,SLOT(slots_progressBar(int)));
     deviceManageThread.start();
 
-    connect(&timer ,SIGNAL(timeout()) ,this ,SIGNAL(signals_device_status()));
+    connect(&timer ,SIGNAL(timeout()) ,this ,SLOT(slots_timeout()));
 //    timer.setInterval(1000);
     timer.start(1000);
+
+    on_refresh_clicked();
+    updateUi();
+
+    progressDialog = new QProgressDialog(this ,Qt::SplashScreen);
+    progressDialog->setCancelButton(NULL);
+    progressDialog->setLabel(new QLabel(tr("Get Printer Information.")));
 }
 
+void MainWidget::slots_progressBar(int value)
+{
+    progressDialog->setValue(value);
+}
+
+void MainWidget::slots_timeout()
+{
+    static int count = 0;
+    switch(cmd_status)
+    {
+    case DeviceManager::CMD_STATUS_COMPLETE://jobs complete,no job
+        if(count % 10)
+            emit_cmd(DeviceManager::CMD_DEVICE_status);
+        break;
+
+    //others cmd not complete
+    case DeviceManager::CMD_WIFI_getAplist:
+    case DeviceManager::CMD_WIFI_get:
+    case DeviceManager::CMD_DEVICE_status:
+    case DeviceManager::CMD_COPY:
+    case DeviceManager::CMD_WIFI_apply:
+    default://
+        break;
+    }
+    count ++;
+    if(count >= 100)
+        count = 0;
+}
+
+void MainWidget::slots_cmd()
+{
+    QObject* sd = sender();
+    if(sd == tc->copy)    {
+        emit_cmd(DeviceManager::CMD_COPY);
+    }else if(sd == ts->btn_apply_ws){
+        slots_wifi_applyDo();
+    }else if(sd == ts->btn_refresh){
+        emit_cmd(DeviceManager::CMD_WIFI_getAplist);
+    }else if(sd == ts->btn_apply_mp){
+        slots_passwd_setDo();
+    }
+}
+#include <QMessageBox>
+void MainWidget::emit_cmd(int cmd)
+{
+    if(DeviceManager::CMD_STATUS_COMPLETE == cmd_status)    {
+        cmd_status = cmd;
+        emit signals_cmd(cmd);
+    }else{
+        QMessageBox::information(this ,tr("Lenovo Virtual Panel") ,tr("The machine is busy, please try later...") );
+    }
+}
+
+void MainWidget::slots_cmd_result(int cmd ,int err)
+{    
+    cmd_status = DeviceManager::CMD_STATUS_COMPLETE;
+    qDebug()<<"err:"<<tr(VopProtocol::getErrString(err));
+    switch(err){//handle err message box
+    case ERR_communication ://communication err
+        if(DeviceManager::CMD_DEVICE_status != cmd)
+            QMessageBox::information(this ,tr("Lenovo Virtual Panel") ,tr("Failed to acquire the information.") );
+        break;
+    case ERR_Password_incorrect :
+        QMessageBox::information(this ,tr("Lenovo Virtual Panel") ,tr("Authentication error, please enter the password again.") );
+        break;
+    case ERR_CMD_invalid :
+    case ERR_Parameter_invalid :
+    case ERR_Do_not_support :
+    case ERR_Printer_busy :
+    case ERR_Printer_error :
+    case ERR_Set_parameter_error :
+    case ERR_Get_parameter_error :
+    case ERR_Printer_is_Sleeping:
+    case ERR_Printer_is_in_error:
+    case ERR_Scanner_operation_NG :
+    case ERR_ACK :
+    default:
+        break;
+    }
+    switch(cmd)
+    {
+    case DeviceManager::CMD_DEVICE_status:
+        device_status = (err ==  ERR_ACK);
+//        updateCopy();//disable copy or enable
+        tc->copy->setEnabled(device_status);
+        break;
+    case DeviceManager::CMD_WIFI_get:
+        if(!err){//no err,ACK
+//            ts->pageWidget->setEnabled(true);
+            cmdst_wifi_get wifi_para = deviceManager->wifi_get_para();
+            emit ts->checkBox->toggled(wifi_para.wifiEnable & 1 ?true :false);
+            //manual setup display the current ssid
+            ts->le_ssid->setText(wifi_para.ssid);
+            ts->cb_ssid->setCurrentText(wifi_para.ssid);
+            ts->cb_encryptionType->setCurrentIndex(wifi_para.encryption % 4);
+            ts->cb_keyIndex->setCurrentIndex(wifi_para.wepKeyId % 4);
+            wifi_update();
+        }else if(ERR_communication == err){//communication err
+//            ts->pageWidget->setEnabled(false);
+            emit ts->checkBox->toggled(ts->checkBox->isChecked());//update setting enable or disbale
+        }
+        break;
+    case DeviceManager::CMD_PASSWD_confirmForApply:
+        if(!err){//no err,ACK
+            passwd_checked = true;
+            slots_wifi_applyDone();
+        }else if(ERR_Password_incorrect == err){//password incorrect
+            passwd_checked = false;
+            slots_wifi_applyDo();
+        }
+        break;
+    case DeviceManager::CMD_PASSWD_confirmForSetPasswd:
+        if(!err){//no err,ACK
+            slots_passwd_setDone();
+        }else if(ERR_Password_incorrect == err){//password incorrect
+            slots_passwd_setDo();
+        }
+        break;
+    case DeviceManager::CMD_WIFI_getAplist:
+        if(!err){//no err,ACK
+//        if(1){//no err,ACK
+            cmdst_aplist_get aplist = deviceManager->wifi_getAplist();
+            cmdst_wifi_get wifi_para = deviceManager->wifi_get_para();
+            ts->cb_ssid->clear();
+            int current_ssid = 0;
+            for(int i = 0 ;i < NUM_OF_APLIST ;i++){
+//                QString ssid((char*)&aplist.aplist[i]);
+                QString ssid(aplist.aplist[i].ssid);
+                if(ssid.isEmpty()){
+                    break;
+                }else{
+                    ts->cb_ssid->addItem( ssid);
+                    wifi_sw_encryptionType[i] = aplist.aplist[i].encryption;
+                    if(!ssid.compare(wifi_para.ssid))
+                        current_ssid = i;
+                }
+            }
+            ts->cb_ssid->setCurrentIndex(current_ssid);
+            emit ts->cb_ssid->activated(ts->cb_ssid->currentText());
+        }
+        break;
+    default:
+        break;
+    }
+}
 void MainWidget::initializeUi()
 {
-    on_refresh_clicked();
     initializeTabCopy();
     initializeTabSetting();
     initializeTabAbout();
@@ -70,59 +226,46 @@ void MainWidget::createActions()
     //    action_refresh = new QAction(this);
     //    connect(action_refresh ,SIGNAL(triggered()) ,this ,SLOT(on_refresh_clicked()));
 }
-void MainWidget::slots_device_status(int _status)
-{
-    status = _status;
-    updateUi();
-}
 
 #include <QMouseEvent>
 bool MainWidget::eventFilter(QObject *obj, QEvent *event)
 {
-    if(qobject_cast<QComboBox*>(obj))
-    {
+    if(qobject_cast<QComboBox*>(obj))    {
         if(event->type() == QEvent::Wheel)
             return true;
-        return QWidget::eventFilter(obj, event);
-    }
-
-    if (obj == ta->label && event->type() == QEvent::MouseButtonPress) {
+    }    else    if(obj == ts->pageWidget && event->type() == QEvent::Show)    {//wifi setup show
+        emit_cmd(DeviceManager::CMD_WIFI_get);
+    }    else        if(obj == ui->tab_4 && event->type() == QEvent::Hide)        {//tab setting hide
+            passwd_checked = false;
+    }    else    if (obj == ta->label && event->type() == QEvent::MouseButtonPress) {//tab about click
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         if(Qt::LeftButton == mouseEvent->button()
                 && mouseEvent->x() > 130 && mouseEvent->y() > 280
                 && mouseEvent->x() < 180 && mouseEvent->y() < 330
-                )
-        {
+                )        {
 //            action_about_update->trigger();
             slots_about_update();
-            qDebug() << "pos:" << mouseEvent->pos();
+//            qDebug() << "pos:" << mouseEvent->pos();
         }
         return true;
-    } else {
-        // standard event processing
-        return QWidget::eventFilter(obj, event);
     }
+    return QWidget::eventFilter(obj, event);
 }
 
 void MainWidget::updateUi()
 {
-    updateCopy();
     QString device_uri = deviceManager->getCurrentDeviceURI();
     QMainWindow* mainWindow = qobject_cast<QMainWindow*>(parent());
-    if(mainWindow)
-    {
-        if(device_uri.count())
-        {
+    if(mainWindow){
+        if(!device_uri.isEmpty()){
             QString title;
             title = ui->comboBox_deviceList->currentText() + " - " + device_uri;
                mainWindow->setWindowTitle(title) ;
-        }
-        else
-        {
-               mainWindow->setWindowTitle("vop");
+        }else{
+               mainWindow->setWindowTitle(tr("Ricoh VOP"));
         }
     }
-    update();
+//    update();
 }
 
 void MainWidget::on_refresh_clicked()
@@ -134,24 +277,24 @@ void MainWidget::on_refresh_clicked()
     {
         ui->comboBox_deviceList->insertItems(0 ,printerNames);
         ui->comboBox_deviceList->setCurrentIndex(selected_printer);
+        on_comboBox_deviceList_activated(selected_printer);
     }
 }
 
 void MainWidget::on_comboBox_deviceList_activated(int index)
 {
-    deviceManager->selectDevice(index);
+    deviceManager->selectDevice(index);    
     updateUi();
+    ui->tabWidget->setCurrentWidget(ui->tab_5);
+    emit_cmd(DeviceManager::CMD_DEVICE_status);
 }
 
 ///////////////////////////////////////////////////////////tab about/////////////////////////////////////////////////////////
 void MainWidget::initializeTabAbout()
 {
     ta->setupUi(ui->tab_5);
-//    ta->label->setMask(QPixmap(QString::fromUtf8(":/images/about.png")).mask());
-
 //    action_about_update = new QAction(this);
 //    connect(action_about_update ,SIGNAL(triggered()) ,this ,SLOT(slots_about_update()));
-
     ta->label->installEventFilter(this);
 }
 
@@ -204,22 +347,23 @@ void MainWidget::initializeTabCopy()
     int i;
     for(i = 0 ;i < sizeof(output_size_list) / sizeof(output_size_list[0]) ;i++)
         stringlist_output_size << output_size_list[i];
-    connect(tc->scaling_minus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_minus_plus()));
-    connect(tc->scaling_plus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_minus_plus()));
-    connect(tc->copies_minus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_minus_plus()));
-    connect(tc->copies_plus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_minus_plus()));
-    connect(tc->density_minus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_minus_plus()));
-    connect(tc->density_plus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_minus_plus()));
-    connect(tc->photo ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_scaningMode()));
-//    connect(tc->text ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_scaningMode()));
-    connect(tc->IDCardCopy ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_scaningMode()));
+
+    connect(tc->btn_default ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
+    connect(tc->scaling_minus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
+    connect(tc->scaling_plus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
+    connect(tc->copies_minus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
+    connect(tc->copies_plus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
+    connect(tc->density_minus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
+    connect(tc->density_plus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
+//    connect(tc->text ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_pushbutton()));
+    connect(tc->IDCardCopy ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
+    connect(tc->photo ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_radio(bool)));
     connect(tc->combo_documentType ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(tc->combo_documentSize ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(tc->combo_outputSize ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(tc->combo_nIn1Copy ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(tc->combo_dpi ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
-    connect(tc->btn_default ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_default()));
-    connect(tc->copy ,SIGNAL(clicked()) ,this ,SIGNAL(signals_copy()));
+    connect(tc->copy ,SIGNAL(clicked()) ,this ,SLOT(slots_cmd()));
 
 //    action_copy_default = new QAction(this);
 //    connect(action_copy_default ,SIGNAL(triggered()) ,this ,SLOT(slots_copy_default()));
@@ -233,143 +377,6 @@ void MainWidget::initializeTabCopy()
     tc->combo_dpi->installEventFilter(this);
 }
 
-void MainWidget::slots_copy_combo(int value)
-{
-    QComboBox* qb = qobject_cast<QComboBox*>(sender( ));
-    if(!qb)
-        return;
-    copycmdset copyPara = deviceManager->getCopyParameter();
-    copycmdset* pCopyPara = &copyPara;
-    if(qb == tc->combo_documentType)              pCopyPara->mediaType = value;
-    else if(qb == tc->combo_dpi)                           pCopyPara->dpi = value;
-    else if(qb == tc->combo_documentSize)
-    {
-        pCopyPara->orgSize = value;
-        //document size setting can change scaling
-        if(!pCopyPara->nUp)
-            GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
-    }
-    else if(qb == tc->combo_nIn1Copy)
-    {
-        pCopyPara->nUp = value;
-        QStringList sl(stringlist_output_size);
-        if(value)
-        {
-            pCopyPara->scale = 100;
-            if(1 == value)//2 in 1 copy
-            {
-                //tc->combo_outputSize hide a6 b6
-                sl.removeAt(5);
-                sl.removeAt(3);
-            }else{
-                //tc->combo_outputSize only letter a4
-                sl.removeLast();
-                sl.removeLast();
-                sl.removeLast();
-                sl.removeLast();
-                sl.removeLast();
-                sl.removeLast();
-            }
-        }else{
-            GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
-        }
-
-        tc->combo_outputSize->clear();
-        tc->combo_outputSize->insertItems(0 ,sl);
-    }
-    else if(qb == tc->combo_outputSize)
-    {
-        if(1 == pCopyPara->nUp)
-        {
-            if(value > 3)                value += 2;
-            else if(value > 2)        value ++;
-        }
-        tc->combo_nIn1Copy->clear();
-        if(3 == value || 5 == value)
-        {
-            tc->combo_nIn1Copy->addItem("1");
-        }else if(value > 1){
-            tc->combo_nIn1Copy->addItem("1");
-            tc->combo_nIn1Copy->addItem("2");
-        }else{
-            tc->combo_nIn1Copy->addItem("1");
-            tc->combo_nIn1Copy->addItem("2");
-            tc->combo_nIn1Copy->addItem("4");
-            tc->combo_nIn1Copy->addItem("9");
-        }
-
-        pCopyPara->paperSize = value;
-        if(!pCopyPara->nUp)
-            GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
-        qDebug()<<"outsize"<<stringlist_output_size.at(value);
-    }
-    deviceManager->setCopyParameter(pCopyPara);
-    updateUi();
-}
-
-void MainWidget::slots_copy_scaningMode()
-{
-    QAbstractButton* ab = qobject_cast<QAbstractButton*>(sender( ));
-    if(!ab)
-        return;
-    copycmdset copyPara = deviceManager->getCopyParameter();
-    copycmdset* pCopyPara = &copyPara;
-    if(2 == pCopyPara->scanMode)
-    {
-        if(ab == tc->IDCardCopy)
-        {
-            if(tc->photo->isChecked())
-                pCopyPara->scanMode = 0;
-            else
-                pCopyPara->scanMode = 1;
-            GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
-        }
-    }else{
-        if(ab == tc->photo)
-        {
-            pCopyPara->scanMode = !tc->photo->isChecked();
-        }
-//        else if(ab == tc->text)
-//        {
-//            if(1 == pCopyPara->scanMode)
-//                return;
-//            pCopyPara->scanMode = 1;
-//        }
-        else if(ab == tc->IDCardCopy)
-        {
-            pCopyPara->scanMode = 2;
-            pCopyPara->dpi = 1;
-            pCopyPara->scale = 100;
-        }
-    }
-    deviceManager->setCopyParameter(pCopyPara);
-    updateUi();
-}
-
-void MainWidget::slots_copy_minus_plus()
-{
-    QPushButton* pb = qobject_cast<QPushButton*>(sender( ));
-    if(!pb)
-        return;
-    copycmdset copyPara = deviceManager->getCopyParameter();
-    copycmdset* pCopyPara = &copyPara;
-    if(pb == tc->scaling_minus){
-        pCopyPara->scale --;
-    }else if(pb == tc->scaling_plus){
-        pCopyPara->scale ++;
-    }else if(pb == tc->density_minus){
-        pCopyPara->Density --;
-    }else if(pb == tc->density_plus){
-        pCopyPara->Density ++;
-    }else if(pb == tc->copies_minus){
-        pCopyPara->copyNum --;
-    }else if(pb == tc->copies_plus){
-        pCopyPara->copyNum ++;
-    }
-    deviceManager->setCopyParameter(pCopyPara);
-    updateUi();
-}
-
 #define SetWhite(widget) widget->setStyleSheet("background-color:white")
 #define SetGray(widget) widget->setStyleSheet("background-color:gray")
 #define SetIDCardCopy(widget) widget->setStyleSheet(":enabled:!pressed{background-color:#faaf40}")
@@ -377,7 +384,7 @@ void MainWidget::slots_copy_minus_plus()
 
 void MainWidget::updateCopy()
 {
-    copycmdset copyPara = deviceManager->getCopyParameter();
+    copycmdset copyPara = deviceManager->copy_get_para();
     copycmdset* pCopyPara = &copyPara;
     tc->scaling->setText(QString("%1%").arg(pCopyPara->scale));
     tc->copies->setText(QString("%1").arg(pCopyPara->copyNum));
@@ -397,7 +404,39 @@ void MainWidget::updateCopy()
     default: break;
     }
 
+    QStringList sl(stringlist_output_size);
+    if(1 == pCopyPara->nUp){//2in1 hide a6 b6
+        sl.removeAt(5);
+        sl.removeAt(3);
+        if(3 == pCopyPara->paperSize || 5 == pCopyPara->paperSize){
+            pCopyPara->paperSize = 0;
+        }
+    }else if(pCopyPara->nUp) {// 4in1 and 9in1 only letter a4
+        sl.removeLast();
+        sl.removeLast();
+        sl.removeLast();
+        sl.removeLast();
+        sl.removeLast();
+        sl.removeLast();
+        if(pCopyPara->paperSize > 1)
+            pCopyPara->paperSize = 0;
+    }
+    tc->combo_outputSize->clear();
+    tc->combo_outputSize->insertItems(0 ,sl);
+
     int value = pCopyPara->paperSize;
+    tc->combo_nIn1Copy->clear();
+    if(3 == value || 5 == value){
+        tc->combo_nIn1Copy->addItem("1");
+    }else if(value > 1){
+        tc->combo_nIn1Copy->addItem("1");
+        tc->combo_nIn1Copy->addItem("2");
+    }else{
+        tc->combo_nIn1Copy->addItem("1");
+        tc->combo_nIn1Copy->addItem("2");
+        tc->combo_nIn1Copy->addItem("4");
+        tc->combo_nIn1Copy->addItem("9");
+    }
     if(1 == pCopyPara->nUp)
     {
         if(value > 4)                value -= 2;
@@ -415,7 +454,7 @@ void MainWidget::updateCopy()
     if(pCopyPara->scale <= 25) {pCopyPara->scale = 25; tc->scaling_minus->setEnabled(false);}
     else{tc->scaling_minus->setEnabled(true);}
 
-    if(pCopyPara->copyNum >= 100) {pCopyPara->copyNum = 100; tc->copies_plus->setEnabled(false);}
+    if(pCopyPara->copyNum >= 99) {pCopyPara->copyNum = 99; tc->copies_plus->setEnabled(false);}
     else{tc->copies_plus->setEnabled(true);}
     if(pCopyPara->copyNum <= 1) {pCopyPara->copyNum = 1; tc->copies_minus->setEnabled(false);}
     else{tc->copies_minus->setEnabled(true);}
@@ -427,8 +466,9 @@ void MainWidget::updateCopy()
 
     if(2 == pCopyPara->scanMode)
     {
-        tc->scaling_plus->setEnabled(false);
-        tc->scaling_minus->setEnabled(false);
+//        tc->scaling_plus->setEnabled(false);
+//        tc->scaling_minus->setEnabled(false);
+        tc->bg_scaling->setEnabled(false);
         tc->combo_documentSize->setEnabled(false);
         tc->combo_nIn1Copy->setEnabled(false);
         tc->combo_dpi->setEnabled(false);
@@ -436,8 +476,9 @@ void MainWidget::updateCopy()
     }
     else
     {
-        if(pCopyPara->scale < 400) {tc->scaling_plus->setEnabled(true);}
-        if(pCopyPara->scale > 25) {tc->scaling_minus->setEnabled(true);}
+        tc->bg_scaling->setEnabled(true);
+//        if(pCopyPara->scale < 400) {tc->scaling_plus->setEnabled(true);}
+//        if(pCopyPara->scale > 25) {tc->scaling_minus->setEnabled(true);}
         tc->combo_documentSize->setEnabled(true);
         tc->combo_nIn1Copy->setEnabled(true);
         tc->combo_dpi->setEnabled(true);
@@ -456,16 +497,93 @@ void MainWidget::updateCopy()
         if(pCopyPara->scale < 400) {tc->scaling_plus->setEnabled(true);}
         if(pCopyPara->scale > 25) {tc->scaling_minus->setEnabled(true);}
     }
-    if(!status)//device status ready
-        tc->copy->setEnabled(true);
-    else
-        tc->copy->setEnabled(false);
+    tc->copy->setEnabled(device_status);
 }
 
-void MainWidget::slots_copy_default()
+void MainWidget::slots_copy_combo(int value)
 {
-    deviceManager->setDefaultCopyParameter();
-    updateUi();
+    QObject* sd = sender();
+    copycmdset copyPara = deviceManager->copy_get_para();
+    copycmdset* pCopyPara = &copyPara;
+    if(sd == tc->combo_documentType)
+        pCopyPara->mediaType = value;
+    else if(sd == tc->combo_dpi)
+        pCopyPara->dpi = value;
+    else if(sd == tc->combo_documentSize) {//disable when scanMode ==2
+        pCopyPara->orgSize = value;
+        if(!pCopyPara->nUp)// && 2 > pCopyPara->scanMode)//always true
+            GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
+    }else if(sd == tc->combo_nIn1Copy){//disable when scanMode ==2
+        pCopyPara->nUp = value;
+        if(value)        {
+            pCopyPara->scale = 100;
+        }else{
+//            if(2 > pCopyPara->scanMode)//always true
+                GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
+        }
+    }    else if(sd == tc->combo_outputSize)    {
+        if(1 == pCopyPara->nUp)        {
+            if(value > 3)                value += 2;
+            else if(value > 2)        value ++;
+        }
+        pCopyPara->paperSize = value;
+        if(!pCopyPara->nUp && 2 > pCopyPara->scanMode)
+            GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
+    }
+    deviceManager->copy_set_para(pCopyPara);
+    updateCopy();
+}
+
+void MainWidget::slots_copy_pushbutton()
+{
+    copycmdset copyPara = deviceManager->copy_get_para();
+    copycmdset* pCopyPara = &copyPara;
+    QObject* sd = sender();
+    if(sd == tc->IDCardCopy){//button IDCardCopy click
+        if(2 == pCopyPara->scanMode)    {//ID Card mode
+            if(tc->photo->isChecked())
+                pCopyPara->scanMode = 0;
+            else
+                pCopyPara->scanMode = 1;
+            GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
+        }else{
+            pCopyPara->scanMode = 2;
+            pCopyPara->dpi = 1;//600 * 600
+            pCopyPara->scale = 100;
+        }
+    }else if(sd == tc->btn_default){
+        deviceManager->copy_set_defaultPara();
+        updateCopy();
+        return;
+    }else if(sd == tc->scaling_minus){
+        pCopyPara->scale --;
+    }else if(sd == tc->scaling_plus){
+        pCopyPara->scale ++;
+    }else if(sd == tc->density_minus){
+        pCopyPara->Density --;
+    }else if(sd == tc->density_plus){
+        pCopyPara->Density ++;
+    }else if(sd == tc->copies_minus){
+        pCopyPara->copyNum --;
+    }else if(sd == tc->copies_plus){
+        pCopyPara->copyNum ++;
+    }
+    deviceManager->copy_set_para(pCopyPara);
+    updateCopy();
+}
+
+void MainWidget::slots_copy_radio(bool checked)
+{
+    QObject* sd = sender();
+    if(sd == tc->photo){
+        copycmdset copyPara = deviceManager->copy_get_para();
+        copycmdset* pCopyPara = &copyPara;
+        if(2 != pCopyPara->scanMode){//not ID Card mode
+            pCopyPara->scanMode = !checked;
+            deviceManager->copy_set_para(pCopyPara);
+            updateCopy();
+        }
+    }
 }
 
 //////////////////////////tab setting///////////////////
@@ -474,84 +592,229 @@ void MainWidget::slots_copy_default()
 void MainWidget::initializeTabSetting()
 {
     ts->setupUi(ui->tab_4);
+
     ts->listWidget->setCurrentRow(0);
     ts->stackedWidget->setCurrentIndex(0);
     ts->radioButton_searchWifi->setChecked(true);
-    ts->stackedWidget_2->setCurrentIndex(0);
-    ts->cb_encryptionType->setCurrentIndex(2);
-    ts->stackedWidget_3->setCurrentIndex(2);
+    ts->searchWifiWidget->show();
+    ts->manualSetupWidget->hide();
+
+    wifi_encryptionType = 2;
+    wifi_ms_wepIndex = 0;
+    wifi_sw_wepIndex = 0;
+    wifi_sw_encryptionType[0] = 2;
+    passwd_checked = false;
+    wifi_update();
 
     QRegExp regexp("^[\\x0020-\\x007e]{1,32}$");
     QValidator *validator = new QRegExpValidator(regexp, this);
     ts->le_ssid->setValidator(validator);
 
-    ts->btn_apply_ws->setEnabled(false);
+    regexp.setPattern("^[0-9a-zA-Z]{1,32}$");
+    QValidator* validator2 =  new QRegExpValidator(regexp, this);
+    ts->le_newPassword->setValidator(validator2);
+    ts->le_confirmPassword->setValidator(validator2);
 
-    connect(ts->radioButton_searchWifi ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_setting_radiobutton(bool)));
-    connect(ts->le_ssid,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_setting_lineedit_textChanged(QString)));
-    connect(ts->le_wepkey,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_setting_lineedit_textChanged(QString)));
-    connect(ts->le_passphrase_wpa,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_setting_lineedit_textChanged(QString)));
-    connect(ts->le_passphrase_psk,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_setting_lineedit_textChanged(QString)));
+    connect(ts->radioButton_searchWifi ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_wifi_radiobutton(bool)));
+    connect(ts->le_ssid,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_wifi_textChanged(QString)));
+    connect(ts->le_wepkey,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_wifi_textChanged(QString)));
+    connect(ts->le_passphrase,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_wifi_textChanged(QString)));
+    connect(ts->cb_encryptionType,SIGNAL(activated(QString)) ,this ,SLOT(slots_wifi_textChanged(QString)));
+    connect(ts->cb_keyIndex,SIGNAL(activated(QString)) ,this ,SLOT(slots_wifi_textChanged(QString)));
+    connect(ts->cb_ssid,SIGNAL(activated(QString)) ,this ,SLOT(slots_wifi_textChanged(QString)));
+    connect(ts->btn_apply_ws ,SIGNAL(clicked()) ,this ,SLOT(slots_cmd()));
+    connect(ts->btn_refresh ,SIGNAL(clicked()) ,this ,SLOT(slots_cmd()));
+    connect(ts->checkBox ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_wifi_checkbox(bool)));
+    connect(ts->btn_apply_mp ,SIGNAL(clicked()) ,this ,SLOT(slots_cmd()));
 
-    connect(ts->cb_encryptionType,SIGNAL(activated(QString)) ,this ,SLOT(slots_setting_lineedit_textChanged(QString)));
+    ts->pageWidget->installEventFilter(this);
+    ts->cb_encryptionType->installEventFilter(this);
+    ts->cb_keyIndex->installEventFilter(this);
+    ts->cb_ssid->installEventFilter(this);
+    ui->tab_4->installEventFilter(this);
 }
 
-void MainWidget::slots_setting_radiobutton(bool toggle)
+void MainWidget::wifi_update_encryptionType()
 {
-    QAbstractButton* ab = qobject_cast<QAbstractButton*>(sender( ));
-    if(!ab)
-        return;
-    if(ab == ts->radioButton_searchWifi)
+    switch(wifi_encryptionType)
     {
-        if(toggle)
-        {
-            ts->stackedWidget_2->setCurrentIndex(0);
+    case 1://wep
+        ts->passphraseWidget->hide();
+        ts->wepWidget->show();
+        break;
+    case 2://wpa2-psk-aes
+    case 3://mixed mode psk
+        ts->passphraseWidget->show();
+        ts->wepWidget->hide();
+        break;
+    default:
+        ts->passphraseWidget->hide();
+        ts->wepWidget->hide();
+        break;
+    }
+}
+
+void MainWidget::slots_wifi_radiobutton(bool checked)
+{
+    QObject* sd = sender();
+    if(sd == ts->radioButton_searchWifi){
+        if(checked){//show wifi setup
+            ts->searchWifiWidget->show();
+            ts->manualSetupWidget->hide();
+            //search wifi password
+            ts->le_wepkey->setText(wifi_sw_password);
+            ts->le_passphrase->setText(wifi_sw_password);
+            ts->cb_keyIndex->setCurrentIndex(wifi_sw_wepIndex);
+        }else{//show manual setup
+            ts->searchWifiWidget->hide();
+            ts->manualSetupWidget->show();
+            //manual setup password
+            ts->le_wepkey->setText(wifi_ms_password);
+            ts->le_passphrase->setText(wifi_ms_password);
+            ts->cb_keyIndex->setCurrentIndex(wifi_ms_wepIndex);
+        }
+        wifi_update();
+    }
+}
+
+void MainWidget::wifi_update()
+{
+    wifi_update_Data();
+    wifi_update_encryptionType();
+    ts->btn_apply_ws->setEnabled(wifi_validate_ssidPassword());
+}
+
+void MainWidget::wifi_update_Data()
+{
+    if(ts->radioButton_searchWifi->isChecked()){
+        wifi_ssid = ts->cb_ssid->currentText();
+        int index = ts->cb_ssid->currentIndex();
+        wifi_encryptionType = wifi_sw_encryptionType[index < 0 ?0 :index];
+        wifi_wepIndex = wifi_sw_wepIndex;
+    }else{
+        wifi_encryptionType = ts->cb_encryptionType->currentIndex();
+        wifi_ssid = ts->le_ssid->text();
+        wifi_wepIndex = wifi_ms_wepIndex;
+    }
+    if(1 == wifi_encryptionType){
+        wifi_password = ts->le_wepkey->text();
+    }else{
+        wifi_password = ts->le_passphrase->text();//not use when encryptionType=0
+    }
+}
+
+void MainWidget::slots_wifi_textChanged(const QString &arg1)
+{
+    QObject* sd = sender();
+    if(sd == ts->le_passphrase){
+        if(ts->radioButton_searchWifi->isChecked()){
+            wifi_sw_password = arg1;
         }else{
-            ts->stackedWidget_2->setCurrentIndex(1);
+            wifi_ms_password = arg1;
+        }
+        wifi_update();
+    }else if(sd == ts->le_wepkey){
+        if(ts->radioButton_searchWifi->isChecked()){
+            wifi_sw_password = arg1;
+        }else{
+            wifi_ms_password = arg1;
+        }
+        wifi_update();
+    }else if(sd == ts->le_ssid){
+        wifi_update();
+    }else  if(sd == ts->cb_encryptionType){
+        wifi_update();
+    }else if(sd == ts->cb_ssid){
+        wifi_sw_password.clear();
+        ts->le_passphrase->clear();
+        ts->le_wepkey->clear();
+        wifi_update();
+    }else if(sd == ts->cb_keyIndex){
+        if(ts->radioButton_searchWifi->isChecked()){
+            wifi_sw_wepIndex = ts->cb_keyIndex->currentIndex();
+        }else{
+            wifi_ms_wepIndex = ts->cb_keyIndex->currentIndex();
         }
     }
 }
 
-void MainWidget::slots_setting_lineedit_textChanged(const QString &arg1)
+bool MainWidget::wifi_validate_ssidPassword()
 {
-//    QLineEdit* le = qobject_cast<QLineEdit*>(sender( ));
-//    if(!le)
-//        return;
-    validateSsidPassword("" ,"");
+    bool validPattern = false;
+    if(wifi_encryptionType){
+        QRegExp regexp;
+        if(1 == wifi_encryptionType)
+        {
+            regexp.setPattern("^(?:.{5,5}|.{13,13}|[0-9a-fA-F]{10,10}|[0-9a-fA-F]{26,26})$");
+        }else{
+            regexp.setPattern("^(?:.{8,63}|[0-9a-fA-F]{64,64})$");
+        }
+        if(!wifi_ssid.isEmpty() && !wifi_password.isEmpty() && -1 != regexp.indexIn(wifi_password))
+            validPattern = true;
+    }else{
+        if(!wifi_ssid.isEmpty())
+             validPattern = true;
+    }
+    return validPattern;
 }
 
-void MainWidget::validateSsidPassword(const QString& ssid ,const QString& password)
+void MainWidget::slots_wifi_checkbox(bool checked)
 {
-    QRegExp regexp;
-    QString str = ts->le_ssid->text();
-    QString toValidateStr = QString();
-    bool validPattern = false;
+    if(checked){
+        ts->frame->setEnabled(true);
+        ts->btn_apply_ws->setEnabled(wifi_validate_ssidPassword());
+    }else{//diable setting
+        ts->frame->setEnabled(false);
+        ts->btn_apply_ws->setEnabled(true);
+    }
+}
 
-    switch(ts->cb_encryptionType->currentIndex())
-    {
-    case 1://wep
-    {
-        regexp.setPattern("^(?:.{5,5}|.{13,13}|[0-9a-fA-F]{10,10}|[0-9a-fA-F]{26,26})$");
-        toValidateStr = ts->le_wepkey->text();
-        break;
+#include <QInputDialog>
+void MainWidget::slots_wifi_applyDo()
+{
+    if(passwd_checked){
+        emit_cmd(DeviceManager::CMD_PASSWD_confirmForApply);
+    }else{
+        bool ok;
+        passwd = QInputDialog::getText(this ,tr("Login") ,tr("Password") ,QLineEdit::Password ,QString() ,&ok);
+        if (ok && !passwd.isEmpty()){
+            emit_cmd(DeviceManager::CMD_PASSWD_confirmForApply);
+        }
     }
-    case 2://wpa2-psk-aes
-    {
-        regexp.setPattern("^(?:.{8,63}|[0-9a-fA-F]{64,64})$");
-        toValidateStr = ts->le_passphrase_wpa->text();
-        break;
-    }
-    case 3://mixed mode psk
-    {
-        regexp.setPattern("^(?:.{8,63}|[0-9a-fA-F]{64,64})$");
-        toValidateStr = ts->le_passphrase_psk->text();
-        break;
-    }
-    default:
-        break;
-    }
+}
 
-    if(str.count() && toValidateStr.count() && -1 != regexp.indexIn(toValidateStr))
-        validPattern = true;
-    ts->btn_apply_ws->setEnabled(validPattern);
+void MainWidget::slots_wifi_applyDone()
+{
+    cmdst_wifi_get wifi_para = deviceManager->wifi_get_para();
+    //setting data then apply
+    deviceManager->wifi_set_password(&wifi_para ,wifi_password.toLatin1());
+    deviceManager->wifi_set_ssid(&wifi_para ,wifi_ssid.toLatin1());
+    wifi_para.encryption = wifi_encryptionType;
+    wifi_para.wepKeyId = wifi_wepIndex;
+    wifi_para.wifiEnable &= ~1;
+    wifi_para.wifiEnable |= ts->checkBox->isChecked() ? 1 : 0;//bit 0
+    deviceManager->wifi_set_para(&wifi_para);
+    emit_cmd(DeviceManager::CMD_WIFI_apply);
+}
+
+void MainWidget::slots_passwd_setDo()
+{
+    if(ts->le_newPassword->text().isEmpty() || ts->le_confirmPassword->text().isEmpty())
+        return;
+    if(QString::compare(ts->le_newPassword->text() ,ts->le_confirmPassword->text())){
+        QMessageBox::critical(this ,tr("Lenovo Virtual Panel") ,tr("The passwords you entered are different, please try again."));
+    }else{
+        bool ok;
+        passwd = QInputDialog::getText(this ,tr("Login") ,tr("Password") ,QLineEdit::Password ,QString() ,&ok);
+        if (ok && !passwd.isEmpty())
+        {
+            emit_cmd(DeviceManager::CMD_PASSWD_confirmForSetPasswd);
+        }
+    }
+}
+
+void MainWidget::slots_passwd_setDone()
+{
+    deviceManager->passwd_set(ts->le_newPassword->text().toLatin1());
+    emit_cmd(DeviceManager::CMD_PASSWD_set);
 }
