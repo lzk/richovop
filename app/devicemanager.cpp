@@ -127,7 +127,7 @@ int DeviceManager::getDeviceList(QStringList& printerInfo)
 }
 
 QString DeviceManager::current_devicename = QString();
-int DeviceManager::device_writeThenRead(const char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize)
+int DeviceManager::device_writeThenRead(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize)
 {
     if(current_devicename.isEmpty())
         return -1;
@@ -157,39 +157,27 @@ void DeviceManager::slots_cmd(int cmd)
         break;
     }
     case CMD_COPY:
-        emit signals_setProgress(0);
-        emit signals_setProgress(20);
-        err = protocol->cmd_copy();
-        emit signals_setProgress(100);
+        err = protocol->cmd(VopProtocol::CMD_COPY);
         break;
     case CMD_WIFI_apply:
-        emit signals_setProgress(0);
-        emit signals_setProgress(20);
-        err = protocol->cmd_wifi_set();
-        emit signals_setProgress(100);
+        err = protocol->cmd(VopProtocol::CMD_WIFI_apply);
         break;
     case CMD_WIFI_get:
-        emit signals_setProgress(0);
-        emit signals_setProgress(20);
-        err = protocol->cmd_wifi_get();
-        emit signals_setProgress(100);
+        err = protocol->cmd(VopProtocol::CMD_WIFI_get);
         break;
     case CMD_WIFI_getAplist:
-        emit signals_setProgress(0);
-        emit signals_setProgress(20);
-        err = protocol->cmd_wifi_getAplist();
-        emit signals_setProgress(100);
+        err = protocol->cmd(VopProtocol::CMD_WIFI_getAplist);
         break;
     case CMD_PASSWD_set:
-        err = protocol->cmd_passwd_set();
+        err = protocol->cmd(VopProtocol::CMD_PASSWD_set);
         break;
     case CMD_PASSWD_get:
-        err = protocol->cmd_passwd_get();
+        err = protocol->cmd(VopProtocol::CMD_PASSWD_get);
         break;
     case CMD_PASSWD_confirm:
     case CMD_PASSWD_confirmForApply:
     case CMD_PASSWD_confirmForSetPasswd:
-        err = protocol->cmd_passwd_confirm();
+        err = protocol->cmd(VopProtocol::CMD_PASSWD_confirm);
         break;
     default:
         break;

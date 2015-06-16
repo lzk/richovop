@@ -80,7 +80,7 @@ void MainWidget::slots_timeout()
     switch(cmd_status)
     {
     case DeviceManager::CMD_STATUS_COMPLETE://jobs complete,no job
-        if(count % 10)
+        if(0 == count % 10)
             emit_cmd(DeviceManager::CMD_DEVICE_status);
         break;
 
@@ -114,17 +114,24 @@ void MainWidget::slots_cmd()
 #include <QMessageBox>
 void MainWidget::emit_cmd(int cmd)
 {
-    if(DeviceManager::CMD_STATUS_COMPLETE == cmd_status)    {
+    switch(cmd_status)
+    {
+    case DeviceManager::CMD_STATUS_COMPLETE:
+    case DeviceManager::CMD_PASSWD_confirmForApply:
+    case DeviceManager::CMD_PASSWD_confirmForSetPasswd:
+    case DeviceManager::CMD_WIFI_get://first get then get aplist
         cmd_status = cmd;
         emit signals_cmd(cmd);
-    }else{
+        break;
+
+    default:
         QMessageBox::information(this ,tr("Lenovo Virtual Panel") ,tr("The machine is busy, please try later...") );
+        break;
     }
 }
 
 void MainWidget::slots_cmd_result(int cmd ,int err)
-{    
-    cmd_status = DeviceManager::CMD_STATUS_COMPLETE;
+{
     qDebug()<<"err:"<<tr(VopProtocol::getErrString(err));
     switch(err){//handle err message box
     case ERR_communication ://communication err
@@ -157,19 +164,9 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
         break;
     case DeviceManager::CMD_WIFI_get:
         if(!err){//no err,ACK
-//            ts->pageWidget->setEnabled(true);
-            cmdst_wifi_get wifi_para = deviceManager->wifi_get_para();
-            emit ts->checkBox->toggled(wifi_para.wifiEnable & 1 ?true :false);
-            //manual setup display the current ssid
-            ts->le_ssid->setText(wifi_para.ssid);
-            ts->cb_ssid->setCurrentText(wifi_para.ssid);
-            ts->cb_encryptionType->setCurrentIndex(wifi_para.encryption % 4);
-            ts->cb_keyIndex->setCurrentIndex(wifi_para.wepKeyId % 4);
-            wifi_update();
-        }else if(ERR_communication == err){//communication err
-//            ts->pageWidget->setEnabled(false);
-            emit ts->checkBox->toggled(ts->checkBox->isChecked());//update setting enable or disbale
+            slots_wifi_get();
         }
+        emit ts->checkBox->toggled(ts->checkBox->isChecked());//update setting enable or disbale
         break;
     case DeviceManager::CMD_PASSWD_confirmForApply:
         if(!err){//no err,ACK
@@ -180,39 +177,40 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
             slots_wifi_applyDo();
         }
         break;
+    case DeviceManager::CMD_WIFI_apply:
+        if(!err){
+            //clear passwd
+//            wifi_ms_password.clear();
+//            wifi_sw_password.clear();
+//            ts->le_passphrase->clear();
+//            ts->le_wepkey->clear();
+            wifi_update();
+        }
+        break;
     case DeviceManager::CMD_PASSWD_confirmForSetPasswd:
         if(!err){//no err,ACK
             slots_passwd_setDone();
         }else if(ERR_Password_incorrect == err){//password incorrect
+            passwd_checked = false;
             slots_passwd_setDo();
+        }
+        break;
+    case DeviceManager::CMD_PASSWD_set:
+        if(!err){
+            ts->le_confirmPassword->clear();
+            ts->le_newPassword->clear();
         }
         break;
     case DeviceManager::CMD_WIFI_getAplist:
         if(!err){//no err,ACK
 //        if(1){//no err,ACK
-            cmdst_aplist_get aplist = deviceManager->wifi_getAplist();
-            cmdst_wifi_get wifi_para = deviceManager->wifi_get_para();
-            ts->cb_ssid->clear();
-            int current_ssid = 0;
-            for(int i = 0 ;i < NUM_OF_APLIST ;i++){
-//                QString ssid((char*)&aplist.aplist[i]);
-                QString ssid(aplist.aplist[i].ssid);
-                if(ssid.isEmpty()){
-                    break;
-                }else{
-                    ts->cb_ssid->addItem( ssid);
-                    wifi_sw_encryptionType[i] = aplist.aplist[i].encryption;
-                    if(!ssid.compare(wifi_para.ssid))
-                        current_ssid = i;
-                }
-            }
-            ts->cb_ssid->setCurrentIndex(current_ssid);
-            emit ts->cb_ssid->activated(ts->cb_ssid->currentText());
+            slots_wifi_getAplist();
         }
         break;
     default:
         break;
     }
+    cmd_status = DeviceManager::CMD_STATUS_COMPLETE;
 }
 void MainWidget::initializeUi()
 {
@@ -348,6 +346,7 @@ void MainWidget::initializeTabCopy()
     for(i = 0 ;i < sizeof(output_size_list) / sizeof(output_size_list[0]) ;i++)
         stringlist_output_size << output_size_list[i];
 
+    updateCopy();
     connect(tc->btn_default ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
     connect(tc->scaling_minus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
     connect(tc->scaling_plus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
@@ -587,8 +586,6 @@ void MainWidget::slots_copy_radio(bool checked)
 }
 
 //////////////////////////tab setting///////////////////
-/// \brief MainWidget::initializeTabSetting
-///
 void MainWidget::initializeTabSetting()
 {
     ts->setupUi(ui->tab_4);
@@ -673,6 +670,9 @@ void MainWidget::slots_wifi_radiobutton(bool checked)
             ts->le_passphrase->setText(wifi_ms_password);
             ts->cb_keyIndex->setCurrentIndex(wifi_ms_wepIndex);
         }
+        //clear password when radio button emit
+//        ts->le_wepkey->clear();
+//        ts->le_passphrase->clear();
         wifi_update();
     }
 }
@@ -723,6 +723,9 @@ void MainWidget::slots_wifi_textChanged(const QString &arg1)
     }else if(sd == ts->le_ssid){
         wifi_update();
     }else  if(sd == ts->cb_encryptionType){
+//        wifi_ms_password.clear();
+//        ts->le_passphrase->clear();
+//        ts->le_wepkey->clear();
         wifi_update();
     }else if(sd == ts->cb_ssid){
         wifi_sw_password.clear();
@@ -778,6 +781,7 @@ void MainWidget::slots_wifi_applyDo()
         bool ok;
         passwd = QInputDialog::getText(this ,tr("Login") ,tr("Password") ,QLineEdit::Password ,QString() ,&ok);
         if (ok && !passwd.isEmpty()){
+            deviceManager->passwd_set(passwd.toLatin1());
             emit_cmd(DeviceManager::CMD_PASSWD_confirmForApply);
         }
     }
@@ -789,7 +793,7 @@ void MainWidget::slots_wifi_applyDone()
     //setting data then apply
     deviceManager->wifi_set_password(&wifi_para ,wifi_password.toLatin1());
     deviceManager->wifi_set_ssid(&wifi_para ,wifi_ssid.toLatin1());
-    wifi_para.encryption = wifi_encryptionType;
+    wifi_para.encryption = wifi_encryptionType > 1 ? wifi_encryptionType + 1 :wifi_encryptionType;
     wifi_para.wepKeyId = wifi_wepIndex;
     wifi_para.wifiEnable &= ~1;
     wifi_para.wifiEnable |= ts->checkBox->isChecked() ? 1 : 0;//bit 0
@@ -808,6 +812,7 @@ void MainWidget::slots_passwd_setDo()
         passwd = QInputDialog::getText(this ,tr("Login") ,tr("Password") ,QLineEdit::Password ,QString() ,&ok);
         if (ok && !passwd.isEmpty())
         {
+            deviceManager->passwd_set(passwd.toLatin1());
             emit_cmd(DeviceManager::CMD_PASSWD_confirmForSetPasswd);
         }
     }
@@ -816,5 +821,57 @@ void MainWidget::slots_passwd_setDo()
 void MainWidget::slots_passwd_setDone()
 {
     deviceManager->passwd_set(ts->le_newPassword->text().toLatin1());
-    emit_cmd(DeviceManager::CMD_PASSWD_set);
+    emit_cmd(DeviceManager::CMD_PASSWD_set);    
+}
+
+void MainWidget::slots_wifi_get()
+{
+ //            ts->pageWidget->setEnabled(true);
+            cmdst_wifi_get wifi_para = deviceManager->wifi_get_para();
+            //wifi enable
+            ts->checkBox->setChecked(wifi_para.wifiEnable & 1 ?true :false);
+            //ssid
+            QString ssid(wifi_para.ssid);
+            if(ssid.count() > 32)
+                machine_wifi_ssid = QString(wifi_para.ssid).left(32);
+            else
+                machine_wifi_ssid = ssid;
+            ts->le_ssid->setText(machine_wifi_ssid);
+            ts->cb_ssid->setCurrentText(machine_wifi_ssid);
+            //encryption
+            int encryption = wifi_para.encryption % 5;
+            if(encryption != 2){
+                if(encryption == 3 || encryption == 4)
+                        encryption --;
+                ts->cb_encryptionType->setCurrentIndex(encryption);
+            }
+            //key index
+            ts->cb_keyIndex->setCurrentIndex(wifi_para.wepKeyId % 4);
+
+            wifi_update();
+            //get aplist
+            emit ts->btn_refresh->clicked();
+}
+
+void MainWidget::slots_wifi_getAplist()
+{
+    cmdst_aplist_get aplist = deviceManager->wifi_getAplist();
+    //aplist
+    ts->cb_ssid->clear();
+    int current_ssid = 0;
+    for(int i = 0 ;i < NUM_OF_APLIST ;i++){
+//                QString ssid((char*)&aplist.aplist[i]);
+        QString ssid = QString(aplist.aplist[i].ssid).left(32);
+        if(ssid.isEmpty()){
+            break;
+        }else{
+            ts->cb_ssid->addItem( ssid);
+            wifi_sw_encryptionType[i] = aplist.aplist[i].encryption;
+            if(!ssid.compare(machine_wifi_ssid))
+                current_ssid = i;
+        }
+    }
+    ts->cb_ssid->setCurrentIndex(current_ssid);
+    //update ui else
+    emit ts->cb_ssid->activated(ts->cb_ssid->currentText());
 }

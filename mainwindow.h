@@ -21,9 +21,15 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    virtual void closeEvent(QCloseEvent *);
+
 private:
     Ui::MainWindow *ui;
     MainWidget* mainWidget;
+
+private slots:
+    void slots_exit();
 };
 
 #endif // MAINWINDOW_H

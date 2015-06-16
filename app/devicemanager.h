@@ -28,7 +28,7 @@ public:
     void selectDevice(int selected_device);
     QString getCurrentDeviceURI();
     static QString getDeviceURI(const QString&);
-    static int device_writeThenRead(const char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize);
+    static int device_writeThenRead(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize);
 
     void copy_set_defaultPara();
     void copy_set_para(copycmdset* p);
@@ -53,7 +53,6 @@ private:
 
 public:
     enum{
-        CMD_DEVICE_status,
         CMD_COPY,
         CMD_WIFI_apply,
         CMD_WIFI_get,
@@ -61,8 +60,10 @@ public:
         CMD_PASSWD_set,
         CMD_PASSWD_get,
         CMD_PASSWD_confirm,
+
         CMD_PASSWD_confirmForApply,
         CMD_PASSWD_confirmForSetPasswd,
+        CMD_DEVICE_status,
 
         CMD_STATUS_COMPLETE,
 

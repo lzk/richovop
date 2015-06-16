@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     mainwidget.cpp \
     app/vop_protocol.cpp \
     app/devicemanager.cpp \
-    app/vop_device.cpp
+    app/vop_device.cpp \
+    app/deviceapp.cpp
 
 HEADERS  += mainwindow.h \
     mainwidget.h \
@@ -25,7 +26,8 @@ HEADERS  += mainwindow.h \
     app/vop_protocol.h \
     app/vop_device.h \
     lib/usb.h \
-    lib/NetDevice.h
+    lib/NetDevice.h \
+    app/deviceapp.h
 
 FORMS    += mainwindow.ui \
     setting.ui \

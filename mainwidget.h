@@ -85,6 +85,8 @@ private:
     int wifi_ms_wepIndex;
     int wifi_sw_wepIndex;
     int wifi_sw_encryptionType[NUM_OF_APLIST];
+    QString machine_wifi_ssid;
+//    QString machine_wifi_password;
 
     bool passwd_checked;
     QString passwd;
@@ -97,6 +99,8 @@ private:
     void slots_wifi_applyDone();
     void slots_passwd_setDo();
     void slots_passwd_setDone();
+    void slots_wifi_get();
+    void slots_wifi_getAplist();
 
 private slots:
     //////////////////tab about///////////////////////////

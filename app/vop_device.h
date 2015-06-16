@@ -15,7 +15,7 @@ public:
     ~VopDevice();
 
     static int isValidDevice(const char* printer_info);
-    static int writeThenRead(const char* device_uri ,const char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize);
+    static int writeThenRead(const char* device_uri ,char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize);
     static int getDeviceStatus(const char* device_uri);
 
 private:

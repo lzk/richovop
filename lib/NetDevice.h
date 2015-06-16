@@ -17,7 +17,7 @@
 //For VOP uses interfaces start here
 //
 int connetToNetDevice(char* devURI);
-int get_device_id(char *buffer, size_t bufsize);
+int get_device_id_net(char *buffer, size_t bufsize);
 int wirteToNetDevice(void *buffer, int len);
 int readFromNetDevice(void *buffer, int len);
 void closeSocket(void);

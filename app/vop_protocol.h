@@ -27,30 +27,8 @@ enum{
 
     ERR_NOERR = 0,
     ERR_communication = -1,
+    ERR_library = -2,
 };
-typedef enum _CMD_ID
-{
-    _LS_SEARCH		= 0x0000, 	// Search Machine
-    _LS_CONNECT		= 0x0001,	// Connect Machine
-    _LS_DISCONNECT	= 0x0002,	// Disconnect Machine
-    _LS_CALLFUNC	= 0x0100,	// Call Function
-    _LS_SHOWVAR		= 0x0101, 	// Show Variable/Structure
-    _LS_MODIFYVAR	= 0x0102,	// Modify Variable/Structure
-    _LS_PRIVEXEC	= 0x0103,	// Private Execution
-    _LS_ENGCMD		= 0x0104,	// Engine Command
-    _LS_NETCMD		= 0x0105,	// Network Command
-    _LS_WIFICMD		= 0x0106,	// Wireless Command
-    _LS_PRNCMD		= 0x0107,	// Print Command
-    _LS_SCACMD		= 0x0108,	// Scan Command
-    _LS_CPYCMD		= 0x0109,	// Copy Command
-    _LS_FAXCMD		= 0x010A,	// Fax Command
-    _LS_DBGMSG		= 0x0200, 	// Debug Message
-    _LS_HEARTBEAT 	= 0x0201,	// Heart Beat, Null Packet, keep activated
-    _LS_PANKEY		= 0x0300,	// Panel Key Simulation
-    _LS_PANIMG		= 0x0301,	// Panel Frame & LED status
-    _LS_DATADOWN	= 0x0400,	// Download Data
-    _LS_DATAUPLD	= 0x0401	// Upload Data
-}CMD_ID;
 
 typedef struct _copycmdset
 {
@@ -124,29 +102,41 @@ public:
     void copy_set_defaultPara();
     void copy_set_para(copycmdset* p);
     copycmdset copy_get_para();
-    int cmd_copy();
 
     void wifi_set_ssid(cmdst_wifi_get*  ,const char*);
     void wifi_set_password(cmdst_wifi_get*  ,const char*);
     void wifi_set_para(cmdst_wifi_get* p);
     cmdst_wifi_get wifi_get_para();
     cmdst_aplist_get wifi_getAplist();
-    int cmd_wifi_set();
-    int cmd_wifi_get();
-    int cmd_wifi_getAplist();
 
     void passwd_set(const char*);
-    int cmd_passwd_set();
-    int cmd_passwd_get();
-    int cmd_passwd_confirm();
 
+enum{
+    CMD_COPY,
+    CMD_WIFI_apply,
+    CMD_WIFI_get,
+    CMD_WIFI_getAplist,
+    CMD_PASSWD_set,
+    CMD_PASSWD_get,
+    CMD_PASSWD_confirm,
+};
+    int cmd(int);
 private:
     DeviceManager* deviceManager;
     copycmdset* copy_parameter;
     cmdst_wifi_get* wifi_parameter;
     cmdst_aplist_get* wifi_aplist;
     cmdst_passwd* passwd;
-    int vop_cmd(CMD_ID cmd ,int sub_cmd, void* data ,int data_size);
+    int vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size);
+# if 0
+    int cmd_copy();
+    int cmd_wifi_set();
+    int cmd_wifi_get();
+    int cmd_wifi_getAplist();
+    int cmd_passwd_set();
+    int cmd_passwd_get();
+    int cmd_passwd_confirm();
+#endif
 };
 #endif // VOP_PROTOCOL
 
