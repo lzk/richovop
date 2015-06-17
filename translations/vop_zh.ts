@@ -29,52 +29,52 @@
         <translation type="unfinished">关于</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="69"/>
+        <location filename="../mainwidget.cpp" line="62"/>
         <source>Get Printer Information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="121"/>
-        <location filename="../mainwidget.cpp" line="132"/>
-        <location filename="../mainwidget.cpp" line="135"/>
-        <location filename="../mainwidget.cpp" line="814"/>
+        <location filename="../mainwidget.cpp" line="112"/>
+        <location filename="../mainwidget.cpp" line="122"/>
+        <location filename="../mainwidget.cpp" line="125"/>
+        <location filename="../mainwidget.cpp" line="801"/>
         <source>Lenovo Virtual Panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="121"/>
+        <location filename="../mainwidget.cpp" line="112"/>
         <source>The machine is busy, please try later...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="132"/>
+        <location filename="../mainwidget.cpp" line="122"/>
         <source>Failed to acquire the information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="135"/>
+        <location filename="../mainwidget.cpp" line="125"/>
         <source>Authentication error, please enter the password again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="274"/>
+        <location filename="../mainwidget.cpp" line="247"/>
         <source>Ricoh VOP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="787"/>
-        <location filename="../mainwidget.cpp" line="817"/>
+        <location filename="../mainwidget.cpp" line="772"/>
+        <location filename="../mainwidget.cpp" line="804"/>
         <source>Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="787"/>
-        <location filename="../mainwidget.cpp" line="817"/>
+        <location filename="../mainwidget.cpp" line="772"/>
+        <location filename="../mainwidget.cpp" line="804"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="814"/>
+        <location filename="../mainwidget.cpp" line="801"/>
         <source>The passwords you entered are different, please try again.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -102,13 +102,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="35"/>
-        <source>&lt;h2&gt;Lenovo Virtual Panel&lt;/h2&gt;</source>
+        <location filename="../mainwindow.cpp" line="43"/>
+        <source>Exit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="36"/>
-        <source>Exit?</source>
+        <location filename="../mainwindow.h" line="27"/>
+        <source>&lt;h3&gt;Lenovo Virtual Panel&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

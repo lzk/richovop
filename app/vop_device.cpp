@@ -54,10 +54,47 @@ static int usbWriteThenRead(const char* device_uri ,char* wrBuffer ,int wrSize ,
     int _write_size = 0,_read_size = 0;
     int i;
     for(i = 0 ;i < 3 ;i++){
+#if 1 //copy from windows
+        int sz = 256;
+        char device_id[sz];
+        memset(device_id ,0 ,sz);
+        if(usb_get_device_id)
+            err = usb_get_device_id(device_id ,sz);
+        if(!err){
+            char inBuffer[522] = { 0 };
+            char outBuffer[12] = { 0 };
+           memset(inBuffer, 0, sizeof(inBuffer));
+
+           inBuffer[0] = 0x1B;
+           inBuffer[1] = 0x4D;
+           inBuffer[2] = 0x53;
+           inBuffer[3] = 0x55;
+           inBuffer[4] = 0xE0;
+           inBuffer[5] = 0x2B;
+
+           if(usb_USBWrite){
+               usb_USBWrite(inBuffer ,10);
+               usb_USBWrite(inBuffer + 10 ,512);
+           }
+
+           // acorrding the mail from Gerard:
+           // " The reply of wakeup cmd is defined in Toolbox cmd spec,
+           // 12 bytes in all, 1c 00 e0 2b  00 00 00 00  00 00 00 00
+           // ". We read the "Print Bulk-in" package.
+
+           if(usb_USBRead)
+               _read_size = usb_USBRead(outBuffer , sizeof(outBuffer));
+           char* buffer = outBuffer;
+           qDebug("reply of wakeup cmd:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
+                  ,buffer[0],buffer[1],buffer[2],buffer[3],buffer[4],
+                   buffer[5],buffer[6],buffer[7],buffer[8],buffer[9],buffer[10]);
+        }
+#endif
         err = 0;
         if(usb_USBWrite)
             _write_size = usb_USBWrite(wrBuffer ,wrSize);
         usleep(100 * 1000);//100 ms
+        sleep(5);//100 ms
         if(usb_USBRead)
             _read_size = usb_USBRead(rdBuffer ,rdSize);
         if((_write_size == wrSize) && (_read_size == rdSize)){

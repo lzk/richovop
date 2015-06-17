@@ -15,6 +15,7 @@
 #include <QProgressDialog>
 
 #include "app/devicemanager.h"
+#include "app/deviceapp.h"
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
@@ -22,10 +23,9 @@ MainWidget::MainWidget(QWidget *parent) :
     tc(new Ui::TabCopy),
     ts(new Ui::TabSetting),
     ta(new Ui::TabAbout),
-    deviceManager (new DeviceManager),
-    device_status(0),
-    cmd_status(DeviceManager::CMD_STATUS_COMPLETE)
+    device_status(0)
 {
+    device = new DeviceApp(this);
     ui->setupUi(this);
     createActions();
     initializeUi();
@@ -36,13 +36,26 @@ MainWidget::MainWidget(QWidget *parent) :
 
 MainWidget::~MainWidget()
 {
-    deviceManageThread.quit();
-    deviceManageThread.wait();
-    delete deviceManager;
     delete ui;
     delete tc;
     delete ts;
     delete ta;
+//    delete progressDialog;
+}
+
+QMessageBox::StandardButton MainWidget::showMessageBox(const QString &text,
+          QMessageBox::StandardButtons buttons ,
+         QMessageBox::StandardButton defaultButton,
+         const QString &title )
+{
+    MessageBox msgBox;
+    msgBox.setText(title);
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.setInformativeText(text);
+    msgBox.setStandardButtons(buttons);
+    msgBox.setDefaultButton(defaultButton);
+    msgBox.setWindowFlags(Qt::FramelessWindowHint);
+    return (QMessageBox::StandardButton)msgBox.exec();
 }
 
 void MainWidget::retranslateUi()
@@ -51,12 +64,6 @@ void MainWidget::retranslateUi()
 
 void MainWidget::initialize()
 {
-    deviceManager->moveToThread(&deviceManageThread);
-    connect(this ,SIGNAL(signals_cmd(int)) ,deviceManager ,SLOT(slots_cmd(int)));
-    connect(deviceManager ,SIGNAL(signals_cmd_result(int,int)) ,this ,SLOT(slots_cmd_result(int ,int)));
-    connect(deviceManager ,SIGNAL(signals_setProgress(int)) ,this ,SLOT(slots_progressBar(int)));
-    deviceManageThread.start();
-
     connect(&timer ,SIGNAL(timeout()) ,this ,SLOT(slots_timeout()));
 //    timer.setInterval(1000);
     timer.start(1000);
@@ -64,9 +71,12 @@ void MainWidget::initialize()
     on_refresh_clicked();
     updateUi();
 
-    progressDialog = new QProgressDialog(this ,Qt::SplashScreen);
+//    progressDialog = new QProgressDialog(this ,Qt::SplashScreen);
+    progressDialog = new QProgressDialog(this);
     progressDialog->setCancelButton(NULL);
     progressDialog->setLabel(new QLabel(tr("Get Printer Information.")));
+    progressDialog->setWindowFlags(Qt::FramelessWindowHint);
+
 }
 
 void MainWidget::slots_progressBar(int value)
@@ -77,7 +87,7 @@ void MainWidget::slots_progressBar(int value)
 void MainWidget::slots_timeout()
 {
     static int count = 0;
-    switch(cmd_status)
+    switch(device->cmd_status)
     {
     case DeviceManager::CMD_STATUS_COMPLETE://jobs complete,no job
         if(0 == count % 10)
@@ -111,22 +121,10 @@ void MainWidget::slots_cmd()
         slots_passwd_setDo();
     }
 }
-#include <QMessageBox>
 void MainWidget::emit_cmd(int cmd)
 {
-    switch(cmd_status)
-    {
-    case DeviceManager::CMD_STATUS_COMPLETE:
-    case DeviceManager::CMD_PASSWD_confirmForApply:
-    case DeviceManager::CMD_PASSWD_confirmForSetPasswd:
-    case DeviceManager::CMD_WIFI_get://first get then get aplist
-        cmd_status = cmd;
-        emit signals_cmd(cmd);
-        break;
-
-    default:
-        QMessageBox::information(this ,tr("Lenovo Virtual Panel") ,tr("The machine is busy, please try later...") );
-        break;
+    if(!device->emit_cmd(cmd)){
+        showMessageBox(tr("The machine is busy, please try later..."));
     }
 }
 
@@ -136,10 +134,10 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     switch(err){//handle err message box
     case ERR_communication ://communication err
         if(DeviceManager::CMD_DEVICE_status != cmd)
-            QMessageBox::information(this ,tr("Lenovo Virtual Panel") ,tr("Failed to acquire the information.") );
+            showMessageBox(tr("Failed to acquire the information."));
         break;
     case ERR_Password_incorrect :
-        QMessageBox::information(this ,tr("Lenovo Virtual Panel") ,tr("Authentication error, please enter the password again.") );
+        showMessageBox(tr("Authentication error, please enter the password again."));
         break;
     case ERR_CMD_invalid :
     case ERR_Parameter_invalid :
@@ -210,7 +208,7 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     default:
         break;
     }
-    cmd_status = DeviceManager::CMD_STATUS_COMPLETE;
+    device->cmd_status = DeviceManager::CMD_STATUS_COMPLETE;
 }
 void MainWidget::initializeUi()
 {
@@ -252,6 +250,7 @@ bool MainWidget::eventFilter(QObject *obj, QEvent *event)
 
 void MainWidget::updateUi()
 {
+    DeviceManager* deviceManager = device->deviceManager;
     QString device_uri = deviceManager->getCurrentDeviceURI();
     QMainWindow* mainWindow = qobject_cast<QMainWindow*>(parent());
     if(mainWindow){
@@ -270,6 +269,7 @@ void MainWidget::on_refresh_clicked()
 {
     ui->comboBox_deviceList->clear();
     QStringList printerNames;
+    DeviceManager* deviceManager = device->deviceManager;
     int selected_printer = deviceManager->getDeviceList(printerNames);
     if(-1 != selected_printer)//has printer
     {
@@ -281,6 +281,7 @@ void MainWidget::on_refresh_clicked()
 
 void MainWidget::on_comboBox_deviceList_activated(int index)
 {
+    DeviceManager* deviceManager = device->deviceManager;
     deviceManager->selectDevice(index);    
     updateUi();
     ui->tabWidget->setCurrentWidget(ui->tab_5);
@@ -383,6 +384,7 @@ void MainWidget::initializeTabCopy()
 
 void MainWidget::updateCopy()
 {
+    DeviceManager* deviceManager = device->deviceManager;
     copycmdset copyPara = deviceManager->copy_get_para();
     copycmdset* pCopyPara = &copyPara;
     tc->scaling->setText(QString("%1%").arg(pCopyPara->scale));
@@ -502,6 +504,7 @@ void MainWidget::updateCopy()
 void MainWidget::slots_copy_combo(int value)
 {
     QObject* sd = sender();
+    DeviceManager* deviceManager = device->deviceManager;
     copycmdset copyPara = deviceManager->copy_get_para();
     copycmdset* pCopyPara = &copyPara;
     if(sd == tc->combo_documentType)
@@ -535,6 +538,7 @@ void MainWidget::slots_copy_combo(int value)
 
 void MainWidget::slots_copy_pushbutton()
 {
+    DeviceManager* deviceManager = device->deviceManager;
     copycmdset copyPara = deviceManager->copy_get_para();
     copycmdset* pCopyPara = &copyPara;
     QObject* sd = sender();
@@ -575,6 +579,7 @@ void MainWidget::slots_copy_radio(bool checked)
 {
     QObject* sd = sender();
     if(sd == tc->photo){
+        DeviceManager* deviceManager = device->deviceManager;
         copycmdset copyPara = deviceManager->copy_get_para();
         copycmdset* pCopyPara = &copyPara;
         if(2 != pCopyPara->scanMode){//not ID Card mode
@@ -781,6 +786,7 @@ void MainWidget::slots_wifi_applyDo()
         bool ok;
         passwd = QInputDialog::getText(this ,tr("Login") ,tr("Password") ,QLineEdit::Password ,QString() ,&ok);
         if (ok && !passwd.isEmpty()){
+            DeviceManager* deviceManager = device->deviceManager;
             deviceManager->passwd_set(passwd.toLatin1());
             emit_cmd(DeviceManager::CMD_PASSWD_confirmForApply);
         }
@@ -789,6 +795,7 @@ void MainWidget::slots_wifi_applyDo()
 
 void MainWidget::slots_wifi_applyDone()
 {
+    DeviceManager* deviceManager = device->deviceManager;
     cmdst_wifi_get wifi_para = deviceManager->wifi_get_para();
     //setting data then apply
     deviceManager->wifi_set_password(&wifi_para ,wifi_password.toLatin1());
@@ -812,6 +819,7 @@ void MainWidget::slots_passwd_setDo()
         passwd = QInputDialog::getText(this ,tr("Login") ,tr("Password") ,QLineEdit::Password ,QString() ,&ok);
         if (ok && !passwd.isEmpty())
         {
+            DeviceManager* deviceManager = device->deviceManager;
             deviceManager->passwd_set(passwd.toLatin1());
             emit_cmd(DeviceManager::CMD_PASSWD_confirmForSetPasswd);
         }
@@ -820,6 +828,7 @@ void MainWidget::slots_passwd_setDo()
 
 void MainWidget::slots_passwd_setDone()
 {
+    DeviceManager* deviceManager = device->deviceManager;
     deviceManager->passwd_set(ts->le_newPassword->text().toLatin1());
     emit_cmd(DeviceManager::CMD_PASSWD_set);    
 }
@@ -827,34 +836,36 @@ void MainWidget::slots_passwd_setDone()
 void MainWidget::slots_wifi_get()
 {
  //            ts->pageWidget->setEnabled(true);
-            cmdst_wifi_get wifi_para = deviceManager->wifi_get_para();
-            //wifi enable
-            ts->checkBox->setChecked(wifi_para.wifiEnable & 1 ?true :false);
-            //ssid
-            QString ssid(wifi_para.ssid);
-            if(ssid.count() > 32)
-                machine_wifi_ssid = QString(wifi_para.ssid).left(32);
-            else
-                machine_wifi_ssid = ssid;
-            ts->le_ssid->setText(machine_wifi_ssid);
-            ts->cb_ssid->setCurrentText(machine_wifi_ssid);
-            //encryption
-            int encryption = wifi_para.encryption % 5;
-            if(encryption != 2){
-                if(encryption == 3 || encryption == 4)
-                        encryption --;
-                ts->cb_encryptionType->setCurrentIndex(encryption);
-            }
-            //key index
-            ts->cb_keyIndex->setCurrentIndex(wifi_para.wepKeyId % 4);
+        DeviceManager* deviceManager = device->deviceManager;
+        cmdst_wifi_get wifi_para = deviceManager->wifi_get_para();
+        //wifi enable
+        ts->checkBox->setChecked(wifi_para.wifiEnable & 1 ?true :false);
+        //ssid
+        QString ssid(wifi_para.ssid);
+        if(ssid.count() > 32)
+            machine_wifi_ssid = QString(wifi_para.ssid).left(32);
+        else
+            machine_wifi_ssid = ssid;
+        ts->le_ssid->setText(machine_wifi_ssid);
+        ts->cb_ssid->setCurrentText(machine_wifi_ssid);
+        //encryption
+        int encryption = wifi_para.encryption % 5;
+        if(encryption != 2){
+            if(encryption == 3 || encryption == 4)
+                    encryption --;
+            ts->cb_encryptionType->setCurrentIndex(encryption);
+        }
+        //key index
+        ts->cb_keyIndex->setCurrentIndex(wifi_para.wepKeyId % 4);
 
-            wifi_update();
-            //get aplist
-            emit ts->btn_refresh->clicked();
+        wifi_update();
+        //get aplist
+        emit ts->btn_refresh->clicked();
 }
 
 void MainWidget::slots_wifi_getAplist()
 {
+    DeviceManager* deviceManager = device->deviceManager;
     cmdst_aplist_get aplist = deviceManager->wifi_getAplist();
     //aplist
     ts->cb_ssid->clear();

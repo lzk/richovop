@@ -42,6 +42,8 @@ TRANSLATIONS = translations/vop_zh.ts
 
 INCLUDEPATH += cups
 
+LIBS +=   -ldl
+
 PLATFORM = $$system(uname -i)
 contains(PLATFORM, x86_64){
 LIBS += \
@@ -49,10 +51,9 @@ LIBS += \
 }else{
 LIBS += \
     /usr/lib/i386-linux-gnu/libcups.so.2 \
-   -ldl
 
   #  -lcups -L/usr/lib/i386-linux-gnu/  \
 
-DEFINES += DEVICE_LIB_SUPPORT
 }
+DEFINES += DEVICE_LIB_SUPPORT
 

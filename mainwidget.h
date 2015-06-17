@@ -16,10 +16,23 @@ class TabAbout;
 }
 
 class QProgressDialog;
-class DeviceManager;
-#include<QThread>
+class DeviceApp;
 #include <QTimer>
 #include "app/vop_protocol.h"
+#include <QMessageBox>
+class MessageBox:public QMessageBox
+{
+protected:
+    void showEvent(QShowEvent* event)
+    {
+        QWidget* label = findChild<QWidget*>("qt_msgbox_label");
+        if(label){
+//            label->setMinimumSize(400,300);
+            label->setMinimumWidth(400);
+        }
+        QMessageBox::showEvent(event);
+    }
+};
 
 class MainWidget : public QWidget
 {
@@ -28,6 +41,10 @@ class MainWidget : public QWidget
 public:
     explicit MainWidget(QWidget *parent = 0);
     ~MainWidget();
+    static QMessageBox::StandardButton showMessageBox(const QString &text,
+          QMessageBox::StandardButtons buttons = QMessageBox::Ok,
+         QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
+         const QString &title = tr("<h3>Lenovo Virtual Panel</h3>"));
 
 private:
     Ui::MainWidget *ui;
@@ -40,12 +57,10 @@ protected:
 
 private:
 //    QAction* action_refresh;
-    DeviceManager* deviceManager;
-    QThread deviceManageThread;
+    DeviceApp* device;
     QTimer timer;
     QProgressDialog* progressDialog;
     bool device_status;
-    int cmd_status;
 
     void initializeUi();
     void retranslateUi();

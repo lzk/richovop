@@ -13,7 +13,7 @@ DeviceApp::DeviceApp(QObject *parent) :
     connect(deviceManager ,SIGNAL(signals_cmd_result(int,int)) ,this ,SIGNAL(signals_cmd_result(int ,int)));
     connect(this ,SIGNAL(signals_cmd_result(int,int)) ,widget ,SLOT(slots_cmd_result(int ,int)));
 
-    connect(deviceManager ,SIGNAL(signals_setProgress(int)) ,this ,SLOT(signals_progress(int)));
+    connect(deviceManager ,SIGNAL(signals_setProgress(int)) ,this ,SIGNAL(signals_progress(int)));
     connect(this ,SIGNAL(signals_progress(int)) ,widget ,SLOT(slots_progressBar(int)));
 
     deviceManageThread.start();

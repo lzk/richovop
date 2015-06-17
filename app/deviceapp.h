@@ -15,6 +15,7 @@ public:
     bool emit_cmd(int);
 public:
     DeviceManager* deviceManager;
+    int cmd_status;
 
 signals:
     void signals_cmd(int);
@@ -28,7 +29,6 @@ public slots:
 
 private:
     QThread deviceManageThread;
-    int cmd_status;
 };
 
 #endif // DEVICE_H
