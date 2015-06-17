@@ -17,6 +17,8 @@ class TabAbout;
 
 class QProgressDialog;
 class DeviceManager;
+class CopiesSettingKeyboard;
+class ScalingSettingKeyboard;
 #include<QThread>
 #include <QTimer>
 #include "app/vop_protocol.h"
@@ -62,6 +64,9 @@ public slots:
    void slots_cmd();
    void slots_timeout();
    void slots_progressBar(int);
+private slots:
+    void on_refresh_clicked();
+    void on_comboBox_deviceList_activated(int index);
 
 private:
     ///////////////////////////tab about//////////////////////
@@ -72,6 +77,8 @@ private:
     ///////////////////////////tab copy///////////////////
     //    QAction* action_copy_default;
     QStringList stringlist_output_size;
+    ScalingSettingKeyboard* keyboard_scaling;
+    CopiesSettingKeyboard* keyboard_copies;
     void initializeTabCopy();
     void updateCopy();
 
@@ -104,11 +111,7 @@ private slots:
     void slots_copy_combo(int);
     void slots_copy_pushbutton();
     void slots_copy_radio(bool);
-
-private slots:
-    void on_refresh_clicked();
-    void on_comboBox_deviceList_activated(int index);
-
+    void slots_copy_keyboard(QString);
     //////////////////////////tab setting///////////////////
     void slots_wifi_radiobutton(bool);
     void slots_wifi_textChanged(const QString &arg1);
