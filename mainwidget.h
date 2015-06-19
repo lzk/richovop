@@ -1,5 +1,4 @@
 /////////////////////////////////////////
-/// File:mainwidget.h
 /// Author:Jacky Liang
 /// Version:
 /////////////////////////////////////////
@@ -7,6 +6,13 @@
 #define MAINWIDGET_H
 
 #include <QWidget>
+#include <QTimer>
+#include <QMessageBox>
+
+class QProgressDialog;
+class DeviceManager;
+class CopiesSettingKeyboard;
+class ScalingSettingKeyboard;
 
 namespace Ui {
 class MainWidget;
@@ -15,13 +21,19 @@ class TabSetting;
 class TabAbout;
 }
 
-class QProgressDialog;
-class DeviceManager;
-class CopiesSettingKeyboard;
-class ScalingSettingKeyboard;
-#include<QThread>
-#include <QTimer>
-#include "app/vop_protocol.h"
+class MessageBox:public QMessageBox
+{
+protected:
+    void showEvent(QShowEvent* event)
+    {
+        QWidget* label = findChild<QWidget*>("qt_msgbox_label");
+        if(label){
+//            label->setMinimumSize(400,300);
+            label->setMinimumWidth(400);
+        }
+        QMessageBox::showEvent(event);
+    }
+};
 
 class MainWidget : public QWidget
 {
@@ -30,6 +42,10 @@ class MainWidget : public QWidget
 public:
     explicit MainWidget(QWidget *parent = 0);
     ~MainWidget();
+    static QMessageBox::StandardButton showMessageBox(const QString &text,
+          QMessageBox::StandardButtons buttons = QMessageBox::Ok,
+         QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
+         const QString &title = tr("<h3>Lenovo Virtual Panel</h3>"));
 
 private:
     Ui::MainWidget *ui;
@@ -42,12 +58,10 @@ protected:
 
 private:
 //    QAction* action_refresh;
-    DeviceManager* deviceManager;
-    QThread deviceManageThread;
     QTimer timer;
     QProgressDialog* progressDialog;
     bool device_status;
-    int cmd_status;
+    DeviceManager* device_manager;
 
     void initializeUi();
     void retranslateUi();
@@ -58,6 +72,8 @@ private:
     void emit_cmd(int);
 signals:
    void signals_cmd(int);
+   void signals_deviceChanged(const QString&);
+   void signals_emit_cmd(int);
 
 public slots:
    void slots_cmd_result(int ,int);
@@ -91,6 +107,7 @@ private:
     QString wifi_sw_password;
     int wifi_ms_wepIndex;
     int wifi_sw_wepIndex;
+#define NUM_OF_APLIST 10
     int wifi_sw_encryptionType[NUM_OF_APLIST];
     QString machine_wifi_ssid;
 //    QString machine_wifi_password;

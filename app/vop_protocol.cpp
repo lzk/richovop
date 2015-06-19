@@ -1,12 +1,132 @@
 /////////////////////////////////////////
-/// File:vop_protocol.cpp
 /// Author:Jacky Liang
 /// Version:
 /////////////////////////////////////////
 #include <string.h>
 #include "vop_protocol.h"
 #include "devicemanager.h"
+#include "devicecontrol.h"
 #include <QDebug>
+
+static int _base64_char_value(char base64char)
+ {
+    if (base64char >= 'A' && base64char <= 'Z')
+         return base64char-'A';
+    if (base64char >= 'a' && base64char <= 'z')
+         return base64char-'a'+26;
+    if (base64char >= '0' && base64char <= '9')
+         return base64char-'0'+2*26;
+    if (base64char == '+')
+         return 2*26+10;
+    if (base64char == '/')
+         return 2*26+11;
+    return -1;
+}
+
+static int _base64_decode_triple(char quadruple[4], unsigned char *result)
+ {
+    int i, triple_value, bytes_to_decode = 3, only_equals_yet = 1;
+    int char_value[4];
+
+    for (i=0; i<4; i++)
+         char_value[i] = _base64_char_value(quadruple[i]);
+
+    for (i=3; i>=0; i--)
+    {
+         if (char_value[i]<0)
+         {
+             if (only_equals_yet && quadruple[i]=='=')
+             {
+                  char_value[i]=0;
+                  bytes_to_decode--;
+                  continue;
+             }
+             return 0;
+         }
+         only_equals_yet = 0;
+    }
+
+    if (bytes_to_decode < 0)
+         bytes_to_decode = 0;
+
+    triple_value = char_value[0];
+    triple_value *= 64;
+    triple_value += char_value[1];
+    triple_value *= 64;
+    triple_value += char_value[2];
+    triple_value *= 64;
+    triple_value += char_value[3];
+
+    for (i=bytes_to_decode; i<3; i++)
+         triple_value /= 256;
+    for (i=bytes_to_decode-1; i>=0; i--)
+    {
+         result[i] = triple_value%256;
+         triple_value /= 256;
+    }
+
+    return bytes_to_decode;
+}
+
+static size_t Base64Decode(char *source, unsigned char *target, size_t targetlen)
+ {
+    char *src, *tmpptr;
+    char quadruple[4], tmpresult[3];
+    int i; size_t tmplen = 3;
+    size_t converted = 0;
+
+    src = (char *)malloc(strlen(source)+5);
+    if (src == NULL)
+         return -1;
+    strcpy(src, source);
+    strcat(src, "====");
+    tmpptr = src;
+    while (tmplen == 3)
+    {
+         /* get 4 characters to convert */
+         for (i=0; i<4; i++)
+         {
+             while (*tmpptr != '=' && _base64_char_value(*tmpptr)<0)
+                  tmpptr++;
+             quadruple[i] = *(tmpptr++);
+         }
+         tmplen = _base64_decode_triple(quadruple, (unsigned char*)tmpresult);
+         if (targetlen < tmplen)
+         {
+             free(src);
+             return converted;
+         }
+         memcpy(target, tmpresult, tmplen);
+         target += tmplen;
+         targetlen -= tmplen;
+         converted += tmplen;
+    }
+    free(src);
+    return converted;
+}
+
+int VopProtocol::DecodeStatusFromDeviceID(char* device_id, PRINTER_STATUS* status)
+{
+    if (device_id==NULL || status==NULL) {
+        return -1;
+    }
+    char *p = device_id;
+
+    while (*p && strncmp(p,"STS:",4)!=0) // Look for "STS:"
+        p++;
+
+    if (!*p)	{ // "STS:" not found
+        qDebug()<<"STS: not found";
+        return -1;
+    }
+    p += 4;	// Skip "STS:"
+
+    if (Base64Decode(p, (unsigned char*)status, sizeof(PRINTER_STATUS)) != sizeof(PRINTER_STATUS))
+    {
+        return -1;
+    }
+    return 0;
+}
 
 #pragma pack(1)
 typedef struct _COMM_HEADER
@@ -120,13 +240,14 @@ static const copycmdset default_copy_parameter =
 };
 
 VopProtocol::VopProtocol(DeviceManager* dm)
-    : copy_parameter(new copycmdset),
+    : status(new PRINTER_STATUS),
+      copy_parameter(new copycmdset),
       wifi_parameter(new cmdst_wifi_get),
       wifi_aplist(new cmdst_aplist_get),
-      passwd(new cmdst_passwd)
+      passwd(new cmdst_passwd),
+      device_manager(dm)
 {
-    deviceManager = dm;
-    copy_set_defaultPara();
+    memcpy(copy_parameter ,&default_copy_parameter ,sizeof(default_copy_parameter));
     memset(wifi_parameter ,0 ,sizeof(cmdst_wifi_get));
     memset(wifi_aplist ,0 ,sizeof(*wifi_aplist));
     memset(passwd ,0 ,sizeof(cmdst_passwd));
@@ -144,11 +265,13 @@ VopProtocol::VopProtocol(DeviceManager* dm)
 
 VopProtocol::~VopProtocol()
 {
+    delete status;
     delete copy_parameter;
     delete wifi_parameter;
     delete wifi_aplist;
     delete passwd;
 }
+
 
 const char* VopProtocol::getErrString(int err)
 {
@@ -201,6 +324,18 @@ const char* VopProtocol::getErrString(int err)
     return str;
 }
 
+PRINTER_STATUS VopProtocol::get_status()
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    return *status;
+}
+int VopProtocol::get_deviceStatus()
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    return status->PrinterStatus;
+}
+
+
 #define     MAGIC_NUM           0x1A2B3C4D
 #define change_32bit_edian(x) (((x) << 24 & 0xff000000) | (((x) << 8) & 0x00ff0000) | (((x) >> 8) & 0x0000ff00) | (((x) >> 24) & 0xff))
 #define change_16bit_edian(x) (((x) << 8) & 0xff00 | ((x) >> 8) & 0x00ff)
@@ -208,7 +343,7 @@ static const unsigned char INIT_VALUE = 0xfe;
 
 int VopProtocol::vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size)
 {
-    int direct ,data_buffer_size;
+    int direct=0 ,data_buffer_size=0;
     int err = vop_getCmdDirect(cmd ,sub_cmd ,direct ,data_buffer_size);
     if(err)
         return -3;//not support
@@ -227,14 +362,14 @@ int VopProtocol::vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size)
     ppkg->subid = 0x13;
     ppkg->len2 = 1;
     ppkg->subcmd = sub_cmd;
-    deviceManager->mutex.lock();
+    device_manager->mutex_ctrl.lock();
     memcpy(buffer + sizeof(COMM_HEADER) ,data ,data_size);
-    deviceManager->mutex.unlock();
+    device_manager->mutex_ctrl.unlock();
 
 //    qDebug("Write:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
 //           ,buffer[0],buffer[1],buffer[2],buffer[3],buffer[4],
 //            buffer[5],buffer[6],buffer[7],buffer[8],buffer[9],buffer[10]);
-    err = DeviceManager::device_writeThenRead(buffer ,sizeof(COMM_HEADER)+data_buffer_size * direct
+    err = DeviceContrl::device_writeThenRead(buffer ,sizeof(COMM_HEADER)+data_buffer_size * direct
                                                ,buffer ,sizeof(COMM_HEADER)+data_buffer_size * (1 - direct));
 //    qDebug("read:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
 //           ,buffer[0],buffer[1],buffer[2],buffer[3],buffer[4],
@@ -244,9 +379,9 @@ int VopProtocol::vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size)
         if(direct){//set
                 err = ppkg->subcmd;
         }else{//get
-            deviceManager->mutex.lock();
+            device_manager->mutex_ctrl.lock();
             memcpy(data ,buffer + sizeof(COMM_HEADER) ,data_size);
-            deviceManager->mutex.unlock();
+            device_manager->mutex_ctrl.unlock();
         }
     }else
         err = -1;
@@ -256,19 +391,19 @@ int VopProtocol::vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size)
 
 void VopProtocol::copy_set_defaultPara()
 {    
-    QMutexLocker locker(&deviceManager->mutex);
+    QMutexLocker locker(&device_manager->mutex_ctrl);
     memcpy(copy_parameter ,&default_copy_parameter ,sizeof(default_copy_parameter));
 }
 
 void VopProtocol::copy_set_para(copycmdset* p)
 {
-    QMutexLocker locker(&deviceManager->mutex);
+    QMutexLocker locker(&device_manager->mutex_ctrl);
     memcpy(copy_parameter ,p ,sizeof(copycmdset));
 }
 
 copycmdset VopProtocol::copy_get_para()
 {
-    QMutexLocker locker(&deviceManager->mutex);
+    QMutexLocker locker(&device_manager->mutex_ctrl);
     return *copy_parameter;
 }
 
@@ -286,18 +421,18 @@ void VopProtocol::wifi_set_password(cmdst_wifi_get* p ,const char* password)
 
 void VopProtocol::wifi_set_para(cmdst_wifi_get* p)
 {
-    QMutexLocker locker(&deviceManager->mutex);
+    QMutexLocker locker(&device_manager->mutex_ctrl);
     memcpy(wifi_parameter ,p ,sizeof(cmdst_wifi_get));
 }
 
 cmdst_wifi_get VopProtocol::wifi_get_para()
 {
-    QMutexLocker locker(&deviceManager->mutex);
+    QMutexLocker locker(&device_manager->mutex_ctrl);
     return *wifi_parameter;
 }
 cmdst_aplist_get VopProtocol::wifi_getAplist()
 {
-    QMutexLocker locker(&deviceManager->mutex);
+    QMutexLocker locker(&device_manager->mutex_ctrl);
     return *wifi_aplist;
 }
 
@@ -310,10 +445,16 @@ void VopProtocol::passwd_set(const char* p)
 int VopProtocol::cmd(int _cmd)
 {
     int err = -3;
-    emit deviceManager->signals_setProgress(0);
-    emit deviceManager->signals_setProgress(20);
 
     switch(_cmd)    {
+    case CMD_GetStatus:{
+        char buffer[256];
+        err = DeviceContrl::device_getDeviceStatus(buffer ,sizeof(buffer));
+        if(!err){
+            DecodeStatusFromDeviceID(buffer ,status);
+        }
+        break;
+    }
     case CMD_COPY:{
         err = vop_copy(copy_parameter);
     }
@@ -345,15 +486,14 @@ int VopProtocol::cmd(int _cmd)
     default:
         break;
     }
-    emit deviceManager->signals_setProgress(100);
     return err;
 }
 # if 0
 int  VopProtocol::cmd_copy()
 {
-    deviceManager->mutex.lock();
+    device_manager->mutex_ctrl.lock();
     copycmdset _para = *copy_parameter;
-    deviceManager->mutex.unlock();
+    device_manager->mutex_ctrl.unlock();
 
     _para.scale = change_16bit_edian(_para.scale);
     return vop_copy(&_para);
@@ -361,49 +501,49 @@ int  VopProtocol::cmd_copy()
 
 int  VopProtocol::cmd_wifi_get()
 {
-    deviceManager->mutex.lock();
+    device_manager->mutex_ctrl.lock();
     cmdst_wifi_get _para = *wifi_parameter;
-    deviceManager->mutex.unlock();
+    device_manager->mutex_ctrl.unlock();
     return vop_getWifiInfo(&_para);
 }
 
 int VopProtocol::cmd_wifi_set()
 {
-    deviceManager->mutex.lock();
+    device_manager->mutex_ctrl.lock();
     cmdst_wifi_get _para = *wifi_parameter;
-    deviceManager->mutex.unlock();
+    device_manager->mutex_ctrl.unlock();
     return vop_setWifiInfo(&_para);
 }
 
 int  VopProtocol::cmd_wifi_getAplist()
 {
-    deviceManager->mutex.lock();
+    device_manager->mutex_ctrl.lock();
     cmdst_aplist_get _para = *wifi_aplist;
-    deviceManager->mutex.unlock();
+    device_manager->mutex_ctrl.unlock();
     return vop_getApList(&_para);
 }
 
 int VopProtocol::cmd_passwd_set()
 {
-    deviceManager->mutex.lock();
+    device_manager->mutex_ctrl.lock();
     cmdst_passwd _para = *passwd;
-    deviceManager->mutex.unlock();
+    device_manager->mutex_ctrl.unlock();
     return vop_setPasswd(&_para);
 }
 
 int VopProtocol::cmd_passwd_get()
 {
-    deviceManager->mutex.lock();
+    device_manager->mutex_ctrl.lock();
     cmdst_passwd _para = *passwd;
-    deviceManager->mutex.unlock();
+    device_manager->mutex_ctrl.unlock();
     return vop_getPasswd(&_para);
 }
 
 int VopProtocol::cmd_passwd_confirm()
 {
-    deviceManager->mutex.lock();
+    device_manager->mutex_ctrl.lock();
     cmdst_passwd _para = *passwd;
-    deviceManager->mutex.unlock();
+    device_manager->mutex_ctrl.unlock();
     return vop_confirmPasswd(&_para);
 }
 #endif

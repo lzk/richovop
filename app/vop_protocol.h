@@ -1,5 +1,4 @@
 /////////////////////////////////////////
-/// File:vop_protocol.h
 /// Author:Jacky Liang
 /// Version:
 /////////////////////////////////////////
@@ -11,6 +10,60 @@
 typedef unsigned char UINT8;
 typedef unsigned short UINT16;
 typedef unsigned int UINT32;
+typedef unsigned char BYTE;
+typedef unsigned short WORD;
+typedef unsigned int DWORD;
+
+typedef struct
+{
+    ////////////////////////////////////////////////////
+    // Consumable
+    ////////////////////////////////////////////////////
+    BYTE	TonelStatusLevelK;
+    BYTE	TonelStatusLevelC;
+    BYTE	TonelStatusLevelM;
+    BYTE	TonelStatusLevelY;
+    BYTE	DrumStatusLifeRemain;
+
+    ////////////////////////////////////////////////////
+    // Covers
+    ////////////////////////////////////////////////////
+    BYTE	CoverStatusFlags;
+
+    ////////////////////////////////////////////////////
+    // Paper Tray
+    ////////////////////////////////////////////////////
+    BYTE	PaperTrayStatus;
+    BYTE	PaperSize;
+
+    ////////////////////////////////////////////////////
+    // Output Tray
+    ////////////////////////////////////////////////////
+    BYTE	OutputTrayLevel;
+
+    ////////////////////////////////////////////////////
+    // General Status and information
+    ////////////////////////////////////////////////////
+    BYTE	PrinterStatus;
+    WORD	OwnerName[16];
+    WORD	DocuName[16];
+    BYTE	ErrorCodeGroup;
+    BYTE	ErrorCodeID;
+    WORD	PrintingPage;
+    WORD	Copies;
+    DWORD	TotalCounter;
+
+    BYTE         reserved[12];
+
+    BYTE	TonerSize[4];
+    BYTE	PaperType;
+    BYTE	NonDellTonerMode;
+    BYTE	AioStatus;
+    BYTE	job;
+    WORD	wReserved1;
+    WORD	wReserved2;
+} PRINTER_STATUS;
+
 enum{
     ERR_ACK = 0,
     ERR_CMD_invalid = 1,
@@ -91,13 +144,83 @@ typedef struct cmdst_passwd
 }
     cmdst_passwd;
 
+enum
+{
+    PSTATUS_Ready                      = 0x00,
+    PSTATUS_Printing                   = 0x01,
+    PSTATUS_PowerSaving                = 0x02,
+    PSTATUS_WarmingUp                  = 0x03,
+    PSTATUS_PrintCanceling             = 0x04,
+    PSTATUS_Processing                 = 0x07,
+    PSTATUS_CopyScanning               = 0x60,
+    PSTATUS_CopyScanNextPage           = 0x61,
+    PSTATUS_CopyPrinting               = 0x62,
+    PSTATUS_CopyCanceling              = 0x63,
+    PSTATUS_IDCardMode                 = 0x64,
+    PSTATUS_ScanScanning               = 0x6A,
+    PSTATUS_ScanSending                = 0x6B,
+    PSTATUS_ScanCanceling              = 0x6C,
+    PSTATUS_ScannerBusy                = 0x6D,
+    PSTATUS_TonerEnd1                  = 0x7F,//For china maket
+    PSTATUS_TonerEnd2                  = 0x80,
+    PSTATUS_TonerNearEnd               = 0x81,
+    PSTATUS_ManualFeedRequired         = 0x85,
+    PSTATUS_InitializeJam              = 0xBC,
+    PSTATUS_NofeedJam                  = 0xBD,
+    PSTATUS_JamAtRegistStayOn          = 0xBE,
+    PSTATUS_JamAtExitNotReach          = 0xBF,
+    PSTATUS_JamAtExitStayOn            = 0xC0,
+    PSTATUS_CoverOpen                  = 0xC1,
+    PSTATUS_NoTonerCartridge           = 0xC5,
+    PSTATUS_WasteTonerFull             = 0xC6,
+    PSTATUS_FWUpdate                   = 0xC7,
+    PSTATUS_OverHeat                   = 0xC8,
+    PSTATUS_PolygomotorOnTimeoutError  = 0xCD,
+    PSTATUS_PSTATUS_PolygomotorOffTimeoutError = 0xCE,
+    PSTATUS_PolygomotorLockSignalError = 0xCF,
+    PSTATUS_BeamSynchronizeError       = 0xD1,
+    PSTATUS_BiasLeak                   = 0xD2,
+    PSTATUS_PlateActionError           = 0xD3,
+    PSTATUS_MainmotorError             = 0xD4,
+    PSTATUS_MainFanMotorEorror         = 0xD5,
+    PSTATUS_JoinerThermistorError       = 0xD6,
+    PSTATUS_JoinerReloadError           = 0xD7,
+    PSTATUS_HighTemperatureErrorSoft   = 0xD8,
+    PSTATUS_HighTemperatureErrorHard   = 0xD9,
+    PSTATUS_JoinerFullHeaterError       = 0xDA,
+    PSTATUS_Joiner3timesJamError        = 0xDB,
+    PSTATUS_LowVoltageJoinerReloadError = 0xDC,
+    PSTATUS_MotorThermistorError       = 0xDD,
+    PSTATUS_EEPROMCommunicationError   = 0xDE,
+    PSTATUS_CTL_PRREQ_NSignalNoCome    = 0xDF,
+    PSTATUS_ScanPCUnkownCommandUSB     = 0xE0,
+    PSTATUS_SCANUSBDisconnect          = 0xE1,
+    PSTATUS_ScanPCUnkownCommandNET     = 0xE3,
+    PSTATUS_ScanNETDisconnect          = 0xE4,
+    PSTATUS_ScanMotorError             = 0xE5,
+    PSTATUS_NetWirelessConnectFail     = 0xE6,
+    PSTATUS_NetWirelessDisable         = 0xE7,
+    PSTATUS_NetWirelessDongleCfgFail   = 0xE8,
+    PSTATUS_FWUpdateError              = 0xEB,
+    PSTATUS_DSPError                   = 0xEC,
+    PSTATUS_CodecError                 = 0xED,
+    PSTATUS_PrinterDataError           = 0xEF,
+    PSTATUS_Unknown                    = 0xF0, // status added by SW
+    PSTATUS_Offline                    = 0xF1, // status added by SW
+    PSTATUS_PowerOff                   = 0xF2, // status added by SW
+};
+
 class DeviceManager;
 class VopProtocol
 {
 public:
-    VopProtocol(DeviceManager*);
+    VopProtocol(DeviceManager* dm);
     ~VopProtocol();
     static const char* getErrString(int err);
+    static int DecodeStatusFromDeviceID(char* device_id, PRINTER_STATUS* status);
+
+    PRINTER_STATUS get_status();
+    int get_deviceStatus();
 
     void copy_set_defaultPara();
     void copy_set_para(copycmdset* p);
@@ -112,6 +235,7 @@ public:
     void passwd_set(const char*);
 
 enum{
+    CMD_GetStatus,
     CMD_COPY,
     CMD_WIFI_apply,
     CMD_WIFI_get,
@@ -122,11 +246,12 @@ enum{
 };
     int cmd(int);
 private:
-    DeviceManager* deviceManager;
+    PRINTER_STATUS* status;
     copycmdset* copy_parameter;
     cmdst_wifi_get* wifi_parameter;
     cmdst_aplist_get* wifi_aplist;
     cmdst_passwd* passwd;
+    DeviceManager* device_manager;
     int vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size);
 # if 0
     int cmd_copy();

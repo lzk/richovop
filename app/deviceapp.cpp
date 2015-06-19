@@ -1,20 +1,29 @@
+/////////////////////////////////////////
+/// Author:Jacky Liang
+/// Version:
+/////////////////////////////////////////
 #include "deviceapp.h"
 
+#include "devicecontrol.h"
 #include "devicemanager.h"
 #include "../mainwidget.h"
-DeviceApp::DeviceApp(QObject *parent) :
-    QObject(parent),
-    deviceManager (new DeviceManager),
-    cmd_status(DeviceManager::CMD_STATUS_COMPLETE)
+#include <QDebug>
+DeviceApp::DeviceApp(DeviceManager* dm ,MainWidget* _widget) :
+    device_manager(dm),
+    ctrl (new DeviceContrl(dm)),
+    cmd_status(DeviceContrl::CMD_STATUS_COMPLETE),
+    widget(_widget)
 {
-    deviceManager->moveToThread(&deviceManageThread);
-    connect(this ,SIGNAL(signals_cmd(int)) ,deviceManager ,SLOT(slots_cmd(int)));
-    MainWidget* widget = qobject_cast<MainWidget*>(parent);
-    connect(deviceManager ,SIGNAL(signals_cmd_result(int,int)) ,this ,SIGNAL(signals_cmd_result(int ,int)));
+    ctrl->moveToThread(&deviceManageThread);
+
+    connect(this ,SIGNAL(signals_cmd(int)) ,ctrl ,SLOT(slots_cmd(int)));
+    connect(this ,SIGNAL(signals_progress(int)) ,widget ,SLOT(slots_progressBar(int)));
+
+    connect(ctrl ,SIGNAL(signals_cmd_result(int,int)) ,this ,SIGNAL(signals_cmd_result(int ,int)));
     connect(this ,SIGNAL(signals_cmd_result(int,int)) ,widget ,SLOT(slots_cmd_result(int ,int)));
 
-    connect(deviceManager ,SIGNAL(signals_setProgress(int)) ,this ,SLOT(signals_progress(int)));
-    connect(this ,SIGNAL(signals_progress(int)) ,widget ,SLOT(slots_progressBar(int)));
+    connect(widget ,SIGNAL(signals_deviceChanged(QString)) ,this ,SIGNAL(signals_deviceChanged(QString)));
+    connect(this ,SIGNAL(signals_deviceChanged(QString)) ,ctrl ,SLOT(slots_deviceChanged(QString)));
 
     deviceManageThread.start();
 }
@@ -23,20 +32,47 @@ DeviceApp::~DeviceApp()
 {
     deviceManageThread.quit();
     deviceManageThread.wait();
-    delete deviceManager;
+    delete ctrl;
+}
+
+void DeviceApp::disconnect_App()
+{
+    ctrl->disconnect();
+    widget->disconnect(this);
+    disconnect();
+
 }
 
 
 bool DeviceApp::emit_cmd(int cmd)
 {
     bool ret = false;
-    switch(cmd_status)
+    int status = get_cmdStatus();
+    switch(status)
     {
-    case DeviceManager::CMD_STATUS_COMPLETE:
-    case DeviceManager::CMD_PASSWD_confirmForApply:
-    case DeviceManager::CMD_PASSWD_confirmForSetPasswd:
-    case DeviceManager::CMD_WIFI_get://first get then get aplist
-        cmd_status = cmd;
+    case DeviceContrl::CMD_STATUS_COMPLETE:    {
+        if(DeviceContrl::CMD_COPY == cmd
+                || DeviceContrl::CMD_WIFI_get == cmd
+                || DeviceContrl::CMD_WIFI_apply == cmd
+                || DeviceContrl::CMD_WIFI_getAplist == cmd
+                ){
+            emit signals_progress(0);
+            emit signals_progress(20);
+            qDebug()<<"show progress bar";
+        }
+        set_cmdStatus(cmd);
+        emit signals_cmd(cmd);
+        ret = true;
+    }
+        break;
+    case DeviceContrl::CMD_PASSWD_confirmForApply:
+    case DeviceContrl::CMD_WIFI_get://first get then get aplist
+    case DeviceContrl::CMD_PASSWD_confirmForSetPasswd:
+        if(DeviceContrl::CMD_WIFI_get == status){
+            emit signals_progress(50);
+            qDebug()<<"progress bar update";
+        }
+        set_cmdStatus(cmd);
         emit signals_cmd(cmd);
         ret = true;
         break;
@@ -47,65 +83,37 @@ bool DeviceApp::emit_cmd(int cmd)
     return ret;
 }
 
-#if 0
-void DeviceApp::slots_progress(int value)
+void DeviceApp::set_cmdStatus(int status)
 {
-//    progressDialog->setValue(value);
+    QMutexLocker locker(&device_manager->mutex_app);
+    cmd_status = status;
+    if(DeviceContrl::CMD_STATUS_COMPLETE == status)
+    {
+        //if progress bar display,hide it
+        emit signals_progress(100);
+        qDebug()<<"cmd complete,hide progress bar";
+    }
 }
+
+int DeviceApp::get_cmdStatus()
+{
+    QMutexLocker locker(&device_manager->mutex_app);
+    return cmd_status;
+}
+
+#if 0
 
 void DeviceApp::slots_emit_cmd(int cmd)
 {
     int status = cmd_status;
-    while(DeviceManager::CMD_STATUS_COMPLETE != status){
+    while(DeviceContrl::CMD_STATUS_COMPLETE != status){
         status = cmd_status;
         sleep(1);
     }
-//    if(DeviceManager::CMD_STATUS_COMPLETE == cmd_status){
+//    if(DeviceContrl::CMD_STATUS_COMPLETE == cmd_status){
         cmd_status = cmd;
         emit signals_cmd(cmd);
 //    }
-}
-
-void DeviceApp::slots_cmd_result(int cmd ,int err)
-{
-    switch(cmd)
-    {
-    case DeviceManager::CMD_DEVICE_status:
-        break;
-    case DeviceManager::CMD_WIFI_get:
-        break;
-    case DeviceManager::CMD_PASSWD_confirmForApply:
-        if(!err){//no err,ACK
-            passwd_checked = true;
-
-            cmdst_wifi_get wifi_para = deviceManager->wifi_get_para();
-            //setting data then apply
-            deviceManager->wifi_set_password(&wifi_para ,wifi_password.toLatin1());
-            deviceManager->wifi_set_ssid(&wifi_para ,wifi_ssid.toLatin1());
-            wifi_para.encryption = wifi_encryptionType > 1 ? wifi_encryptionType + 1 :wifi_encryptionType;
-            wifi_para.wepKeyId = wifi_wepIndex;
-            wifi_para.wifiEnable &= ~1;
-            wifi_para.wifiEnable |= ts->checkBox->isChecked() ? 1 : 0;//bit 0
-            deviceManager->wifi_set_para(&wifi_para);
-            emit_cmd(DeviceManager::CMD_WIFI_apply);
-        }else if(ERR_Password_incorrect == err){//password incorrect
-            passwd_checked = false;
-        }
-        break;
-    case DeviceManager::CMD_PASSWD_confirmForSetPasswd:
-        if(!err){//no err,ACK
-            deviceManager->passwd_set(ts->le_newPassword->text().toLatin1());
-            emit_cmd(DeviceManager::CMD_PASSWD_set);
-        }else if(ERR_Password_incorrect == err){//password incorrect
-            passwd_checked = false;
-        }
-        break;
-    case DeviceManager::CMD_WIFI_getAplist:
-        break;
-    default:
-        break;
-    }
-    cmd_status = DeviceManager::CMD_STATUS_COMPLETE;
 }
 
 #endif

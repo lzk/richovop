@@ -2,6 +2,85 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
+    <name>CopiesSettingKeyboard</name>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="14"/>
+        <source>Copies Setting Keyboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="33"/>
+        <source>9</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="56"/>
+        <source>3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="79"/>
+        <location filename="../copiessettingkeyboard.ui" line="286"/>
+        <source>1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="105"/>
+        <source>Backspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="128"/>
+        <source>4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="151"/>
+        <source>6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="174"/>
+        <source>0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="197"/>
+        <source>7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="220"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="240"/>
+        <source>2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="263"/>
+        <source>5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="309"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="332"/>
+        <source>Copies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../copiessettingkeyboard.ui" line="352"/>
+        <source>8</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWidget</name>
     <message>
         <location filename="../mainwidget.ui" line="64"/>
@@ -11,71 +90,73 @@
     <message>
         <location filename="../mainwidget.ui" line="85"/>
         <source>Refresh</source>
-        <translation type="unfinished">刷新</translation>
+        <translation>刷新</translation>
     </message>
     <message>
         <location filename="../mainwidget.ui" line="114"/>
         <source>Copy</source>
-        <translation type="unfinished">复印</translation>
+        <translation>复印</translation>
     </message>
     <message>
         <location filename="../mainwidget.ui" line="119"/>
         <source>Setting</source>
-        <translation type="unfinished">设置</translation>
+        <translation>设置</translation>
     </message>
     <message>
         <location filename="../mainwidget.ui" line="124"/>
         <source>About</source>
-        <translation type="unfinished">关于</translation>
+        <translation>关于</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="69"/>
+        <location filename="../mainwidget.cpp" line="80"/>
         <source>Get Printer Information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="121"/>
-        <location filename="../mainwidget.cpp" line="132"/>
-        <location filename="../mainwidget.cpp" line="135"/>
-        <location filename="../mainwidget.cpp" line="814"/>
+        <location filename="../mainwidget.cpp" line="874"/>
         <source>Lenovo Virtual Panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="121"/>
+        <location filename="../mainwidget.cpp" line="129"/>
         <source>The machine is busy, please try later...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="132"/>
+        <location filename="../mainwidget.cpp" line="139"/>
         <source>Failed to acquire the information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="135"/>
+        <location filename="../mainwidget.cpp" line="142"/>
         <source>Authentication error, please enter the password again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="274"/>
+        <location filename="../mainwidget.cpp" line="294"/>
         <source>Ricoh VOP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="787"/>
-        <location filename="../mainwidget.cpp" line="817"/>
+        <location filename="../mainwidget.cpp" line="843"/>
+        <location filename="../mainwidget.cpp" line="877"/>
         <source>Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="787"/>
-        <location filename="../mainwidget.cpp" line="817"/>
+        <location filename="../mainwidget.cpp" line="843"/>
+        <location filename="../mainwidget.cpp" line="877"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="814"/>
+        <location filename="../mainwidget.cpp" line="874"/>
         <source>The passwords you entered are different, please try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwidget.h" line="51"/>
+        <source>&lt;h3&gt;Lenovo Virtual Panel&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -102,13 +183,96 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="35"/>
-        <source>&lt;h2&gt;Lenovo Virtual Panel&lt;/h2&gt;</source>
+        <location filename="../mainwindow.cpp" line="34"/>
+        <source>Exit?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ScalingSettingKeyboard</name>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="14"/>
+        <source>Scaling Setting Keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="36"/>
-        <source>Exit?</source>
+        <location filename="../scalingsettingkeyboard.ui" line="33"/>
+        <source>Scaling:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="53"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="73"/>
+        <source>1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="96"/>
+        <source>2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="119"/>
+        <source>3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="142"/>
+        <source>6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="165"/>
+        <source>4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="188"/>
+        <source>5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="211"/>
+        <source>8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="234"/>
+        <source>9</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="257"/>
+        <source>7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="280"/>
+        <source>Backspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="303"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="326"/>
+        <source>0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="352"/>
+        <source>100</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="378"/>
+        <source>%</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -303,7 +467,7 @@ Copy</source>
     <message>
         <location filename="../copy.ui" line="930"/>
         <source>Copy</source>
-        <translation type="unfinished">复印</translation>
+        <translation>复印</translation>
     </message>
     <message>
         <location filename="../copy.ui" line="970"/>
@@ -373,7 +537,7 @@ Copy</source>
     <message>
         <location filename="../setting.ui" line="306"/>
         <source>Refresh</source>
-        <translation type="unfinished">刷新</translation>
+        <translation>刷新</translation>
     </message>
     <message>
         <location filename="../setting.ui" line="339"/>

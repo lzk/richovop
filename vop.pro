@@ -16,22 +16,24 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     mainwidget.cpp \
     app/vop_protocol.cpp \
-    app/devicemanager.cpp \
     app/vop_device.cpp \
-    app/deviceapp.cpp
+    app/deviceapp.cpp \
     copiessettingkeyboard.cpp \
-    scalingsettingkeyboard.cpp
+    scalingsettingkeyboard.cpp \
+    app/devicecontrol.cpp \
+    app/devicemanager.cpp
 
 HEADERS  += mainwindow.h \
     mainwidget.h \
-    app/devicemanager.h \
     app/vop_protocol.h \
     app/vop_device.h \
     lib/usb.h \
     lib/NetDevice.h \
-    app/deviceapp.h
+    app/deviceapp.h \
     copiessettingkeyboard.h \
-    scalingsettingkeyboard.h
+    scalingsettingkeyboard.h \
+    app/devicecontrol.h \
+    app/devicemanager.h
 
 FORMS    += mainwindow.ui \
     setting.ui \
@@ -48,6 +50,8 @@ TRANSLATIONS = translations/vop_zh.ts
 
 INCLUDEPATH += cups
 
+LIBS +=   -ldl
+
 PLATFORM = $$system(uname -i)
 contains(PLATFORM, x86_64){
 LIBS += \
@@ -59,6 +63,6 @@ LIBS += \
 
 #    /usr/lib/i386-linux-gnu/libcups.so.2 \
 
-DEFINES += DEVICE_LIB_SUPPORT
 }
+DEFINES += DEVICE_LIB_SUPPORT
 

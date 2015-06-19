@@ -1,18 +1,19 @@
 /////////////////////////////////////////
-/// File:devicemanager.cpp
 /// Author:Jacky Liang
 /// Version:
 /////////////////////////////////////////
 #include "devicemanager.h"
+#include <cups/cups.h>
 #include<QDebug>
 #include<QStringList>
-#include"vop_device.h"
-#include "vop_protocol.h"
-
-DeviceManager::DeviceManager(QObject *parent) : QObject(parent)
-{    
-    device = new VopDevice(this);
+#include "vop_device.h"
+#include "deviceapp.h"
+DeviceManager::DeviceManager(MainWidget* _widget):
+    device_app(NULL),
+    widget(_widget)
+{   
     devices.clear();
+    device = new VopDevice();
     protocol = new VopProtocol(this);
 }
 
@@ -20,13 +21,26 @@ DeviceManager::~DeviceManager()
 {
     delete device;
     delete protocol;
+    if(device_app)
+        delete device_app;
+}
+
+const QString DeviceManager::get_deviceName()
+{
+    return selected_devicename;
 }
 
 void DeviceManager::selectDevice(int selected_device)
 {
-    QMutexLocker locker(&mutex);
+    if(device_app){
+        device_app->disconnect_App();
+        delete device_app;
+        device_app = NULL;
+    }
     if(devices.count()){
         selected_devicename = devices.at(selected_device);
+        if(!device_app)
+            device_app = new DeviceApp(this ,widget);
     }else{
         selected_devicename = QString();
     }
@@ -48,10 +62,7 @@ QString DeviceManager::getDeviceURI(const QString& devicename)
 
 QString DeviceManager::getCurrentDeviceURI()
 {
-    mutex.lock();
-    current_devicename = selected_devicename;
-    mutex.unlock();
-    return getDeviceURI(current_devicename);
+    return getDeviceURI(selected_devicename);
 }
 
 #include<QPrinterInfo>
@@ -120,69 +131,13 @@ int DeviceManager::getDeviceList(QStringList& printerInfo)
    if(!selected){
        qDebug()<<"the printer isn't selected,select the first printer";
    }
-   //select the device
-   selectDevice(selected_printer);   
    cupsFreeDests(num_dests, dests);
    return selected_printer;
 }
 
-QString DeviceManager::current_devicename = QString();
-int DeviceManager::device_writeThenRead(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize)
+int DeviceManager::get_deviceStatus()
 {
-    if(current_devicename.isEmpty())
-        return -1;
-    int err = 0;
-    QString device_uri = getDeviceURI(current_devicename);
-    err = VopDevice::writeThenRead(device_uri.toLatin1() ,wrBuffer ,wrSize ,rdBuffer ,rdSize);
-    return err;
-}
-
-void DeviceManager::slots_cmd(int cmd)
-{
-//    assert(cmd < CMD_MAX);
-    mutex.lock();
-    current_devicename = selected_devicename;
-    mutex.unlock();
-    if(current_devicename == QString())
-        return;
-    int err = -1;
-    switch(cmd){
-    case CMD_DEVICE_status:    {
-        QString device_uri = getDeviceURI(current_devicename);
-        emit signals_setProgress(0);
-        emit signals_setProgress(20);
-        err = VopDevice::getDeviceStatus(device_uri.toLatin1());
-//        sleep(5);
-        emit signals_setProgress(100);
-        break;
-    }
-    case CMD_COPY:
-        err = protocol->cmd(VopProtocol::CMD_COPY);
-        break;
-    case CMD_WIFI_apply:
-        err = protocol->cmd(VopProtocol::CMD_WIFI_apply);
-        break;
-    case CMD_WIFI_get:
-        err = protocol->cmd(VopProtocol::CMD_WIFI_get);
-        break;
-    case CMD_WIFI_getAplist:
-        err = protocol->cmd(VopProtocol::CMD_WIFI_getAplist);
-        break;
-    case CMD_PASSWD_set:
-        err = protocol->cmd(VopProtocol::CMD_PASSWD_set);
-        break;
-    case CMD_PASSWD_get:
-        err = protocol->cmd(VopProtocol::CMD_PASSWD_get);
-        break;
-    case CMD_PASSWD_confirm:
-    case CMD_PASSWD_confirmForApply:
-    case CMD_PASSWD_confirmForSetPasswd:
-        err = protocol->cmd(VopProtocol::CMD_PASSWD_confirm);
-        break;
-    default:
-        break;
-    }
-    emit signals_cmd_result(cmd ,err);
+    return protocol->get_deviceStatus();
 }
 
 void DeviceManager::copy_set_para(copycmdset* p)
@@ -228,4 +183,9 @@ cmdst_aplist_get DeviceManager::wifi_getAplist()
 void DeviceManager::passwd_set(const char* p)
 {
     protocol->passwd_set(p);
+}
+
+DeviceApp* DeviceManager::deviceApp()
+{
+    return device_app;
 }

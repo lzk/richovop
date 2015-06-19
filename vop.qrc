@@ -12,5 +12,6 @@
         <file>images/squareCopy.png</file>
         <file>images/squareCopyAlt.png</file>
         <file>images/squareCopyDisabled.png</file>
+        <file>translations/vop_zh.ts</file>
     </qresource>
 </RCC>

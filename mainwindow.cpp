@@ -1,5 +1,4 @@
 /////////////////////////////////////////
-/// File:mainwindow.cpp
 /// Author:Jacky Liang
 /// Version:
 /////////////////////////////////////////
@@ -31,14 +30,7 @@ MainWindow::~MainWindow()
 #include <QMessageBox>
 void MainWindow::slots_exit()
 {
-    QMessageBox msgBox;
-    msgBox.setText(tr("<h3>Lenovo Virtual Panel</h3>"));
-    msgBox.setInformativeText(tr("Exit?"));
-    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    msgBox.setWindowFlags(Qt::FramelessWindowHint);
-    msgBox.setFixedSize(600 ,400);
-    int ret = msgBox.exec();
+    int ret = MainWidget::showMessageBox(tr("Exit?") ,QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
     switch (ret) {
     case QMessageBox::Ok:
         exit(0);
@@ -52,7 +44,9 @@ void MainWindow::slots_exit()
   }
 }
 
-void MainWindow::closeEvent(QCloseEvent *)
+#include <QCloseEvent>
+void MainWindow::closeEvent(QCloseEvent *event)
 {
     ui->actionExit_Lenovo_Virtual_Panel->trigger();
+    event->ignore();
 }
