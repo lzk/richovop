@@ -1,5 +1,4 @@
 /////////////////////////////////////////
-/// File:mainwidget.h
 /// Author:Jacky Liang
 /// Version:
 /////////////////////////////////////////
@@ -7,6 +6,13 @@
 #define MAINWIDGET_H
 
 #include <QWidget>
+#include <QTimer>
+#include <QMessageBox>
+
+class QProgressDialog;
+class DeviceManager;
+class CopiesSettingKeyboard;
+class ScalingSettingKeyboard;
 
 namespace Ui {
 class MainWidget;
@@ -15,11 +21,6 @@ class TabSetting;
 class TabAbout;
 }
 
-class QProgressDialog;
-class DeviceApp;
-#include <QTimer>
-#include "app/vop_protocol.h"
-#include <QMessageBox>
 class MessageBox:public QMessageBox
 {
 protected:
@@ -57,10 +58,10 @@ protected:
 
 private:
 //    QAction* action_refresh;
-    DeviceApp* device;
     QTimer timer;
     QProgressDialog* progressDialog;
     bool device_status;
+    DeviceManager* device_manager;
 
     void initializeUi();
     void retranslateUi();
@@ -71,12 +72,17 @@ private:
     void emit_cmd(int);
 signals:
    void signals_cmd(int);
+   void signals_deviceChanged(const QString&);
+   void signals_emit_cmd(int);
 
 public slots:
    void slots_cmd_result(int ,int);
    void slots_cmd();
    void slots_timeout();
    void slots_progressBar(int);
+private slots:
+    void on_refresh_clicked();
+    void on_comboBox_deviceList_activated(int index);
 
 private:
     ///////////////////////////tab about//////////////////////
@@ -87,6 +93,8 @@ private:
     ///////////////////////////tab copy///////////////////
     //    QAction* action_copy_default;
     QStringList stringlist_output_size;
+    ScalingSettingKeyboard* keyboard_scaling;
+    CopiesSettingKeyboard* keyboard_copies;
     void initializeTabCopy();
     void updateCopy();
 
@@ -99,6 +107,7 @@ private:
     QString wifi_sw_password;
     int wifi_ms_wepIndex;
     int wifi_sw_wepIndex;
+#define NUM_OF_APLIST 10
     int wifi_sw_encryptionType[NUM_OF_APLIST];
     QString machine_wifi_ssid;
 //    QString machine_wifi_password;
@@ -123,11 +132,7 @@ private slots:
     void slots_copy_combo(int);
     void slots_copy_pushbutton();
     void slots_copy_radio(bool);
-
-private slots:
-    void on_refresh_clicked();
-    void on_comboBox_deviceList_activated(int index);
-
+    void slots_copy_keyboard(QString);
     //////////////////////////tab setting///////////////////
     void slots_wifi_radiobutton(bool);
     void slots_wifi_textChanged(const QString &arg1);
