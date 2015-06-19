@@ -19,6 +19,8 @@ SOURCES += main.cpp\
     app/devicemanager.cpp \
     app/vop_device.cpp \
     app/deviceapp.cpp
+    copiessettingkeyboard.cpp \
+    scalingsettingkeyboard.cpp
 
 HEADERS  += mainwindow.h \
     mainwidget.h \
@@ -28,12 +30,16 @@ HEADERS  += mainwindow.h \
     lib/usb.h \
     lib/NetDevice.h \
     app/deviceapp.h
+    copiessettingkeyboard.h \
+    scalingsettingkeyboard.h
 
 FORMS    += mainwindow.ui \
     setting.ui \
     mainwidget.ui \
     copy.ui \
-    about.ui
+    about.ui \
+    copiessettingkeyboard.ui \
+    scalingsettingkeyboard.ui
 
 RESOURCES += \
     vop.qrc
@@ -48,10 +54,10 @@ LIBS += \
     /usr/lib/x86_64-linux-gnu/libcups.so.2
 }else{
 LIBS += \
-    /usr/lib/i386-linux-gnu/libcups.so.2 \
-   -ldl
+   -ldl \
+   -lcups -L/usr/lib/i386-linux-gnu/  \
 
-  #  -lcups -L/usr/lib/i386-linux-gnu/  \
+#    /usr/lib/i386-linux-gnu/libcups.so.2 \
 
 DEFINES += DEVICE_LIB_SUPPORT
 }

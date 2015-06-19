@@ -15,6 +15,8 @@
 #include <QProgressDialog>
 
 #include "app/devicemanager.h"
+#include "scalingsettingkeyboard.h"
+#include "copiessettingkeyboard.h"
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
@@ -228,24 +230,44 @@ void MainWidget::createActions()
 #include <QMouseEvent>
 bool MainWidget::eventFilter(QObject *obj, QEvent *event)
 {
-    if(qobject_cast<QComboBox*>(obj))    {
-        if(event->type() == QEvent::Wheel)
+    QEvent::Type type = event->type();
+    switch(type){
+    case QEvent::Wheel:
+        if(qobject_cast<QComboBox*>(obj))
             return true;
-    }    else    if(obj == ts->pageWidget && event->type() == QEvent::Show)    {//wifi setup show
-        emit_cmd(DeviceManager::CMD_WIFI_get);
-    }    else        if(obj == ui->tab_4 && event->type() == QEvent::Hide)        {//tab setting hide
+        break;
+    case QEvent::Show:
+        if(obj == ts->pageWidget)
+            emit_cmd(DeviceManager::CMD_WIFI_get);
+        break;
+    case QEvent::Hide:
+        if(obj == ui->tab_4)
             passwd_checked = false;
-    }    else    if (obj == ta->label && event->type() == QEvent::MouseButtonPress) {//tab about click
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-        if(Qt::LeftButton == mouseEvent->button()
-                && mouseEvent->x() > 130 && mouseEvent->y() > 280
-                && mouseEvent->x() < 180 && mouseEvent->y() < 330
-                )        {
-//            action_about_update->trigger();
-            slots_about_update();
-//            qDebug() << "pos:" << mouseEvent->pos();
+        break;
+    case QEvent::MouseButtonPress:
+        if (obj == ta->label){
+            QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+            if(Qt::LeftButton == mouseEvent->button()
+                    && mouseEvent->x() > 130 && mouseEvent->y() > 280
+                    && mouseEvent->x() < 180 && mouseEvent->y() < 330
+                    )        {
+    //            action_about_update->trigger();
+                slots_about_update();
+    //            qDebug() << "pos:" << mouseEvent->pos();
+            }
+//            return true;
+        }else if(obj == tc->copies){
+            if(!keyboard_copies->isVisible()){
+                keyboard_copies->set_num(tc->copies->text().toInt());
+                keyboard_copies->show();
+            }
+        }else if(obj == tc->scaling){
+            if(!keyboard_scaling->isVisible() && tc->label_scaling->isEnabled()){
+                keyboard_scaling->set_num(tc->scaling->text().remove(QChar('%')).toInt());
+                keyboard_scaling->show();
+            }
         }
-        return true;
+        break;
     }
     return QWidget::eventFilter(obj, event);
 }
@@ -374,6 +396,15 @@ void MainWidget::initializeTabCopy()
     tc->combo_outputSize->installEventFilter(this);
     tc->combo_nIn1Copy->installEventFilter(this);
     tc->combo_dpi->installEventFilter(this);
+    keyboard_scaling = new ScalingSettingKeyboard(this);
+    keyboard_scaling->hide();
+    tc->scaling->installEventFilter(this);
+    connect(keyboard_scaling ,SIGNAL(sendScalingData(QString)) ,this ,SLOT(slots_copy_keyboard(QString)));
+
+    keyboard_copies = new CopiesSettingKeyboard(this);
+    keyboard_copies->hide();
+    tc->copies->installEventFilter(this);
+    connect(keyboard_copies ,SIGNAL(sendCopiesData(QString)) ,this ,SLOT(slots_copy_keyboard(QString)));
 }
 
 #define SetWhite(widget) widget->setStyleSheet("background-color:white")
@@ -583,6 +614,20 @@ void MainWidget::slots_copy_radio(bool checked)
             updateCopy();
         }
     }
+}
+
+void MainWidget::slots_copy_keyboard(QString str)
+{
+    copycmdset copyPara = deviceManager->copy_get_para();
+    copycmdset* pCopyPara = &copyPara;
+    QObject* sd = sender();
+    if(sd == keyboard_copies){
+        pCopyPara->copyNum = str.toInt();
+    }else if(sd == keyboard_scaling){
+        pCopyPara->scale = str.toInt();
+    }
+    deviceManager->copy_set_para(pCopyPara);
+    updateCopy();
 }
 
 //////////////////////////tab setting///////////////////
