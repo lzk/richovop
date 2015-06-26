@@ -3,10 +3,10 @@
 /// Version:
 /////////////////////////////////////////
 #include "devicecontrol.h"
-#include<QDebug>
 #include"vop_device.h"
 #include "vop_protocol.h"
 #include "devicemanager.h"
+#include "log.h"
 
 QString DeviceContrl::current_devicename = QString();
 
@@ -39,6 +39,7 @@ int DeviceContrl::device_getDeviceStatus(char* buffer ,int buffer_size)
         return -1;
     int err = 0;
     QString device_uri = DeviceManager::getDeviceURI(current_devicename);
+//    device_uri = "socket://192.168.6.123:9100";
     err = VopDevice::getDeviceStatus(device_uri.toLatin1() ,buffer ,buffer_size);
     return err;
 }

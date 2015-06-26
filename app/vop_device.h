@@ -7,13 +7,16 @@
 
 #include <stddef.h>
 class DeviceContrl;
+#include<QString>
 class VopDevice
 {
 public:
     VopDevice();
     ~VopDevice();
 
-    static int isValidDevice(const char* printer_info);
+    static bool is_usbDevice(const QString&);
+    static bool is_netDevice(const QString&);
+    static int isValidDevice(const char* printer_info);    
     static int writeThenRead(const char* device_uri ,char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize);
     static int getDeviceStatus(const char* device_uri ,char* buffer ,int buffer_size);
 

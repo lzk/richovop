@@ -4,7 +4,7 @@
 /////////////////////////////////////////
 #include "vop_device.h"
 #include "devicecontrol.h"
-#include <QDebug>
+#include "log.h"
 #include <unistd.h>
 
 #ifndef DEVICE_LIB_SUPPORT
@@ -47,7 +47,7 @@ static int usbWriteThenRead(const char* device_uri ,char* wrBuffer ,int wrSize ,
         err = usb_openPrinter((char*)device_uri);
     else
         return -2;
-    qDebug()<<"usb_openPrinter:return"<<err;
+    qLog()<<"usb_openPrinter:return"<<err;
     if(1 != err)
         return -1;
 
@@ -85,7 +85,7 @@ static int usbWriteThenRead(const char* device_uri ,char* wrBuffer ,int wrSize ,
            if(usb_USBRead)
                _read_size = usb_USBRead(outBuffer , sizeof(outBuffer));
            char* buffer = outBuffer;
-           qDebug("reply of wakeup cmd:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
+           qLog("reply of wakeup cmd:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
                   ,buffer[0],buffer[1],buffer[2],buffer[3],buffer[4],
                    buffer[5],buffer[6],buffer[7],buffer[8],buffer[9],buffer[10]);
         }
@@ -97,7 +97,7 @@ static int usbWriteThenRead(const char* device_uri ,char* wrBuffer ,int wrSize ,
         if(usb_USBRead)
             _read_size = usb_USBRead(rdBuffer ,rdSize);
         if((_write_size == wrSize) && (_read_size == rdSize)){
-            qDebug()<<"try times:"<<i+1;
+            qLog()<<"try times:"<<i+1;
             break;
         }
         err = -1;
@@ -107,7 +107,7 @@ static int usbWriteThenRead(const char* device_uri ,char* wrBuffer ,int wrSize ,
         usb_closePrinter();
     else
         return -2;
-    qDebug()<<"usb_closePrinter";
+    qLog()<<"usb_closePrinter";
 
     return err;
 }
@@ -119,7 +119,7 @@ static int usb_getDeviceID(const char* device_uri ,char* buffer ,int buffer_size
         err = usb_openPrinter((char*)device_uri);
     else
         return -2;
-//    qDebug()<<"usb_openPrinter:return"<<err;
+//    qLog()<<"usb_openPrinter:return"<<err;
     if(1 != err)
         return -1;
 
@@ -127,7 +127,7 @@ static int usb_getDeviceID(const char* device_uri ,char* buffer ,int buffer_size
         err = usb_get_device_id(buffer ,buffer_size);
     else
         return -2;
-//    qDebug()<<"usb_get_device_id:"<<buffer<<"\nsize:"<<strlen(buffer);
+//    qLog()<<"usb_get_device_id:"<<buffer<<"\nsize:"<<strlen(buffer);
     if(1 != err)
     {
         err = -1;
@@ -138,7 +138,7 @@ static int usb_getDeviceID(const char* device_uri ,char* buffer ,int buffer_size
         usb_closePrinter();
     else
         return -2;
-//        qDebug()<<"usb_closePrinter";
+//        qLog()<<"usb_closePrinter";
 
     return err;
 }
@@ -150,7 +150,7 @@ static int networkWriteThenRead(const char* device_uri ,char* wrBuffer ,int wrSi
         err = net_connetToNetDevice((char*)device_uri);
     else
         return -2;
-    qDebug()<<"net_connetToNetDevice:return"<<err;
+    qLog()<<"net_connetToNetDevice:return"<<err;
     if(1 != err)
         return -1;
 
@@ -160,11 +160,12 @@ static int networkWriteThenRead(const char* device_uri ,char* wrBuffer ,int wrSi
         err = 0;
         if(net_wirteToNetDevice)
             _write_size = net_wirteToNetDevice(wrBuffer ,wrSize);
-//        usleep(100 * 1000);//100 ms
+        usleep(100 * 1000);//100 ms
         if(net_readFromNetDevice)
             _read_size = net_readFromNetDevice(rdBuffer ,rdSize);
+
+        qLog()<<"try times:"<<i+1<<"\twirte size:"<<wrSize<<":"<<_write_size<<"\tread size:"<<rdSize<<":"<<_read_size;
         if((_write_size == wrSize) && (_read_size == rdSize)){
-            qDebug()<<"try times:"<<i+1;
             break;
         }
         err = -1;
@@ -173,7 +174,7 @@ static int networkWriteThenRead(const char* device_uri ,char* wrBuffer ,int wrSi
         net_closeSocket();
     else
         return -2;
-    qDebug()<<"net_closeSocket:";
+    qLog()<<"net_closeSocket:";
 
     return err;
 }
@@ -185,7 +186,7 @@ static int net_getDeviceID(const char* device_uri ,char* buffer ,int buffer_size
         err = net_connetToNetDevice((char*)device_uri);
     else
         return -2;
-    qDebug()<<"net_connetToNetDevice:return"<<err;
+    qLog()<<"net_connetToNetDevice:return"<<err;
     if(1 != err)
         return -1;
 
@@ -193,13 +194,13 @@ static int net_getDeviceID(const char* device_uri ,char* buffer ,int buffer_size
         err = net_get_device_id(buffer ,buffer_size);
     else
         return -2;
-    qDebug()<<"net_get_device_id:return"<<err;
+    qLog()<<"net_get_device_id:return"<<err;
 
     if(net_closeSocket)
         net_closeSocket();
     else
         return -2;
-    qDebug()<<"net_closeSocket:";
+    qLog()<<"net_closeSocket:";
 
     err = 0;//no err
     return err;
@@ -218,6 +219,8 @@ VopDevice::VopDevice()
         usb_USBWrite = (int (*)(char *, size_t ))dlsym(hLLD_usb, "USBWrite");
         usb_USBRead = (int (*)(char *, size_t ))dlsym(hLLD_usb, "USBRead");
         usb_get_device_id = (int (*)(char *, size_t ))dlsym(hLLD_usb, "get_device_id");
+    }else{
+        qLog()<<"dlerror:"<<dlerror();
     }
 
     hLLD_net = dlopen("./libsocket.so", RTLD_LAZY);
@@ -258,23 +261,35 @@ int VopDevice::isValidDevice(const char* printer_info)
     return valid;
 }
 
+bool VopDevice::is_usbDevice(const QString& str)
+{
+    return str.startsWith("usb://");
+}
+
+bool VopDevice::is_netDevice(const QString& str)
+{
+    return (str.startsWith("socket://")
+            || str.startsWith("dnssd://")
+//            || str.startsWith("lpd://")
+//            || str.startsWith("ipp://")
+//            || str.startsWith("mdns://")
+            );
+}
+
 int VopDevice::writeThenRead(const char* device_uri ,char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize)
 {
     int err = -1;
-    QString _device_uri = QString(device_uri);
-    qDebug()<<__func__<<"device-uri"<<_device_uri;
+//    QString _device_uri = QString(device_uri);
+//    qLog()<<__func__<<"device-uri"<<_device_uri;
 
 //    return -1;
 
-    if(_device_uri.startsWith("usb://"))    {
+    if(is_usbDevice(device_uri)){
         err = usbWriteThenRead(device_uri ,wrBuffer ,wrSize ,rdBuffer ,rdSize);
-    }else if(_device_uri.startsWith("socket://")
-             || _device_uri.startsWith("lpd://")
-             || _device_uri.startsWith("ipp://")
-             || _device_uri.startsWith("dnssd://")
-             || _device_uri.startsWith("mdns://")
-             ){
+    }else if(is_netDevice(device_uri)){
         err = networkWriteThenRead(device_uri ,wrBuffer ,wrSize ,rdBuffer ,rdSize);
+    }else{
+        qLog()<<"the uri is not correct";
     }
 
     return err;
@@ -283,20 +298,11 @@ int VopDevice::writeThenRead(const char* device_uri ,char* wrBuffer ,int wrSize 
 int VopDevice::getDeviceStatus(const char* device_uri ,char* buffer ,int buffer_size)
 {
     int err = -1;
-    QString _device_uri = QString(device_uri);
-    qDebug()<<__func__<<"device-uri"<<_device_uri;
+//    QString _device_uri = QString(device_uri);
 
-//    return 0;
-//    return -1;
-
-    if(_device_uri.startsWith("usb://"))    {
+    if(is_usbDevice(device_uri)){
         err = usb_getDeviceID(device_uri ,buffer ,buffer_size);
-    }else if(_device_uri.startsWith("socket://")
-             || _device_uri.startsWith("lpd://")
-             || _device_uri.startsWith("ipp://")
-             || _device_uri.startsWith("dnssd://")
-             || _device_uri.startsWith("mdns://")
-             ){
+    }else if(is_netDevice(device_uri)){
         err = net_getDeviceID(device_uri ,buffer ,buffer_size);
     }
     return err;

@@ -4,10 +4,10 @@
 /////////////////////////////////////////
 #include "devicemanager.h"
 #include <cups/cups.h>
-#include<QDebug>
 #include<QStringList>
 #include "vop_device.h"
 #include "deviceapp.h"
+#include "log.h"
 DeviceManager::DeviceManager(MainWidget* _widget):
     device_app(NULL),
     widget(_widget)
@@ -94,7 +94,7 @@ int DeviceManager::getDeviceList(QStringList& printerInfo)
        if (dest->instance == NULL){
            value = cupsGetOption("printer-info", dest->num_options, dest->options);
 //            value = cupsGetOption("printer-make-and-model", dest->num_options, dest->options);
-//           qDebug()<<dest->name<<"---info---"<<value;
+//           qLog()<<dest->name<<"---info---"<<value;
            if(VopDevice::isValidDevice(value)){
                 devices << dest->name;
                 printerInfo << value;
@@ -110,26 +110,26 @@ int DeviceManager::getDeviceList(QStringList& printerInfo)
 //                int j;
 //               for(j=0,option=dest->options ;j < dest->num_options ;j++,option++)
 //                {
-//                    qDebug()<<option->name<<option->value;
+//                    qLog()<<option->name<<option->value;
 //                }
            }
-//           qDebug()<<"";
+//           qLog()<<"";
        }
    }
    if(!devices.count())
    {
-       qDebug()<<"there is no printer";
+       qLog()<<"there is no printer";
        return -1;
    }
    if(selected)
-       qDebug()<<"the selected printer is founded";
+       qLog()<<"the selected printer is founded";
    else if(-1 != default_printer){
            selected_printer =default_printer;
            selected = true;
-           qDebug()<<"select the default printer";
+           qLog()<<"select the default printer";
    }
    if(!selected){
-       qDebug()<<"the printer isn't selected,select the first printer";
+       qLog()<<"the printer isn't selected,select the first printer";
    }
    cupsFreeDests(num_dests, dests);
    return selected_printer;

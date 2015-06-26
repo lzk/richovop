@@ -7,7 +7,7 @@
 #include "devicecontrol.h"
 #include "devicemanager.h"
 #include "../mainwidget.h"
-#include <QDebug>
+#include "log.h"
 DeviceApp::DeviceApp(DeviceManager* dm ,MainWidget* _widget) :
     device_manager(dm),
     ctrl (new DeviceContrl(dm)),
@@ -58,7 +58,7 @@ bool DeviceApp::emit_cmd(int cmd)
                 ){
             emit signals_progress(0);
             emit signals_progress(20);
-            qDebug()<<"show progress bar";
+            qLog()<<"show progress bar";
         }
         set_cmdStatus(cmd);
         emit signals_cmd(cmd);
@@ -70,7 +70,7 @@ bool DeviceApp::emit_cmd(int cmd)
     case DeviceContrl::CMD_PASSWD_confirmForSetPasswd:
         if(DeviceContrl::CMD_WIFI_get == status){
             emit signals_progress(50);
-            qDebug()<<"progress bar update";
+            qLog()<<"progress bar update";
         }
         set_cmdStatus(cmd);
         emit signals_cmd(cmd);
@@ -91,7 +91,7 @@ void DeviceApp::set_cmdStatus(int status)
     {
         //if progress bar display,hide it
         emit signals_progress(100);
-        qDebug()<<"cmd complete,hide progress bar";
+        qLog()<<"cmd complete,hide progress bar";
     }
 }
 

@@ -6,7 +6,7 @@
 #include "vop_protocol.h"
 #include "devicemanager.h"
 #include "devicecontrol.h"
-#include <QDebug>
+#include "app/log.h"
 
 static int _base64_char_value(char base64char)
  {
@@ -116,7 +116,7 @@ int VopProtocol::DecodeStatusFromDeviceID(char* device_id, PRINTER_STATUS* statu
         p++;
 
     if (!*p)	{ // "STS:" not found
-        qDebug()<<"STS: not found";
+        qLog()<<"STS: not found";
         return -1;
     }
     p += 4;	// Skip "STS:"
@@ -366,12 +366,12 @@ int VopProtocol::vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size)
     memcpy(buffer + sizeof(COMM_HEADER) ,data ,data_size);
     device_manager->mutex_ctrl.unlock();
 
-//    qDebug("Write:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
+//    qLog("Write:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
 //           ,buffer[0],buffer[1],buffer[2],buffer[3],buffer[4],
 //            buffer[5],buffer[6],buffer[7],buffer[8],buffer[9],buffer[10]);
     err = DeviceContrl::device_writeThenRead(buffer ,sizeof(COMM_HEADER)+data_buffer_size * direct
                                                ,buffer ,sizeof(COMM_HEADER)+data_buffer_size * (1 - direct));
-//    qDebug("read:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
+//    qLog("read:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
 //           ,buffer[0],buffer[1],buffer[2],buffer[3],buffer[4],
 //            buffer[5],buffer[6],buffer[7],buffer[8],buffer[9],buffer[10]);
     //check result

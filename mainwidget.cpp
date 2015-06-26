@@ -9,10 +9,10 @@
 #include "ui_about.h"
 
 #include <QAction>
-#include <QDebug>
 #include <QMainWindow>
 #include <QProgressDialog>
 
+#include "app/log.h"
 #include "app/devicecontrol.h"
 #include "app/deviceapp.h"
 #include "scalingsettingkeyboard.h"
@@ -95,7 +95,7 @@ void MainWidget::slots_timeout()
         switch(device_app->get_cmdStatus())
         {
         case DeviceContrl::CMD_STATUS_COMPLETE://jobs complete,no job
-            if(0 == count % 10)
+            if(0 == count % 5)
                 emit_cmd(DeviceContrl::CMD_DEVICE_status);
             break;
 
@@ -143,7 +143,7 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     DeviceApp* device_app = device_manager->deviceApp();
     if(!device_app)
         return;
-    qDebug()<<"err:"<<tr(VopProtocol::getErrString(err));
+    qLog()<<"err:"<<tr(VopProtocol::getErrString(err));
     switch(err){//handle err message box
     case ERR_communication ://communication err
         device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
@@ -170,8 +170,13 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     switch(cmd)
     {
     case DeviceContrl::CMD_DEVICE_status:
-        qDebug("get_deviceStatus():%#.2x",device_manager->get_deviceStatus());
-        device_status = device_manager->get_deviceStatus() == PSTATUS_Ready ? true :false;
+        if(!err){
+//            qLog("get_deviceStatus correct:%#.2x",device_manager->get_deviceStatus());
+            qLog()<<QString().sprintf("get_deviceStatus correct:%#.2x" ,device_manager->get_deviceStatus());
+            device_status = device_manager->get_deviceStatus() == PSTATUS_Ready ? true :false;
+        }else{
+            device_status = false;
+        }
 //        updateCopy();//disable copy or enable
         tc->copy->setEnabled(device_status);
         device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
@@ -274,7 +279,7 @@ bool MainWidget::eventFilter(QObject *obj, QEvent *event)
                     )        {
     //            action_about_update->trigger();
                 slots_about_update();
-    //            qDebug() << "pos:" << mouseEvent->pos();
+    //            qLog() << "pos:" << mouseEvent->pos();
             }
 //            return true;
         }else if(obj == tc->copies){

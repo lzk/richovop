@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     copiessettingkeyboard.cpp \
     scalingsettingkeyboard.cpp \
     app/devicecontrol.cpp \
-    app/devicemanager.cpp
+    app/devicemanager.cpp \
+    app/log.cpp
 
 HEADERS  += mainwindow.h \
     mainwidget.h \
@@ -33,7 +34,8 @@ HEADERS  += mainwindow.h \
     copiessettingkeyboard.h \
     scalingsettingkeyboard.h \
     app/devicecontrol.h \
-    app/devicemanager.h
+    app/devicemanager.h \
+    app/log.h
 
 FORMS    += mainwindow.ui \
     setting.ui \
