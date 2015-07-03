@@ -11,7 +11,7 @@
     <message>
         <location filename="../copiessettingkeyboard.ui" line="33"/>
         <source>9</source>
-        <translation>9</translation>
+        <translation type="unfinished">9</translation>
     </message>
     <message>
         <location filename="../copiessettingkeyboard.ui" line="56"/>
@@ -22,7 +22,7 @@
         <location filename="../copiessettingkeyboard.ui" line="79"/>
         <location filename="../copiessettingkeyboard.ui" line="286"/>
         <source>1</source>
-        <translation>1</translation>
+        <translation type="unfinished">1</translation>
     </message>
     <message>
         <location filename="../copiessettingkeyboard.ui" line="105"/>
@@ -32,7 +32,7 @@
     <message>
         <location filename="../copiessettingkeyboard.ui" line="128"/>
         <source>4</source>
-        <translation>4</translation>
+        <translation type="unfinished">4</translation>
     </message>
     <message>
         <location filename="../copiessettingkeyboard.ui" line="151"/>
@@ -57,7 +57,7 @@
     <message>
         <location filename="../copiessettingkeyboard.ui" line="240"/>
         <source>2</source>
-        <translation>2</translation>
+        <translation type="unfinished">2</translation>
     </message>
     <message>
         <location filename="../copiessettingkeyboard.ui" line="263"/>
@@ -208,12 +208,12 @@
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="73"/>
         <source>1</source>
-        <translation>1</translation>
+        <translation type="unfinished">1</translation>
     </message>
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="96"/>
         <source>2</source>
-        <translation>2</translation>
+        <translation type="unfinished">2</translation>
     </message>
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="119"/>
@@ -228,7 +228,7 @@
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="165"/>
         <source>4</source>
-        <translation>4</translation>
+        <translation type="unfinished">4</translation>
     </message>
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="188"/>
@@ -243,7 +243,7 @@
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="234"/>
         <source>9</source>
-        <translation>9</translation>
+        <translation type="unfinished">9</translation>
     </message>
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="257"/>
@@ -292,7 +292,7 @@
         <location filename="../copy.ui" line="193"/>
         <location filename="../copy.ui" line="834"/>
         <source>1</source>
-        <translation>1</translation>
+        <translation type="unfinished">1</translation>
     </message>
     <message>
         <location filename="../copy.ui" line="218"/>
@@ -431,17 +431,17 @@
     <message>
         <location filename="../copy.ui" line="839"/>
         <source>2</source>
-        <translation>2</translation>
+        <translation type="unfinished">2</translation>
     </message>
     <message>
         <location filename="../copy.ui" line="844"/>
         <source>4</source>
-        <translation>4</translation>
+        <translation type="unfinished">4</translation>
     </message>
     <message>
         <location filename="../copy.ui" line="849"/>
         <source>9</source>
-        <translation>9</translation>
+        <translation type="unfinished">9</translation>
     </message>
     <message>
         <location filename="../copy.ui" line="857"/>
@@ -552,12 +552,12 @@ Copy</source>
     <message>
         <location filename="../setting.ui" line="364"/>
         <source>1</source>
-        <translation>1</translation>
+        <translation type="unfinished">1</translation>
     </message>
     <message>
         <location filename="../setting.ui" line="369"/>
         <source>2</source>
-        <translation>2</translation>
+        <translation type="unfinished">2</translation>
     </message>
     <message>
         <location filename="../setting.ui" line="374"/>
@@ -567,7 +567,7 @@ Copy</source>
     <message>
         <location filename="../setting.ui" line="379"/>
         <source>4</source>
-        <translation>4</translation>
+        <translation type="unfinished">4</translation>
     </message>
     <message>
         <location filename="../setting.ui" line="418"/>

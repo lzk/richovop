@@ -36,7 +36,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 Log log;
 Log::Log()
 {
-    qInstallMessageHandler(myMessageOutput);
+//    qInstallMessageHandler(myMessageOutput);
 }
 
 Log::~Log()

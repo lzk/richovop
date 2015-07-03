@@ -27,7 +27,6 @@ MainWidget::MainWidget(QWidget *parent) :
     device_status(0)
 {
     device_manager = new DeviceManager(this);
-//    device_app = device_manager->new_deviceApp(this);
     ui->setupUi(this);
     createActions();
     initializeUi();
