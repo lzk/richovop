@@ -94,12 +94,12 @@ def match_dict(str ,dict ,dict_spec ,language):
 	return str
 
 def to_match_file(dict ,languages):
-	from test import spec_string
+	from spec import spec_string
 	str =''
 	for language in languages:
 		str=match_dict(str ,dict ,spec_string ,language)
 
-	fo = open('test.match' ,'w')
+	fo = open('match.txt' ,'w')
 	fo.write(str.encode('utf-8'))
 	fo.close()
 	return
@@ -123,10 +123,10 @@ languages=()
 for qph in qphs:
 	langugage = add_dict_lang_qph(dict ,qph)
 	languages+=(langugage,)
-if program_name == 'change_to_rc_file':
+if program_name == 'qph_to_rc':
 	to_rc_file(dict ,languages)
 	print('change to rc file complete')
-elif program_name == 'match_file':
+elif program_name == 'match_qph':
 	to_match_file(dict ,languages)
 	print('match file complete')
 else:

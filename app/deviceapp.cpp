@@ -25,13 +25,22 @@ DeviceApp::DeviceApp(DeviceManager* dm ,MainWidget* _widget) :
     connect(widget ,SIGNAL(signals_deviceChanged(QString)) ,this ,SIGNAL(signals_deviceChanged(QString)));
     connect(this ,SIGNAL(signals_deviceChanged(QString)) ,ctrl ,SLOT(slots_deviceChanged(QString)));
 
+    app_block = new DeviceApp_Block(this);
+    app_block->moveToThread(&app_block_thread);
+    connect(app_block ,SIGNAL(signals_cmd(int)) ,ctrl ,SLOT(slots_cmd(int)));
+    connect(this ,SIGNAL(signals_cmd_block(int)) ,app_block ,SLOT(slots_cmd(int)));
+
     deviceManageThread.start();
+    app_block_thread.start();
 }
 
 DeviceApp::~DeviceApp()
 {
+    app_block_thread.quit();
+    app_block_thread.wait();
     deviceManageThread.quit();
     deviceManageThread.wait();
+    delete app_block;
     delete ctrl;
 }
 
@@ -40,16 +49,14 @@ void DeviceApp::disconnect_App()
     ctrl->disconnect();
     widget->disconnect(this);
     disconnect();
-
 }
-
 
 bool DeviceApp::emit_cmd(int cmd)
 {
-    bool ret = false;
+//    bool ret = false;
     int status = get_cmdStatus();
     switch(status)
-    {
+    {/*
     case DeviceContrl::CMD_STATUS_COMPLETE:    {
         if(DeviceContrl::CMD_COPY == cmd
                 || DeviceContrl::CMD_WIFI_get == cmd
@@ -58,29 +65,31 @@ bool DeviceApp::emit_cmd(int cmd)
                 ){
             emit signals_progress(0);
             emit signals_progress(20);
-            qLog()<<"show progress bar";
+//            qLog()<<"show progress bar";
         }
         set_cmdStatus(cmd);
         emit signals_cmd(cmd);
         ret = true;
     }
-        break;
+        break;*/
     case DeviceContrl::CMD_PASSWD_confirmForApply:
     case DeviceContrl::CMD_WIFI_get://first get then get aplist
     case DeviceContrl::CMD_PASSWD_confirmForSetPasswd:
         if(DeviceContrl::CMD_WIFI_get == status){
             emit signals_progress(50);
-            qLog()<<"progress bar update";
+//            qLog()<<"progress bar update";
         }
         set_cmdStatus(cmd);
         emit signals_cmd(cmd);
-        ret = true;
+//        ret = true;
         break;
 
     default:
+        emit signals_cmd_block(cmd);
         break;
     }
-    return ret;
+//    return ret;
+    return true;
 }
 
 void DeviceApp::set_cmdStatus(int status)
@@ -91,7 +100,7 @@ void DeviceApp::set_cmdStatus(int status)
     {
         //if progress bar display,hide it
         emit signals_progress(100);
-        qLog()<<"cmd complete,hide progress bar";
+//        qLog()<<"cmd complete,hide progress bar";
     }
 }
 
@@ -101,19 +110,29 @@ int DeviceApp::get_cmdStatus()
     return cmd_status;
 }
 
-#if 0
-
-void DeviceApp::slots_emit_cmd(int cmd)
+void DeviceApp::emit_progress(int pro)
 {
-    int status = cmd_status;
-    while(DeviceContrl::CMD_STATUS_COMPLETE != status){
-        status = cmd_status;
-        sleep(1);
-    }
-//    if(DeviceContrl::CMD_STATUS_COMPLETE == cmd_status){
-        cmd_status = cmd;
-        emit signals_cmd(cmd);
-//    }
+    emit signals_progress(pro);
 }
 
-#endif
+#include <unistd.h>
+void DeviceApp_Block::slots_cmd(int cmd)
+{
+    int status = app->get_cmdStatus();
+    while(DeviceContrl::CMD_STATUS_COMPLETE != status){
+        status = app->get_cmdStatus();
+        qLog()<<"waiting for cmd complete";
+        usleep(100*1000);
+    }
+    if(DeviceContrl::CMD_COPY == cmd
+            || DeviceContrl::CMD_WIFI_get == cmd
+            || DeviceContrl::CMD_WIFI_apply == cmd
+            || DeviceContrl::CMD_WIFI_getAplist == cmd
+            ){
+        emit app->emit_progress(0);
+        emit app->emit_progress(20);
+//            qLog()<<"show progress bar";
+    }
+    app->set_cmdStatus(cmd);
+    emit signals_cmd(cmd);
+}

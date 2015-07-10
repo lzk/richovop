@@ -42,10 +42,15 @@ class MainWidget : public QWidget
 public:
     explicit MainWidget(QWidget *parent = 0);
     ~MainWidget();
-    static QMessageBox::StandardButton showMessageBox(const QString &text,
-          QMessageBox::StandardButtons buttons = QMessageBox::Ok,
-         QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
-         const QString &title = tr("<h3>Lenovo Virtual Panel</h3>"));
+    QMessageBox::StandardButton messagebox_exec(const QString &text,
+                                                QMessageBox::StandardButtons buttons = QMessageBox::Ok,
+                                               QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
+                                               const QString &title = "<h3>" + tr("Lenovo Virtual Panel") + "</h3>");
+    void messagebox_show(const QString &text,
+                         QMessageBox::StandardButtons buttons = QMessageBox::NoButton,
+                        QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
+                        const QString &title = "<h3>" + tr("Lenovo Virtual Panel") + "</h3>");
+    void messagebox_hide(){msgBox_info.hide();}
 
 private:
     Ui::MainWidget *ui;
@@ -62,6 +67,8 @@ private:
     QProgressDialog* progressDialog;
     bool device_status;
     DeviceManager* device_manager;
+    MessageBox msgBox;
+    MessageBox msgBox_info;
 
     void initializeUi();
     void retranslateUi();

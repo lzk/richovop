@@ -4,7 +4,11 @@
 //#include <stdlib.h>
 #include <QFile>
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+#else
+void myMessageOutput(QtMsgType type, const char *msg)
+#endif
 {
 #if 0
     QByteArray localMsg = msg.toLocal8Bit();
@@ -32,11 +36,16 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
     file.close();
 }
 
-
 Log log;
 Log::Log()
 {
-//    qInstallMessageHandler(myMessageOutput);
+#if 0
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    qInstallMessageHandler(myMessageOutput);
+#else
+    qInstallMsgHandler(myMessageOutput);
+#endif
+#endif
 }
 
 Log::~Log()

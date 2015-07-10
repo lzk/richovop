@@ -30,7 +30,7 @@ MainWindow::~MainWindow()
 #include <QMessageBox>
 void MainWindow::slots_exit()
 {
-    int ret = MainWidget::showMessageBox(tr("Exit?") ,QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
+    int ret = mainWidget->messagebox_exec(tr("Exit")+"?" ,QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
     switch (ret) {
     case QMessageBox::Ok:
         exit(0);

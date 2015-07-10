@@ -108,55 +108,61 @@
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="80"/>
+        <location filename="../mainwidget.cpp" line="96"/>
         <source>Get Printer Information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="874"/>
+        <location filename="../mainwidget.h" line="48"/>
+        <location filename="../mainwidget.h" line="52"/>
         <source>Lenovo Virtual Panel</source>
         <translation>联想虚拟操作面板</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="129"/>
+        <location filename="../mainwidget.cpp" line="176"/>
         <source>The machine is busy, please try later...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="139"/>
+        <location filename="../mainwidget.cpp" line="170"/>
         <source>Failed to acquire the information.</source>
         <translation>获取信息失败</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="142"/>
+        <location filename="../mainwidget.cpp" line="173"/>
         <source>Authentication error, please enter the password again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="294"/>
+        <location filename="../mainwidget.cpp" line="206"/>
+        <source>Place Next Page</source>
+        <translation>放置下一页</translation>
+    </message>
+    <message>
+        <location filename="../mainwidget.cpp" line="349"/>
         <source>Ricoh VOP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="843"/>
-        <location filename="../mainwidget.cpp" line="877"/>
+        <location filename="../mainwidget.cpp" line="901"/>
+        <location filename="../mainwidget.cpp" line="933"/>
         <source>Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="843"/>
-        <location filename="../mainwidget.cpp" line="877"/>
+        <location filename="../mainwidget.cpp" line="901"/>
+        <location filename="../mainwidget.cpp" line="933"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="874"/>
-        <source>The passwords you entered are different, please try again.</source>
+        <location filename="../mainwidget.cpp" line="928"/>
+        <source>The new password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.h" line="51"/>
-        <source>&lt;h3&gt;Lenovo Virtual Panel&lt;/h3&gt;</source>
+        <location filename="../mainwidget.cpp" line="930"/>
+        <source>The passwords you entered are different, please try again.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -183,7 +189,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="34"/>
+        <location filename="../mainwindow.cpp" line="33"/>
         <source>Exit?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -576,7 +582,7 @@ Copy</source>
     </message>
     <message>
         <location filename="../setting.ui" line="462"/>
-        <location filename="../setting.ui" line="562"/>
+        <location filename="../setting.ui" line="556"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
@@ -586,7 +592,7 @@ Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setting.ui" line="522"/>
+        <location filename="../setting.ui" line="519"/>
         <source>Confirm Password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -594,72 +600,72 @@ Copy</source>
 <context>
     <name>VopProtocol</name>
     <message>
-        <location filename="../app/vop_protocol.cpp" line="158"/>
+        <location filename="../app/vop_protocol.cpp" line="281"/>
         <source>ACK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/vop_protocol.cpp" line="161"/>
+        <location filename="../app/vop_protocol.cpp" line="284"/>
         <source>CMD invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/vop_protocol.cpp" line="164"/>
+        <location filename="../app/vop_protocol.cpp" line="287"/>
         <source>Parameter invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/vop_protocol.cpp" line="167"/>
+        <location filename="../app/vop_protocol.cpp" line="290"/>
         <source>Printer busy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/vop_protocol.cpp" line="170"/>
+        <location filename="../app/vop_protocol.cpp" line="293"/>
         <source>Printer error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/vop_protocol.cpp" line="173"/>
+        <location filename="../app/vop_protocol.cpp" line="296"/>
         <source>Set parameter error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/vop_protocol.cpp" line="176"/>
+        <location filename="../app/vop_protocol.cpp" line="299"/>
         <source>Get parameter error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/vop_protocol.cpp" line="179"/>
+        <location filename="../app/vop_protocol.cpp" line="302"/>
         <source>Printer is Sleeping</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/vop_protocol.cpp" line="182"/>
+        <location filename="../app/vop_protocol.cpp" line="305"/>
         <source>Printer is in error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/vop_protocol.cpp" line="185"/>
+        <location filename="../app/vop_protocol.cpp" line="308"/>
         <source>Password incorrect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/vop_protocol.cpp" line="188"/>
+        <location filename="../app/vop_protocol.cpp" line="311"/>
         <source>Scanner operation NG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/vop_protocol.cpp" line="191"/>
+        <location filename="../app/vop_protocol.cpp" line="314"/>
         <source>communication error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/vop_protocol.cpp" line="194"/>
+        <location filename="../app/vop_protocol.cpp" line="317"/>
         <source>library error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/vop_protocol.cpp" line="198"/>
+        <location filename="../app/vop_protocol.cpp" line="321"/>
         <source>Do not support</source>
         <translation type="unfinished"></translation>
     </message>

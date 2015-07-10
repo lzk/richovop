@@ -15,7 +15,6 @@ public:
     Log();
     ~Log();
 
-    typedef const QLoggingCategory &(*CategoryFunction)();
     QDebug debug() const;
 };
 
