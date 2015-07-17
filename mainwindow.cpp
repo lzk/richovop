@@ -47,6 +47,7 @@ void MainWindow::slots_exit()
 #include <QCloseEvent>
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    ui->actionExit_Lenovo_Virtual_Panel->trigger();
     event->ignore();
+    slots_exit();
+//    ui->actionExit_Lenovo_Virtual_Panel->trigger();
 }

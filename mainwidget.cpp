@@ -11,6 +11,7 @@
 #include <QAction>
 #include <QMainWindow>
 #include <QProgressDialog>
+#include <QDesktopWidget>
 
 #include "app/log.h"
 #include "app/devicecontrol.h"
@@ -60,9 +61,11 @@ QMessageBox::StandardButton MainWidget::messagebox_exec(const QString &text,
     msgBox.setWindowFlags(Qt::FramelessWindowHint);
 //    msgBox.adjustSize();
     msgBox.show();
-    QPoint widget_pos = mapToGlobal(pos());
-    msgBox.move(widget_pos.x() + (width() - msgBox.width())/2,
-         widget_pos.y() + (height() - msgBox.height())/2 - 50);
+//    QPoint widget_pos = mapToGlobal(pos());
+//    msgBox.move(widget_pos.x() + (width() - msgBox.width())/2,
+//         widget_pos.y() + (height() - msgBox.height())/2 - 50);
+    msgBox.move((QApplication::desktop()->width() - msgBox.width())/2,
+          (QApplication::desktop()->height() - msgBox.height())/2);
     return (QMessageBox::StandardButton)msgBox.exec();
 }
 
@@ -82,10 +85,12 @@ void MainWidget::messagebox_show(const QString &text,
         msgBox_info.setDefaultButton(defaultButton);
         msgBox_info.setWindowFlags(Qt::FramelessWindowHint);
         msgBox_info.adjustSize();
-        QPoint widget_pos = mapToGlobal(pos());
         msgBox_info.show();
-        msgBox_info.move(widget_pos.x() + (width() - msgBox_info.width())/2,
-             widget_pos.y() + (height() - msgBox_info.height())/2 - 50);
+//        QPoint widget_pos = mapToGlobal(pos());
+//        msgBox_info.move(widget_pos.x() + (width() - msgBox_info.width())/2,
+//             widget_pos.y() + (height() - msgBox_info.height())/2 - 50);
+        msgBox_info.move((QApplication::desktop()->width() - msgBox_info.width())/2,
+              (QApplication::desktop()->height() - msgBox_info.height())/2);
     }
 }
 void MainWidget::retranslateUi()
@@ -103,6 +108,9 @@ void MainWidget::initialize()
     progressDialog->setCancelButton(NULL);
     progressDialog->setModal(true);
     progressDialog->setLabel(new QLabel("\n\n" + tr("Get Printer Information.") +"\t\t\t\t\t\n"));
+
+    progressDialog->move((QApplication::desktop()->width() - progressDialog->width())/2,
+          (QApplication::desktop()->height() - progressDialog->height())/2);
 
     on_refresh_clicked();
     updateUi();
@@ -350,13 +358,13 @@ void MainWidget::updateUi()
     QString device_uri = device_manager->getCurrentDeviceURI();
     QMainWindow* mainWindow = qobject_cast<QMainWindow*>(parent());
     if(mainWindow){
-        if(!device_uri.isEmpty()){
-            QString title;
-            title = ui->comboBox_deviceList->currentText() + " - " + device_uri;
-               mainWindow->setWindowTitle(title) ;
-        }else{
-               mainWindow->setWindowTitle(tr("Ricoh VOP"));
-        }
+//        if(!device_uri.isEmpty()){
+//            QString title;
+//            title = ui->comboBox_deviceList->currentText() + " - " + device_uri;
+               mainWindow->setWindowTitle(ui->comboBox_deviceList->currentText() + " - " + device_uri) ;
+//        }else{
+//               mainWindow->setWindowTitle(tr("Ricoh VOP"));
+//        }
     }
 //    update();
 }
@@ -985,19 +993,14 @@ void MainWidget::slots_wifi_getAplist()
             break;
         }else{
             ts->cb_ssid->addItem( ssid);
-            wifi_sw_encryptionType[i] = aplist.aplist[i].encryption;
+            wifi_sw_encryptionType[i] = aplist.aplist[i].encryption > 1 ?aplist.aplist[i].encryption -1 : aplist.aplist[i].encryption;
             if(!ssid.compare(machine_wifi_ssid))
                 current_ssid = i;
         }
     }
     ts->cb_ssid->setCurrentIndex(current_ssid);
     //encryption
-    int encryption = wifi_para.encryption % 5;
-    if(encryption != 2){
-        if(encryption == 3 || encryption == 4)
-                encryption --;
-        ts->cb_encryptionType->setCurrentIndex(encryption);
-    }
+     ts->cb_encryptionType->setCurrentIndex(wifi_sw_encryptionType[current_ssid]);
     //key index
     ts->cb_keyIndex->setCurrentIndex(wifi_para.wepKeyId % 4);
 

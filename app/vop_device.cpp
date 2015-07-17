@@ -90,7 +90,7 @@ static int get_deviceID(struct device_control* dc ,const char* device_uri ,char*
         return -2;
     }
     if(1 != dc->openPrinter((char*)device_uri)){
-        qLog()<<"can not open usb printer";
+        qLog()<<"can not open printer";
         return -1;
     }
     int err = -1;
@@ -168,8 +168,9 @@ bool VopDevice::is_netDevice(const QString& str)
 {
     return (str.startsWith("socket://")
             || str.startsWith("dnssd://")
-//            || str.startsWith("lpd://")
-//            || str.startsWith("ipp://")
+            || str.startsWith("lpd://")
+            || str.startsWith("ipp://")
+            || str.startsWith("lpr://")
 //            || str.startsWith("mdns://")
             );
 }

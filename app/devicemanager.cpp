@@ -3,11 +3,11 @@
 /// Version:
 /////////////////////////////////////////
 #include "devicemanager.h"
-#include <cups/cups.h>
 #include<QStringList>
 #include "vop_device.h"
 #include "deviceapp.h"
 #include "log.h"
+#include <cups/cups.h>
 DeviceManager::DeviceManager(MainWidget* _widget):
     device_app(NULL),
     widget(_widget)
@@ -45,9 +45,13 @@ void DeviceManager::selectDevice(int selected_device)
         selected_devicename = QString();
     }
 }
-
+#include<QFile>
+#include<QTextStream>
 QString DeviceManager::getDeviceURI(const QString& devicename)
 {
+    QString device_uri;
+
+    //rhel5 not work
     cups_dest_t *dests;
     int num_dests;
     num_dests = cupsGetDests(&dests);
@@ -55,8 +59,25 @@ QString DeviceManager::getDeviceURI(const QString& devicename)
     dest = cupsGetDest(devicename.toLatin1() ,NULL ,num_dests ,dests);
     if(!dest)
         return NULL;
-    QString device_uri =  cupsGetOption("device-uri", dest->num_options, dest->options);
+    device_uri =  cupsGetOption("device-uri", dest->num_options, dest->options);
     cupsFreeDests(num_dests ,dests);
+
+    if(device_uri.isEmpty()){
+        QString str("LANG=en_US.UTF-8 lpstat -v ");
+        QString tmp_file("/tmp/lpstattmpfile123456789");
+        str += devicename;
+        str += ">";
+        str += tmp_file;
+        if(!system(str.toLatin1())){
+            QFile fl(tmp_file);
+            if(fl.open(QFile::ReadOnly)){
+                QTextStream in(&fl);
+                device_uri = in.readLine();
+                device_uri = device_uri.section(' ' ,-1);
+            }
+        }
+        qLog()<<"get device uri:"<<device_uri;
+    }
     return device_uri;
 }
 
@@ -66,7 +87,7 @@ QString DeviceManager::getCurrentDeviceURI()
 }
 
 #include<QPrinterInfo>
-int DeviceManager::getDeviceList(QStringList& printerInfo)
+int DeviceManager::getDeviceList(QStringList& printerNames)
 {
     int selected_printer = 0;
     int default_printer = -1;
@@ -92,12 +113,11 @@ int DeviceManager::getDeviceList(QStringList& printerInfo)
    for (i = num_dests, dest = dests; i > 0; i --, dest ++)
    {
        if (dest->instance == NULL){
-           value = cupsGetOption("printer-info", dest->num_options, dest->options);
-//            value = cupsGetOption("printer-make-and-model", dest->num_options, dest->options);
-//           qLog()<<dest->name<<"---info---"<<value;
+//           value = cupsGetOption("printer-info", dest->num_options, dest->options);
+            value = cupsGetOption("printer-make-and-model", dest->num_options, dest->options);
            if(VopDevice::isValidDevice(value)){
                 devices << dest->name;
-                printerInfo << value;
+                printerNames << dest->name;
                 if(dest->is_default){
                     default_printer = devices.indexOf(dest->name);
                 }

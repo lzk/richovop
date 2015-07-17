@@ -12,7 +12,7 @@ TARGET = vop
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
+SOURCES += main.cpp \
         mainwindow.cpp \
     mainwidget.cpp \
     app/vop_protocol.cpp \
@@ -50,21 +50,5 @@ RESOURCES += \
 
 TRANSLATIONS = translations/vop_zh.ts
 
-INCLUDEPATH += cups
-
-LIBS +=   -ldl
-
-PLATFORM = $$system(uname -i)
-contains(PLATFORM, x86_64){
-LIBS += \
-    /usr/lib/x86_64-linux-gnu/libcups.so.2
-}else{
-LIBS += \
-   -ldl \
-   -lcups -L/usr/lib/i386-linux-gnu/  \
-
-#    /usr/lib/i386-linux-gnu/libcups.so.2 \
-
-}
-DEFINES += DEVICE_LIB_SUPPORT
+LIBS +=   -ldl `cups-config --libs`
 

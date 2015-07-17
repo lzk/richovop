@@ -23,7 +23,7 @@ public:
 
     DeviceApp* deviceApp();
 
-    int getDeviceList(QStringList& printerInfo);
+    int getDeviceList(QStringList& printerNames);
     void selectDevice(int selected_device);
     QString getCurrentDeviceURI();
     static QString getDeviceURI(const QString&);
