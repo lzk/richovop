@@ -30,18 +30,19 @@ MainWindow::~MainWindow()
 #include <QMessageBox>
 void MainWindow::slots_exit()
 {
-    int ret = mainWidget->messagebox_exec(tr("Exit")+"?" ,QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
-    switch (ret) {
-    case QMessageBox::Ok:
-        exit(0);
-        break;
-    case QMessageBox::Cancel:
-        // Cancel was clicked
-        break;
-    default:
-        // should never be reached
-        break;
-  }
+    exit(0);
+//    int ret = mainWidget->messagebox_exec(tr("Exit")+"?" ,QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
+//    switch (ret) {
+//    case QMessageBox::Ok:
+//        exit(0);
+//        break;
+//    case QMessageBox::Cancel:
+//        // Cancel was clicked
+//        break;
+//    default:
+//        // should never be reached
+//        break;
+//  }
 }
 
 #include <QCloseEvent>

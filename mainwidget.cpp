@@ -358,13 +358,10 @@ void MainWidget::updateUi()
     QString device_uri = device_manager->getCurrentDeviceURI();
     QMainWindow* mainWindow = qobject_cast<QMainWindow*>(parent());
     if(mainWindow){
-//        if(!device_uri.isEmpty()){
-//            QString title;
-//            title = ui->comboBox_deviceList->currentText() + " - " + device_uri;
-               mainWindow->setWindowTitle(ui->comboBox_deviceList->currentText() + " - " + device_uri) ;
-//        }else{
-//               mainWindow->setWindowTitle(tr("Ricoh VOP"));
-//        }
+        if(ui->comboBox_deviceList->count())
+            mainWindow->setWindowTitle(ui->comboBox_deviceList->currentText() + " - " + device_uri) ;
+        else
+            mainWindow->setWindowTitle("AltoVop") ;
     }
 //    update();
 }
@@ -374,11 +371,24 @@ void MainWidget::on_refresh_clicked()
     ui->comboBox_deviceList->clear();
     QStringList printerNames;
     int selected_printer = device_manager->getDeviceList(printerNames);
-    if(-1 != selected_printer)//has printer
-    {
+    if(-1 != selected_printer){//has printer
+//        ui->tabWidget->removeTab(0);
+//        ui->tabWidget->removeTab(0);
+//        ui->tabWidget->removeTab(0);
+//        ui->tabWidget->addTab(ui->tab_3 ,tr("Copy"));
+//        ui->tabWidget->addTab(ui->tab_4 ,tr("Setting"));
+//        ui->tabWidget->addTab(ui->tab_5 ,tr("About"));
+        ui->tabWidget->setTabEnabled(0 ,true);
+        ui->tabWidget->setTabEnabled(1,true);
         ui->comboBox_deviceList->insertItems(0 ,printerNames);
         ui->comboBox_deviceList->setCurrentIndex(selected_printer);
         on_comboBox_deviceList_activated(selected_printer);
+    }else{//no supported printer
+        ui->tabWidget->setCurrentWidget(ui->tab_5);
+//        ui->tabWidget->removeTab(0);
+//        ui->tabWidget->removeTab(0);
+        ui->tabWidget->setTabEnabled(0 ,false);
+        ui->tabWidget->setTabEnabled(1,false);
     }
 }
 
