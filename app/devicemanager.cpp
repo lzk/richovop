@@ -68,6 +68,7 @@ QString DeviceManager::getDeviceURI(const QString& devicename)
         str += devicename;
         str += ">";
         str += tmp_file;
+//        qLog()<<"cmd:"<<str.toLatin1();
         if(!system(str.toLatin1())){
             QFile fl(tmp_file);
             if(fl.open(QFile::ReadOnly)){

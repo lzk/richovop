@@ -4,11 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
-TARGET = vop
+TARGET = VOP
 TEMPLATE = app
 
 
@@ -50,5 +50,6 @@ RESOURCES += \
 
 TRANSLATIONS = translations/vop_zh.ts
 
-LIBS +=   -ldl `cups-config --libs`
+LIBS += -Wl,-rpath,"/opt/RICOH/app/Ricoh SP 150SU_SP 150" -ldl `cups-config --libs`
+#LIBS += -Wl,-rpath,"/opt/RICOH/app/Ricoh SP 150SU_SP 150"  -ldl /usr/lib64/libcups.so.2
 

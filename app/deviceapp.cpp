@@ -119,10 +119,13 @@ void DeviceApp::emit_progress(int pro)
 void DeviceApp_Block::slots_cmd(int cmd)
 {
     int status = app->get_cmdStatus();
-    while(DeviceContrl::CMD_STATUS_COMPLETE != status){
-        status = app->get_cmdStatus();
+    if(DeviceContrl::CMD_STATUS_COMPLETE != status){
         qLog()<<"waiting for cmd complete";
-        usleep(100*1000);
+        do{
+            usleep(100*1000);
+            status = app->get_cmdStatus();
+        }
+        while(DeviceContrl::CMD_STATUS_COMPLETE != status);
     }
     if(DeviceContrl::CMD_COPY == cmd
             || DeviceContrl::CMD_WIFI_get == cmd

@@ -9,15 +9,12 @@
 
 #define qLog qDebug
 
-
-class Log;
-extern Log log;
-//#define qLog log.debug
 class Log
 {
 public:
     Log();
     ~Log();
+    static void  init();
 
     QDebug debug() const;
 };

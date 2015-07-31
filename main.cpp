@@ -6,9 +6,41 @@
 #include <QApplication>
 #include<QTranslator>
 #include <QLocale>
+#include<QMessageBox>
+#include "app/log.h"
+
+#include <QLocalSocket>
+ #include <QLocalServer>
+#include <QFile>
+QLocalServer* m_localServer;
+bool isRunning(const QString& serverName)
+{
+    bool running = true;
+    QLocalSocket socket;
+    socket.connectToServer(serverName);
+    if (!socket.waitForConnected()) {
+        m_localServer = new QLocalServer(qApp);
+        if (!m_localServer->listen(serverName)) {
+            if (m_localServer->serverError() == QAbstractSocket::AddressInUseError
+                    && QFile::exists(serverName)) { //make sure listening success
+                QFile::remove(serverName);
+                m_localServer->listen(serverName);
+            }
+        }
+        running = false;
+    }
+    return running;
+}
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    if(isRunning("/tmp/lock_Ricoh_Alto_VOP")){
+        QMessageBox::warning(0,"Warnning" ,"The application is running!");
+        return 0;
+    }
+    Log::init();
+    QApplication::setStyle("gtk");
 
     QTranslator trans;
     QString filename =":/translations/vop_" + QLocale::system().name();
@@ -17,6 +49,5 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.show();
-
     return a.exec();
 }

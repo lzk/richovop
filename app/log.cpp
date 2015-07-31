@@ -33,27 +33,31 @@ void myMessageOutput(QtMsgType type, const char *msg)
         abort();
     }
 #endif
-    QFile file("vop.log");
+    QFile file("/tmp/AltoVOP.log");
     file.open(QIODevice::WriteOnly | QIODevice::Append);
     QTextStream out(&file);
     out << msg << endl;
     file.close();
 }
 
-Log log;
 Log::Log()
 {
-#if 0
+}
+
+Log::~Log()
+{
+}
+
+void  Log::init()
+{
+#if 1
+    system("echo \"----------------AltoVOP debug log------------------\" > /tmp/AltoVOP.log");
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
     qInstallMessageHandler(myMessageOutput);
 #else
     qInstallMsgHandler(myMessageOutput);
 #endif
 #endif
-}
-
-Log::~Log()
-{
 }
 
 QDebug Log::debug() const
