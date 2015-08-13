@@ -21,16 +21,18 @@ MainWindow::MainWindow(QWidget *parent) :
          (QApplication::desktop()->height() - height())/2);
 
     connect(ui->actionExit_Lenovo_Virtual_Panel ,SIGNAL(triggered()) ,this ,SLOT(slots_exit()));
+    menuBar()->hide();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-#include <QMessageBox>
+
+//#include <QMessageBox>
 void MainWindow::slots_exit()
 {
-    exit(0);
+    qApp->quit();
 //    int ret = mainWidget->messagebox_exec(tr("Exit")+"?" ,QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
 //    switch (ret) {
 //    case QMessageBox::Ok:
@@ -45,6 +47,7 @@ void MainWindow::slots_exit()
 //  }
 }
 
+#if 0
 #include <QCloseEvent>
 void MainWindow::closeEvent(QCloseEvent *event)
 {
@@ -52,3 +55,4 @@ void MainWindow::closeEvent(QCloseEvent *event)
     slots_exit();
 //    ui->actionExit_Lenovo_Virtual_Panel->trigger();
 }
+#endif

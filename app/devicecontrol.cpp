@@ -39,7 +39,6 @@ int DeviceContrl::device_getDeviceStatus(char* buffer ,int buffer_size)
         return -1;
     int err = 0;
     QString device_uri = DeviceManager::getDeviceURI(current_devicename);
-//    device_uri = "socket://192.168.6.123:9100";
     err = VopDevice::getDeviceStatus(device_uri.toLatin1() ,buffer ,buffer_size);
     return err;
 }
@@ -80,6 +79,9 @@ void DeviceContrl::slots_cmd(int cmd)
         break;
     case CMD_PASSWD_get:
         err = protocol->cmd(VopProtocol::CMD_PASSWD_get);
+        break;
+    case CMD_WIFI_GetWifiStatus:
+        err = protocol->cmd(VopProtocol::CMD_WIFI_GetWifiStatus);
         break;
     case CMD_PASSWD_confirm:
     case CMD_PASSWD_confirmForApply:

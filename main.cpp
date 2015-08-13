@@ -12,6 +12,15 @@
 #include <QLocalSocket>
  #include <QLocalServer>
 #include <QFile>
+
+#ifdef STATIC_BUILD
+#include <QtPlugin>
+Q_IMPORT_PLUGIN(qjpeg)
+Q_IMPORT_PLUGIN(qtiff)
+Q_IMPORT_PLUGIN(qmng)
+Q_IMPORT_PLUGIN(qgif)
+#endif
+
 QLocalServer* m_localServer;
 bool isRunning(const QString& serverName)
 {

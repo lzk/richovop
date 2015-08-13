@@ -77,10 +77,12 @@ private:
     void initialize();
 
     void emit_cmd(int);
+    void install_next_callback(const char *member);
 signals:
    void signals_cmd(int);
    void signals_deviceChanged(const QString&);
    void signals_emit_cmd(int);
+   void signals_cmd_next();
 
 public slots:
    void slots_cmd_result(int ,int);
@@ -90,6 +92,17 @@ public slots:
 private slots:
     void on_refresh_clicked();
     void on_comboBox_deviceList_activated(int index);
+    void slots_cmd_complete();
+
+private:
+    void cmdResult_getDeviceStatus(int err);
+    void cmdResult_passwd_confirmForApply(int err);
+    void cmdResult_wifi_apply(int err);
+    void cmdResult_passwd_confirmForSetPasswd(int err);
+    void cmdResult_passwd_set(int err);
+    void cmdResult_wifi_getAplist(int err);
+    void cmdResult_wifi_get(int err);
+    void cmdResult_wifi_getWifiStatus(int err);
 
 private:
     ///////////////////////////tab about//////////////////////
@@ -126,12 +139,14 @@ private:
     void wifi_update_encryptionType();
     void wifi_update_Data();
     void wifi_update();
-    void slots_wifi_applyDo();
-    void slots_wifi_applyDone();
-    void slots_passwd_setDo();
-    void slots_passwd_setDone();
-    void slots_wifi_get();
-    void slots_wifi_getAplist();
+    void wifi_apply_doConfirm();
+    void result_wifi_apply();
+    void passwd_set_doConfirm();
+    void result_passwd_set();
+    void result_wifi_getAplist();
+    void wifi_update_checkbox(bool);
+    void wifi_init();
+    void wifi_refreshAplist();
 
 private slots:
     //////////////////tab about///////////////////////////
@@ -144,6 +159,9 @@ private slots:
     void slots_wifi_radiobutton(bool);
     void slots_wifi_textChanged(const QString &arg1);
     void slots_wifi_checkbox(bool);
+    void slots_wifi_enable();
+    void slots_wifi_getStatusToRefreshAplist();
+    void slots_wifi_refreshAplist();
 };
 
 #endif // MAINWIDGET_H

@@ -50,6 +50,18 @@ RESOURCES += \
 
 TRANSLATIONS = translations/vop_zh.ts
 
-LIBS += -Wl,-rpath,"/opt/RICOH/app/Ricoh SP 150SU_SP 150" -ldl `cups-config --libs`
-#LIBS += -Wl,-rpath,"/opt/RICOH/app/Ricoh SP 150SU_SP 150"  -ldl /usr/lib64/libcups.so.2
+LIBS += -Wl,-rpath,"/opt/RICOH/app/Ricoh SP 150SU_SP 150" -ldl
 
+st = $$system("cat /etc/issue|awk '{print tolower($1)}' ")
+contains(st ,ubuntu) {
+    LIBS += `cups-config --libs`
+}else{
+    lb=$$system(getconf LONG_BIT)
+    contains(lb ,64){
+        LIBS += /usr/lib64/libcups.so.2
+    }else{
+        LIBS += /usr/lib/libcups.so.2
+    }
+    QTPLUGIN += qjpeg qtiff qmng qgif
+    DEFINES += STATIC_BUILD
+}

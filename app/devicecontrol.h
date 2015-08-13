@@ -35,6 +35,7 @@ public:
         CMD_PASSWD_set,
         CMD_PASSWD_get,
         CMD_PASSWD_confirm,
+        CMD_WIFI_GetWifiStatus,
 
         CMD_PASSWD_confirmForApply,
         CMD_PASSWD_confirmForSetPasswd,

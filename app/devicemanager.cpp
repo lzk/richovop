@@ -62,10 +62,12 @@ QString DeviceManager::getDeviceURI(const QString& devicename)
     device_uri =  cupsGetOption("device-uri", dest->num_options, dest->options);
     cupsFreeDests(num_dests ,dests);
 
-    if(device_uri.isEmpty()){
+    if(1){
+//    if(device_uri.isEmpty()){
         QString str("LANG=en_US.UTF-8 lpstat -v ");
         QString tmp_file("/tmp/lpstattmpfile123456789");
         str += devicename;
+//        str += "|awk \'{print $NF}\'";
         str += ">";
         str += tmp_file;
 //        qLog()<<"cmd:"<<str.toLatin1();
@@ -75,6 +77,8 @@ QString DeviceManager::getDeviceURI(const QString& devicename)
                 QTextStream in(&fl);
                 device_uri = in.readLine();
                 device_uri = device_uri.section(' ' ,-1);
+                fl.close();
+                fl.remove();
             }
         }
         qLog()<<"get device uri:"<<device_uri;

@@ -144,6 +144,8 @@ typedef struct cmdst_passwd
 }
     cmdst_passwd;
 
+typedef UINT8  cmdst_wifi_status;
+
 enum
 {
     PSTATUS_Ready                      = 0x00,
@@ -231,6 +233,7 @@ public:
     void wifi_set_para(cmdst_wifi_get* p);
     cmdst_wifi_get wifi_get_para();
     cmdst_aplist_get wifi_getAplist();
+    cmdst_wifi_status wifi_getWifiStatus();
 
     void passwd_set(const char*);
 
@@ -243,6 +246,7 @@ enum{
     CMD_PASSWD_set,
     CMD_PASSWD_get,
     CMD_PASSWD_confirm,
+    CMD_WIFI_GetWifiStatus,
 };
     int cmd(int);
 private:
@@ -251,6 +255,7 @@ private:
     cmdst_wifi_get* wifi_parameter;
     cmdst_aplist_get* wifi_aplist;
     cmdst_passwd* passwd;
+    cmdst_wifi_status* wifi_status;
     DeviceManager* device_manager;
     int vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size);
 # if 0

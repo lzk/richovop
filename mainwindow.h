@@ -20,7 +20,7 @@ public:
     ~MainWindow();
 
 protected:
-    virtual void closeEvent(QCloseEvent *);
+//    virtual void closeEvent(QCloseEvent *);
 
 private:
     Ui::MainWindow *ui;

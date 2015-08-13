@@ -171,16 +171,40 @@ VopDevice::~VopDevice()
 
 int VopDevice::isValidDevice(const char* printer_info)
 {
-//    return true;
     int valid = false;
     QString str(printer_info);
-    if(str.startsWith("Lenovo M7208W"))    {
+    if(str.startsWith("Ricoh SP 150SU v")){
         valid = true;
-    }else if(str.startsWith("Lenovo M7208")){
+    }else if(str.startsWith("Ricoh SP 150SUw v")){
         valid = true;
-    }else if(str.startsWith("Lenovo LJ2208W")){
+    }else if(str.startsWith("Ricoh SP 150 v")){
         valid = true;
-    }else if(str.startsWith("Lenovo LJ2208")){
+    }else if(str.startsWith("Ricoh SP 150w v")){
+        valid = true;
+    }else  if(!str.compare("Ricoh SP 150SU")){
+        valid = true;
+    }else if(!str.compare("Ricoh SP 150SUw")){
+        valid = true;
+    }else if(!str.compare("Ricoh SP 150")){
+        valid = true;
+    }else if(!str.compare("Ricoh SP 150w")){
+        valid = true;
+    }
+    else if(str.startsWith("Lenovo M7208W v")){
+        valid = true;
+    }else if(str.startsWith("Lenovo M7208 v")){
+        valid = true;
+    }else if(str.startsWith("Lenovo LJ2208W v")){
+        valid = true;
+    }else if(str.startsWith("Lenovo LJ2208 v")){
+        valid = true;
+    }else if(!str.compare("Lenovo M7208W"))    {
+        valid = true;
+    }else if(!str.compare("Lenovo M7208")){
+        valid = true;
+    }else if(!str.compare("Lenovo LJ2208W")){
+        valid = true;
+    }else if(!str.compare("Lenovo LJ2208")){
         valid = true;
     }
     return valid;
