@@ -65,3 +65,6 @@ contains(st ,ubuntu) {
     QTPLUGIN += qjpeg qtiff qmng qgif
     DEFINES += STATIC_BUILD
 }
+
+DISTFILES += \
+    styles/default.qss

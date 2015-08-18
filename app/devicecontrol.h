@@ -41,6 +41,9 @@ public:
         CMD_PASSWD_confirmForSetPasswd,
         CMD_DEVICE_status,
 
+        CMD_WIFI_GetWifiStatus_immediately,
+
+
         CMD_STATUS_COMPLETE,
 
         CMD_MAX,

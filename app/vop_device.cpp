@@ -64,7 +64,7 @@ static int write_then_read(struct device_control* dc ,const char* device_uri ,ch
 
     if(_write_size == wrSize){
         int nocheck=0;
-        for(j = 0 ;j < 20 ;j++){
+        for(j = 0 ;j < 5 ;j++){
             if(!nocheck){
                 if(1 == dc->read(rdBuffer,1)){
                     if(0x4d != rdBuffer[0]){

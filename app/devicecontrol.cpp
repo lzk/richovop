@@ -81,6 +81,7 @@ void DeviceContrl::slots_cmd(int cmd)
         err = protocol->cmd(VopProtocol::CMD_PASSWD_get);
         break;
     case CMD_WIFI_GetWifiStatus:
+    case CMD_WIFI_GetWifiStatus_immediately:
         err = protocol->cmd(VopProtocol::CMD_WIFI_GetWifiStatus);
         break;
     case CMD_PASSWD_confirm:

@@ -1,0 +1,4 @@
+
+QDialog  {    border:1px solid gray;}
+
+QListView{    background-color:white;}

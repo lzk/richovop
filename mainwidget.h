@@ -102,7 +102,8 @@ private:
     void cmdResult_passwd_set(int err);
     void cmdResult_wifi_getAplist(int err);
     void cmdResult_wifi_get(int err);
-    void cmdResult_wifi_getWifiStatus(int err);
+    int cmdResult_emit_next(int err);
+    void cmdResult_passwd_confirmed(int err);
 
 private:
     ///////////////////////////tab about//////////////////////
@@ -139,14 +140,15 @@ private:
     void wifi_update_encryptionType();
     void wifi_update_Data();
     void wifi_update();
-    void wifi_apply_doConfirm();
-    void result_wifi_apply();
+    void wifi_passwd_doConfirm();
+    void wifi_passwd_doConfirm(const char *member);
     void passwd_set_doConfirm();
-    void result_passwd_set();
     void result_wifi_getAplist();
     void wifi_update_checkbox(bool);
     void wifi_init();
-    void wifi_refreshAplist();
+    void wifi_apply();
+    void wifi_getStatusToRefreshAplist();
+    int wifi_getStatus();
 
 private slots:
     //////////////////tab about///////////////////////////
@@ -162,6 +164,9 @@ private slots:
     void slots_wifi_enable();
     void slots_wifi_getStatusToRefreshAplist();
     void slots_wifi_refreshAplist();
+    void slots_passwd_set();
+    void slots_wifi_getStatusToApply();
+    void slots_passwd_comfirmed();
 };
 
 #endif // MAINWIDGET_H

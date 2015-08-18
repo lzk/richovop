@@ -49,12 +49,18 @@ int main(int argc, char *argv[])
         return 0;
     }
     Log::init();
-    QApplication::setStyle("gtk");
 
     QTranslator trans;
     QString filename =":/translations/vop_" + QLocale::system().name();
     trans.load(filename);
     a.installTranslator(&trans);
+
+    a.setStyle("gtk");
+    QFile file(":/styles/default.qss");
+    if(file.open(QFile::ReadOnly)){
+        QString stylesheet = file.readAll();
+        a.setStyleSheet(stylesheet);
+    }
 
     MainWindow w;
     w.show();

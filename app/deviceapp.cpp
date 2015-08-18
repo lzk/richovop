@@ -50,41 +50,27 @@ void DeviceApp::disconnect_App()
     widget->disconnect(this);
     disconnect();
 }
-
+//static int progress = 0;
 bool DeviceApp::emit_cmd(int cmd)
 {
 //    bool ret = false;
-    int status = get_cmdStatus();
-    switch(status)
-    {/*
-    case DeviceContrl::CMD_STATUS_COMPLETE:    {
-        if(DeviceContrl::CMD_COPY == cmd
-                || DeviceContrl::CMD_WIFI_get == cmd
-                || DeviceContrl::CMD_WIFI_apply == cmd
-                || DeviceContrl::CMD_WIFI_getAplist == cmd
-                ){
-            emit signals_progress(0);
-            emit signals_progress(20);
-//            qLog()<<"show progress bar";
-        }
+    switch(cmd)
+    {
+    case DeviceContrl::CMD_PASSWD_set:
+    case DeviceContrl::CMD_WIFI_getAplist:
+    case DeviceContrl::CMD_WIFI_GetWifiStatus_immediately:
+    case DeviceContrl::CMD_WIFI_apply:
+        qLog()<<"cmd continue immeditaly";
         set_cmdStatus(cmd);
         emit signals_cmd(cmd);
-        ret = true;
-    }
-        break;*/
-    case DeviceContrl::CMD_PASSWD_confirmForApply:
-    case DeviceContrl::CMD_WIFI_get://first get then get aplist
-    case DeviceContrl::CMD_PASSWD_confirmForSetPasswd:
-        if(DeviceContrl::CMD_WIFI_get == status){
-            emit signals_progress(50);
-//            qLog()<<"progress bar update";
-        }
-        set_cmdStatus(cmd);
-        emit signals_cmd(cmd);
-//        ret = true;
+//        if(progress <= 50)
+//            progress += 30;
+//        emit emit_progress(progress);
+        emit emit_progress(50);
         break;
-
+    case DeviceContrl::CMD_DEVICE_status://last cmd is get device id
     default:
+        qLog()<<"cmd start block";
         emit signals_cmd_block(cmd);
         break;
     }
@@ -127,14 +113,11 @@ void DeviceApp_Block::slots_cmd(int cmd)
         }
         while(DeviceContrl::CMD_STATUS_COMPLETE != status);
     }
-    if(DeviceContrl::CMD_COPY == cmd
-            || DeviceContrl::CMD_WIFI_get == cmd
-            || DeviceContrl::CMD_WIFI_apply == cmd
-            || DeviceContrl::CMD_WIFI_getAplist == cmd
-            ){
+    if(cmd != DeviceContrl::CMD_DEVICE_status){
+        qLog()<<"cmd cmd "<<cmd;
         emit app->emit_progress(0);
         emit app->emit_progress(20);
-//            qLog()<<"show progress bar";
+//        progress = 20;
     }
     app->set_cmdStatus(cmd);
     emit signals_cmd(cmd);

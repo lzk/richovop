@@ -390,13 +390,14 @@ int VopProtocol::vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size)
 //            buffer[5],buffer[6],buffer[7],buffer[8],buffer[9],buffer[10]);
     //check result
     if(!err && MAGIC_NUM == ppkg->magic){//ACK
-        err = ppkg->subcmd;
         if(!direct){//get
             if(data){
                 device_manager->mutex_ctrl.lock();
                 memcpy(data ,buffer + sizeof(COMM_HEADER) ,data_size);
                 device_manager->mutex_ctrl.unlock();
             }
+        }else{//set
+            err = ppkg->subcmd;
         }
     }else
         err = -1;

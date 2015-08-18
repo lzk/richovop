@@ -40,6 +40,7 @@ public:
     void wifi_set_para(cmdst_wifi_get* p);
     cmdst_wifi_get wifi_get_para();
     cmdst_aplist_get wifi_getAplist();
+    cmdst_wifi_status wifi_getWifiStatus();
 
     void passwd_set(const char*);
 private:

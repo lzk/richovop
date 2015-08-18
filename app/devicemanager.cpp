@@ -200,6 +200,11 @@ cmdst_wifi_get DeviceManager::wifi_get_para()
     return protocol->wifi_get_para();
 }
 
+cmdst_wifi_status DeviceManager::wifi_getWifiStatus()
+{
+    return protocol->wifi_getWifiStatus();
+}
+
 cmdst_aplist_get DeviceManager::wifi_getAplist()
 {
     return protocol->wifi_getAplist();
