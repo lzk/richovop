@@ -81,6 +81,8 @@ enum{
     ERR_NOERR = 0,
     ERR_communication = -1,
     ERR_library = -2,
+    ERR_decode_status = -3,
+    ERR_vop_cannot_support = -99,
 };
 
 typedef struct _copycmdset
@@ -216,6 +218,18 @@ class DeviceManager;
 class VopProtocol
 {
 public:
+    enum{
+        CMD_GetStatus,
+        CMD_COPY,
+        CMD_WIFI_apply,
+        CMD_WIFI_get,
+        CMD_WIFI_getAplist,
+        CMD_PASSWD_set,
+        CMD_PASSWD_get,
+        CMD_PASSWD_confirm,
+        CMD_WIFI_GetWifiStatus,
+    };
+public:
     VopProtocol(DeviceManager* dm);
     ~VopProtocol();
     static const char* getErrString(int err);
@@ -237,17 +251,6 @@ public:
 
     void passwd_set(const char*);
 
-enum{
-    CMD_GetStatus,
-    CMD_COPY,
-    CMD_WIFI_apply,
-    CMD_WIFI_get,
-    CMD_WIFI_getAplist,
-    CMD_PASSWD_set,
-    CMD_PASSWD_get,
-    CMD_PASSWD_confirm,
-    CMD_WIFI_GetWifiStatus,
-};
     int cmd(int);
 private:
     PRINTER_STATUS* status;

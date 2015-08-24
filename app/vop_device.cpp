@@ -44,15 +44,15 @@ static int write_then_read(struct device_control* dc ,const char* device_uri ,ch
     for(i = 0 ;i < 3 ;i++){
 
         if(1 != dc->openPrinter((char*)device_uri)){
-            qLog()<<"can not open printer";
+            qLog("can not open printer");
             return -1;
         }
         if(dc == &usb_dc){
             _read_size = dc->read(readBuffer ,340);
-            qLog()<<"before write clear read buffer :"<<_read_size;
+            qLog(QString().sprintf("before write clear read buffer :%d" ,_read_size));
         }
         _write_size = dc->write(writeBuffer ,wrSize);
-        qLog()<<QString().sprintf("write size:%d......%d" ,wrSize ,_write_size);
+        qLog(QString().sprintf("write size:%d......%d" ,wrSize ,_write_size));
         if(_write_size == wrSize){
             break;
         }else{
@@ -68,12 +68,12 @@ static int write_then_read(struct device_control* dc ,const char* device_uri ,ch
             if(!nocheck){
                 if(1 == dc->read(rdBuffer,1)){
                     if(0x4d != rdBuffer[0]){
-                        qLog()<<QString().sprintf("waiting for 0x4d:%#.2x" ,rdBuffer[0]);
+                        qLog(QString().sprintf("waiting for 0x4d:%#.2x" ,rdBuffer[0]));
                         USB_DELAY(1);
                         continue;
                     }
                 }else{
-                    qLog()<<"cannot read now,wait 100 ms read again";
+                    qLog("cannot read now,wait 100 ms read again");
                     USB_DELAY(1);
                     continue;
                 }
@@ -81,7 +81,7 @@ static int write_then_read(struct device_control* dc ,const char* device_uri ,ch
             nocheck = 0;
             USB_DELAY(1);
             if(1 == dc->read(rdBuffer+1,1)){
-//                qLog()<<QString().sprintf("waiting for 0x3c:%#.2x" ,rdBuffer[1]);
+//                qLog(QString().sprintf("waiting for 0x3c:%#.2x" ,rdBuffer[1]));
                 if(0x3c == rdBuffer[1]){
                     USB_DELAY(1);
                     _read_size = dc->read(rdBuffer+2 ,rdSize-2);
@@ -95,13 +95,13 @@ static int write_then_read(struct device_control* dc ,const char* device_uri ,ch
                 }
             }
         }
-        qLog()<<"try times:"<<j;
+        qLog(QString().sprintf("try times:%d" ,j));
         if(_read_size == rdSize -2){
             err = 0;
             i++;
-            qLog()<<"read complete";
+            qLog("read complete");
         }else{
-            qLog()<<"read wrong";
+            qLog("read wrong");
         }
     }
     dc->closePrinter();
@@ -114,18 +114,16 @@ static int get_deviceID(struct device_control* dc ,const char* device_uri ,char*
         return -2;
     }
     if(1 != dc->openPrinter((char*)device_uri)){
-        qLog()<<"can not open printer";
+        qLog("can not open printer");
         return -1;
     }
     int err = -1;
     err = dc->get_device_id(buffer ,buffer_size);
-//    qLog()<<"usb_get_device_id:"<<buffer<<"\nsize:"<<strlen(buffer);
     if(1 != err){
         err = -1;
     }else
         err = 0;
     dc->closePrinter();
-//        qLog()<<"usb_closePrinter";
     return err;
 }
 
@@ -135,7 +133,6 @@ VopDevice::VopDevice()
       hLLD_net(NULL)
 {
     QString path = QApplication::applicationDirPath();
-//    qLog()<<"path:"<<path;
     hLLD_usb = dlopen( (path + "/libvopusb.so").toLatin1(), RTLD_LAZY);
     if(hLLD_usb)    {
         usb_dc.openPrinter  = (int (*)(char*))dlsym(hLLD_usb, "openPrinter");
@@ -144,7 +141,8 @@ VopDevice::VopDevice()
         usb_dc.read  = (int (*)(char *, size_t ))dlsym(hLLD_usb, "USBRead");
         usb_dc.get_device_id  = (int (*)(char *, size_t ))dlsym(hLLD_usb, "get_device_id");
     }else{
-        qLog()<<"dlerror:"<<dlerror();
+        qLog("can not open usb backend.");
+        qLog(QString("dlerror:") + dlerror());
     }
 
     hLLD_net = dlopen((path + "/libsocket.so").toLatin1() , RTLD_LAZY);
@@ -155,7 +153,8 @@ VopDevice::VopDevice()
         net_dc.read  = (int (*)(char *, size_t ))dlsym(hLLD_net, "readFromNetDevice");
         net_dc.get_device_id  = (int (*)(char *, size_t ))dlsym(hLLD_net, "get_device_id_net");
     }else{
-        qLog()<<"dlerror:"<<dlerror();
+        qLog("can not open net backend.");
+        qLog(QString("dlerror:") + dlerror());
     }
 }
 
@@ -171,43 +170,43 @@ VopDevice::~VopDevice()
 
 int VopDevice::isValidDevice(const char* printer_info)
 {
-    int valid = false;
+    int device = Device_invalid;
     QString str(printer_info);
     if(str.startsWith("Ricoh SP 150SU v")){
-        valid = true;
+        device = Device_3in1;
     }else if(str.startsWith("Ricoh SP 150SUw v")){
-        valid = true;
+        device = Device_3in1_wifi;
     }else if(str.startsWith("Ricoh SP 150 v")){
-        valid = true;
+        device = Device_sfp;
     }else if(str.startsWith("Ricoh SP 150w v")){
-        valid = true;
+        device = Device_sfp_wifi;
     }else  if(!str.compare("Ricoh SP 150SU")){
-        valid = true;
+        device = Device_3in1;
     }else if(!str.compare("Ricoh SP 150SUw")){
-        valid = true;
+        device = Device_3in1_wifi;
     }else if(!str.compare("Ricoh SP 150")){
-        valid = true;
+        device = Device_sfp;
     }else if(!str.compare("Ricoh SP 150w")){
-        valid = true;
+        device = Device_sfp_wifi;
     }
     else if(str.startsWith("Lenovo M7208W v")){
-        valid = true;
+        device = Device_3in1_wifi;
     }else if(str.startsWith("Lenovo M7208 v")){
-        valid = true;
+        device = Device_3in1;
     }else if(str.startsWith("Lenovo LJ2208W v")){
-        valid = true;
+        device = Device_sfp_wifi;
     }else if(str.startsWith("Lenovo LJ2208 v")){
-        valid = true;
+        device = Device_sfp;
     }else if(!str.compare("Lenovo M7208W"))    {
-        valid = true;
+        device = Device_3in1_wifi;
     }else if(!str.compare("Lenovo M7208")){
-        valid = true;
+        device = Device_3in1;
     }else if(!str.compare("Lenovo LJ2208W")){
-        valid = true;
+        device = Device_sfp_wifi;
     }else if(!str.compare("Lenovo LJ2208")){
-        valid = true;
+        device = Device_sfp;
     }
-    return valid;
+    return device;
 }
 
 bool VopDevice::is_usbDevice(const QString& str)
@@ -234,7 +233,7 @@ int VopDevice::writeThenRead(const char* device_uri ,char* wrBuffer ,int wrSize 
     }else if(is_netDevice(device_uri)){
         err = write_then_read(&net_dc ,device_uri ,wrBuffer ,wrSize ,rdBuffer ,rdSize);
     }else{
-        qLog()<<"the uri is not correct";
+        qLog(" the uri is not supported");
     }
     return err;
 }
@@ -247,7 +246,7 @@ int VopDevice::getDeviceStatus(const char* device_uri ,char* buffer ,int buffer_
     }else if(is_netDevice(device_uri)){
         err = get_deviceID(&net_dc ,device_uri ,buffer ,buffer_size);
     }else{
-        qLog()<<"the uri is not correct";
+        qLog(" the uri is not supported");
     }
     return err;
 }

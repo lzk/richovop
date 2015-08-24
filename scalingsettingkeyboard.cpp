@@ -138,7 +138,7 @@ void ScalingSettingKeyboard::on_btn_Clear_clicked()
     ui->lineEdit_ShowScalingPercent->clear();
 }
 
-void ScalingSettingKeyboard::on_lineEdit_ShowScalingPercent_textChanged(const QString &arg1)    //set limitation and enabled/disabled "OK" button
+void ScalingSettingKeyboard::on_lineEdit_ShowScalingPercent_textChanged(const QString &)    //set limitation and enabled/disabled "OK" button
 {
     if (ui->lineEdit_ShowScalingPercent->text().toInt()>400 || ui->lineEdit_ShowScalingPercent->text().toInt()<25)
         ui->btn_OK->setEnabled(false);

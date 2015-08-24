@@ -30,7 +30,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Scaling:</string>
+    <string>IDS_CP_Scaling</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btn_OK">
@@ -49,8 +49,11 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
-    <string>OK</string>
+    <string>IDS_KB_OK</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btn_1">
@@ -69,8 +72,11 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
-    <string>1</string>
+    <string notr="true">1</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>
@@ -92,8 +98,11 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
-    <string>2</string>
+    <string notr="true">2</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>
@@ -115,8 +124,11 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
-    <string>3</string>
+    <string notr="true">3</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>
@@ -138,8 +150,11 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
-    <string>6</string>
+    <string notr="true">6</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>
@@ -161,8 +176,11 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
-    <string>4</string>
+    <string notr="true">4</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>
@@ -184,8 +202,11 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
-    <string>5</string>
+    <string notr="true">5</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>
@@ -207,8 +228,11 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
-    <string>8</string>
+    <string notr="true">8</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>
@@ -230,8 +254,11 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
-    <string>9</string>
+    <string notr="true">9</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>
@@ -253,8 +280,11 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
-    <string>7</string>
+    <string notr="true">7</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>
@@ -276,8 +306,11 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
-    <string>Backspace</string>
+    <string>IDS_KB_Backspace</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>
@@ -299,8 +332,11 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
-    <string>Clear</string>
+    <string>IDS_KB_Clear</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>
@@ -322,8 +358,11 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
-    <string>0</string>
+    <string notr="true">0</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>
@@ -345,11 +384,14 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="layoutDirection">
     <enum>Qt::LeftToRight</enum>
    </property>
    <property name="text">
-    <string>100</string>
+    <string notr="true">100</string>
    </property>
    <property name="maxLength">
     <number>4</number>
@@ -375,7 +417,7 @@
     </font>
    </property>
    <property name="text">
-    <string>%</string>
+    <string notr="true">%</string>
    </property>
   </widget>
  </widget>

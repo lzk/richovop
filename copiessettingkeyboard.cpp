@@ -139,7 +139,7 @@ void CopiesSettingKeyboard::on_btn_Clear_clicked()
     ui->lineEdit_ShowCopiesPercent->clear();
 }
 
-void CopiesSettingKeyboard::on_lineEdit_ShowCopiesPercent_textChanged(const QString &arg1)      //set limitation and enabled/disabled "OK" button
+void CopiesSettingKeyboard::on_lineEdit_ShowCopiesPercent_textChanged(const QString &)      //set limitation and enabled/disabled "OK" button
 {
     if (ui->lineEdit_ShowCopiesPercent->text().toInt()>99 || ui->lineEdit_ShowCopiesPercent->text().toInt()<1)
         ui->btn_OK->setEnabled(false);

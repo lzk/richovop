@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->hide();
     statusBar()->hide();
     setFixedSize(926,660);
+//    setFixedSize(800,600);
     move((QApplication::desktop()->width() - width())/2,
          (QApplication::desktop()->height() - height())/2);
 

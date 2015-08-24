@@ -6,27 +6,46 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>639</width>
-    <height>223</height>
+    <width>651</width>
+    <height>160</height>
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget{font:13px; color:#4c4c4c}
-/*
-#logo{
-min-height:28;
-max-height:28;
-font:bold italic 28px  &quot;Times New Roman&quot;;
-}*/
-#refresh{min-width:100;
-max-width:100;}
-QComboBox{min-width:250px;max-width:250px}
-QWidget #tab_3,#tab_4,#tab_5{
+   <string notr="true">
+#widget_main
+{
+min-height:50;
+max-height:50;
+}
+#refresh
+{
+min-width:100;
+max-width:100;
+}
+QComboBox
+{
+min-width:240px;
+max-width:240px;
+}
+
+#tab_3
+,#tab_4
+,#tab_5
+{
 /*	background-color: rgb(239, 237, 234);
 	background-color: rgb(67, 96, 137);*/
 }
-QTabWidget::tab-bar{alignment:center}
-QTabWidget::pane{position:absolute;top:-0.5em}</string>
+
+QTabWidget::tab-bar
+{
+alignment:center
+}
+QTabWidget::pane
+{
+position:absolute;
+top:-0.5em;
+border: 1px solid darkgray;
+}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="leftMargin">
@@ -44,88 +63,119 @@ QTabWidget::pane{position:absolute;top:-0.5em}</string>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <item>
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QComboBox" name="comboBox_deviceList">
-             <property name="focusPolicy">
-              <enum>Qt::NoFocus</enum>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="refresh">
-             <property name="focusPolicy">
-              <enum>Qt::NoFocus</enum>
-             </property>
-             <property name="text">
-              <string>Refresh</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QLabel" name="logo">
-         <property name="pixmap">
-          <pixmap resource="vop.qrc">:/images/Ricoh.bmp</pixmap>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QWidget" name="widget_main" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <property name="spacing">
+             <number>30</number>
+            </property>
+            <item>
+             <widget class="QComboBox" name="comboBox_deviceList">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="refresh">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>IDS_MW_Refresh</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="logo">
+            <property name="pixmap">
+             <pixmap resource="vop.qrc">:/images/Ricoh.bmp</pixmap>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </item>
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
        </property>
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
        <widget class="QWidget" name="tab_3">
         <attribute name="title">
-         <string>Copy</string>
+         <string>IDS_Tab_Copy</string>
         </attribute>
        </widget>
        <widget class="QWidget" name="tab_4">
         <attribute name="title">
-         <string>Setting</string>
+         <string>IDS_Tab_Setting</string>
         </attribute>
        </widget>
        <widget class="QWidget" name="tab_5">
         <attribute name="title">
-         <string>About</string>
+         <string>IDS_Tab_About</string>
         </attribute>
        </widget>
       </widget>

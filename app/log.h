@@ -5,18 +5,21 @@
 #ifndef LOG_H
 #define LOG_H
 
-#include <QDebug>
+#include <QString>
 
-#define qLog qDebug
+#define qLog1(x)  Log::logout(x)
+//#define qLog1(x)
 
+//#include <QDebug>
+//#define qLog qDebug
+#define qLog(x) qLog1(x)
 class Log
 {
 public:
     Log();
     ~Log();
     static void  init();
-
-    QDebug debug() const;
+    static void logout(const QString&);
 };
 
 #endif // LOG_H

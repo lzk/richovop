@@ -19,11 +19,13 @@ DeviceApp::DeviceApp(DeviceManager* dm ,MainWidget* _widget) :
     connect(this ,SIGNAL(signals_cmd(int)) ,ctrl ,SLOT(slots_cmd(int)));
     connect(this ,SIGNAL(signals_progress(int)) ,widget ,SLOT(slots_progressBar(int)));
 
-    connect(ctrl ,SIGNAL(signals_cmd_result(int,int)) ,this ,SIGNAL(signals_cmd_result(int ,int)));
-    connect(this ,SIGNAL(signals_cmd_result(int,int)) ,widget ,SLOT(slots_cmd_result(int ,int)));
+//    connect(ctrl ,SIGNAL(signals_cmd_result(int,int)) ,this ,SIGNAL(signals_cmd_result(int ,int)));
+//    connect(this ,SIGNAL(signals_cmd_result(int,int)) ,widget ,SLOT(slots_cmd_result(int ,int)));
+    connect(ctrl ,SIGNAL(signals_cmd_result(int,int))  ,widget ,SLOT(slots_cmd_result(int ,int)));
 
-    connect(widget ,SIGNAL(signals_deviceChanged(QString)) ,this ,SIGNAL(signals_deviceChanged(QString)));
-    connect(this ,SIGNAL(signals_deviceChanged(QString)) ,ctrl ,SLOT(slots_deviceChanged(QString)));
+//    connect(widget ,SIGNAL(signals_deviceChanged(QString)) ,this ,SIGNAL(signals_deviceChanged(QString)));
+//    connect(this ,SIGNAL(signals_deviceChanged(QString)) ,ctrl ,SLOT(slots_deviceChanged(QString)));
+    connect(widget ,SIGNAL(signals_deviceChanged(QString)) ,ctrl ,SLOT(slots_deviceChanged(QString)));
 
     app_block = new DeviceApp_Block(this);
     app_block->moveToThread(&app_block_thread);
@@ -60,7 +62,7 @@ bool DeviceApp::emit_cmd(int cmd)
     case DeviceContrl::CMD_WIFI_getAplist:
     case DeviceContrl::CMD_WIFI_GetWifiStatus_immediately:
     case DeviceContrl::CMD_WIFI_apply:
-        qLog()<<"cmd continue immeditaly";
+//        qLog("cmd continue immeditaly");
         set_cmdStatus(cmd);
         emit signals_cmd(cmd);
 //        if(progress <= 50)
@@ -70,7 +72,7 @@ bool DeviceApp::emit_cmd(int cmd)
         break;
     case DeviceContrl::CMD_DEVICE_status://last cmd is get device id
     default:
-        qLog()<<"cmd start block";
+//        qLog("cmd start block");
         emit signals_cmd_block(cmd);
         break;
     }
@@ -86,7 +88,7 @@ void DeviceApp::set_cmdStatus(int status)
     {
         //if progress bar display,hide it
         emit signals_progress(100);
-//        qLog()<<"cmd complete,hide progress bar";
+//        qLog("cmd complete,hide progress bar");
     }
 }
 
@@ -106,7 +108,7 @@ void DeviceApp_Block::slots_cmd(int cmd)
 {
     int status = app->get_cmdStatus();
     if(DeviceContrl::CMD_STATUS_COMPLETE != status){
-        qLog()<<"waiting for cmd complete";
+        qLog("waiting for cmd complete");
         do{
             usleep(100*1000);
             status = app->get_cmdStatus();
@@ -114,7 +116,6 @@ void DeviceApp_Block::slots_cmd(int cmd)
         while(DeviceContrl::CMD_STATUS_COMPLETE != status);
     }
     if(cmd != DeviceContrl::CMD_DEVICE_status){
-        qLog()<<"cmd cmd "<<cmd;
         emit app->emit_progress(0);
         emit app->emit_progress(20);
 //        progress = 20;

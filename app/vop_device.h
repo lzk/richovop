@@ -14,6 +14,14 @@ public:
     VopDevice();
     ~VopDevice();
 
+    enum{
+        Device_invalid = 0,
+        Device_3in1 = 1,
+        Device_3in1_wifi = 2,
+        Device_sfp = 3,
+        Device_sfp_wifi = 4,
+
+    };
     static bool is_usbDevice(const QString&);
     static bool is_netDevice(const QString&);
     static int isValidDevice(const char* printer_info);    

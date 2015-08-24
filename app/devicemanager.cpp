@@ -37,7 +37,7 @@ void DeviceManager::selectDevice(int selected_device)
         delete device_app;
         device_app = NULL;
     }
-    if(devices.count()){
+    if(!devices.isEmpty() && -1 != selected_device){
         selected_devicename = devices.at(selected_device);
         if(!device_app)
             device_app = new DeviceApp(this ,widget);
@@ -70,7 +70,6 @@ QString DeviceManager::getDeviceURI(const QString& devicename)
 //        str += "|awk \'{print $NF}\'";
         str += ">";
         str += tmp_file;
-//        qLog()<<"cmd:"<<str.toLatin1();
         if(!system(str.toLatin1())){
             QFile fl(tmp_file);
             if(fl.open(QFile::ReadOnly)){
@@ -81,7 +80,6 @@ QString DeviceManager::getDeviceURI(const QString& devicename)
                 fl.remove();
             }
         }
-        qLog()<<"get device uri:"<<device_uri;
     }
     return device_uri;
 }
@@ -91,7 +89,12 @@ QString DeviceManager::getCurrentDeviceURI()
     return getDeviceURI(selected_devicename);
 }
 
-#include<QPrinterInfo>
+//#include<QPrinterInfo>
+///
+/// \brief DeviceManager::getDeviceList :get printer names and set selected printer
+/// \param printerNames :return printer names
+/// \return :selected for current printer
+///
 int DeviceManager::getDeviceList(QStringList& printerNames)
 {
     int selected_printer = 0;
@@ -118,7 +121,6 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
    for (i = num_dests, dest = dests; i > 0; i --, dest ++)
    {
        if (dest->instance == NULL){
-//           value = cupsGetOption("printer-info", dest->num_options, dest->options);
             value = cupsGetOption("printer-make-and-model", dest->num_options, dest->options);
            if(VopDevice::isValidDevice(value)){
                 devices << dest->name;
@@ -130,34 +132,42 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
                     selected_printer = devices.indexOf(dest->name);
                     selected = true;
                 }
-                //just display all printer options
-//               cups_option_t* option;
-//                int j;
-//               for(j=0,option=dest->options ;j < dest->num_options ;j++,option++)
-//                {
-//                    qLog()<<option->name<<option->value;
-//                }
            }
-//           qLog()<<"";
        }
    }
-   if(!devices.count())
+   if(devices.isEmpty())
    {
-       qLog()<<"there is no printer";
+       qLog("there is no printer");
        return -1;
    }
    if(selected)
-       qLog()<<"the selected printer is founded";
+       qLog("the selected printer is founded");
    else if(-1 != default_printer){
            selected_printer =default_printer;
            selected = true;
-           qLog()<<"select the default printer";
+           qLog("select the default printer");
    }
    if(!selected){
-       qLog()<<"the printer isn't selected,select the first printer";
+       qLog("the printer isn't selected,select the first printer");
    }
    cupsFreeDests(num_dests, dests);
    return selected_printer;
+}
+
+int DeviceManager::getDeviceModel(const QString& devicename)
+{
+    const char* value;
+    cups_dest_t *dests;
+    int num_dests;
+    num_dests = cupsGetDests(&dests);
+    cups_dest_t* dest;
+    dest = cupsGetDest(devicename.toLatin1() ,NULL ,num_dests ,dests);
+    if(!dest)
+        return VopDevice::Device_invalid;
+    value = cupsGetOption("printer-make-and-model", dest->num_options, dest->options);
+    int model =  VopDevice::isValidDevice(value);
+    cupsFreeDests(num_dests ,dests);
+    return model;
 }
 
 int DeviceManager::get_deviceStatus()

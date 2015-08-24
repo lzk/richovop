@@ -43,9 +43,9 @@ public:
 
 signals:
     void signals_cmd(int);
-    void signals_cmd_result(int,int);
+//    void signals_cmd_result(int,int);
     void signals_progress(int);
-    void signals_deviceChanged(QString);
+//    void signals_deviceChanged(QString);
     void signals_cmd_block(int);
 
 public slots:

@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>TabAbout</class>
  <widget class="QWidget" name="TabAbout">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>598</width>
+    <height>520</height>
+   </rect>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <spacer name="verticalSpacer_2">

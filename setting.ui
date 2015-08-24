@@ -22,8 +22,10 @@ max-height:90;
 QStackedWidget,#pageWidget,#page2Widget{
 min-width:600;
 max-width:600;
-min-height:320;
-max-height:320;
+/*min-height:320;
+max-height:320;*/
+min-height:500;
+max-height:500;
 }
 
 QLabel{
@@ -107,7 +109,7 @@ max-width:100;
            <x>0</x>
            <y>0</y>
            <width>600</width>
-           <height>320</height>
+           <height>500</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -475,7 +477,7 @@ max-width:100;
            <x>0</x>
            <y>0</y>
            <width>600</width>
-           <height>320</height>
+           <height>500</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">

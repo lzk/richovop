@@ -50,23 +50,27 @@ QMessageBox::StandardButton MainWidget::messagebox_exec(const QString &text,
          QMessageBox::StandardButton defaultButton,
          const QString &title )
 {
-    if(msgBox.isVisible()){
-        msgBox.hide();
+    MessageBox* mb;
+    mb = &msgBox;
+//    mb->setParent(this);
+    if(mb->isVisible()){
+        mb->hide();
     }    
-    msgBox.setText(title);
-    msgBox.setIcon(QMessageBox::Information);
-    msgBox.setInformativeText(text);
-    msgBox.setStandardButtons(buttons);
-    msgBox.setDefaultButton(defaultButton);
-    msgBox.setWindowFlags(Qt::FramelessWindowHint);//
-//    msgBox.adjustSize();
-    msgBox.show();//show first before get real size
+    mb->setText(title);
+    mb->setIcon(QMessageBox::Information);
+    mb->setInformativeText(text);
+    mb->setStandardButtons(buttons);
+    mb->setDefaultButton(defaultButton);
+    mb->setWindowFlags(Qt::FramelessWindowHint);//
+#if 1
+    mb->show();//show first before get real size
 //    QPoint widget_pos = mapToGlobal(pos());
-//    msgBox.move(widget_pos.x() + (width() - msgBox.width())/2,
-//         widget_pos.y() + (height() - msgBox.height())/2 - 50);
-    msgBox.move((QApplication::desktop()->width() - msgBox.width())/2,
-          (QApplication::desktop()->height() - msgBox.height())/2);
-    return (QMessageBox::StandardButton)msgBox.exec();
+//    mb->move(widget_pos.x() + (width() - mb->width())/2,
+//         widget_pos.y() + (height() - mb->height())/2 - 50);
+    mb->move((QApplication::desktop()->width() - mb->width())/2,
+          (QApplication::desktop()->height() - mb->height())/2);
+#endif
+    return (QMessageBox::StandardButton)mb->exec();
 }
 
 void MainWidget::messagebox_show(const QString &text,
@@ -74,23 +78,27 @@ void MainWidget::messagebox_show(const QString &text,
          QMessageBox::StandardButton defaultButton,
          const QString &title )
 {
-    if(text.compare(msgBox_info.informativeText()) && msgBox_info.isVisible()){
-        msgBox_info.hide();
+    MessageBox* mb;
+    mb = &msgBox_info;
+    if(text.compare(mb->informativeText()) && mb->isVisible()){
+        mb->hide();
     }
-    if(!msgBox_info.isVisible()){
-        msgBox_info.setText(title);
-        msgBox_info.setIcon(QMessageBox::Information);
-        msgBox_info.setInformativeText(text);
-        msgBox_info.setStandardButtons(buttons);
-        msgBox_info.setDefaultButton(defaultButton);
-        msgBox_info.setWindowFlags(Qt::FramelessWindowHint);
-        msgBox_info.adjustSize();
-        msgBox_info.show();//show first before get real size
+    if(!mb->isVisible()){
+        mb->setText(title);
+        mb->setIcon(QMessageBox::Information);
+        mb->setInformativeText(text);
+        mb->setStandardButtons(buttons);
+        mb->setDefaultButton(defaultButton);
+        mb->setWindowFlags(Qt::FramelessWindowHint);
+        mb->adjustSize();
+        mb->show();//show first before get real size
+#if 1
 //        QPoint widget_pos = mapToGlobal(pos());
-//        msgBox_info.move(widget_pos.x() + (width() - msgBox_info.width())/2,
-//             widget_pos.y() + (height() - msgBox_info.height())/2 - 50);
-        msgBox_info.move((QApplication::desktop()->width() - msgBox_info.width())/2,
-              (QApplication::desktop()->height() - msgBox_info.height())/2);
+//        mb->move(widget_pos.x() + (width() - mb->width())/2,
+//             widget_pos.y() + (height() - mb->height())/2 - 50);
+        mb->move((QApplication::desktop()->width() - mb->width())/2,
+              (QApplication::desktop()->height() - mb->height())/2);
+#endif
     }
 }
 void MainWidget::retranslateUi()
@@ -117,7 +125,6 @@ void MainWidget::initialize()
     msgBox_info.setWindowTitle(" ");
 
     on_refresh_clicked();
-    updateUi();
 
 }
 
@@ -136,7 +143,7 @@ void MainWidget::slots_timeout()
         switch(device_app->get_cmdStatus())
         {
         case DeviceContrl::CMD_STATUS_COMPLETE://jobs complete,no job
-            if(0 == count % 5)
+            if(0 == count % 5  && tc->copy->isVisible())
                 emit_cmd(DeviceContrl::CMD_DEVICE_status);
             break;
 
@@ -205,7 +212,7 @@ void MainWidget::cmdResult_getDeviceStatus(int err)
             messagebox_show(tr("Place Next Page"));
         else
             messagebox_hide();
-        qLog()<<QString().sprintf("get_deviceStatus correct:%#.2x" ,_status);
+        qLog(QString().sprintf("get_deviceStatus correct:%#.2x" ,_status));
 //            device_status = device_manager->get_deviceStatus() == PSTATUS_Ready ? true :false;
     }else{
         device_status = false;
@@ -238,10 +245,10 @@ void MainWidget::cmdResult_wifi_apply(int err)
         return;
     if(!err){
         //clear passwd
-//            wifi_ms_password.clear();
-//            wifi_sw_password.clear();
-//            ts->le_passphrase->clear();
-//            ts->le_wepkey->clear();
+        wifi_ms_password.clear();
+        wifi_sw_password.clear();
+        ts->le_passphrase->clear();
+        ts->le_wepkey->clear();
         wifi_update();
     }
     device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
@@ -319,7 +326,7 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     DeviceApp* device_app = device_manager->deviceApp();
     if(!device_app)
         return;
-    qLog()<<"err:"<<tr(VopProtocol::getErrString(err));
+    qLog(QString("cmd return:") + VopProtocol::getErrString(err));
     //handle err message box
     switch(err){
     case ERR_communication ://communication err
@@ -378,7 +385,7 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
         cmdResult_wifi_getAplist(err);
         break;
     case DeviceContrl::CMD_WIFI_get:
-        cmdResult_wifi_get(err);//for last version
+        cmdResult_wifi_get(err);
         break;
     case DeviceContrl::CMD_WIFI_GetWifiStatus:
     case DeviceContrl::CMD_WIFI_GetWifiStatus_immediately:
@@ -415,6 +422,8 @@ bool MainWidget::eventFilter(QObject *obj, QEvent *event)
     case QEvent::Show:
         if(obj == ts->pageWidget)
             wifi_init();
+        else if(obj == tc->copy)
+            emit_cmd(DeviceContrl::CMD_DEVICE_status);
         break;
     case QEvent::Hide:
         if(obj == ui->tab_4)
@@ -427,9 +436,7 @@ bool MainWidget::eventFilter(QObject *obj, QEvent *event)
                     && mouseEvent->x() > 130 && mouseEvent->y() > 280
                     && mouseEvent->x() < 180 && mouseEvent->y() < 330
                     )        {
-    //            action_about_update->trigger();
                 slots_about_update();
-    //            qLog() << "pos:" << mouseEvent->pos();
             }
 //            return true;
         }else if(obj == tc->copies){
@@ -450,17 +457,47 @@ default:
     return QWidget::eventFilter(obj, event);
 }
 
+#include "app/vop_device.h"
 void MainWidget::updateUi()
 {
-    QString device_uri = device_manager->getCurrentDeviceURI();
-    QMainWindow* mainWindow = qobject_cast<QMainWindow*>(parent());
-    if(mainWindow){
-        if(ui->comboBox_deviceList->count())
-            mainWindow->setWindowTitle(ui->comboBox_deviceList->currentText() + " - " + device_uri) ;
-        else
-            mainWindow->setWindowTitle("AltoVop") ;
+    QString device_name = device_manager->get_deviceName();
+
+    int model = device_manager->getDeviceModel(device_name);
+    ui->tabWidget->hide();
+    ui->tabWidget->clear();
+    switch(model){
+    case VopDevice::Device_3in1:
+        ui->tabWidget->addTab(ui->tab_3 ,tr("IDS_Tab_Copy"));
+//            ui->tabWidget->addTab(ui->tab_4 ,tr("IDS_Tab_Setting"));
+        break;
+    case VopDevice::Device_3in1_wifi:
+        ui->tabWidget->addTab(ui->tab_3 ,tr("IDS_Tab_Copy"));
+        ui->tabWidget->addTab(ui->tab_4 ,tr("IDS_Tab_Setting"));
+        break;
+    case VopDevice::Device_sfp:
+    case VopDevice::Device_sfp_wifi:
+    default:
+//            ui->tabWidget->addTab(ui->tab_3 ,tr("IDS_Tab_Copy"));
+//            ui->tabWidget->addTab(ui->tab_4 ,tr("IDS_Tab_Setting"));
+        break;
     }
-//    update();
+    ui->tabWidget->addTab(ui->tab_5 ,tr("IDS_Tab_About"));
+    ui->tabWidget->setCurrentWidget(ui->tab_5);
+    ui->tabWidget->show();
+
+    QMainWindow* mainWindow = qobject_cast<QMainWindow*>(parent());
+    if(!device_name.isEmpty()){
+        QString device_uri = device_manager->getCurrentDeviceURI();
+        if(mainWindow)
+            mainWindow->setWindowTitle(device_name + " - " + device_uri);
+        qLog("current device: " + device_name);
+        qLog("device uri: "+ device_uri);
+    }else{
+        if(mainWindow)
+            mainWindow->setWindowTitle("AltoVOP");
+        qLog("no device");
+    }
+
 }
 
 void MainWidget::on_refresh_clicked()
@@ -469,24 +506,12 @@ void MainWidget::on_refresh_clicked()
     QStringList printerNames;
     int selected_printer = device_manager->getDeviceList(printerNames);
     if(-1 != selected_printer){//has printer
-//        ui->tabWidget->removeTab(0);
-//        ui->tabWidget->removeTab(0);
-//        ui->tabWidget->removeTab(0);
-//        ui->tabWidget->addTab(ui->tab_3 ,tr("Copy"));
-//        ui->tabWidget->addTab(ui->tab_4 ,tr("Setting"));
-//        ui->tabWidget->addTab(ui->tab_5 ,tr("About"));
         ui->tabWidget->setTabEnabled(0 ,true);
         ui->tabWidget->setTabEnabled(1,true);
         ui->comboBox_deviceList->insertItems(0 ,printerNames);
         ui->comboBox_deviceList->setCurrentIndex(selected_printer);
-        on_comboBox_deviceList_activated(selected_printer);
-    }else{//no supported printer
-        ui->tabWidget->setCurrentWidget(ui->tab_5);
-//        ui->tabWidget->removeTab(0);
-//        ui->tabWidget->removeTab(0);
-        ui->tabWidget->setTabEnabled(0 ,false);
-        ui->tabWidget->setTabEnabled(1,false);
     }
+    on_comboBox_deviceList_activated(selected_printer);
 }
 
 void MainWidget::on_comboBox_deviceList_activated(int index)
@@ -494,8 +519,6 @@ void MainWidget::on_comboBox_deviceList_activated(int index)
     device_manager->selectDevice(index);
     emit signals_deviceChanged(device_manager->get_deviceName());
     updateUi();
-    ui->tabWidget->setCurrentWidget(ui->tab_5);
-    emit_cmd(DeviceContrl::CMD_DEVICE_status);
 }
 
 ///////////////////////////////////////////////////////////tab about/////////////////////////////////////////////////////////
@@ -512,8 +535,8 @@ void MainWidget::initializeTabAbout()
 void MainWidget::slots_about_update()
 {
     if(!QDesktopServices::openUrl(QUrl("http://www.lenovo.com"))){
-        qLog()<<"QDesktopServices wrong";
-        system("xdg-open http://www.lenovo.com");
+//        qLog("QDesktopServices wrong");
+//        system("xdg-open http://www.lenovo.com");
     }
 }
 
@@ -588,6 +611,9 @@ void MainWidget::initializeTabCopy()
     tc->combo_outputSize->installEventFilter(this);
     tc->combo_nIn1Copy->installEventFilter(this);
     tc->combo_dpi->installEventFilter(this);
+
+    tc->copy->installEventFilter(this);
+
     keyboard_scaling = new ScalingSettingKeyboard(this);
     keyboard_scaling->hide();
     tc->scaling->installEventFilter(this);
@@ -737,7 +763,6 @@ void MainWidget::slots_copy_combo(int value)
             pCopyPara->orgSize = value - 1;
         else
             pCopyPara->orgSize = value;
-        qLog()<<"orgSize"<<pCopyPara->orgSize;
         if(!pCopyPara->nUp)
             GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
     }else if(sd == tc->combo_nIn1Copy){//disable when IsIDCardCopyMode
@@ -831,6 +856,12 @@ void MainWidget::initializeTabSetting()
 {
     ts->setupUi(ui->tab_4);
 
+    ts->stackedWidget->setStyleSheet("QStackedWidget,#pageWidget,#page2Widget{ \
+                                min-height:320; \
+                                max-height:320; \
+                             }");
+//*/
+
     ts->listWidget->setCurrentRow(0);
     ts->stackedWidget->setCurrentIndex(0);
     ts->radioButton_searchWifi->setChecked(true);
@@ -872,6 +903,7 @@ void MainWidget::initializeTabSetting()
 
     wifi_update();
     wifi_update_checkbox(ts->checkBox->isChecked());
+    ts->checkBox->hide();//checkbox hide
 }
 
 void MainWidget::wifi_update_encryptionType()
@@ -1070,6 +1102,7 @@ void MainWidget::slots_wifi_refreshAplist()
 
 void MainWidget::wifi_update_checkbox(bool checked)
 {
+    return;//checkbox hide
     if(checked){
         ts->frame->setEnabled(true);
         ts->btn_apply_ws->setEnabled(wifi_validate_ssidPassword());
@@ -1132,7 +1165,7 @@ void MainWidget::cmdResult_passwd_confirmed(int err)
 void MainWidget::slots_passwd_comfirmed()
 {
     install_next_callback(SLOT(slots_wifi_getStatusToApply()));
-    emit_cmd(DeviceContrl::CMD_WIFI_GetWifiStatus);
+    emit_cmd(DeviceContrl::CMD_WIFI_GetWifiStatus_immediately);
 }
 
 #include <QInputDialog>
@@ -1247,12 +1280,15 @@ void MainWidget::result_wifi_getAplist()
             break;
         }else{
             ts->cb_ssid->addItem( ssid);
-            wifi_sw_encryptionType[i] = aplist.aplist[i].encryption > 1 ?aplist.aplist[i].encryption -1 : aplist.aplist[i].encryption;
+            int encryption = aplist.aplist[i].encryption & 7;
+            if(encryption > 4) encryption = 4;
+            wifi_sw_encryptionType[i] = encryption > 1 ?encryption -1 : encryption;
             if(!ssid.compare(machine_wifi_ssid))
                 current_ssid = i;
         }
     }
     ts->cb_ssid->setCurrentIndex(current_ssid);
+    qLog(QString().sprintf("encryption:%d" ,aplist.aplist[current_ssid].encryption));
     //encryption
      ts->cb_encryptionType->setCurrentIndex(wifi_sw_encryptionType[current_ssid]);
     //key index

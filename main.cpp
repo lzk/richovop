@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     trans.load(filename);
     a.installTranslator(&trans);
 
-    a.setStyle("gtk");
+//    a.setStyle("gtk");
     QFile file(":/styles/default.qss");
     if(file.open(QFile::ReadOnly)){
         QString stylesheet = file.readAll();

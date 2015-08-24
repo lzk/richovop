@@ -13,7 +13,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-        mainwindow.cpp \
+    mainwindow.cpp \
     mainwidget.cpp \
     app/vop_protocol.cpp \
     app/vop_device.cpp \
@@ -35,7 +35,8 @@ HEADERS  += mainwindow.h \
     scalingsettingkeyboard.h \
     app/devicecontrol.h \
     app/devicemanager.h \
-    app/log.h
+    app/log.h \
+    version.h
 
 FORMS    += mainwindow.ui \
     setting.ui \
@@ -48,7 +49,9 @@ FORMS    += mainwindow.ui \
 RESOURCES += \
     vop.qrc
 
-TRANSLATIONS = translations/vop_zh.ts
+TRANSLATIONS = translations/vop_zh.ts translations/vop_ja.ts translations/vop_de.ts \
+                                translations/vop_es.ts translations/vop_ru.ts translations/vop_tr.ts \
+                                translations/vop_el.ts translations/vop_en.ts
 
 LIBS += -Wl,-rpath,"/opt/RICOH/app/Ricoh SP 150SU_SP 150" -ldl
 
@@ -66,5 +69,3 @@ contains(st ,ubuntu) {
     DEFINES += STATIC_BUILD
 }
 
-DISTFILES += \
-    styles/default.qss

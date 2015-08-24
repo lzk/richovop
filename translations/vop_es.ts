@@ -1,100 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<TS version="2.0" language="es_ES">
 <context>
     <name>CopiesSettingKeyboard</name>
     <message>
         <location filename="../copiessettingkeyboard.ui" line="14"/>
         <source>Copies Setting Keyboard</source>
-        <translation>份数值设定键盘</translation>
-    </message>
-    <message>
-        <location filename="../copiessettingkeyboard.ui" line="117"/>
-        <source>IDS_KB_Backspace</source>
-        <translation>退格</translation>
-    </message>
-    <message>
-        <location filename="../copiessettingkeyboard.ui" line="247"/>
-        <source>IDS_KB_OK</source>
-        <translation>确定</translation>
-    </message>
-    <message>
-        <location filename="../copiessettingkeyboard.ui" line="348"/>
-        <source>IDS_KB_Clear</source>
-        <translation>清除</translation>
-    </message>
-    <message>
-        <location filename="../copiessettingkeyboard.ui" line="371"/>
-        <source>IDS_CP_Copies</source>
-        <translation>份数</translation>
-    </message>
-    <message>
-        <source>9</source>
-        <translation type="obsolete">9</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copiessettingkeyboard.ui" line="88"/>
         <source>1</source>
-        <translation type="unfinished">1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Backspace</source>
-        <translation type="obsolete">退格</translation>
+        <location filename="../copiessettingkeyboard.ui" line="117"/>
+        <source>IDS_KB_Backspace</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>4</source>
-        <translation type="obsolete">4</translation>
+        <location filename="../copiessettingkeyboard.ui" line="247"/>
+        <source>IDS_KB_OK</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>OK</source>
-        <translation type="obsolete">确定</translation>
+        <location filename="../copiessettingkeyboard.ui" line="348"/>
+        <source>IDS_KB_Clear</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>2</source>
-        <translation type="obsolete">2</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="obsolete">清除</translation>
-    </message>
-    <message>
-        <source>Copies</source>
-        <translation type="obsolete">份数</translation>
+        <location filename="../copiessettingkeyboard.ui" line="371"/>
+        <source>IDS_CP_Copies</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWidget</name>
     <message>
-        <source>Refresh</source>
-        <translation type="obsolete">刷新</translation>
+        <location filename="../mainwidget.ui" line="113"/>
+        <source>IDS_MW_Refresh</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Copy</source>
-        <translation type="obsolete">复印</translation>
+        <location filename="../mainwidget.ui" line="168"/>
+        <location filename="../mainwidget.cpp" line="470"/>
+        <location filename="../mainwidget.cpp" line="474"/>
+        <source>IDS_Tab_Copy</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Setting</source>
-        <translation type="obsolete">设定</translation>
+        <location filename="../mainwidget.ui" line="173"/>
+        <location filename="../mainwidget.cpp" line="475"/>
+        <source>IDS_Tab_Setting</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>About</source>
-        <translation type="obsolete">关于</translation>
+        <location filename="../mainwidget.ui" line="178"/>
+        <location filename="../mainwidget.cpp" line="484"/>
+        <source>IDS_Tab_About</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.h" line="48"/>
-        <location filename="../mainwidget.h" line="52"/>
-        <source>Lenovo Virtual Panel</source>
-        <translation>联想虚拟操作面板</translation>
-    </message>
-    <message>
-        <location filename="../mainwidget.cpp" line="348"/>
-        <source>The machine is busy, please try later...</source>
+        <location filename="../mainwidget.cpp" line="212"/>
+        <source>Place Next Page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwidget.cpp" line="334"/>
         <source>Failed to acquire the information.</source>
-        <translation>获取信息失败</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwidget.cpp" line="344"/>
@@ -102,9 +76,9 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="212"/>
-        <source>Place Next Page</source>
-        <translation>放置下一页</translation>
+        <location filename="../mainwidget.cpp" line="348"/>
+        <source>The machine is busy, please try later...</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwidget.cpp" line="1179"/>
@@ -131,28 +105,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="113"/>
-        <source>IDS_MW_Refresh</source>
-        <translation>刷新</translation>
-    </message>
-    <message>
-        <location filename="../mainwidget.ui" line="168"/>
-        <location filename="../mainwidget.cpp" line="470"/>
-        <location filename="../mainwidget.cpp" line="474"/>
-        <source>IDS_Tab_Copy</source>
-        <translation>复印</translation>
-    </message>
-    <message>
-        <location filename="../mainwidget.ui" line="173"/>
-        <location filename="../mainwidget.cpp" line="475"/>
-        <source>IDS_Tab_Setting</source>
-        <translation>设定</translation>
-    </message>
-    <message>
-        <location filename="../mainwidget.ui" line="178"/>
-        <location filename="../mainwidget.cpp" line="484"/>
-        <source>IDS_Tab_About</source>
-        <translation>关于</translation>
+        <location filename="../mainwidget.h" line="48"/>
+        <location filename="../mainwidget.h" line="52"/>
+        <source>Lenovo Virtual Panel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -165,7 +121,7 @@
     <message>
         <location filename="../mainwindow.ui" line="28"/>
         <source>Lenovo Virtual Panel</source>
-        <translation>联想虚拟操作面板</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="45"/>
@@ -183,60 +139,32 @@
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="14"/>
         <source>Scaling Setting Keyboard</source>
-        <translation>缩放数值设置键盘</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">确定</translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation type="obsolete">1</translation>
-    </message>
-    <message>
-        <source>2</source>
-        <translation type="obsolete">2</translation>
-    </message>
-    <message>
-        <source>4</source>
-        <translation type="obsolete">4</translation>
-    </message>
-    <message>
-        <source>9</source>
-        <translation type="obsolete">9</translation>
-    </message>
-    <message>
-        <source>Backspace</source>
-        <translation type="obsolete">退格</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="obsolete">清除</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="33"/>
         <source>IDS_CP_Scaling</source>
-        <translation>缩放</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="56"/>
         <source>IDS_KB_OK</source>
-        <translation>确定</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="313"/>
         <source>IDS_KB_Backspace</source>
-        <translation>退格</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="339"/>
         <source>IDS_KB_Clear</source>
-        <translation>清除</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="394"/>
         <source>100</source>
-        <translation type="unfinished">100</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="420"/>
@@ -254,13 +182,13 @@
     <message>
         <location filename="../copy.ui" line="228"/>
         <source>Copies</source>
-        <translation>份数</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="235"/>
         <location filename="../copy.ui" line="876"/>
         <source>1</source>
-        <translation type="unfinished">1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="260"/>
@@ -279,17 +207,17 @@
     <message>
         <location filename="../copy.ui" line="331"/>
         <source>Scaling</source>
-        <translation>缩放</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="338"/>
         <source>100%</source>
-        <translation type="unfinished">100%</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="434"/>
         <source>Density</source>
-        <translation>浓度</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="675"/>
@@ -299,12 +227,12 @@
     <message>
         <location filename="../copy.ui" line="700"/>
         <source>Photo</source>
-        <translation>照片</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="713"/>
         <source>Text</source>
-        <translation>文本</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="733"/>
@@ -314,32 +242,32 @@
     <message>
         <location filename="../copy.ui" line="744"/>
         <source>Plain</source>
-        <translation>普通纸</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="749"/>
         <source>Recycled</source>
-        <translation>再生纸</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="754"/>
         <source>Thick</source>
-        <translation>普通厚纸</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="759"/>
         <source>Thin</source>
-        <translation>普通薄纸</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="764"/>
         <source>Label</source>
-        <translation>标签</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="772"/>
         <source>Document Size</source>
-        <translation>原稿大小</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="783"/>
@@ -374,7 +302,7 @@
     <message>
         <location filename="../copy.ui" line="811"/>
         <source>Output Size</source>
-        <translation>输出纸张大小</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="837"/>
@@ -394,27 +322,27 @@
     <message>
         <location filename="../copy.ui" line="865"/>
         <source>N in 1 Copy</source>
-        <translation>N合1复印</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="881"/>
         <source>2</source>
-        <translation type="unfinished">2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="886"/>
         <source>4</source>
-        <translation type="unfinished">4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="891"/>
         <source>9</source>
-        <translation type="unfinished">9</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="899"/>
         <source>DPI</source>
-        <translation>DPI</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="910"/>
@@ -435,12 +363,12 @@ Copy</source>
     <message>
         <location filename="../copy.ui" line="972"/>
         <source>Copy</source>
-        <translation>复印</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../copy.ui" line="1012"/>
         <source>Default</source>
-        <translation>默认</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -449,7 +377,7 @@ Copy</source>
         <location filename="../setting.ui" line="73"/>
         <location filename="../setting.ui" line="158"/>
         <source>WIFI Setup</source>
-        <translation>Wi-Fi安装</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="78"/>
@@ -464,89 +392,89 @@ Copy</source>
     <message>
         <location filename="../setting.ui" line="170"/>
         <source>Search WIFI</source>
-        <translation>搜索Wi-Fi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="180"/>
         <source>Manual Setup</source>
-        <translation>手动安装</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="212"/>
         <location filename="../setting.ui" line="286"/>
         <source>SSID</source>
-        <translation>网络名称</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="222"/>
         <source>Encryption Type</source>
-        <translation>加密类型</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="233"/>
         <source>No Security</source>
-        <translation>不使用</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="238"/>
         <source>WEP</source>
-        <translation>WEP</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="243"/>
         <source>WPA2-PSK-AES</source>
-        <translation>WPA2-PSK-AES</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="248"/>
         <source>Mixed Mode PSK</source>
-        <translation>混合模式PSK</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="308"/>
         <source>Refresh</source>
-        <translation>刷新</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="341"/>
         <source>WEP Key</source>
-        <translation>WEP密钥</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="355"/>
         <source>Key Index</source>
-        <translation>密钥索引</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="366"/>
         <source>1</source>
-        <translation type="unfinished">1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="371"/>
         <source>2</source>
-        <translation type="unfinished">2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="376"/>
         <source>3</source>
-        <translation type="unfinished">3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="381"/>
         <source>4</source>
-        <translation type="unfinished">4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="420"/>
         <source>Passphrase</source>
-        <translation>密码</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="464"/>
         <location filename="../setting.ui" line="558"/>
         <source>Apply</source>
-        <translation>应用</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setting.ui" line="507"/>

@@ -116,7 +116,7 @@ int VopProtocol::DecodeStatusFromDeviceID(char* device_id, PRINTER_STATUS* statu
         p++;
 
     if (!*p)	{ // "STS:" not found
-        qLog()<<"STS: not found";
+        qLog1("STS: not found");
         return -1;
     }
     p += 4;	// Skip "STS:"
@@ -276,53 +276,60 @@ VopProtocol::~VopProtocol()
     delete wifi_status;
 }
 
-
+//#define STR_PREFIX  QT_TR_NOOP_UTF8
+#define STR_PREFIX
 const char* VopProtocol::getErrString(int err)
 {
     const char* str = NULL;
     switch(err)    {
     case ERR_ACK :
-        str = QT_TR_NOOP_UTF8("ACK");
+        str = STR_PREFIX("ACK");
         break;
     case ERR_CMD_invalid :
-        str = QT_TR_NOOP_UTF8("CMD invalid");
+        str = STR_PREFIX("CMD invalid");
         break;
     case ERR_Parameter_invalid :
-        str = QT_TR_NOOP_UTF8("Parameter invalid");
+        str = STR_PREFIX("Parameter invalid");
         break;
     case ERR_Printer_busy :
-        str = QT_TR_NOOP_UTF8("Printer busy");
+        str = STR_PREFIX("Printer busy");
         break;
     case ERR_Printer_error :
-        str = QT_TR_NOOP_UTF8("Printer error");
+        str = STR_PREFIX("Printer error");
         break;
     case ERR_Set_parameter_error :
-        str = QT_TR_NOOP_UTF8("Set parameter error");
+        str = STR_PREFIX("Set parameter error");
         break;
     case ERR_Get_parameter_error :
-        str = QT_TR_NOOP_UTF8("Get parameter error");
+        str = STR_PREFIX("Get parameter error");
         break;
     case ERR_Printer_is_Sleeping:
-        str = QT_TR_NOOP_UTF8("Printer is Sleeping");
+        str = STR_PREFIX("Printer is Sleeping");
         break;
     case ERR_Printer_is_in_error:
-        str = QT_TR_NOOP_UTF8("Printer is in error");
+        str = STR_PREFIX("Printer is in error");
         break;
     case ERR_Password_incorrect :
-        str = QT_TR_NOOP_UTF8("Password incorrect");
+        str = STR_PREFIX("Password incorrect");
         break;
     case ERR_Scanner_operation_NG :
-        str = QT_TR_NOOP_UTF8("Scanner operation NG");
+        str = STR_PREFIX("Scanner operation NG");
         break;
     case ERR_communication :
-        str = QT_TR_NOOP_UTF8("communication error");
+        str = STR_PREFIX("communication error");
         break;
     case ERR_library :
-        str = QT_TR_NOOP_UTF8("library error");
+        str = STR_PREFIX("library error");
         break;
     case ERR_Do_not_support :
+        str = STR_PREFIX("FW do not support");
+        break;
+    case ERR_decode_status:
+        str = STR_PREFIX("status decode err");
+        break;
+    case ERR_vop_cannot_support:
     default:
-        str = QT_TR_NOOP_UTF8("Do not support");
+        str = STR_PREFIX("VOP do not support");
         break;
     }
     return str;
@@ -358,7 +365,7 @@ int VopProtocol::vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size)
     int direct=0 ,data_buffer_size=0;
     int err = vop_getCmdDirect(cmd ,sub_cmd ,direct ,data_buffer_size);
     if(err)
-        return -3;//not support
+        return ERR_vop_cannot_support;//not support
 
     int device_cmd_len = sizeof(COMM_HEADER)+data_buffer_size;
     char* buffer = new char[device_cmd_len];
@@ -467,14 +474,18 @@ void VopProtocol::passwd_set(const char* p)
 
 int VopProtocol::cmd(int _cmd)
 {
-    int err = -3;
-
+    int err = ERR_vop_cannot_support;
+    qLog1(QString().sprintf("exec cmd:%d" ,_cmd));
     switch(_cmd)    {
     case CMD_GetStatus:{
-        char buffer[256];
+        char buffer[1024];
+        memset(buffer ,0 ,sizeof(buffer));
         err = DeviceContrl::device_getDeviceStatus(buffer ,sizeof(buffer));
+        buffer[1023] = 0;//make sure buffer is a c string.
+        qLog1(QString().sprintf("buffer size:%lu" ,strlen(buffer)));
         if(!err){
-            DecodeStatusFromDeviceID(buffer ,status);
+            if(DecodeStatusFromDeviceID(buffer ,status))
+                err = ERR_decode_status;
         }
         break;
     }

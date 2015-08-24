@@ -1,4 +1,11 @@
 
+/*QMainWindow{background-color: white;}*/
+
+/*.QWidget {   background-color: white;}*/
+
+/*QWidget{font:13px; color:#4c4c4c}*/
+
 QDialog  {    border:1px solid gray;}
 
-QListView{    background-color:white;}
+/*QComboBox QAbstractItemView{    background-color:white;  }*/
+
