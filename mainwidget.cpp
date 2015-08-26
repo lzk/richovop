@@ -194,6 +194,7 @@ void MainWidget::slots_cmd_complete()
 
 void MainWidget::cmdResult_getDeviceStatus(int err)
 {
+    static bool idCardMode = false;
     DeviceApp* device_app = device_manager->deviceApp();
     if(!device_app)
         return;
@@ -203,13 +204,26 @@ void MainWidget::cmdResult_getDeviceStatus(int err)
         case PSTATUS_Ready:
         case PSTATUS_PowerSaving:
             device_status = true;
+            if(idCardMode){
+                idCardMode = false;
+                copy_button_IDCardCopy();
+            }
             break;
         default:
             device_status = false;
             break;
         }
-        if(PSTATUS_CopyScanNextPage == _status)
-            messagebox_show(tr("Place Next Page"));
+        if(PSTATUS_CopyScanNextPage == _status){
+            copycmdset copyPara = device_manager->copy_get_para();
+            copycmdset* pCopyPara = &copyPara;
+            if(pCopyPara->nUp == 4){//IsIDCardCopyMode(pCopyPara))
+                messagebox_show(tr("IDS_MSG_TurnCardOver"));
+                idCardMode = true;
+            }else
+                messagebox_show(tr("IDS_MSG_PlaceNextPage"));
+        }
+//        else if(PSTATUS_Printing == _status)
+//            messagebox_show(tr("IDS_MSG_Printering"));
         else
             messagebox_hide();
         qLog(QString().sprintf("get_deviceStatus correct:%#.2x" ,_status));
@@ -232,6 +246,7 @@ void MainWidget::cmdResult_passwd_confirmForApply(int err)
         wifi_apply();
     }else if(ERR_Password_incorrect == err){//password incorrect
         passwd_checked = false;
+        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
         wifi_passwd_doConfirm();
     }else{
         device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
@@ -261,9 +276,9 @@ void MainWidget::cmdResult_passwd_confirmForSetPasswd(int err)
         return;
     if(!err){//no err,ACK
         slots_passwd_set();
-        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
     }else if(ERR_Password_incorrect == err){//password incorrect
         passwd_checked = false;
+        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
         passwd_set_doConfirm();
     }else{
         device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
@@ -331,16 +346,14 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     switch(err){
     case ERR_communication ://communication err
         if(DeviceContrl::CMD_DEVICE_status != cmd)
-            messagebox_exec(tr("Failed to acquire the information."));
+            messagebox_exec(tr("IDS_ERR_AcquireInformation"));
         device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
-        return;
         break;
     case ERR_Password_incorrect :
         if(     (DeviceContrl::CMD_PASSWD_confirmForApply == cmd)
                 ||(DeviceContrl::CMD_PASSWD_confirm == cmd)
                 ||(DeviceContrl::CMD_PASSWD_confirmForSetPasswd == cmd)
                 )
-            device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
             messagebox_exec(tr("Authentication error, please enter the password again."));
         break;
     case ERR_Printer_busy :
@@ -541,17 +554,17 @@ void MainWidget::slots_about_update()
 }
 
 /////////////////////////////////////////////////////tab copy/////////////////////////////////////////////////////////////
-static const char* output_size_list[] =
-{
-    "Letter (8.5 * 11)" ,
-    "A4 (210 * 297mm)",
-    "A5 (148 * 210mm)",
-    "A6 (105 * 148mm)",
-    "B5 (182 * 257mm)",
-    "B6 (128 * 182mm)",
-    "Executive (7.25 * 105\")",
-    "16K (185 * 260mm)"
-};
+//static const char* output_size_list[] =
+//{
+//    QT_TRANSLATE_NOOP_UTF8("TabCopy" ,"IDS_SIZE_Letter") ,//"Letter (8.5 * 11)" ,
+//    QT_TRANSLATE_NOOP_UTF8("TabCopy" ,"IDS_SIZE_A4"),//"A4 (210 * 297mm)"
+//    QT_TRANSLATE_NOOP_UTF8("TabCopy" ,"IDS_SIZE_A5"),//"A5 (148 * 210mm)"
+//    QT_TRANSLATE_NOOP_UTF8("TabCopy" ,"IDS_SIZE_A6"),//"A6 (105 * 148mm)"
+//    QT_TRANSLATE_NOOP_UTF8("TabCopy" ,"IDS_SIZE_B5"),//"B5 (182 * 257mm)"
+//    QT_TRANSLATE_NOOP_UTF8("TabCopy" ,"IDS_SIZE_B6"),//"B6 (128 * 182mm)"
+//    QT_TRANSLATE_NOOP_UTF8("TabCopy" ,"IDS_SIZE_Executive"),//"Executive (7.25 * 105\")"
+//    QT_TRANSLATE_NOOP_UTF8("TabCopy" ,"IDS_SIZE_16K"),//"16K (185 * 260mm)"
+//};
 
 static const int document_size[] =
 {1 ,2 ,4 ,0 ,6};// A4 A5 B5 Letter Executive
@@ -575,13 +588,18 @@ static const int output_size[][2] =
     double scaling_height = _GetSizeScaling(ds ,os ,1); \
     scaling = 100 * (scaling_width < scaling_height ? scaling_width :scaling_height); \
 }
-
+#include<QDebug>
 void MainWidget::initializeTabCopy()
 {
     tc->setupUi(ui->tab_3);
+
     int i;
-    for(i = 0 ;i < sizeof(output_size_list) / sizeof(output_size_list[0]) ;i++)
-        stringlist_output_size << output_size_list[i];
+//    for(i = 0 ;i < sizeof(output_size_list) / sizeof(output_size_list[0]) ;i++){
+    for(i = 0 ;i < tc->combo_outputSize->count() ;i++){
+//        stringlist_output_size << QApplication::translate("TabCopy" ,output_size_list[i]);
+        stringlist_output_size << tc->combo_outputSize->itemText(i);
+        qDebug()<<tc->combo_outputSize->itemText(i);
+    }
 
     updateCopy();
     connect(tc->btn_default ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
@@ -785,23 +803,30 @@ void MainWidget::slots_copy_combo(int value)
     updateCopy();
 }
 
+void MainWidget::copy_button_IDCardCopy()
+{
+    copycmdset copyPara = device_manager->copy_get_para();
+    copycmdset* pCopyPara = &copyPara;
+    if(IsIDCardCopyMode(pCopyPara))    {//ID Card mode
+        pCopyPara->nUp = 0;
+        GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
+    }else{
+        SetIDCardCopyMode(pCopyPara);
+        pCopyPara->dpi = 1;//600 * 600
+        pCopyPara->scale = 100;
+        if(3 == pCopyPara->paperSize || 5 == pCopyPara->paperSize){
+            pCopyPara->paperSize = 0;
+        }
+    }
+}
+
 void MainWidget::slots_copy_pushbutton()
 {
     copycmdset copyPara = device_manager->copy_get_para();
     copycmdset* pCopyPara = &copyPara;
     QObject* sd = sender();
     if(sd == tc->IDCardCopy){//button IDCardCopy click
-        if(IsIDCardCopyMode(pCopyPara))    {//ID Card mode
-            pCopyPara->nUp = 0;
-            GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
-        }else{
-            SetIDCardCopyMode(pCopyPara);
-            pCopyPara->dpi = 1;//600 * 600
-            pCopyPara->scale = 100;
-            if(3 == pCopyPara->paperSize || 5 == pCopyPara->paperSize){
-                pCopyPara->paperSize = 0;
-            }
-        }
+        copy_button_IDCardCopy();
     }else if(sd == tc->btn_default){
         device_manager->copy_set_defaultPara();
         updateCopy();
@@ -1156,6 +1181,7 @@ void MainWidget::cmdResult_passwd_confirmed(int err)
         emit signals_cmd_next();
     }else if(ERR_Password_incorrect == err){//password incorrect
         passwd_checked = false;
+        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
         wifi_passwd_doConfirm();
     }else{
         device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);

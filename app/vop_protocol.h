@@ -220,6 +220,7 @@ class VopProtocol
 public:
     enum{
         CMD_GetStatus,
+        CMD_GetCopy,
         CMD_COPY,
         CMD_WIFI_apply,
         CMD_WIFI_get,

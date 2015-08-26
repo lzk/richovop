@@ -45,11 +45,13 @@ public:
     QMessageBox::StandardButton messagebox_exec(const QString &text,
                                                 QMessageBox::StandardButtons buttons = QMessageBox::Ok,
                                                QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
-                                               const QString &title = "<h3>" + tr("Lenovo Virtual Panel") + "</h3>");
+                                                const QString &title = "");
+//                                               const QString &title = "<h3>" + tr("Lenovo Virtual Panel") + "</h3>");
     void messagebox_show(const QString &text,
                          QMessageBox::StandardButtons buttons = QMessageBox::NoButton,
                         QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
-                        const QString &title = "<h3>" + tr("Lenovo Virtual Panel") + "</h3>");
+                         const QString &title = "");
+//                        const QString &title = "<h3>" + tr("Lenovo Virtual Panel") + "</h3>");
     void messagebox_hide(){msgBox_info.hide();}
 
 private:
@@ -118,6 +120,7 @@ private:
     CopiesSettingKeyboard* keyboard_copies;
     void initializeTabCopy();
     void updateCopy();
+    void copy_button_IDCardCopy();
 
     //////////////////////////tab setting///////////////////
     int wifi_encryptionType;

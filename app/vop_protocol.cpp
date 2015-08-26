@@ -346,6 +346,7 @@ int VopProtocol::get_deviceStatus()
     return status->PrinterStatus;
 }
 
+#define vop_getCopy(buffer)                      vop_cmd(_LS_CPYCMD ,0 ,buffer ,sizeof(*buffer))
 #define vop_copy(buffer)                            vop_cmd(_LS_CPYCMD ,1 ,buffer ,sizeof(*buffer))
 #define vop_getWifiInfo(buffer)                 vop_cmd(_LS_WIFICMD ,0 ,buffer ,sizeof(*buffer))
 #define vop_setWifiInfo(buffer)                 vop_cmd(_LS_WIFICMD ,1 ,buffer ,sizeof(*buffer))
@@ -488,6 +489,9 @@ int VopProtocol::cmd(int _cmd)
                 err = ERR_decode_status;
         }
         break;
+    }
+    case CMD_GetCopy:{
+        err = vop_getCopy(copy_parameter);
     }
     case CMD_COPY:{
         err = vop_copy(copy_parameter);

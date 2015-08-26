@@ -12,8 +12,8 @@
         <file>images/squareCopy.png</file>
         <file>images/squareCopyAlt.png</file>
         <file>images/squareCopyDisabled.png</file>
-        <file>translations/vop_zh.ts</file>
         <file>images/Ricoh.bmp</file>
         <file>styles/default.qss</file>
+        <file>translations/vop_en.qm</file>
     </qresource>
 </RCC>

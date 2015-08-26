@@ -62,6 +62,9 @@ void DeviceContrl::slots_cmd(int cmd)
         err = protocol->cmd(VopProtocol::CMD_GetStatus);
         break;
     }
+    case CMD_GetCopy:
+        err = protocol->cmd(VopProtocol::CMD_GetCopy);
+        break;
     case CMD_COPY:
         err = protocol->cmd(VopProtocol::CMD_COPY);
         break;

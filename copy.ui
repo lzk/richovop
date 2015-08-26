@@ -10,9 +10,6 @@
     <height>561</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <property name="styleSheet">
    <string notr="true">
 #bg_scaling
@@ -225,14 +222,14 @@ QPushButton
             <item>
              <widget class="QLabel" name="label_copies">
               <property name="text">
-               <string>Copies</string>
+               <string>IDS_CP_Copies</string>
               </property>
              </widget>
             </item>
             <item alignment="Qt::AlignHCenter">
              <widget class="QLabel" name="copies">
               <property name="text">
-               <string>1</string>
+               <string notr="true">1</string>
               </property>
              </widget>
             </item>
@@ -257,7 +254,7 @@ QPushButton
                  <enum>Qt::NoFocus</enum>
                 </property>
                 <property name="text">
-                 <string>-</string>
+                 <string notr="true">-</string>
                 </property>
                 <property name="autoRepeat">
                  <bool>true</bool>
@@ -270,7 +267,7 @@ QPushButton
                  <enum>Qt::NoFocus</enum>
                 </property>
                 <property name="text">
-                 <string>+</string>
+                 <string notr="true">+</string>
                 </property>
                 <property name="autoRepeat">
                  <bool>true</bool>
@@ -328,14 +325,14 @@ QPushButton
             <item>
              <widget class="QLabel" name="label_scaling">
               <property name="text">
-               <string>Scaling</string>
+               <string>IDS_CP_Scaling</string>
               </property>
              </widget>
             </item>
             <item alignment="Qt::AlignHCenter">
              <widget class="QLabel" name="scaling">
               <property name="text">
-               <string>100%</string>
+               <string notr="true">100%</string>
               </property>
              </widget>
             </item>
@@ -360,7 +357,7 @@ QPushButton
                  <enum>Qt::NoFocus</enum>
                 </property>
                 <property name="text">
-                 <string>-</string>
+                 <string notr="true">-</string>
                 </property>
                 <property name="autoRepeat">
                  <bool>true</bool>
@@ -373,7 +370,7 @@ QPushButton
                  <enum>Qt::NoFocus</enum>
                 </property>
                 <property name="text">
-                 <string>+</string>
+                 <string notr="true">+</string>
                 </property>
                 <property name="autoRepeat">
                  <bool>true</bool>
@@ -431,7 +428,7 @@ QPushButton
             <item>
              <widget class="QLabel" name="label_density">
               <property name="text">
-               <string>Density</string>
+               <string>IDS_CP_Density</string>
               </property>
              </widget>
             </item>
@@ -613,7 +610,7 @@ QPushButton
                  <enum>Qt::NoFocus</enum>
                 </property>
                 <property name="text">
-                 <string>-</string>
+                 <string notr="true">-</string>
                 </property>
                 <property name="autoRepeat">
                  <bool>true</bool>
@@ -626,7 +623,7 @@ QPushButton
                  <enum>Qt::NoFocus</enum>
                 </property>
                 <property name="text">
-                 <string>+</string>
+                 <string notr="true">+</string>
                 </property>
                 <property name="autoRepeat">
                  <bool>true</bool>
@@ -672,7 +669,7 @@ QPushButton
             <item>
              <widget class="QLabel" name="label_scaningMode">
               <property name="text">
-               <string>Scaning Mode</string>
+               <string>IDS_CP_ScanningMode</string>
               </property>
              </widget>
             </item>
@@ -697,7 +694,7 @@ QPushButton
                   <enum>Qt::NoFocus</enum>
                  </property>
                  <property name="text">
-                  <string>Photo</string>
+                  <string>IDS_SM_Photo</string>
                  </property>
                  <property name="checked">
                   <bool>true</bool>
@@ -710,7 +707,7 @@ QPushButton
                   <enum>Qt::NoFocus</enum>
                  </property>
                  <property name="text">
-                  <string>Text</string>
+                  <string>IDS_SM_Text</string>
                  </property>
                 </widget>
                </item>
@@ -730,7 +727,7 @@ QPushButton
           <item>
            <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>Document Type</string>
+             <string>IDS_CP_MediaType</string>
             </property>
            </widget>
           </item>
@@ -741,27 +738,27 @@ QPushButton
             </property>
             <item>
              <property name="text">
-              <string>Plain</string>
+              <string>IDS_MT_Plain</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Recycled</string>
+              <string>IDS_MT_Recycled</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Thick</string>
+              <string>IDS_MT_Thick</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Thin</string>
+              <string>IDS_MT_Thin</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Label</string>
+              <string>IDS_MT_Label</string>
              </property>
             </item>
            </widget>
@@ -769,7 +766,7 @@ QPushButton
           <item>
            <widget class="QLabel" name="label_10">
             <property name="text">
-             <string>Document Size</string>
+             <string>IDS_CP_DocumentSize</string>
             </property>
            </widget>
           </item>
@@ -780,27 +777,27 @@ QPushButton
             </property>
             <item>
              <property name="text">
-              <string>Letter (8.5 * 11&quot;)</string>
+              <string>IDS_SIZE_Letter</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>A4 (210 * 297mm)</string>
+              <string>IDS_SIZE_A4</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>A5 (148 * 210mm)</string>
+              <string>IDS_SIZE_A5</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>B5 (182 * 257mm)</string>
+              <string>IDS_SIZE_B5</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Executive (7.25 * 105&quot;)</string>
+              <string>IDS_SIZE_Executive</string>
              </property>
             </item>
            </widget>
@@ -808,7 +805,7 @@ QPushButton
           <item>
            <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>Output Size</string>
+             <string>IDS_CP_OutputSize</string>
             </property>
            </widget>
           </item>
@@ -819,42 +816,42 @@ QPushButton
             </property>
             <item>
              <property name="text">
-              <string>Letter (8.5 * 11&quot;)</string>
+              <string>IDS_SIZE_Letter</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>A4 (210 * 297mm)</string>
+              <string>IDS_SIZE_A4</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>A5 (148 * 210mm)</string>
+              <string>IDS_SIZE_A5</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>A6 (105 * 148mm)</string>
+              <string>IDS_SIZE_A6</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>B5 (182 * 257mm)</string>
+              <string>IDS_SIZE_B5</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>B6 (128 * 182mm)</string>
+              <string>IDS_SIZE_B6</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Executive (7.25 * 105&quot;)</string>
+              <string>IDS_SIZE_Executive</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>16K (185 * 260mm)</string>
+              <string>IDS_SIZE_16K</string>
              </property>
             </item>
            </widget>
@@ -862,7 +859,7 @@ QPushButton
           <item>
            <widget class="QLabel" name="label_12">
             <property name="text">
-             <string>N in 1 Copy</string>
+             <string>IDS_CP_Nin1Copy</string>
             </property>
            </widget>
           </item>
@@ -873,22 +870,22 @@ QPushButton
             </property>
             <item>
              <property name="text">
-              <string>1</string>
+              <string>IDS_Nin1_1</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>2</string>
+              <string>IDS_Nin1_2</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>4</string>
+              <string>IDS_Nin1_4</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>9</string>
+              <string>IDS_Nin1_9</string>
              </property>
             </item>
            </widget>
@@ -896,7 +893,7 @@ QPushButton
           <item>
            <widget class="QLabel" name="label_13">
             <property name="text">
-             <string>DPI</string>
+             <string>IDS_CP_DPI</string>
             </property>
            </widget>
           </item>
@@ -907,12 +904,12 @@ QPushButton
             </property>
             <item>
              <property name="text">
-              <string>300 * 300</string>
+              <string>IDS_DPI_300</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>600 * 600</string>
+              <string>IDS_DPI_600</string>
              </property>
             </item>
            </widget>
@@ -958,8 +955,7 @@ QPushButton
                <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string>ID Card
-Copy</string>
+               <string>IDS_CP_IDCardCopy</string>
               </property>
              </widget>
             </item>
@@ -969,7 +965,7 @@ Copy</string>
                <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string>Copy</string>
+               <string>IDS_Tab_Copy</string>
               </property>
              </widget>
             </item>
@@ -1009,7 +1005,7 @@ Copy</string>
                <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string>Default</string>
+               <string>IDS_CP_Default</string>
               </property>
              </widget>
             </item>
