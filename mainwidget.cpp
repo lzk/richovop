@@ -747,9 +747,11 @@ void MainWidget::updateCopy()
         SetIDCardCopy(tc->copy);
         tc->bg_scaling->setEnabled(false);
         tc->IDCardCopy->setEnabled(true);
+        tc->combo_outputSize->setEnabled(false);
     }
     else
     {
+        tc->combo_outputSize->setEnabled(true);
         tc->combo_documentSize->setEnabled(true);
         tc->combo_nIn1Copy->setEnabled(true);
         tc->combo_dpi->setEnabled(true);
@@ -814,37 +816,51 @@ void MainWidget::copy_button_IDCardCopy()
         SetIDCardCopyMode(pCopyPara);
         pCopyPara->dpi = 1;//600 * 600
         pCopyPara->scale = 100;
-        if(3 == pCopyPara->paperSize || 5 == pCopyPara->paperSize){
-            pCopyPara->paperSize = 0;
-        }
+        pCopyPara->paperSize = 1;//A4
+//        if(3 == pCopyPara->paperSize || 5 == pCopyPara->paperSize){
+//            pCopyPara->paperSize = 0;
+//        }
     }
+    device_manager->copy_set_para(pCopyPara);
 }
 
 void MainWidget::slots_copy_pushbutton()
 {
-    copycmdset copyPara = device_manager->copy_get_para();
-    copycmdset* pCopyPara = &copyPara;
     QObject* sd = sender();
     if(sd == tc->IDCardCopy){//button IDCardCopy click
         copy_button_IDCardCopy();
     }else if(sd == tc->btn_default){
         device_manager->copy_set_defaultPara();
-        updateCopy();
-        return;
     }else if(sd == tc->scaling_minus){
+        copycmdset copyPara = device_manager->copy_get_para();
+        copycmdset* pCopyPara = &copyPara;
         pCopyPara->scale --;
     }else if(sd == tc->scaling_plus){
+        copycmdset copyPara = device_manager->copy_get_para();
+        copycmdset* pCopyPara = &copyPara;
         pCopyPara->scale ++;
+        device_manager->copy_set_para(pCopyPara);
     }else if(sd == tc->density_minus){
+        copycmdset copyPara = device_manager->copy_get_para();
+        copycmdset* pCopyPara = &copyPara;
         pCopyPara->Density --;
+        device_manager->copy_set_para(pCopyPara);
     }else if(sd == tc->density_plus){
+        copycmdset copyPara = device_manager->copy_get_para();
+        copycmdset* pCopyPara = &copyPara;
         pCopyPara->Density ++;
+        device_manager->copy_set_para(pCopyPara);
     }else if(sd == tc->copies_minus){
+        copycmdset copyPara = device_manager->copy_get_para();
+        copycmdset* pCopyPara = &copyPara;
         pCopyPara->copyNum --;
+        device_manager->copy_set_para(pCopyPara);
     }else if(sd == tc->copies_plus){
+        copycmdset copyPara = device_manager->copy_get_para();
+        copycmdset* pCopyPara = &copyPara;
         pCopyPara->copyNum ++;
+        device_manager->copy_set_para(pCopyPara);
     }
-    device_manager->copy_set_para(pCopyPara);
     updateCopy();
 }
 

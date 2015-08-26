@@ -229,7 +229,7 @@ static const copycmdset default_copy_parameter =
 //    .Density   = 3,
 //    .copyNum   = 1,
 //    .scale     = 100
-    3,//UINT8 Density         ; // 0  -   0~6
+    2,//UINT8 Density         ; // 0  -   0~6
     1,//UINT8 copyNum         ; // 1  -   1~99
     0,//UINT8 scanMode        ; // 2  -   0: Photo, 1: Text, 2: ID card
     0,//UINT8 orgSize         ; // 3  -   0: A4, 1: A5, 2: B5, 3: Letter, 4: Executive
