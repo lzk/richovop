@@ -75,7 +75,7 @@ max-width:100;
        </item>
        <item>
         <property name="text">
-         <string>IDS_ST_MP</string>
+         <string>IDS_ST_ModifyPasswd</string>
         </property>
        </item>
       </widget>

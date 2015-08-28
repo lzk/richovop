@@ -29,7 +29,7 @@ struct device_control net_dc ={
 #define USB_DELAY(x) if(dc == &usb_dc){usleep(x * 100 * 1000);}
 static int write_then_read(struct device_control* dc ,const char* device_uri ,char* wrBuffer ,int wrSize ,char* rdBuffer, int rdSize)
 {
-    if(dc->openPrinter && dc->write && dc->read &&dc->closePrinter){
+    if(dc->openPrinter && dc->write && dc->read &&dc->closePrinter && dc->get_device_id){
     }else{
         return -2;
     }
@@ -37,7 +37,7 @@ static int write_then_read(struct device_control* dc ,const char* device_uri ,ch
     int err = -1;
     int _write_size = 0,_read_size = 0;
     int i ,j;
-    char readBuffer[340];
+    char readBuffer[0x3ff];
     char writeBuffer[wrSize];
     memcpy(writeBuffer ,wrBuffer ,wrSize);
 
@@ -47,8 +47,31 @@ static int write_then_read(struct device_control* dc ,const char* device_uri ,ch
             qLog("can not open printer");
             return -1;
         }
+
+        //porting from windows
         if(dc == &usb_dc){
-            _read_size = dc->read(readBuffer ,340);
+            char buffer[2048];
+            err = dc->get_device_id(buffer ,sizeof(buffer));
+            if(1 != err){
+                char inBuffer[522];
+                char outBuffer[12];
+                memset(inBuffer ,0 ,sizeof(inBuffer));
+                inBuffer[0] = 0x1b;
+                inBuffer[1] = 0x4d;
+                inBuffer[2] = 0x53;
+                inBuffer[3] = 0x55;
+                inBuffer[4] = 0xe0;
+                inBuffer[5] = 0x2b;
+
+                dc->write(inBuffer ,10);
+                dc->write(&inBuffer[10] ,512);
+                dc->read(outBuffer ,sizeof(outBuffer));
+            }
+        }
+
+
+        if(dc == &usb_dc){
+            _read_size = dc->read(readBuffer ,0x3ff);
             qLog(QString().sprintf("before write clear read buffer :%d" ,_read_size));
         }
         _write_size = dc->write(writeBuffer ,wrSize);

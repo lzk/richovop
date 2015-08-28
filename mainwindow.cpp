@@ -6,6 +6,7 @@
 #include "ui_mainwindow.h"
 #include "mainwidget.h"
 #include <QDesktopWidget>
+#include <QScrollArea>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,14 +14,16 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     mainWidget = new MainWidget(this);
-    setCentralWidget(mainWidget);
+
+    QScrollArea* sa = new QScrollArea(this);
+    sa->setWidget(mainWidget);
+    mainWidget->setFixedSize(920,650);
+    setCentralWidget(sa);
+//    setCentralWidget(mainWidget);
     ui->mainToolBar->hide();
     statusBar()->hide();
-    setFixedSize(926,660);
-//    setFixedSize(800,600);
-    move((QApplication::desktop()->width() - width())/2,
-         (QApplication::desktop()->height() - height())/2);
-
+    slots_desktopResized(-1);
+   connect(QApplication::desktop() ,SIGNAL(resized(int)) ,this ,SLOT(slots_desktopResized(int)));
     connect(ui->actionExit_Lenovo_Virtual_Panel ,SIGNAL(triggered()) ,this ,SLOT(slots_exit()));
     menuBar()->hide();
 }
@@ -57,3 +60,22 @@ void MainWindow::closeEvent(QCloseEvent *event)
 //    ui->actionExit_Lenovo_Virtual_Panel->trigger();
 }
 #endif
+
+void MainWindow::slots_desktopResized(int )
+{
+    QDesktopWidget *dwsktopwidget = QApplication::desktop();
+    QRect screenrect = dwsktopwidget->screenGeometry();
+
+    if(screenrect.width() <=  800 || screenrect.height() <= 600){
+        setMinimumSize(screenrect.size() - QSize(400 ,300));
+        setMaximumSize(screenrect.size() - QSize(200 ,100));
+        resize(screenrect.size() - QSize(300 ,200));
+    }else{
+//        setMaximumSize(926,660);
+        setFixedSize(926,660);
+//        resize(926,660);
+    }
+    move((screenrect.width() - width())/2,
+         (screenrect.size().height() - height())/2);
+    update();
+}

@@ -207,6 +207,7 @@ void MainWidget::cmdResult_getDeviceStatus(int err)
             if(idCardMode){
                 idCardMode = false;
                 copy_button_IDCardCopy();
+                updateCopy();
             }
             break;
         default:
@@ -588,7 +589,7 @@ static const int output_size[][2] =
     double scaling_height = _GetSizeScaling(ds ,os ,1); \
     scaling = 100 * (scaling_width < scaling_height ? scaling_width :scaling_height); \
 }
-#include<QDebug>
+
 void MainWidget::initializeTabCopy()
 {
     tc->setupUi(ui->tab_3);
@@ -598,7 +599,6 @@ void MainWidget::initializeTabCopy()
     for(i = 0 ;i < tc->combo_outputSize->count() ;i++){
 //        stringlist_output_size << QApplication::translate("TabCopy" ,output_size_list[i]);
         stringlist_output_size << tc->combo_outputSize->itemText(i);
-        qDebug()<<tc->combo_outputSize->itemText(i);
     }
 
     updateCopy();
@@ -1329,8 +1329,25 @@ void MainWidget::result_wifi_getAplist()
                 current_ssid = i;
         }
     }
+    for(int i = 0 ;i < NUM_OF_APLIST ;i++){
+        qLog(QString().sprintf("display ssid[%d] memory from FW:" ,i));
+        qLog(QString().sprintf("%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x"
+                               ,aplist.aplist[i].ssid[0] ,aplist.aplist[i].ssid[1],aplist.aplist[i].ssid[2] ,aplist.aplist[i].ssid[3]
+                                ,aplist.aplist[i].ssid[4] ,aplist.aplist[i].ssid[5],aplist.aplist[i].ssid[6] ,aplist.aplist[i].ssid[7]));
+        qLog(QString().sprintf("%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x"
+                               ,aplist.aplist[i].ssid[8] ,aplist.aplist[i].ssid[9],aplist.aplist[i].ssid[10] ,aplist.aplist[i].ssid[11]
+                                ,aplist.aplist[i].ssid[12] ,aplist.aplist[i].ssid[13],aplist.aplist[i].ssid[14] ,aplist.aplist[i].ssid[15]));
+        qLog(QString().sprintf("%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x"
+                               ,aplist.aplist[i].ssid[16] ,aplist.aplist[i].ssid[17],aplist.aplist[i].ssid[18] ,aplist.aplist[i].ssid[19]
+                                ,aplist.aplist[i].ssid[20] ,aplist.aplist[i].ssid[21],aplist.aplist[i].ssid[22] ,aplist.aplist[i].ssid[23]));
+        qLog(QString().sprintf("%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x"
+                               ,aplist.aplist[i].ssid[24] ,aplist.aplist[i].ssid[25],aplist.aplist[i].ssid[26] ,aplist.aplist[i].ssid[27]
+                                ,aplist.aplist[i].ssid[28] ,aplist.aplist[i].ssid[29],aplist.aplist[i].ssid[30] ,aplist.aplist[i].ssid[31]
+                                ,aplist.aplist[i].ssid[32]));
+        qLog(QString().sprintf("ssid[%d] encryptionType from FW:%d" ,i ,aplist.aplist[i].encryption));
+    }
     ts->cb_ssid->setCurrentIndex(current_ssid);
-    qLog(QString().sprintf("encryption:%d" ,aplist.aplist[current_ssid].encryption));
+    qLog(QString().sprintf("selected ssid:%d encryption:%d" ,current_ssid ,aplist.aplist[current_ssid].encryption));
     //encryption
      ts->cb_encryptionType->setCurrentIndex(wifi_sw_encryptionType[current_ssid]);
     //key index

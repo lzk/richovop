@@ -51,8 +51,13 @@ int main(int argc, char *argv[])
     Log::init();
 
     QTranslator trans;
-    QString filename =":/translations/vop_" + QLocale::system().name();
-    trans.load(filename);
+//    QString filename =":/translations/vop_" + QLocale::system().name();
+//    trans.load(filename);
+//    trans.load("vop" ,":/translations");
+    if(!trans.load(QLocale(QLocale::system().name()), "vop", ".", ":/translations"))
+//    if(!trans.load(QLocale::system(), "vop", ".", ":/translations"))
+        trans.load(QLocale(QLocale::English), "vop", ".", ":/translations");
+//        trans.load( "vop",":/translations");
     a.installTranslator(&trans);
 
 //    a.setStyle("gtk");

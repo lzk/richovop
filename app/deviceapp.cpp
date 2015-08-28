@@ -15,6 +15,7 @@ DeviceApp::DeviceApp(DeviceManager* dm ,MainWidget* _widget) :
     widget(_widget)
 {
     ctrl->moveToThread(&deviceManageThread);
+    connect(&deviceManageThread, SIGNAL(finished()), ctrl, SLOT(deleteLater()));
 
     connect(this ,SIGNAL(signals_cmd(int)) ,ctrl ,SLOT(slots_cmd(int)));
     connect(this ,SIGNAL(signals_progress(int)) ,widget ,SLOT(slots_progressBar(int)));
@@ -29,6 +30,7 @@ DeviceApp::DeviceApp(DeviceManager* dm ,MainWidget* _widget) :
 
     app_block = new DeviceApp_Block(this);
     app_block->moveToThread(&app_block_thread);
+    connect(&app_block_thread, SIGNAL(finished()), app_block, SLOT(deleteLater()));
     connect(app_block ,SIGNAL(signals_cmd(int)) ,ctrl ,SLOT(slots_cmd(int)));
     connect(this ,SIGNAL(signals_cmd_block(int)) ,app_block ,SLOT(slots_cmd(int)));
 
@@ -38,12 +40,10 @@ DeviceApp::DeviceApp(DeviceManager* dm ,MainWidget* _widget) :
 
 DeviceApp::~DeviceApp()
 {
-    app_block_thread.quit();
-    app_block_thread.wait();
     deviceManageThread.quit();
     deviceManageThread.wait();
-    delete app_block;
-    delete ctrl;
+    app_block_thread.quit();
+    app_block_thread.wait();
 }
 
 void DeviceApp::disconnect_App()

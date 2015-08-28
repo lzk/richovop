@@ -49,9 +49,15 @@ FORMS    += mainwindow.ui \
 RESOURCES += \
     vop.qrc
 
-TRANSLATIONS = translations/vop_zh.ts translations/vop_ja.ts translations/vop_de.ts \
-                                translations/vop_es.ts translations/vop_ru.ts translations/vop_tr.ts \
-                                translations/vop_el.ts translations/vop_en.ts
+#English	SC	Japanese	French	Italian	German
+#Spanish	Danish	Dutch	Norwegian	Swedish
+#Russian	Turkish	Iberian-Portuguese	Brazilian-Portuguese Polish
+#Czech	Hungarian	TC	Greek Finnish	Catalan
+
+TRANSLATIONS = translations/vop.en.ts translations/vop.zh_CN.ts translations/vop.ja.ts translations/vop.fr.ts translations/vop.it.ts translations/vop.de.ts \
+                                translations/vop.es.ts translations/vop.da.ts translations/vop.nl.ts translations/vop.nb.ts translations/vop.sv.ts\
+                                translations/vop.ru.ts translations/vop.tr.ts translations/vop.pt.ts translations/vop.pt_br.ts translations/vop.pl.ts \
+                                translations/vop.cs.ts translations/vop.hu.ts translations/vop.zh_TW.ts translations/vop.el.ts translations/vop.fi.ts translations/vop.ca.ts
 
 LIBS += -Wl,-rpath,"/opt/RICOH/app/Ricoh SP 150SU_SP 150" -ldl
 

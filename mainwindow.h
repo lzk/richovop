@@ -28,6 +28,7 @@ private:
 
 private slots:
     void slots_exit();
+    void slots_desktopResized(int);
 };
 
 #endif // MAINWINDOW_H
