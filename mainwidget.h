@@ -91,8 +91,8 @@ public slots:
    void slots_cmd();
    void slots_timeout();
    void slots_progressBar(int);
+   void on_refresh_clicked();
 private slots:
-    void on_refresh_clicked();
     void on_comboBox_deviceList_activated(int index);
     void slots_cmd_complete();
 

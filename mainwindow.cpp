@@ -13,9 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    mainWidget = new MainWidget(this);
-
-    QScrollArea* sa = new QScrollArea(this);
+    mainWidget = new MainWidget;
+    QScrollArea* sa = new QScrollArea;
     sa->setWidget(mainWidget);
     mainWidget->setFixedSize(920,650);
     setCentralWidget(sa);
@@ -32,6 +31,12 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::refresh()
+{
+    mainWidget->on_refresh_clicked();
+}
+
 
 //#include <QMessageBox>
 void MainWindow::slots_exit()

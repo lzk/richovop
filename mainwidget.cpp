@@ -124,7 +124,7 @@ void MainWidget::initialize()
     msgBox.setWindowTitle(" ");
     msgBox_info.setWindowTitle(" ");
 
-    on_refresh_clicked();
+//    on_refresh_clicked();
 
 }
 
@@ -472,6 +472,7 @@ default:
 }
 
 #include "app/vop_device.h"
+extern QMainWindow* gMainWidow;
 void MainWidget::updateUi()
 {
     QString device_name = device_manager->get_deviceName();
@@ -499,16 +500,16 @@ void MainWidget::updateUi()
     ui->tabWidget->setCurrentWidget(ui->tab_5);
     ui->tabWidget->show();
 
-    QMainWindow* mainWindow = qobject_cast<QMainWindow*>(parent());
     if(!device_name.isEmpty()){
         QString device_uri = device_manager->getCurrentDeviceURI();
-        if(mainWindow)
-            mainWindow->setWindowTitle(device_name + " - " + device_uri);
+        if(gMainWidow)
+            gMainWidow->setWindowTitle(device_name + " - " + device_uri);
+
         qLog("current device: " + device_name);
         qLog("device uri: "+ device_uri);
     }else{
-        if(mainWindow)
-            mainWindow->setWindowTitle("AltoVOP");
+        if(gMainWidow)
+            gMainWidow->setWindowTitle(" ");
         qLog("no device");
     }
 
@@ -549,8 +550,6 @@ void MainWidget::initializeTabAbout()
 void MainWidget::slots_about_update()
 {
     if(!QDesktopServices::openUrl(QUrl("http://www.lenovo.com"))){
-//        qLog("QDesktopServices wrong");
-//        system("xdg-open http://www.lenovo.com");
     }
 }
 
@@ -924,6 +923,8 @@ void MainWidget::initializeTabSetting()
     ts->le_newPassword->setValidator(validator2);
     ts->le_confirmPassword->setValidator(validator2);
 
+    ts->btn_apply_mp->setEnabled(false);
+
     connect(ts->radioButton_searchWifi ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_wifi_radiobutton(bool)));
     connect(ts->le_ssid,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_wifi_textChanged(QString)));
     connect(ts->le_wepkey,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_wifi_textChanged(QString)));
@@ -935,6 +936,9 @@ void MainWidget::initializeTabSetting()
     connect(ts->btn_refresh ,SIGNAL(clicked()) ,this ,SLOT(slots_cmd()));
     connect(ts->checkBox ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_wifi_checkbox(bool)));
     connect(ts->btn_apply_mp ,SIGNAL(clicked()) ,this ,SLOT(slots_cmd()));
+    connect(ts->le_newPassword,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_wifi_textChanged(QString)));
+    connect(ts->le_confirmPassword,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_wifi_textChanged(QString)));
+
 
     ts->pageWidget->installEventFilter(this);
     ts->cb_encryptionType->installEventFilter(this);
@@ -1053,6 +1057,12 @@ void MainWidget::slots_wifi_textChanged(const QString &arg1)
             wifi_sw_wepIndex = ts->cb_keyIndex->currentIndex();
         }else{
             wifi_ms_wepIndex = ts->cb_keyIndex->currentIndex();
+        }
+    }else if(sd == ts->le_newPassword || sd == ts->le_confirmPassword){
+        if(ts->le_newPassword->text().isEmpty() && ts->le_confirmPassword->text().isEmpty()){
+            ts->btn_apply_mp->setEnabled(false);
+        }else{
+            ts->btn_apply_mp->setEnabled(true);
         }
     }
 }
@@ -1272,9 +1282,10 @@ void MainWidget::wifi_apply()
 
 void MainWidget::passwd_set_doConfirm()
 {
-    if(ts->le_newPassword->text().isEmpty() && ts->le_confirmPassword->text().isEmpty()){
-        messagebox_exec(tr("The new password cannot be empty."));
-    }else if(QString::compare(ts->le_newPassword->text() ,ts->le_confirmPassword->text())){
+//    if(ts->le_newPassword->text().isEmpty() && ts->le_confirmPassword->text().isEmpty()){
+//        messagebox_exec(tr("The new password cannot be empty."));
+//    }else
+    if(QString::compare(ts->le_newPassword->text() ,ts->le_confirmPassword->text())){
         messagebox_exec(tr("The passwords you entered are different, please try again."));
     }else{
         bool ok;

@@ -21,6 +21,9 @@ Q_IMPORT_PLUGIN(qmng)
 Q_IMPORT_PLUGIN(qgif)
 #endif
 
+
+QMainWindow* gMainWidow;
+
 QLocalServer* m_localServer;
 bool isRunning(const QString& serverName)
 {
@@ -43,6 +46,9 @@ bool isRunning(const QString& serverName)
 
 int main(int argc, char *argv[])
 {
+#ifdef Q_WS_X11
+    qputenv("LIBOVERLAY_SCROLLBAR", 0);
+#endif
     QApplication a(argc, argv);
     if(isRunning("/tmp/lock_Ricoh_Alto_VOP")){
         QMessageBox::warning(0,"Warnning" ,"The application is running!");
@@ -54,8 +60,8 @@ int main(int argc, char *argv[])
 //    QString filename =":/translations/vop_" + QLocale::system().name();
 //    trans.load(filename);
 //    trans.load("vop" ,":/translations");
-    if(!trans.load(QLocale(QLocale::system().name()), "vop", ".", ":/translations"))
 //    if(!trans.load(QLocale::system(), "vop", ".", ":/translations"))
+    if(!trans.load(QLocale(QLocale::system().name()), "vop", ".", ":/translations"))
         trans.load(QLocale(QLocale::English), "vop", ".", ":/translations");
 //        trans.load( "vop",":/translations");
     a.installTranslator(&trans);
@@ -65,9 +71,13 @@ int main(int argc, char *argv[])
     if(file.open(QFile::ReadOnly)){
         QString stylesheet = file.readAll();
         a.setStyleSheet(stylesheet);
+        file.close();
     }
 
     MainWindow w;
+    gMainWidow = &w;
+    w.refresh();
     w.show();
-    return a.exec();
+    int ret = a.exec();
+    return ret;
 }
