@@ -122,7 +122,7 @@ max-width:100;
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="text">
-             <string>IDS_ST_WLAN</string>
+             <string notr="true">WLAN</string>
             </property>
            </widget>
           </item>

@@ -116,15 +116,13 @@ void MainWidget::initialize()
 
     progressDialog->setCancelButton(NULL);
     progressDialog->setModal(true);
-    progressDialog->setLabel(new QLabel("\n\n" + tr("Get Printer Information.") +"\t\t\t\t\t\n"));
+    progressDialog->setLabel(new QLabel("\n\n" + tr("IDS_MSG_GetInfo") +"\t\t\t\t\t\n"));
 
     progressDialog->move((QApplication::desktop()->width() - progressDialog->width())/2,
           (QApplication::desktop()->height() - progressDialog->height())/2);
 
     msgBox.setWindowTitle(" ");
     msgBox_info.setWindowTitle(" ");
-
-//    on_refresh_clicked();
 
 }
 
@@ -355,11 +353,11 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
                 ||(DeviceContrl::CMD_PASSWD_confirm == cmd)
                 ||(DeviceContrl::CMD_PASSWD_confirmForSetPasswd == cmd)
                 )
-            messagebox_exec(tr("Authentication error, please enter the password again."));
+            messagebox_exec(tr("IDS_ERR_Authentication"));
         break;
     case ERR_Printer_busy :
         if(DeviceContrl::CMD_COPY == cmd)
-            messagebox_exec(tr("The machine is busy, please try later..."));
+            messagebox_exec(tr("IDS_MSG_MachineBusy"));
         break;
     case ERR_CMD_invalid :
     case ERR_Parameter_invalid :
@@ -1221,6 +1219,7 @@ void MainWidget::slots_passwd_comfirmed()
 }
 
 #include <QInputDialog>
+#include "dialoglogin.h"
 void MainWidget::wifi_passwd_doConfirm()
 {
     if(passwd_checked){
@@ -1228,7 +1227,8 @@ void MainWidget::wifi_passwd_doConfirm()
         emit_cmd(DeviceContrl::CMD_PASSWD_confirm);
     }else{
         bool ok;
-        passwd = QInputDialog::getText(this ,tr("Login") ,tr("Password") ,QLineEdit::Password ,QString() ,&ok);
+        passwd = DialogLogin::getPasswd(this ,&ok);
+//        passwd = QInputDialog::getText(this ,tr("IDS_ST_Login") ,tr("IDS_ST_Password") ,QLineEdit::Password ,QString() ,&ok);
         if (ok && !passwd.isEmpty()){
             device_manager->passwd_set(passwd.toLatin1());
 //            emit_cmd(DeviceContrl::CMD_PASSWD_confirmForApply);//last version
@@ -1247,7 +1247,8 @@ void MainWidget::wifi_passwd_doConfirm(const char *member)
         emit_cmd(DeviceContrl::CMD_PASSWD_confirm);
     }else{
         bool ok;
-        passwd = QInputDialog::getText(this ,tr("Login") ,tr("Password") ,QLineEdit::Password ,QString() ,&ok);
+        passwd = DialogLogin::getPasswd(this ,&ok);
+//        passwd = QInputDialog::getText(this ,tr("IDS_ST_Login") ,tr("IDS_ST_Password") ,QLineEdit::Password ,QString() ,&ok);
         if (ok && !passwd.isEmpty()){
             device_manager->passwd_set(passwd.toLatin1());
             install_next_callback(member);
@@ -1286,10 +1287,11 @@ void MainWidget::passwd_set_doConfirm()
 //        messagebox_exec(tr("The new password cannot be empty."));
 //    }else
     if(QString::compare(ts->le_newPassword->text() ,ts->le_confirmPassword->text())){
-        messagebox_exec(tr("The passwords you entered are different, please try again."));
+        messagebox_exec(tr("IDS_ST_PasswordsDifferent"));
     }else{
         bool ok;
-        passwd = QInputDialog::getText(this ,tr("Login") ,tr("Password") ,QLineEdit::Password ,QString() ,&ok);
+        passwd = DialogLogin::getPasswd(this ,&ok);
+//        passwd = QInputDialog::getText(this ,tr("IDS_ST_Login") ,tr("IDS_ST_Password") ,QLineEdit::Password ,QString() ,&ok);
         if (ok){
 //            if(!passwd.isEmpty()){
                 device_manager->passwd_set(passwd.toLatin1());
