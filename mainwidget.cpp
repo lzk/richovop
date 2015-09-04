@@ -116,21 +116,47 @@ void MainWidget::initialize()
 
     progressDialog->setCancelButton(NULL);
     progressDialog->setModal(true);
-    progressDialog->setLabel(new QLabel("\n\n" + tr("IDS_MSG_GetInfo") +"\t\t\t\t\t\n"));
-
-    progressDialog->move((QApplication::desktop()->width() - progressDialog->width())/2,
-          (QApplication::desktop()->height() - progressDialog->height())/2);
 
     msgBox.setWindowTitle(" ");
     msgBox_info.setWindowTitle(" ");
 
 }
 
-void MainWidget::slots_progressBar(int value)
+void MainWidget::slots_progressBar(int cmd ,int value)
 {
-    progressDialog->setValue(value);
-    if(!value)
-        progressDialog->show();
+    //value = 0, show progress bar
+    if(!value){
+        switch(cmd){
+        case DeviceContrl::CMD_DEVICE_status:
+            //do not show progress bar
+            break;
+//        case DeviceContrl::CMD_PASSWD_set:
+//        case DeviceContrl::CMD_WIFI_apply:
+        case DeviceContrl::CMD_COPY:
+        case DeviceContrl::CMD_PASSWD_confirm:
+        case DeviceContrl::CMD_PASSWD_confirmForApply:
+        case DeviceContrl::CMD_PASSWD_confirmForSetPasswd:
+//            progressDialog->setLabel(new QLabel("\n\n" + tr("IDS_MSG_SetInfo") +"\t\t\t\t\t\n"));
+            progressDialog->setLabelText("\n\n" + tr("IDS_MSG_SetInfo") +"\t\t\t\t\t\n");
+            progressDialog->setValue(value);
+            progressDialog->show();
+            progressDialog->move((QApplication::desktop()->width() - progressDialog->width())/2,
+                  (QApplication::desktop()->height() - progressDialog->height())/2);
+            break;
+        default:
+//            progressDialog->setLabel(new QLabel("\n\n" + tr("IDS_MSG_GetInfo") +"\t\t\t\t\t\n"));
+            progressDialog->setLabelText("\n\n" + tr("IDS_MSG_GetInfo") +"\t\t\t\t\t\n");
+            progressDialog->setValue(value);
+            progressDialog->show();
+            progressDialog->move((QApplication::desktop()->width() - progressDialog->width())/2,
+                  (QApplication::desktop()->height() - progressDialog->height())/2);
+            break;
+        }
+    }else{
+        if(cmd != DeviceContrl::CMD_DEVICE_status){
+            progressDialog->setValue(value);
+        }
+    }
 }
 
 void MainWidget::slots_timeout()
@@ -170,7 +196,8 @@ void MainWidget::slots_cmd()
     }else if(sd == ts->btn_apply_ws){
         wifi_passwd_doConfirm(SLOT(slots_passwd_comfirmed()));
     }else if(sd == ts->btn_refresh){
-        wifi_getStatusToRefreshAplist();
+//        wifi_getStatusToRefreshAplist();
+        wifi_init();
     }else if(sd == ts->btn_apply_mp){
         passwd_set_doConfirm();
     }
@@ -480,18 +507,28 @@ void MainWidget::updateUi()
     ui->tabWidget->clear();
     switch(model){
     case VopDevice::Device_3in1:
+        ts->listWidget->item(0)->setHidden(false);
+        ts->listWidget->setCurrentRow(0);
         ui->tabWidget->addTab(ui->tab_3 ,tr("IDS_Tab_Copy"));
 //            ui->tabWidget->addTab(ui->tab_4 ,tr("IDS_Tab_Setting"));
         break;
     case VopDevice::Device_3in1_wifi:
+        ts->listWidget->item(0)->setHidden(false);
+        ts->listWidget->setCurrentRow(0);
         ui->tabWidget->addTab(ui->tab_3 ,tr("IDS_Tab_Copy"));
         ui->tabWidget->addTab(ui->tab_4 ,tr("IDS_Tab_Setting"));
         break;
     case VopDevice::Device_sfp:
+        ui->tabWidget->addTab(ui->tab_4 ,tr("IDS_Tab_Setting"));
+        ts->listWidget->item(0)->setHidden(true);
+        ts->listWidget->setCurrentRow(1);
+        break;
     case VopDevice::Device_sfp_wifi:
     default:
+        ts->listWidget->item(0)->setHidden(false);
+        ts->listWidget->setCurrentRow(0);
 //            ui->tabWidget->addTab(ui->tab_3 ,tr("IDS_Tab_Copy"));
-//            ui->tabWidget->addTab(ui->tab_4 ,tr("IDS_Tab_Setting"));
+        ui->tabWidget->addTab(ui->tab_4 ,tr("IDS_Tab_Setting"));
         break;
     }
     ui->tabWidget->addTab(ui->tab_5 ,tr("IDS_Tab_About"));
@@ -906,10 +943,10 @@ void MainWidget::initializeTabSetting()
     ts->searchWifiWidget->show();
     ts->manualSetupWidget->hide();
 
-    wifi_encryptionType = 2;
-    wifi_ms_wepIndex = 0;
-    wifi_sw_wepIndex = 0;
-    wifi_sw_encryptionType[0] = 2;
+    wifi_encryptionType = wifi_default_encryptionType;
+    wifi_ms_wepIndex = wifi_default_wepIndex;
+    wifi_sw_wepIndex = wifi_default_wepIndex;
+    wifi_sw_encryptionType[0] = wifi_default_encryptionType;
     passwd_checked = false;
 
     QRegExp regexp("^[\\x0020-\\x007e]{1,32}$");
@@ -1274,7 +1311,7 @@ void MainWidget::wifi_apply()
     device_manager->wifi_set_password(&wifi_para ,wifi_password.toLatin1());
     device_manager->wifi_set_ssid(&wifi_para ,wifi_ssid.toLatin1());
     wifi_para.encryption = wifi_encryptionType > 1 ? wifi_encryptionType + 1 :wifi_encryptionType;
-    wifi_para.wepKeyId = wifi_wepIndex;
+    wifi_para.wepKeyId = wifi_wepIndex + 1;
     wifi_para.wifiEnable &= ~1;
     wifi_para.wifiEnable |= ts->checkBox->isChecked() ? 1 : 0;//bit 0
     device_manager->wifi_set_para(&wifi_para);
@@ -1327,7 +1364,7 @@ void MainWidget::result_wifi_getAplist()
     ts->le_ssid->setText(machine_wifi_ssid);
     //aplist
     ts->cb_ssid->clear();
-    int current_ssid = 0;
+    int current_ssid = -1;
     for(int i = 0 ;i < NUM_OF_APLIST ;i++){
 //                QString ssid((char*)&aplist.aplist[i]);
         QString ssid = QString(aplist.aplist[i].ssid).left(32);
@@ -1338,8 +1375,21 @@ void MainWidget::result_wifi_getAplist()
             int encryption = aplist.aplist[i].encryption & 7;
             if(encryption > 4) encryption = 4;
             wifi_sw_encryptionType[i] = encryption > 1 ?encryption -1 : encryption;
-            if(!ssid.compare(machine_wifi_ssid))
-                current_ssid = i;
+            if(0x80 == 0x80 & aplist.aplist[i].encryption)//FW LShell spec 0811
+                if(!ssid.compare(machine_wifi_ssid))
+                    current_ssid = i;
+        }
+    }
+    if(-1 == current_ssid){
+        for(int i = 0 ;i < NUM_OF_APLIST ;i++){
+    //                QString ssid((char*)&aplist.aplist[i]);
+            QString ssid = QString(aplist.aplist[i].ssid).left(32);
+            if(ssid.isEmpty()){
+                break;
+            }else{
+                if(!ssid.compare(machine_wifi_ssid))//before FW LShell spec 0811
+                    current_ssid = i;
+            }
         }
     }
     for(int i = 0 ;i < NUM_OF_APLIST ;i++){
@@ -1359,12 +1409,30 @@ void MainWidget::result_wifi_getAplist()
                                 ,aplist.aplist[i].ssid[32]));
         qLog(QString().sprintf("ssid[%d] encryptionType from FW:%d" ,i ,aplist.aplist[i].encryption));
     }
-    ts->cb_ssid->setCurrentIndex(current_ssid);
-    qLog(QString().sprintf("selected ssid:%d encryption:%d" ,current_ssid ,aplist.aplist[current_ssid].encryption));
-    //encryption
-     ts->cb_encryptionType->setCurrentIndex(wifi_sw_encryptionType[current_ssid]);
-    //key index
-    ts->cb_keyIndex->setCurrentIndex(wifi_para.wepKeyId % 4);
+    if(-1 != current_ssid){
+        ts->cb_ssid->setCurrentIndex(current_ssid);
+        qLog(QString().sprintf("selected ssid:%d encryption:%d" ,current_ssid ,aplist.aplist[current_ssid].encryption));
+        //encryption
+         ts->cb_encryptionType->setCurrentIndex(wifi_sw_encryptionType[current_ssid]);
+         //key index
+         qLog(QString().sprintf("wepKeyId:%d" ,wifi_para.wepKeyId));
+         if(wifi_para.wepKeyId){
+             wifi_ms_wepIndex = (wifi_para.wepKeyId - 1) % 4;
+             wifi_sw_wepIndex = wifi_ms_wepIndex;
+         }else{
+             wifi_ms_wepIndex = wifi_default_wepIndex;
+             wifi_sw_wepIndex = wifi_ms_wepIndex;
+         }
+         ts->cb_keyIndex->setCurrentIndex(wifi_sw_wepIndex);
+    }else{
+        qLog("no ssid");
+        //encryption
+         ts->cb_encryptionType->setCurrentIndex(wifi_default_encryptionType);
+         //key index
+         wifi_ms_wepIndex = wifi_default_wepIndex;
+         wifi_sw_wepIndex = wifi_ms_wepIndex;
+         ts->cb_keyIndex->setCurrentIndex(wifi_default_wepIndex);
+    }
 
     //clear passwd
     wifi_sw_password.clear();//Qt4

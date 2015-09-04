@@ -39,12 +39,12 @@ public:
     bool emit_cmd(int);
     void set_cmdStatus(int);
     int get_cmdStatus();
-    void emit_progress(int);
+    void emit_progress(int ,int);
 
 signals:
     void signals_cmd(int);
 //    void signals_cmd_result(int,int);
-    void signals_progress(int);
+    void signals_progress(int,int);
 //    void signals_deviceChanged(QString);
     void signals_cmd_block(int);
 

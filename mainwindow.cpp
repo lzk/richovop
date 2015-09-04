@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     mainWidget = new MainWidget;
     QScrollArea* sa = new QScrollArea;
+    sa->setFocusPolicy(Qt::NoFocus);
     sa->setWidget(mainWidget);
     mainWidget->setFixedSize(920,650);
     setCentralWidget(sa);

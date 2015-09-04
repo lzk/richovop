@@ -1,0 +1,431 @@
+<!DOCTYPE QPH>
+
+<QPH language="ru_RU">
+
+	<phrase>
+		<source>IDS_Menu_Exit</source>
+		<target>Выход</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Tab_Copy</source>
+		<target>Копирование</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Tab_Setting</source>
+		<target>Параметр</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Tab_About</source>
+		<target>О программе</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MW_Refresh</source>
+		<target>Обновить</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_ScanningMode</source>
+		<target>Режим сканирования</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SM_Photo</source>
+		<target>Фото</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SM_Text</source>
+		<target>Текст</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Density</source>
+		<target>плотность</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Default</source>
+		<target>Значения по умолчанию</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_DocumentSize</source>
+		<target>Размер документа</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_OutputSize</source>
+		<target>Выходной размер</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SIZE_A4</source>
+		<target>A4 (210 x 297 мм)</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SIZE_A5</source>
+		<target>A5 (148 x 210 мм)</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SIZE_B5</source>
+		<target>B5 (182 x 257 мм)</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SIZE_Letter</source>
+		<target>Letter (8,5 x 11 дюймов)</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SIZE_Executive</source>
+		<target>Executive (7,25 x 10,5 tum)</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SIZE_A6</source>
+		<target>A6 (105 x 148 мм)</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SIZE_B6</source>
+		<target>B6 (128 x 182 мм)</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SIZE_16K</source>
+		<target>16K</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Nin1Copy</source>
+		<target>N в 1 копии</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Nin1_1</source>
+		<target>1</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Nin1_2</source>
+		<target>2</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Nin1_4</source>
+		<target>4</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Nin1_9</source>
+		<target>9</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_DPI</source>
+		<target>DPI</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_DPI_300</source>
+		<target>300 x 300</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_DPI_600</source>
+		<target>600 x 600</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_IDCardCopy</source>
+		<target>Копирование удостоверения личности</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Scaling</source>
+		<target>Масштаб</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_ScalingSettingKeyboard</source>
+		<target>Клавиатура установки масштаба</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Copies</source>
+		<target>Копии</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_CopiesSettingKeyboard</source>
+		<target>Клавиатура установки копий</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_KB_Backspace</source>
+		<target>Пробел</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_KB_Clear</source>
+		<target>Очистка</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_KB_OK</source>
+		<target>ОК</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_MediaType_</source>
+		<target>Тип носителя</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_DPI_300dpi</source>
+		<target></target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_DPI_600dpi</source>
+		<target></target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_Apply</source>
+		<target>Применить</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_WifiSetup</source>
+		<target>Установка WIFI</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_SearchWifi</source>
+		<target>Поиск WIFI</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_ManualSetup</source>
+		<target>Установка вручную</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_SSID</source>
+		<target>SSID</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_Passphrase</source>
+		<target>Пароль</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_WepKey</source>
+		<target>WEP-ключ</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_EncryptionType</source>
+		<target>Тип шифрования</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_NoSecurity</source>
+		<target>Без режима безопасности</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_WEP</source>
+		<target>WEP</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_WPA2-PSK-AES</source>
+		<target>WPA2-PSK-AES</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_MixedModePSK</source>
+		<target>Смеш. режим PSK</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_KeyIndex</source>
+		<target>Индекс ключа</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_No</source>
+		<target></target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_Copying</source>
+		<target>Копирование</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_PlaceNextPage</source>
+		<target>Поместите следующую страницу</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_TurnCardOver</source>
+		<target>Переверните удостоверение, чтобы скопировать обратную сторону</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_Printering</source>
+		<target>Устройство печатает, попробуйте позднее...</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_FixErrorFirst</source>
+		<target>Сначала исправьте ошибку, а затем повторите попытку…</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_JAM</source>
+		<target>ЗАМЯТИЕ：откройте крышку и выньте бумагу</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_Malfunction</source>
+		<target>Неисправность： перезагрузите устройство. Если неисправность останется, свяжитесь с сервисным центром.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_AcquireInformation</source>
+		<target>Не удалось получить информацию.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_Communication</source>
+		<target>Ошибка связи с принтером.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_ConnectAccessPoint</source>
+		<target>Не удается подключиться к точке доступа.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_EDIT</source>
+		<target>Изменить</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_COPY</source>
+		<target>Копировать</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_PASTE</source>
+		<target>Вставить</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SELECT_ALL</source>
+		<target>Выбрать все</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_MediaType</source>
+		<target>Тип носителя</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MT_Plain</source>
+		<target>Обычная бумага</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MT_Recycled</source>
+		<target>Переработанная бумага</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MT_Thick</source>
+		<target>Толстая бумага</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MT_Thin</source>
+		<target>Тонкая бумага</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MT_Label</source>
+		<target>Этикетка</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_WirelessDisabled</source>
+		<target>Беспроводное соединение отключено</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_GetInfo</source>
+		<target>Получение информации о принтере.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_SetInfo</source>
+		<target>Задание информации о принтере.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_SendInfo</source>
+		<target>Передача информации о принтере.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_MachineBusy</source>
+		<target>Устройство занято, повторите попытку позднее.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_ModifyPasswd</source>
+		<target>Изменить пароль</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_NewPassword</source>
+		<target>Новый пароль</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_ConfirmPassword</source>
+		<target>Подтвердить пароль</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_PasswordsDifferent</source>
+		<target>Указанные пароли разные, повторите ввод.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_Password</source>
+		<target>Пароль</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_Login</source>
+		<target>Имя</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_Authentication</source>
+		<target>Ошибка аутентификации, введите пароль повторно.</target>
+	</phrase>
+
+</QPH>
+

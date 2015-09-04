@@ -90,7 +90,7 @@ public slots:
    void slots_cmd_result(int ,int);
    void slots_cmd();
    void slots_timeout();
-   void slots_progressBar(int);
+   void slots_progressBar(int ,int);
    void on_refresh_clicked();
 private slots:
     void on_comboBox_deviceList_activated(int index);
@@ -135,6 +135,9 @@ private:
     int wifi_sw_encryptionType[NUM_OF_APLIST];
     QString machine_wifi_ssid;
 //    QString machine_wifi_password;
+
+    static const int wifi_default_encryptionType = 2;//WPA2-PSK-AES
+    static const int wifi_default_wepIndex = 0;
 
     bool passwd_checked;
     QString passwd;

@@ -18,7 +18,7 @@ DeviceApp::DeviceApp(DeviceManager* dm ,MainWidget* _widget) :
     connect(&deviceManageThread, SIGNAL(finished()), ctrl, SLOT(deleteLater()));
 
     connect(this ,SIGNAL(signals_cmd(int)) ,ctrl ,SLOT(slots_cmd(int)));
-    connect(this ,SIGNAL(signals_progress(int)) ,widget ,SLOT(slots_progressBar(int)));
+    connect(this ,SIGNAL(signals_progress(int ,int)) ,widget ,SLOT(slots_progressBar(int ,int)));
 
 //    connect(ctrl ,SIGNAL(signals_cmd_result(int,int)) ,this ,SIGNAL(signals_cmd_result(int ,int)));
 //    connect(this ,SIGNAL(signals_cmd_result(int,int)) ,widget ,SLOT(slots_cmd_result(int ,int)));
@@ -68,7 +68,7 @@ bool DeviceApp::emit_cmd(int cmd)
 //        if(progress <= 50)
 //            progress += 30;
 //        emit emit_progress(progress);
-        emit emit_progress(50);
+        emit emit_progress(cmd ,50);
         break;
     case DeviceContrl::CMD_DEVICE_status://last cmd is get device id
     default:
@@ -87,7 +87,7 @@ void DeviceApp::set_cmdStatus(int status)
     if(DeviceContrl::CMD_STATUS_COMPLETE == status)
     {
         //if progress bar display,hide it
-        emit signals_progress(100);
+        emit signals_progress(status ,100);
 //        qLog("cmd complete,hide progress bar");
     }
 }
@@ -98,9 +98,9 @@ int DeviceApp::get_cmdStatus()
     return cmd_status;
 }
 
-void DeviceApp::emit_progress(int pro)
+void DeviceApp::emit_progress(int cmd ,int pro)
 {
-    emit signals_progress(pro);
+    emit signals_progress(cmd ,pro);
 }
 
 #include <unistd.h>
@@ -116,8 +116,8 @@ void DeviceApp_Block::slots_cmd(int cmd)
         while(DeviceContrl::CMD_STATUS_COMPLETE != status);
     }
     if(cmd != DeviceContrl::CMD_DEVICE_status){
-        emit app->emit_progress(0);
-        emit app->emit_progress(20);
+        emit app->emit_progress(cmd ,0);
+        emit app->emit_progress(cmd ,20);
 //        progress = 20;
     }
     app->set_cmdStatus(cmd);
