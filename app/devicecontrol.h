@@ -37,6 +37,12 @@ public:
         CMD_PASSWD_get,
         CMD_PASSWD_confirm,
         CMD_WIFI_GetWifiStatus,
+        CMD_PRN_TonerEnd_Get,
+        CMD_PRN_TonerEnd_Set,
+        CMD_PRN_PSaveTime_Get,
+        CMD_PRN_PSaveTime_Set,
+        CMD_PRN_PowerOff_Get,
+        CMD_PRN_PowerOff_Set,
 
         CMD_PASSWD_confirmForApply,
         CMD_PASSWD_confirmForSetPasswd,

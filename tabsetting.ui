@@ -7,30 +7,37 @@
     <x>0</x>
     <y>0</y>
     <width>894</width>
-    <height>665</height>
+    <height>666</height>
    </rect>
   </property>
   <property name="styleSheet">
    <string notr="true">QListView#listWidget{
 min-width:130;
 max-width:130;
-min-height:90;
-max-height:90;
+min-height:120;
+max-height:120;
 	background-color: rgb(255, 255, 255);
 }
 
-QStackedWidget,#pageWidget,#page2Widget{
+QStackedWidget,
+#pageWidget,#page2Widget,
+#page3Widget,#page4Widget
+{
 min-width:600;
 max-width:600;
 /*min-height:320;
 max-height:320;*/
-min-height:500;
-max-height:500;
+min-height:600;
+max-height:600;
 }
+
 
 QLabel{
 min-width:150;
 max-width:150;
+}
+#label_tonerEnd{
+max-width:600;
 }
 QComboBox,QLineEdit{
 min-width:200;
@@ -49,10 +56,7 @@ QPushButton{
 min-width:100;
 max-width:100;
 }
-
-QCheckBox{
-max-width:100;
-}</string>
+</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="spacing">
@@ -78,6 +82,16 @@ max-width:100;
          <string>IDS_ST_ModifyPasswd</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>IDS_ST_TonerEnd</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>IDS_ST_PowerSave</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>
@@ -97,13 +111,10 @@ max-width:100;
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
-     <property name="topMargin">
-      <number>100</number>
-     </property>
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="page">
         <widget class="QWidget" name="pageWidget" native="true">
@@ -112,10 +123,13 @@ max-width:100;
            <x>0</x>
            <y>0</y>
            <width>600</width>
-           <height>500</height>
+           <height>600</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="topMargin">
+           <number>100</number>
+          </property>
           <item>
            <widget class="QCheckBox" name="checkBox">
             <property name="focusPolicy">
@@ -480,10 +494,13 @@ max-width:100;
            <x>0</x>
            <y>0</y>
            <width>600</width>
-           <height>500</height>
+           <height>600</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
+          <property name="topMargin">
+           <number>100</number>
+          </property>
           <item>
            <layout class="QFormLayout" name="formLayout_3">
             <property name="horizontalSpacing">
@@ -566,6 +583,131 @@ max-width:100;
           </item>
           <item>
            <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_3">
+        <widget class="QWidget" name="page3Widget" native="true">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>600</width>
+           <height>600</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <property name="topMargin">
+           <number>100</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="checkBox_tonerEnd">
+            <property name="text">
+             <string>IDS_TE_checkBox</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_tonerEnd">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <property name="text">
+             <string>IDS_TE_Caution</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_4">
+        <widget class="QWidget" name="page4Widget" native="true">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>600</width>
+           <height>600</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <property name="topMargin">
+           <number>100</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QPushButton" name="pushButton_3">
+              <property name="text">
+               <string notr="true">-</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinBox_PSaveTime"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_4">
+              <property name="text">
+               <string notr="true">+</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QPushButton" name="pushButton_2">
+              <property name="text">
+               <string notr="true">-</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinBox_powerOffTime"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton">
+              <property name="text">
+               <string notr="true">+</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_6">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>

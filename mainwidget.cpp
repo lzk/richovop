@@ -4,8 +4,8 @@
 /////////////////////////////////////////
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
-#include "ui_copy.h"
-#include "ui_setting.h"
+#include "ui_tabcopy.h"
+#include "ui_tabsetting.h"
 #include "ui_about.h"
 
 #include <QAction>
@@ -869,6 +869,7 @@ void MainWidget::slots_copy_pushbutton()
         copycmdset copyPara = device_manager->copy_get_para();
         copycmdset* pCopyPara = &copyPara;
         pCopyPara->scale --;
+        device_manager->copy_set_para(pCopyPara);
     }else if(sd == tc->scaling_plus){
         copycmdset copyPara = device_manager->copy_get_para();
         copycmdset* pCopyPara = &copyPara;
@@ -931,9 +932,11 @@ void MainWidget::initializeTabSetting()
 {
     ts->setupUi(ui->tab_4);
 
-    ts->stackedWidget->setStyleSheet("QStackedWidget,#pageWidget,#page2Widget{ \
-                                min-height:320; \
-                                max-height:320; \
+//    ts->stackedWidget->setStyleSheet("QStackedWidget,#pageWidget,#page2Widget{ \
+
+    ts->stackedWidget->setStyleSheet("#pageWidget{ \
+                                min-height:420; \
+                                max-height:420; \
                              }");
 //*/
 
@@ -1375,7 +1378,7 @@ void MainWidget::result_wifi_getAplist()
             int encryption = aplist.aplist[i].encryption & 7;
             if(encryption > 4) encryption = 4;
             wifi_sw_encryptionType[i] = encryption > 1 ?encryption -1 : encryption;
-            if(0x80 == 0x80 & aplist.aplist[i].encryption)//FW LShell spec 0811
+            if(0x80 == (0x80 & aplist.aplist[i].encryption))//FW LShell spec 0811
                 if(!ssid.compare(machine_wifi_ssid))
                     current_ssid = i;
         }

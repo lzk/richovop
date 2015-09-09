@@ -92,6 +92,24 @@ void DeviceContrl::slots_cmd(int cmd)
     case CMD_PASSWD_confirmForSetPasswd:
         err = protocol->cmd(VopProtocol::CMD_PASSWD_confirm);
         break;
+    case CMD_PRN_TonerEnd_Get:
+        err = protocol->cmd(VopProtocol::CMD_PRN_TonerEnd_Get);
+        break;
+    case CMD_PRN_TonerEnd_Set:
+        err = protocol->cmd(VopProtocol::CMD_PRN_TonerEnd_Set);
+        break;
+    case CMD_PRN_PSaveTime_Get:
+        err = protocol->cmd(VopProtocol::CMD_PRN_PSaveTime_Get);
+        break;
+    case CMD_PRN_PSaveTime_Set:
+        err = protocol->cmd(VopProtocol::CMD_PRN_PSaveTime_Set);
+        break;
+    case CMD_PRN_PowerOff_Get:
+        err = protocol->cmd(VopProtocol::CMD_PRN_PowerOff_Get);
+        break;
+    case CMD_PRN_PowerOff_Set:
+        err = protocol->cmd(VopProtocol::CMD_PRN_PowerOff_Set);
+        break;
     default:
         break;
     }

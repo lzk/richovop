@@ -194,9 +194,15 @@ static int vop_getCmdDirect(int cmd ,int sub_cmd ,int& direct ,int& data_buffer_
         break;
     case _LS_PRNCMD:
         switch(sub_cmd){
+        case 0x00:  direct = 0;data_buffer_size = 1;  break;//get psave time
+        case 0x01:  direct = 1;data_buffer_size = 1;  break;//set psave time
         case 0x06:  direct = 1;data_buffer_size = 32;  break;//set passwd
         case 0x07:  direct = 0;data_buffer_size = 32; break;//get passwd
         case 0x08:  direct = 1;data_buffer_size = 32; break;//comfirm
+        case 0x0e:  direct = 0;data_buffer_size = 1; break;//get power off time
+        case 0x0f:  direct = 1;data_buffer_size = 1; break;//set power off time
+        case 0x11:  direct = 0;data_buffer_size = 1; break;//get toner end
+        case 0x12:  direct = 1;data_buffer_size = 1; break;//set toner end
         }
         break;
 
@@ -247,6 +253,9 @@ VopProtocol::VopProtocol(DeviceManager* dm)
       wifi_aplist(new cmdst_aplist_get),
       passwd(new cmdst_passwd),
       wifi_status(new cmdst_wifi_status),
+      tonerEnd(new cmdst_tonerEnd),
+      pSaveTime(new cmdst_PSave_time),
+      powerOffTime(new cmdst_powerOff_time),
       device_manager(dm)
 {
     memcpy(copy_parameter ,&default_copy_parameter ,sizeof(default_copy_parameter));
@@ -254,6 +263,9 @@ VopProtocol::VopProtocol(DeviceManager* dm)
     memset(wifi_aplist ,0 ,sizeof(*wifi_aplist));
     memset(passwd ,0 ,sizeof(cmdst_passwd));
     memset(wifi_status ,0 ,sizeof(cmdst_wifi_status));
+    memset(tonerEnd ,0 ,sizeof(cmdst_tonerEnd));
+    memset(pSaveTime ,0 ,sizeof(cmdst_PSave_time));
+    memset(powerOffTime ,0 ,sizeof(cmdst_powerOff_time));
     //for test
 //    strcpy(wifi_aplist->aplist[0].ssid ,"123");
 //    wifi_aplist->aplist[0].encryption = 0;
@@ -269,6 +281,9 @@ VopProtocol::VopProtocol(DeviceManager* dm)
 VopProtocol::~VopProtocol()
 {
     delete status;
+    delete tonerEnd;
+    delete pSaveTime;
+    delete powerOffTime;
     delete copy_parameter;
     delete wifi_parameter;
     delete wifi_aplist;
@@ -355,6 +370,12 @@ int VopProtocol::get_deviceStatus()
 #define vop_setPasswd(buffer)                  vop_cmd(_LS_PRNCMD ,0x06 ,buffer ,sizeof(*buffer))
 #define vop_getPasswd(buffer)                  vop_cmd(_LS_PRNCMD ,0x07 ,buffer ,sizeof(*buffer))
 #define vop_confirmPasswd(buffer)          vop_cmd(_LS_PRNCMD ,0x08 ,buffer ,sizeof(*buffer))
+#define vop_getTonerEnd(buffer)               vop_cmd(_LS_PRNCMD ,0x11 ,buffer ,sizeof(*buffer))
+#define vop_setTonerEnd(buffer)               vop_cmd(_LS_PRNCMD ,0x12 ,buffer ,sizeof(*buffer))
+#define vop_getPsaveTime(buffer)             vop_cmd(_LS_PRNCMD ,0x00 ,buffer ,sizeof(*buffer))
+#define vop_setPsaveTime(buffer)             vop_cmd(_LS_PRNCMD ,0x01 ,buffer ,sizeof(*buffer))
+#define vop_getPowerOff(buffer)               vop_cmd(_LS_PRNCMD ,0x0e ,buffer ,sizeof(*buffer))
+#define vop_setPowerOff(buffer)               vop_cmd(_LS_PRNCMD ,0x0f ,buffer ,sizeof(*buffer))
 
 #define     MAGIC_NUM           0x1A2B3C4D
 #define change_32bit_edian(x) (((x) << 24 & 0xff000000) | (((x) << 8) & 0x00ff0000) | (((x) >> 8) & 0x0000ff00) | (((x) >> 24) & 0xff))
@@ -467,6 +488,42 @@ cmdst_wifi_status VopProtocol::wifi_getWifiStatus()
     return *wifi_status;
 }
 
+cmdst_tonerEnd VopProtocol::wifi_getTonerEnd()
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    return *tonerEnd;
+}
+
+void VopProtocol::wifi_setTonerEnd(cmdst_tonerEnd* p)
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    memcpy(tonerEnd ,p ,sizeof(cmdst_tonerEnd));
+}
+
+cmdst_PSave_time VopProtocol::wifi_getPSaveTime()
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    return *pSaveTime;
+}
+
+void VopProtocol::wifi_setPSaveTime(cmdst_PSave_time* p)
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    memcpy(pSaveTime ,p ,sizeof(cmdst_PSave_time));
+}
+
+cmdst_powerOff_time VopProtocol::wifi_getPowerOffTime()
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    return *powerOffTime;
+}
+
+void VopProtocol::wifi_setPowerOffTime(cmdst_powerOff_time* p)
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    memcpy(powerOffTime ,p ,sizeof(cmdst_powerOff_time));
+}
+
 void VopProtocol::passwd_set(const char* p)
 {
     memset(passwd ,0 ,32);
@@ -523,6 +580,27 @@ int VopProtocol::cmd(int _cmd)
         break;
     case CMD_WIFI_GetWifiStatus:{
         err = vop_getWifiStatus(wifi_status);
+    }
+        break;
+    case CMD_PRN_TonerEnd_Get:{
+        err = vop_getTonerEnd(tonerEnd);
+    }
+        break;
+    case CMD_PRN_TonerEnd_Set:{
+        err = vop_setTonerEnd(tonerEnd);
+    }
+        break;
+    case CMD_PRN_PSaveTime_Get:{
+        err = vop_getPsaveTime(pSaveTime);
+    }
+    case CMD_PRN_PSaveTime_Set:{
+        err = vop_setPsaveTime(pSaveTime);
+    }
+    case CMD_PRN_PowerOff_Get:{
+        err = vop_getPowerOff(powerOffTime);
+    }
+    case CMD_PRN_PowerOff_Set:{
+        err = vop_setPowerOff(powerOffTime);
     }
         break;
     default:

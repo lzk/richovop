@@ -23,7 +23,9 @@ SOURCES += main.cpp \
     app/devicecontrol.cpp \
     app/devicemanager.cpp \
     app/log.cpp \
-    dialoglogin.cpp
+    dialoglogin.cpp \
+    tabsetting.cpp \
+    tabcopy.cpp
 
 HEADERS  += mainwindow.h \
     mainwidget.h \
@@ -38,16 +40,18 @@ HEADERS  += mainwindow.h \
     app/devicemanager.h \
     app/log.h \
     version.h \
-    dialoglogin.h
+    dialoglogin.h \
+    tabsetting.h \
+    tabcopy.h
 
 FORMS    += mainwindow.ui \
-    setting.ui \
     mainwidget.ui \
-    copy.ui \
     about.ui \
     copiessettingkeyboard.ui \
     scalingsettingkeyboard.ui \
-    dialoglogin.ui
+    dialoglogin.ui \
+    tabsetting.ui \
+    tabcopy.ui
 
 RESOURCES += \
     vop.qrc

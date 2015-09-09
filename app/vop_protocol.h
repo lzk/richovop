@@ -147,6 +147,9 @@ typedef struct cmdst_passwd
     cmdst_passwd;
 
 typedef UINT8  cmdst_wifi_status;
+typedef UINT8  cmdst_tonerEnd;
+typedef UINT8  cmdst_PSave_time;
+typedef UINT8  cmdst_powerOff_time;
 
 enum
 {
@@ -229,6 +232,12 @@ public:
         CMD_PASSWD_get,
         CMD_PASSWD_confirm,
         CMD_WIFI_GetWifiStatus,
+        CMD_PRN_TonerEnd_Get,
+        CMD_PRN_TonerEnd_Set,
+        CMD_PRN_PSaveTime_Get,
+        CMD_PRN_PSaveTime_Set,
+        CMD_PRN_PowerOff_Get,
+        CMD_PRN_PowerOff_Set,
     };
 public:
     VopProtocol(DeviceManager* dm);
@@ -249,6 +258,12 @@ public:
     cmdst_wifi_get wifi_get_para();
     cmdst_aplist_get wifi_getAplist();
     cmdst_wifi_status wifi_getWifiStatus();
+    cmdst_tonerEnd wifi_getTonerEnd();
+    void wifi_setTonerEnd(cmdst_tonerEnd*);
+    cmdst_PSave_time wifi_getPSaveTime();
+    void wifi_setPSaveTime(cmdst_PSave_time*);
+    cmdst_powerOff_time wifi_getPowerOffTime();
+    void wifi_setPowerOffTime(cmdst_powerOff_time*);
 
     void passwd_set(const char*);
 
@@ -260,6 +275,9 @@ private:
     cmdst_aplist_get* wifi_aplist;
     cmdst_passwd* passwd;
     cmdst_wifi_status* wifi_status;
+    cmdst_tonerEnd* tonerEnd;
+    cmdst_PSave_time* pSaveTime;
+    cmdst_powerOff_time* powerOffTime;
     DeviceManager* device_manager;
     int vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size);
 # if 0
