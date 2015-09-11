@@ -12,21 +12,21 @@ DeviceApp::DeviceApp(DeviceManager* dm ,MainWidget* _widget) :
     device_manager(dm),
     ctrl (new DeviceContrl(dm)),
     cmd_status(DeviceContrl::CMD_STATUS_COMPLETE),
-    widget(_widget)
+    main_widget(_widget)
 {
     ctrl->moveToThread(&deviceManageThread);
     connect(&deviceManageThread, SIGNAL(finished()), ctrl, SLOT(deleteLater()));
 
     connect(this ,SIGNAL(signals_cmd(int)) ,ctrl ,SLOT(slots_cmd(int)));
-    connect(this ,SIGNAL(signals_progress(int ,int)) ,widget ,SLOT(slots_progressBar(int ,int)));
+    connect(this ,SIGNAL(signals_progress(int ,int)) ,main_widget ,SLOT(slots_progressBar(int ,int)));
 
 //    connect(ctrl ,SIGNAL(signals_cmd_result(int,int)) ,this ,SIGNAL(signals_cmd_result(int ,int)));
-//    connect(this ,SIGNAL(signals_cmd_result(int,int)) ,widget ,SLOT(slots_cmd_result(int ,int)));
-    connect(ctrl ,SIGNAL(signals_cmd_result(int,int))  ,widget ,SLOT(slots_cmd_result(int ,int)));
+//    connect(this ,SIGNAL(signals_cmd_result(int,int)) ,main_widget ,SLOT(slots_cmd_result(int ,int)));
+    connect(ctrl ,SIGNAL(signals_cmd_result(int,int))  ,main_widget ,SLOT(slots_cmd_result(int ,int)));
 
-//    connect(widget ,SIGNAL(signals_deviceChanged(QString)) ,this ,SIGNAL(signals_deviceChanged(QString)));
+//    connect(main_widget ,SIGNAL(signals_deviceChanged(QString)) ,this ,SIGNAL(signals_deviceChanged(QString)));
 //    connect(this ,SIGNAL(signals_deviceChanged(QString)) ,ctrl ,SLOT(slots_deviceChanged(QString)));
-    connect(widget ,SIGNAL(signals_deviceChanged(QString)) ,ctrl ,SLOT(slots_deviceChanged(QString)));
+    connect(main_widget ,SIGNAL(signals_deviceChanged(QString)) ,ctrl ,SLOT(slots_deviceChanged(QString)));
 
     app_block = new DeviceApp_Block(this);
     app_block->moveToThread(&app_block_thread);
@@ -49,7 +49,7 @@ DeviceApp::~DeviceApp()
 void DeviceApp::disconnect_App()
 {
     ctrl->disconnect();
-    widget->disconnect(this);
+    main_widget->disconnect(this);
     disconnect();
 }
 //static int progress = 0;

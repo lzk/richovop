@@ -38,6 +38,7 @@ max-width:150;
 }
 #label_tonerEnd{
 max-width:600;
+padding:10;
 }
 QComboBox,QLineEdit{
 min-width:200;
@@ -56,7 +57,11 @@ QPushButton{
 min-width:100;
 max-width:100;
 }
-</string>
+
+#pushButton_psave_minus,#pushButton_psave_plus{
+min-width:50;
+max-width:50;
+}</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="spacing">
@@ -613,6 +618,9 @@ max-width:100;
           </property>
           <item>
            <widget class="QCheckBox" name="checkBox_tonerEnd">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="text">
              <string>IDS_TE_checkBox</string>
             </property>
@@ -661,50 +669,101 @@ max-width:100;
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_7">
+          <property name="spacing">
+           <number>20</number>
+          </property>
           <property name="topMargin">
            <number>100</number>
           </property>
           <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>IDS_PS_PSaveTime</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_7">
             <item>
-             <widget class="QPushButton" name="pushButton_3">
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_psave_minus">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="text">
                <string notr="true">-</string>
               </property>
+              <property name="autoRepeat">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_PSaveTime"/>
+             <widget class="QSpinBox" name="spinBox_PSaveTime">
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>30</number>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_4">
+             <widget class="QPushButton" name="pushButton_psave_plus">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="text">
                <string notr="true">+</string>
               </property>
+              <property name="autoRepeat">
+               <bool>true</bool>
+              </property>
              </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_6">
-            <item>
-             <widget class="QPushButton" name="pushButton_2">
-              <property name="text">
-               <string notr="true">-</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="spinBox_powerOffTime"/>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton">
-              <property name="text">
-               <string notr="true">+</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_powerOff">
+            <property name="text">
+             <string>IDS_PS_PowerOff</string>
+            </property>
+           </widget>
           </item>
           <item>
            <spacer name="verticalSpacer_6">
@@ -785,6 +844,38 @@ max-width:100;
     <hint type="destinationlabel">
      <x>398</x>
      <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_psave_minus</sender>
+   <signal>clicked()</signal>
+   <receiver>spinBox_PSaveTime</receiver>
+   <slot>stepDown()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>255</x>
+     <y>124</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>493</x>
+     <y>124</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_psave_plus</sender>
+   <signal>clicked()</signal>
+   <receiver>spinBox_PSaveTime</receiver>
+   <slot>stepUp()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>731</x>
+     <y>124</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>493</x>
+     <y>124</y>
     </hint>
    </hints>
   </connection>

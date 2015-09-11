@@ -1,6 +1,7 @@
 #include "tabcopy.h"
 #include "ui_tabcopy.h"
 
+#include "mainwidget.h"
 #include "app/log.h"
 #include "app/devicecontrol.h"
 #include "app/deviceapp.h"
@@ -43,12 +44,15 @@ static const int output_size[][2] =
     scaling = 100 * (scaling_width < scaling_height ? scaling_width :scaling_height); \
 }
 
-TabCopy::TabCopy(QWidget *parent) :
+TabCopy::TabCopy(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::TabCopy)
+    ui(new Ui::TabCopy),
+    main_widget(widget),
+    device_manager(dm),
+  device_status(0)
 {
     ui->setupUi(this);
-
+#if 1
     int i;
 //    for(i = 0 ;i < sizeof(output_size_list) / sizeof(output_size_list[0]) ;i++){
     for(i = 0 ;i < ui->combo_outputSize->count() ;i++){
@@ -57,7 +61,7 @@ TabCopy::TabCopy(QWidget *parent) :
     }
 
     updateCopy();
-    connect(ui->btn_default ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
+//    connect(ui->btn_default ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
     connect(ui->scaling_minus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
     connect(ui->scaling_plus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
     connect(ui->copies_minus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
@@ -65,14 +69,14 @@ TabCopy::TabCopy(QWidget *parent) :
     connect(ui->density_minus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
     connect(ui->density_plus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
 //    connect(ui->text ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_pushbutton()));
-    connect(ui->IDCardCopy ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
+//    connect(ui->IDCardCopy ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
     connect(ui->photo ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_radio(bool)));
     connect(ui->combo_documentType ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(ui->combo_documentSize ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(ui->combo_outputSize ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(ui->combo_nIn1Copy ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(ui->combo_dpi ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
-    connect(ui->copy ,SIGNAL(clicked()) ,this ,SLOT(slots_cmd()));
+//    connect(ui->copy ,SIGNAL(clicked()) ,this ,SLOT(slots_cmd()));
 
 //    action_copy_default = new QAction(this);
 //    connect(action_copy_default ,SIGNAL(triggered()) ,this ,SLOT(slots_copy_default()));
@@ -84,7 +88,7 @@ TabCopy::TabCopy(QWidget *parent) :
     ui->combo_nIn1Copy->installEventFilter(this);
     ui->combo_dpi->installEventFilter(this);
 
-    ui->copy->installEventFilter(this);
+//    ui->copy->installEventFilter(this);
 
     keyboard_scaling = new ScalingSettingKeyboard(this);
     keyboard_scaling->hide();
@@ -95,11 +99,39 @@ TabCopy::TabCopy(QWidget *parent) :
     keyboard_copies->hide();
     ui->copies->installEventFilter(this);
     connect(keyboard_copies ,SIGNAL(sendCopiesData(QString)) ,this ,SLOT(slots_copy_keyboard(QString)));
+#endif
 }
 
 TabCopy::~TabCopy()
 {
     delete ui;
+}
+
+bool TabCopy::eventFilter(QObject *obj, QEvent *event)
+{
+    QEvent::Type type = event->type();
+    switch(type){
+    case QEvent::Wheel:
+        if(qobject_cast<QComboBox*>(obj))
+            return true;
+        break;
+    case QEvent::MouseButtonPress:
+        if(obj == ui->copies){
+            if(!keyboard_copies->isVisible()){
+                keyboard_copies->set_num(ui->copies->text().toInt());
+                keyboard_copies->show();
+            }
+        }else if(obj == ui->scaling){
+            if(!keyboard_scaling->isVisible() && ui->label_scaling->isEnabled()){
+                keyboard_scaling->set_num(ui->scaling->text().remove(QChar('%')).toInt());
+                keyboard_scaling->show();
+            }
+        }
+        break;
+default:
+        break;
+    }
+    return QWidget::eventFilter(obj, event);
 }
 
 #define SetWhite(widget) widget->setStyleSheet("background-color:white")
@@ -223,7 +255,7 @@ void TabCopy::updateCopy()
             ui->IDCardCopy->setEnabled(true);
         }
     }
-//    ui->copy->setEnabled(device_status);
+    ui->copy->setEnabled(device_status);
 }
 
 void TabCopy::slots_copy_combo(int value)
@@ -264,63 +296,25 @@ void TabCopy::slots_copy_combo(int value)
     updateCopy();
 }
 
-void TabCopy::copy_button_IDCardCopy()
+void TabCopy::slots_copy_pushbutton()
 {
     copycmdset copyPara = device_manager->copy_get_para();
     copycmdset* pCopyPara = &copyPara;
-    if(IsIDCardCopyMode(pCopyPara))    {//ID Card mode
-        pCopyPara->nUp = 0;
-        GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
-    }else{
-        SetIDCardCopyMode(pCopyPara);
-        pCopyPara->dpi = 1;//600 * 600
-        pCopyPara->scale = 100;
-        pCopyPara->paperSize = 1;//A4
-//        if(3 == pCopyPara->paperSize || 5 == pCopyPara->paperSize){
-//            pCopyPara->paperSize = 0;
-//        }
+    QObject* sd = sender();
+    if(sd == ui->scaling_minus){
+        pCopyPara->scale --;
+    }else if(sd == ui->scaling_plus){
+        pCopyPara->scale ++;
+    }else if(sd == ui->density_minus){
+        pCopyPara->Density --;
+    }else if(sd == ui->density_plus){
+        pCopyPara->Density ++;
+    }else if(sd == ui->copies_minus){
+        pCopyPara->copyNum --;
+    }else if(sd == ui->copies_plus){
+        pCopyPara->copyNum ++;
     }
     device_manager->copy_set_para(pCopyPara);
-}
-
-void TabCopy::slots_copy_pushbutton()
-{
-    QObject* sd = sender();
-    if(sd == ui->IDCardCopy){//button IDCardCopy click
-        copy_button_IDCardCopy();
-    }else if(sd == ui->btn_default){
-        device_manager->copy_set_defaultPara();
-    }else if(sd == ui->scaling_minus){
-        copycmdset copyPara = device_manager->copy_get_para();
-        copycmdset* pCopyPara = &copyPara;
-        pCopyPara->scale --;
-        device_manager->copy_set_para(pCopyPara);
-    }else if(sd == ui->scaling_plus){
-        copycmdset copyPara = device_manager->copy_get_para();
-        copycmdset* pCopyPara = &copyPara;
-        pCopyPara->scale ++;
-        device_manager->copy_set_para(pCopyPara);
-    }else if(sd == ui->density_minus){
-        copycmdset copyPara = device_manager->copy_get_para();
-        copycmdset* pCopyPara = &copyPara;
-        pCopyPara->Density --;
-        device_manager->copy_set_para(pCopyPara);
-    }else if(sd == ui->density_plus){
-        copycmdset copyPara = device_manager->copy_get_para();
-        copycmdset* pCopyPara = &copyPara;
-        pCopyPara->Density ++;
-        device_manager->copy_set_para(pCopyPara);
-    }else if(sd == ui->copies_minus){
-        copycmdset copyPara = device_manager->copy_get_para();
-        copycmdset* pCopyPara = &copyPara;
-        pCopyPara->copyNum --;
-        device_manager->copy_set_para(pCopyPara);
-    }else if(sd == ui->copies_plus){
-        copycmdset copyPara = device_manager->copy_get_para();
-        copycmdset* pCopyPara = &copyPara;
-        pCopyPara->copyNum ++;
-        device_manager->copy_set_para(pCopyPara);
-    }
     updateCopy();
 }
 
@@ -349,5 +343,95 @@ void TabCopy::slots_copy_keyboard(QString str)
         pCopyPara->scale = str.toInt();
     }
     device_manager->copy_set_para(pCopyPara);
+    updateCopy();
+}
+
+void TabCopy::slots_cmd_result(int cmd ,int err)
+{
+    switch(cmd)
+    {
+    case DeviceContrl::CMD_DEVICE_status:
+        cmdResult_getDeviceStatus(err);
+        break;
+    default:
+//        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+        break;
+    }
+}
+
+void TabCopy::cmdResult_getDeviceStatus(int err)
+{
+    static bool idCardMode = false;
+    DeviceApp* device_app = device_manager->deviceApp();
+    if(!device_app)
+        return;
+    if(!err){
+        int _status=device_manager->get_deviceStatus();
+        switch(_status){
+        case PSTATUS_Ready:
+        case PSTATUS_PowerSaving:
+            device_status = true;
+            if(idCardMode){
+                idCardMode = false;
+                on_IDCardCopy_clicked();
+            }
+            break;
+        default:
+            device_status = false;
+            break;
+        }
+        if(PSTATUS_CopyScanNextPage == _status){
+            copycmdset copyPara = device_manager->copy_get_para();
+            copycmdset* pCopyPara = &copyPara;
+            if(pCopyPara->nUp == 4){//IsIDCardCopyMode(pCopyPara))
+                main_widget->messagebox_show(tr("IDS_MSG_TurnCardOver"));
+                idCardMode = true;
+            }else{
+                main_widget->messagebox_show(tr("IDS_MSG_PlaceNextPage"));
+            }
+        }
+//        else if(PSTATUS_Printing == _status)
+//            messagebox_show(tr("IDS_MSG_Printering"));
+        else
+            main_widget->messagebox_hide();
+        qLog(QString().sprintf("get_deviceStatus correct:%#.2x" ,_status));
+//            device_status = device_manager->get_deviceStatus() == PSTATUS_Ready ? true :false;
+    }else{
+        device_status = false;
+    }
+//        updateCopy();//disable copy or enable
+    ui->copy->setEnabled(device_status);
+    device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+}
+
+void TabCopy::on_copy_clicked()
+{
+    ui->copy->setEnabled(false);
+    device_manager->emit_cmd(DeviceContrl::CMD_COPY);
+}
+
+void TabCopy::on_IDCardCopy_clicked()
+{
+    copycmdset copyPara = device_manager->copy_get_para();
+    copycmdset* pCopyPara = &copyPara;
+    if(IsIDCardCopyMode(pCopyPara))    {//ID Card mode
+        pCopyPara->nUp = 0;
+        GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
+    }else{
+        SetIDCardCopyMode(pCopyPara);
+        pCopyPara->dpi = 1;//600 * 600
+        pCopyPara->scale = 100;
+        pCopyPara->paperSize = 1;//A4
+//        if(3 == pCopyPara->paperSize || 5 == pCopyPara->paperSize){
+//            pCopyPara->paperSize = 0;
+//        }
+    }
+    device_manager->copy_set_para(pCopyPara);
+    updateCopy();
+}
+
+void TabCopy::on_btn_default_clicked()
+{
+    device_manager->copy_set_defaultPara();
     updateCopy();
 }

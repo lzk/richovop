@@ -163,17 +163,17 @@ border: 1px solid darkgray;
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
        </property>
-       <widget class="QWidget" name="tab_3">
+       <widget class="QWidget" name="tab_copy">
         <attribute name="title">
          <string>IDS_Tab_Copy</string>
         </attribute>
        </widget>
-       <widget class="QWidget" name="tab_4">
+       <widget class="QWidget" name="tab_setting">
         <attribute name="title">
          <string>IDS_Tab_Setting</string>
         </attribute>
        </widget>
-       <widget class="QWidget" name="tab_5">
+       <widget class="QWidget" name="tab_about">
         <attribute name="title">
          <string>IDS_Tab_About</string>
         </attribute>

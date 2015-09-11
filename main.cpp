@@ -22,7 +22,7 @@ Q_IMPORT_PLUGIN(qgif)
 #endif
 
 
-QMainWindow* gMainWidow;
+MainWindow* gMainWidow;
 
 QLocalServer* m_localServer;
 bool isRunning(const QString& serverName)
@@ -76,8 +76,10 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     gMainWidow = &w;
-    w.refresh();
-    w.show();
+//    gMainWidow = new MainWindow;
+    gMainWidow->refresh();
+    gMainWidow->show();
     int ret = a.exec();
+//    delete gMainWidow;
     return ret;
 }

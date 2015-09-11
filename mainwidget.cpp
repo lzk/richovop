@@ -19,11 +19,20 @@
 #include "scalingsettingkeyboard.h"
 #include "copiessettingkeyboard.h"
 #include "app/devicemanager.h"
+
+#define TAB_COPY 0
+#define TAB_SETTING 0
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainWidget),
+    #if TAB_COPY
+    #else
     tc(new Ui::TabCopy),
+    #endif
+    #if TAB_SETTING
+    #else
     ts(new Ui::TabSetting),
+    #endif
     ta(new Ui::TabAbout),
     device_status(0)
 {
@@ -39,8 +48,14 @@ MainWidget::MainWidget(QWidget *parent) :
 MainWidget::~MainWidget()
 {
     delete ui;
+#if TAB_COPY
+#else
     delete tc;
+#endif
+#if TAB_SETTING
+#else
     delete ts;
+#endif
     delete ta;
     delete device_manager;
 }
@@ -136,6 +151,9 @@ void MainWidget::slots_progressBar(int cmd ,int value)
         case DeviceContrl::CMD_PASSWD_confirm:
         case DeviceContrl::CMD_PASSWD_confirmForApply:
         case DeviceContrl::CMD_PASSWD_confirmForSetPasswd:
+        case DeviceContrl::CMD_PRN_TonerEnd_Set:
+        case DeviceContrl::CMD_PRN_PSaveTime_Set:
+        case DeviceContrl::CMD_PRN_PowerOff_Set:
 //            progressDialog->setLabel(new QLabel("\n\n" + tr("IDS_MSG_SetInfo") +"\t\t\t\t\t\n"));
             progressDialog->setLabelText("\n\n" + tr("IDS_MSG_SetInfo") +"\t\t\t\t\t\n");
             progressDialog->setValue(value);
@@ -167,7 +185,7 @@ void MainWidget::slots_timeout()
         switch(device_app->get_cmdStatus())
         {
         case DeviceContrl::CMD_STATUS_COMPLETE://jobs complete,no job
-            if(0 == count % 5  && tc->copy->isVisible())
+            if(0 == count % 5  && ui->tab_copy->isVisible())
                 emit_cmd(DeviceContrl::CMD_DEVICE_status);
             break;
 
@@ -204,8 +222,7 @@ void MainWidget::slots_cmd()
 }
 void MainWidget::emit_cmd(int cmd)
 {
-    DeviceApp* device_app = device_manager->deviceApp();
-    if(device_app && !device_app->emit_cmd(cmd)){
+    if(device_manager && !device_manager->emit_cmd(cmd)){
 //            messagebox_exec(tr("The machine is busy, please try later..."));
     }
 }
@@ -430,6 +447,30 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     case DeviceContrl::CMD_WIFI_GetWifiStatus_immediately:
         cmdResult_emit_next(err);
         break;
+    case DeviceContrl::CMD_PRN_TonerEnd_Get:{
+        cmdst_tonerEnd para = device_manager->wifi_getTonerEnd();
+        if(para)
+            ts->checkBox_tonerEnd->setChecked(true);
+        else
+            ts->checkBox_tonerEnd->setChecked(false);
+        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+    }
+        break;
+    case DeviceContrl::CMD_PRN_PSaveTime_Get:{
+        cmdst_PSave_time para = device_manager->wifi_getPSaveTime();
+        ts->spinBox_PSaveTime->setValue(para);
+        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+    }
+        break;
+    case DeviceContrl::CMD_PRN_PowerOff_Get:{
+        cmdst_powerOff_time para = device_manager->wifi_getPowerOffTime();
+        if(para)
+            ts->checkBox_powerOff->setChecked(true);
+        else
+            ts->checkBox_powerOff->setChecked(false);
+        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+    }
+        break;
     default:
         device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
         break;
@@ -461,11 +502,17 @@ bool MainWidget::eventFilter(QObject *obj, QEvent *event)
     case QEvent::Show:
         if(obj == ts->pageWidget)
             wifi_init();
-        else if(obj == tc->copy)
+        else if(obj == ts->page3Widget)
+            emit_cmd(DeviceContrl::CMD_PRN_TonerEnd_Get);
+        else if(obj == ts->page4Widget){
+            emit_cmd(DeviceContrl::CMD_PRN_PSaveTime_Get);
+//            emit_cmd(DeviceContrl::CMD_PRN_PowerOff_Get);
+        }
+        else if(obj == ui->tab_copy)
             emit_cmd(DeviceContrl::CMD_DEVICE_status);
         break;
     case QEvent::Hide:
-        if(obj == ui->tab_4)
+        if(obj == ui->tab_setting)
             passwd_checked = false;
         break;
     case QEvent::MouseButtonPress:
@@ -509,17 +556,17 @@ void MainWidget::updateUi()
     case VopDevice::Device_3in1:
         ts->listWidget->item(0)->setHidden(false);
         ts->listWidget->setCurrentRow(0);
-        ui->tabWidget->addTab(ui->tab_3 ,tr("IDS_Tab_Copy"));
-//            ui->tabWidget->addTab(ui->tab_4 ,tr("IDS_Tab_Setting"));
+        ui->tabWidget->addTab(ui->tab_copy ,tr("IDS_Tab_Copy"));
+//            ui->tabWidget->addTab(ui->tab_setting ,tr("IDS_Tab_Setting"));
         break;
     case VopDevice::Device_3in1_wifi:
         ts->listWidget->item(0)->setHidden(false);
         ts->listWidget->setCurrentRow(0);
-        ui->tabWidget->addTab(ui->tab_3 ,tr("IDS_Tab_Copy"));
-        ui->tabWidget->addTab(ui->tab_4 ,tr("IDS_Tab_Setting"));
+        ui->tabWidget->addTab(ui->tab_copy ,tr("IDS_Tab_Copy"));
+        ui->tabWidget->addTab(ui->tab_setting ,tr("IDS_Tab_Setting"));
         break;
     case VopDevice::Device_sfp:
-        ui->tabWidget->addTab(ui->tab_4 ,tr("IDS_Tab_Setting"));
+        ui->tabWidget->addTab(ui->tab_setting ,tr("IDS_Tab_Setting"));
         ts->listWidget->item(0)->setHidden(true);
         ts->listWidget->setCurrentRow(1);
         break;
@@ -527,12 +574,12 @@ void MainWidget::updateUi()
     default:
         ts->listWidget->item(0)->setHidden(false);
         ts->listWidget->setCurrentRow(0);
-//            ui->tabWidget->addTab(ui->tab_3 ,tr("IDS_Tab_Copy"));
-        ui->tabWidget->addTab(ui->tab_4 ,tr("IDS_Tab_Setting"));
+//            ui->tabWidget->addTab(ui->tab_copy ,tr("IDS_Tab_Copy"));
+        ui->tabWidget->addTab(ui->tab_setting ,tr("IDS_Tab_Setting"));
         break;
     }
-    ui->tabWidget->addTab(ui->tab_5 ,tr("IDS_Tab_About"));
-    ui->tabWidget->setCurrentWidget(ui->tab_5);
+    ui->tabWidget->addTab(ui->tab_about ,tr("IDS_Tab_About"));
+    ui->tabWidget->setCurrentWidget(ui->tab_about);
     ui->tabWidget->show();
 
     if(!device_name.isEmpty()){
@@ -574,7 +621,7 @@ void MainWidget::on_comboBox_deviceList_activated(int index)
 ///////////////////////////////////////////////////////////tab about/////////////////////////////////////////////////////////
 void MainWidget::initializeTabAbout()
 {
-    ta->setupUi(ui->tab_5);
+    ta->setupUi(ui->tab_about);
 //    action_about_update = new QAction(this);
 //    connect(action_about_update ,SIGNAL(triggered()) ,this ,SLOT(slots_about_update()));
     ta->label->installEventFilter(this);
@@ -624,10 +671,22 @@ static const int output_size[][2] =
     scaling = 100 * (scaling_width < scaling_height ? scaling_width :scaling_height); \
 }
 
+#include "tabcopy.h"
 void MainWidget::initializeTabCopy()
 {
-    tc->setupUi(ui->tab_3);
-
+#if TAB_COPY
+    TabCopy* tabCopy = new TabCopy(this ,device_manager ,this);
+    ui->tabWidget->clear();
+    delete ui->tab_copy;
+    ui->tab_copy = tabCopy;
+    ui->tabWidget->addTab(ui->tab_copy ,tr("IDS_Tab_Copy"));
+    ui->tabWidget->addTab(ui->tab_setting ,tr("IDS_Tab_Setting"));
+    ui->tabWidget->addTab(ui->tab_about ,tr("IDS_Tab_About"));
+    tc = tabCopy->ui;
+    ui->tab_copy->installEventFilter(this);
+#else
+    tc->setupUi(ui->tab_copy);
+    ui->tab_copy->installEventFilter(this);
     int i;
 //    for(i = 0 ;i < sizeof(output_size_list) / sizeof(output_size_list[0]) ;i++){
     for(i = 0 ;i < tc->combo_outputSize->count() ;i++){
@@ -664,7 +723,7 @@ void MainWidget::initializeTabCopy()
     tc->combo_nIn1Copy->installEventFilter(this);
     tc->combo_dpi->installEventFilter(this);
 
-    tc->copy->installEventFilter(this);
+//    tc->copy->installEventFilter(this);
 
     keyboard_scaling = new ScalingSettingKeyboard(this);
     keyboard_scaling->hide();
@@ -675,6 +734,7 @@ void MainWidget::initializeTabCopy()
     keyboard_copies->hide();
     tc->copies->installEventFilter(this);
     connect(keyboard_copies ,SIGNAL(sendCopiesData(QString)) ,this ,SLOT(slots_copy_keyboard(QString)));
+#endif
 }
 
 #define SetWhite(widget) widget->setStyleSheet("background-color:white")
@@ -928,17 +988,21 @@ void MainWidget::slots_copy_keyboard(QString str)
 }
 
 //////////////////////////tab setting///////////////////
+/// \brief MainWidget::initializeTabSetting
+#include "tabsetting.h"
 void MainWidget::initializeTabSetting()
 {
-    ts->setupUi(ui->tab_4);
-
-//    ts->stackedWidget->setStyleSheet("QStackedWidget,#pageWidget,#page2Widget{ \
-
+#if TAB_SETTING
+    TabSetting* tabSetting = new TabSetting(device_manager ,ui->tab_setting);
+    ts = tabSetting->ui;
+//    connect(this ,SIGNAL(signals_cmd_result_setting(int,int)) ,tabSetting ,SLOT(slots_cmd_result(int,int)));
+#else
+    ts->setupUi(ui->tab_setting);
+#endif
     ts->stackedWidget->setStyleSheet("#pageWidget{ \
                                 min-height:420; \
                                 max-height:420; \
                              }");
-//*/
 
     ts->listWidget->setCurrentRow(0);
     ts->stackedWidget->setCurrentIndex(0);
@@ -982,11 +1046,20 @@ void MainWidget::initializeTabSetting()
     ts->cb_encryptionType->installEventFilter(this);
     ts->cb_keyIndex->installEventFilter(this);
     ts->cb_ssid->installEventFilter(this);
-    ui->tab_4->installEventFilter(this);
+    ui->tab_setting->installEventFilter(this);
+
+
+    connect(ts->spinBox_PSaveTime ,SIGNAL(valueChanged(int)) ,this ,SLOT(spinBox_PSaveTime_valueChanged(int)));
+    connect(ts->checkBox_powerOff ,SIGNAL(toggled(bool)) ,this ,SLOT(checkBox_powerOff_toggled(bool)));
+    connect(ts->checkBox_tonerEnd ,SIGNAL(toggled(bool)) ,this ,SLOT(checkBox_tonerEnd_toggled(bool)));
+    ts->page3Widget->installEventFilter(this);
+    ts->page4Widget->installEventFilter(this);
+
 
     wifi_update();
     wifi_update_checkbox(ts->checkBox->isChecked());
     ts->checkBox->hide();//checkbox hide
+    ts->checkBox_powerOff->hide();
 }
 
 void MainWidget::wifi_update_encryptionType()
@@ -1444,4 +1517,25 @@ void MainWidget::result_wifi_getAplist()
     wifi_update();
     //update ui else
 //    emit ts->cb_ssid->activated(ts->cb_ssid->currentText());
+}
+
+void MainWidget::spinBox_PSaveTime_valueChanged(int arg1)
+{
+    cmdst_PSave_time pSave_time = arg1;
+    device_manager->wifi_setPSaveTime(&pSave_time);
+    emit_cmd(DeviceContrl::CMD_PRN_PSaveTime_Set);
+}
+
+void MainWidget::checkBox_powerOff_toggled(bool checked)
+{
+    cmdst_powerOff_time powerOff_time = checked ? 1 : 0;
+    device_manager->wifi_setPowerOffTime(&powerOff_time);
+    emit_cmd(DeviceContrl::CMD_PRN_PowerOff_Set);
+}
+
+void MainWidget::checkBox_tonerEnd_toggled(bool checked)
+{
+    cmdst_tonerEnd tonerEnd = checked ? 1 : 0;
+    device_manager->wifi_setTonerEnd(&tonerEnd);
+    emit_cmd(DeviceContrl::CMD_PRN_TonerEnd_Set);
 }

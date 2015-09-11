@@ -85,6 +85,9 @@ signals:
    void signals_deviceChanged(const QString&);
    void signals_emit_cmd(int);
    void signals_cmd_next();
+   void signals_cmd_result(int ,int);
+   void signals_cmd_result_copy(int ,int);
+   void signals_cmd_result_setting(int ,int);
 
 public slots:
    void slots_cmd_result(int ,int);
@@ -173,6 +176,9 @@ private slots:
     void slots_passwd_set();
     void slots_wifi_getStatusToApply();
     void slots_passwd_comfirmed();
+    void spinBox_PSaveTime_valueChanged(int arg1);
+    void checkBox_powerOff_toggled(bool checked);
+    void checkBox_tonerEnd_toggled(bool checked);
 };
 
 #endif // MAINWIDGET_H

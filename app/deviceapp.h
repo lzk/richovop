@@ -56,7 +56,7 @@ private:
     DeviceManager* device_manager;
     DeviceContrl* ctrl;
     int cmd_status;
-    MainWidget* widget;
+    MainWidget* main_widget;
     DeviceApp_Block* app_block;
     QThread app_block_thread;
 };

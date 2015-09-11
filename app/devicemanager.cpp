@@ -8,9 +8,9 @@
 #include "deviceapp.h"
 #include "log.h"
 #include <cups/cups.h>
-DeviceManager::DeviceManager(MainWidget* _widget):
+DeviceManager::DeviceManager(MainWidget* widget):
     device_app(NULL),
-    widget(_widget)
+    main_widget(widget)
 {   
     devices.clear();
     device = new VopDevice();
@@ -40,7 +40,7 @@ void DeviceManager::selectDevice(int selected_device)
     if(!devices.isEmpty() && -1 != selected_device){
         selected_devicename = devices.at(selected_device);
         if(!device_app)
-            device_app = new DeviceApp(this ,widget);
+            device_app = new DeviceApp(this ,main_widget);
     }else{
         selected_devicename = QString();
     }
@@ -225,7 +225,49 @@ void DeviceManager::passwd_set(const char* p)
     protocol->passwd_set(p);
 }
 
+cmdst_tonerEnd DeviceManager::wifi_getTonerEnd()
+{
+    return
+            protocol->wifi_getTonerEnd();
+}
+
+void DeviceManager::wifi_setTonerEnd(cmdst_tonerEnd* p)
+{
+    protocol->wifi_setTonerEnd(p);
+}
+
+cmdst_PSave_time DeviceManager::wifi_getPSaveTime()
+{
+    return
+            protocol->wifi_getPSaveTime();
+}
+
+void DeviceManager::wifi_setPSaveTime(cmdst_PSave_time* p)
+{
+    protocol->wifi_setPSaveTime(p);
+}
+
+cmdst_powerOff_time DeviceManager::wifi_getPowerOffTime()
+{
+    return
+            protocol->wifi_getPowerOffTime();
+}
+
+void DeviceManager::wifi_setPowerOffTime(cmdst_powerOff_time* p)
+{
+    protocol->wifi_setPowerOffTime(p);
+}
+
 DeviceApp* DeviceManager::deviceApp()
 {
     return device_app;
+}
+
+bool DeviceManager::emit_cmd(int cmd)
+{
+    if(device_app){
+        return device_app->emit_cmd(cmd);
+    }else{
+        return false;
+    }
 }
