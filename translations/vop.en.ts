@@ -473,8 +473,7 @@ Copy</translation>
     <message>
         <location filename="../tabsetting.ui" line="87"/>
         <source>IDS_ST_TonerEnd</source>
-        <translation type="unfinished">Toner End
-</translation>
+        <translation type="unfinished">Toner End</translation>
     </message>
     <message>
         <location filename="../tabsetting.ui" line="92"/>

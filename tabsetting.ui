@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true">QListView#listWidget{
+   <string notr="true">#listWidget{
 min-width:130;
 max-width:130;
 min-height:120;
@@ -19,7 +19,7 @@ max-height:120;
 	background-color: rgb(255, 255, 255);
 }
 
-QStackedWidget,
+#stackedWidget,
 #pageWidget,#page2Widget,
 #page3Widget,#page4Widget
 {
@@ -31,33 +31,46 @@ min-height:600;
 max-height:600;
 }
 
-
-QLabel{
+/*page 1*/
+#pageWidget QLabel{
 min-width:150;
 max-width:150;
 }
+#pageWidget QComboBox{
+min-width:200;
+max-width:200;
+}
+#pageWidget QLineEdit{
+min-width:200;
+max-width:200;
+}
+#pageWidget QPushButton{
+min-width:100;
+max-width:100;
+}
+#pageWidget #cb_keyIndex{
+min-width:100;
+max-width:100;
+}
+/*page2*/
+#page2Widget QLabel{
+min-width:150;
+max-width:150;
+}
+#page2Widget QLineEdit{
+min-width:270;
+max-width:270;
+}
+#page2Widget QPushButton{
+min-width:100;
+max-width:100;
+}
+/*page 3*/
 #label_tonerEnd{
 max-width:600;
 padding:10;
 }
-QComboBox,QLineEdit{
-min-width:200;
-max-width:200;
-}
-#cb_keyIndex{
-min-width:100;
-max-width:100;
-}
-#le_newPassword,#le_confirmPassword{
-min-width:270;
-max-width:270;
-}
-
-QPushButton{
-min-width:100;
-max-width:100;
-}
-
+/*page 4*/
 #pushButton_psave_minus,#pushButton_psave_plus{
 min-width:50;
 max-width:50;
@@ -119,7 +132,7 @@ max-width:50;
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page">
         <widget class="QWidget" name="pageWidget" native="true">

@@ -25,7 +25,8 @@ SOURCES += main.cpp \
     app/log.cpp \
     dialoglogin.cpp \
     tabsetting.cpp \
-    tabcopy.cpp
+    tabcopy.cpp \
+    tababout.cpp
 
 HEADERS  += mainwindow.h \
     mainwidget.h \
@@ -42,16 +43,17 @@ HEADERS  += mainwindow.h \
     version.h \
     dialoglogin.h \
     tabsetting.h \
-    tabcopy.h
+    tabcopy.h \
+    tababout.h
 
 FORMS    += mainwindow.ui \
     mainwidget.ui \
-    about.ui \
     copiessettingkeyboard.ui \
     scalingsettingkeyboard.ui \
     dialoglogin.ui \
     tabsetting.ui \
-    tabcopy.ui
+    tabcopy.ui \
+    tababout.ui
 
 RESOURCES += \
     vop.qrc

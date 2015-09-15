@@ -82,6 +82,7 @@ enum{
     ERR_communication = -1,
     ERR_library = -2,
     ERR_decode_status = -3,
+    ERR_wifi_have_not_been_inited = -4,
     ERR_vop_cannot_support = -99,
 };
 
@@ -150,6 +151,28 @@ typedef UINT8  cmdst_wifi_status;
 typedef UINT8  cmdst_tonerEnd;
 typedef UINT8  cmdst_PSave_time;
 typedef UINT8  cmdst_powerOff_time;
+
+typedef struct net_info_st
+{
+    UINT8 IPMode            ; // 0-ipv4,1-ipv6
+    UINT8 IPAddressMode     ; // 0 AutoIP,1 BOOTP,2 RARP,3 DHCP,4 Panel (Manual)
+    UINT8 IPAddress[4]      ; // 0.0.0.0 ~ 223.255.255.255
+    UINT8 SubnetMask[4]     ; // 0.0.0.0 ~ 223.255.255.255
+    UINT8 GatewayAddress[4] ; // 0.0.0.0 ~ 223.255.255.255
+} net_info_st;
+
+typedef struct
+{
+    UINT8 UseManualAddress;
+    UINT8 ManualAddress[40];
+    UINT8 ManualMask[4];
+    UINT8 StatelessAddress1[40];
+    UINT8 StatelessAddress2[40];
+    UINT8 StatelessAddress3[40];
+    UINT8 LinkLocalAddress1[40];
+    UINT8 LinkLocalAddress2[40];
+    UINT8 AutoGatewayAddress[40];
+}net_ipv6_st;
 
 enum
 {
@@ -238,6 +261,10 @@ public:
         CMD_PRN_PSaveTime_Set,
         CMD_PRN_PowerOff_Get,
         CMD_PRN_PowerOff_Set,
+        CMD_NET_GetV4,
+        CMD_NET_SetV4,
+        CMD_NET_GetV6,
+        CMD_NET_SetV6,
     };
 public:
     VopProtocol(DeviceManager* dm);
@@ -251,24 +278,29 @@ public:
     void copy_set_defaultPara();
     void copy_set_para(copycmdset* p);
     copycmdset copy_get_para();
-
     void wifi_set_ssid(cmdst_wifi_get*  ,const char*);
     void wifi_set_password(cmdst_wifi_get*  ,const char*);
     void wifi_set_para(cmdst_wifi_get* p);
     cmdst_wifi_get wifi_get_para();
     cmdst_aplist_get wifi_getAplist();
     cmdst_wifi_status wifi_getWifiStatus();
-    cmdst_tonerEnd wifi_getTonerEnd();
-    void wifi_setTonerEnd(cmdst_tonerEnd*);
-    cmdst_PSave_time wifi_getPSaveTime();
-    void wifi_setPSaveTime(cmdst_PSave_time*);
-    cmdst_powerOff_time wifi_getPowerOffTime();
-    void wifi_setPowerOffTime(cmdst_powerOff_time*);
+    cmdst_tonerEnd printer_getTonerEnd();
+    void printer_setTonerEnd(cmdst_tonerEnd*);
+    cmdst_PSave_time printer_getPSaveTime();
+    void printer_setPSaveTime(cmdst_PSave_time*);
+    cmdst_powerOff_time printer_getPowerOffTime();
+    void printer_setPowerOffTime(cmdst_powerOff_time*);
+    net_info_st net_getV4();
+    void net_setV4(net_info_st*);
+    net_ipv6_st net_getV6();
+    void net_setV6(net_ipv6_st*);
 
     void passwd_set(const char*);
 
     int cmd(int);
 private:
+    DeviceManager* device_manager;
+
     PRINTER_STATUS* status;
     copycmdset* copy_parameter;
     cmdst_wifi_get* wifi_parameter;
@@ -278,7 +310,9 @@ private:
     cmdst_tonerEnd* tonerEnd;
     cmdst_PSave_time* pSaveTime;
     cmdst_powerOff_time* powerOffTime;
-    DeviceManager* device_manager;
+    net_info_st* ip_info;
+    net_ipv6_st* ipv6_info;
+
     int vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size);
 # if 0
     int cmd_copy();

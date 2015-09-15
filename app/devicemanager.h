@@ -42,21 +42,25 @@ public:
     cmdst_wifi_get wifi_get_para();
     cmdst_aplist_get wifi_getAplist();
     cmdst_wifi_status wifi_getWifiStatus();
-    cmdst_tonerEnd wifi_getTonerEnd();
-    void wifi_setTonerEnd(cmdst_tonerEnd*);
-    cmdst_PSave_time wifi_getPSaveTime();
-    void wifi_setPSaveTime(cmdst_PSave_time*);
-    cmdst_powerOff_time wifi_getPowerOffTime();
-    void wifi_setPowerOffTime(cmdst_powerOff_time*);
+    cmdst_tonerEnd printer_getTonerEnd();
+    void printer_setTonerEnd(cmdst_tonerEnd*);
+    cmdst_PSave_time printer_getPSaveTime();
+    void printer_setPSaveTime(cmdst_PSave_time*);
+    cmdst_powerOff_time printer_getPowerOffTime();
+    void printer_setPowerOffTime(cmdst_powerOff_time*);
 
     void passwd_set(const char*);
 
-    bool emit_cmd(int);
+    void emit_cmd(int);
+
+    void set_tmp_passwd(const char*);
+    void load_tmp_passwd_to_set();
 private:
     QStringList devices;
     QString selected_devicename;
     DeviceApp* device_app;
     MainWidget* main_widget;
+    QString passwd_to_set;
 };
 
 #endif // DEVICEMANAGER_H

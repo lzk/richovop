@@ -52,7 +52,7 @@ TabCopy::TabCopy(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
   device_status(0)
 {
     ui->setupUi(this);
-#if 1
+
     int i;
 //    for(i = 0 ;i < sizeof(output_size_list) / sizeof(output_size_list[0]) ;i++){
     for(i = 0 ;i < ui->combo_outputSize->count() ;i++){
@@ -99,7 +99,6 @@ TabCopy::TabCopy(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
     keyboard_copies->hide();
     ui->copies->installEventFilter(this);
     connect(keyboard_copies ,SIGNAL(sendCopiesData(QString)) ,this ,SLOT(slots_copy_keyboard(QString)));
-#endif
 }
 
 TabCopy::~TabCopy()
@@ -354,7 +353,6 @@ void TabCopy::slots_cmd_result(int cmd ,int err)
         cmdResult_getDeviceStatus(err);
         break;
     default:
-//        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
         break;
     }
 }

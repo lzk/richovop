@@ -205,6 +205,14 @@ static int vop_getCmdDirect(int cmd ,int sub_cmd ,int& direct ,int& data_buffer_
         case 0x12:  direct = 1;data_buffer_size = 1; break;//set toner end
         }
         break;
+    case _LS_NETCMD:
+        switch(sub_cmd){
+        case 0x00:  direct = 0;data_buffer_size = 128;  break;//get ipv4
+        case 0x01:  direct = 1;data_buffer_size = 128;  break;//set ipv4
+        case 0x02:  direct = 0;data_buffer_size = 340;  break;//get ipv6
+        case 0x03:  direct = 1;data_buffer_size = 340;  break;//set ipv6
+        }
+        break;
 
     case _LS_SEARCH:
     case _LS_CONNECT	:
@@ -214,7 +222,6 @@ static int vop_getCmdDirect(int cmd ,int sub_cmd ,int& direct ,int& data_buffer_
     case _LS_MODIFYVAR:
     case _LS_PRIVEXEC:
     case _LS_ENGCMD:
-    case _LS_NETCMD:
     case _LS_SCACMD:
     case _LS_FAXCMD:
     case _LS_DBGMSG:
@@ -247,7 +254,9 @@ static const copycmdset default_copy_parameter =
 };
 
 VopProtocol::VopProtocol(DeviceManager* dm)
-    : status(new PRINTER_STATUS),
+    :
+      device_manager(dm),
+      status(new PRINTER_STATUS),
       copy_parameter(new copycmdset),
       wifi_parameter(new cmdst_wifi_get),
       wifi_aplist(new cmdst_aplist_get),
@@ -256,7 +265,8 @@ VopProtocol::VopProtocol(DeviceManager* dm)
       tonerEnd(new cmdst_tonerEnd),
       pSaveTime(new cmdst_PSave_time),
       powerOffTime(new cmdst_powerOff_time),
-      device_manager(dm)
+      ip_info(new net_info_st),
+      ipv6_info(new net_ipv6_st)
 {
     memcpy(copy_parameter ,&default_copy_parameter ,sizeof(default_copy_parameter));
     memset(wifi_parameter ,0 ,sizeof(cmdst_wifi_get));
@@ -266,29 +276,24 @@ VopProtocol::VopProtocol(DeviceManager* dm)
     memset(tonerEnd ,0 ,sizeof(cmdst_tonerEnd));
     memset(pSaveTime ,0 ,sizeof(cmdst_PSave_time));
     memset(powerOffTime ,0 ,sizeof(cmdst_powerOff_time));
-    //for test
-//    strcpy(wifi_aplist->aplist[0].ssid ,"123");
-//    wifi_aplist->aplist[0].encryption = 0;
-//    strcpy(wifi_aplist->aplist[1].ssid ,"456");
-//    wifi_aplist->aplist[1].encryption = 1;
-//    strcpy(wifi_aplist->aplist[2].ssid ,"789");
-//    wifi_aplist->aplist[2].encryption = 2;
-//    strcpy(wifi_aplist->aplist[3].ssid ,"123456");
-//    wifi_aplist->aplist[3].encryption = 3;
-//    strcpy(wifi_parameter->ssid ,"789");
+    memset(ip_info ,0 ,sizeof(net_info_st));
+    memset(ipv6_info ,0 ,sizeof(net_ipv6_st));
+
 }
 
 VopProtocol::~VopProtocol()
 {
     delete status;
-    delete tonerEnd;
-    delete pSaveTime;
-    delete powerOffTime;
     delete copy_parameter;
     delete wifi_parameter;
     delete wifi_aplist;
     delete passwd;
     delete wifi_status;
+    delete tonerEnd;
+    delete pSaveTime;
+    delete powerOffTime;
+    delete ip_info;
+    delete ipv6_info;
 }
 
 //#define STR_PREFIX  QT_TR_NOOP_UTF8
@@ -331,20 +336,23 @@ const char* VopProtocol::getErrString(int err)
         str = STR_PREFIX("Scanner operation NG");
         break;
     case ERR_communication :
-        str = STR_PREFIX("communication error");
+        str = STR_PREFIX("VOP defined error: communication error");
         break;
     case ERR_library :
-        str = STR_PREFIX("library error");
+        str = STR_PREFIX("VOP defined error: library error");
         break;
     case ERR_Do_not_support :
         str = STR_PREFIX("FW do not support");
         break;
     case ERR_decode_status:
-        str = STR_PREFIX("status decode err");
+        str = STR_PREFIX("VOP defined error: status decode err");
+        break;
+    case ERR_wifi_have_not_been_inited:
+        str = STR_PREFIX("VOP defined error: wifi have not been inited");
         break;
     case ERR_vop_cannot_support:
     default:
-        str = STR_PREFIX("VOP do not support");
+        str = STR_PREFIX("VOP defined error: VOP do not support");
         break;
     }
     return str;
@@ -376,6 +384,10 @@ int VopProtocol::get_deviceStatus()
 #define vop_setPsaveTime(buffer)             vop_cmd(_LS_PRNCMD ,0x01 ,buffer ,sizeof(*buffer))
 #define vop_getPowerOff(buffer)               vop_cmd(_LS_PRNCMD ,0x0e ,buffer ,sizeof(*buffer))
 #define vop_setPowerOff(buffer)               vop_cmd(_LS_PRNCMD ,0x0f ,buffer ,sizeof(*buffer))
+#define vop_getv4(buffer)               vop_cmd(_LS_NETCMD ,0x00 ,buffer ,sizeof(*buffer))
+#define vop_setv4(buffer)               vop_cmd(_LS_NETCMD ,0x01 ,buffer ,sizeof(*buffer))
+#define vop_getv6(buffer)               vop_cmd(_LS_NETCMD ,0x02 ,buffer ,sizeof(*buffer))
+#define vop_setv6(buffer)               vop_cmd(_LS_NETCMD ,0x03 ,buffer ,sizeof(*buffer))
 
 #define     MAGIC_NUM           0x1A2B3C4D
 #define change_32bit_edian(x) (((x) << 24 & 0xff000000) | (((x) << 8) & 0x00ff0000) | (((x) >> 8) & 0x0000ff00) | (((x) >> 24) & 0xff))
@@ -443,7 +455,7 @@ void VopProtocol::copy_set_defaultPara()
 void VopProtocol::copy_set_para(copycmdset* p)
 {
     QMutexLocker locker(&device_manager->mutex_ctrl);
-    memcpy(copy_parameter ,p ,sizeof(copycmdset));
+    memcpy(copy_parameter ,p ,sizeof(*p));
 }
 
 copycmdset VopProtocol::copy_get_para()
@@ -454,12 +466,14 @@ copycmdset VopProtocol::copy_get_para()
 
 void VopProtocol::wifi_set_ssid(cmdst_wifi_get* p ,const char* ssid)
 {
+    QMutexLocker locker(&device_manager->mutex_ctrl);
     memset(p->ssid ,0 ,32);
     strcpy(p->ssid ,ssid);
 }
 
 void VopProtocol::wifi_set_password(cmdst_wifi_get* p ,const char* password)
 {
+    QMutexLocker locker(&device_manager->mutex_ctrl);
     memset(p->pwd ,0 ,64);
     strcpy(p->pwd ,password);
 }
@@ -467,7 +481,7 @@ void VopProtocol::wifi_set_password(cmdst_wifi_get* p ,const char* password)
 void VopProtocol::wifi_set_para(cmdst_wifi_get* p)
 {
     QMutexLocker locker(&device_manager->mutex_ctrl);
-    memcpy(wifi_parameter ,p ,sizeof(cmdst_wifi_get));
+    memcpy(wifi_parameter ,p ,sizeof(*p));
 }
 
 cmdst_wifi_get VopProtocol::wifi_get_para()
@@ -488,46 +502,71 @@ cmdst_wifi_status VopProtocol::wifi_getWifiStatus()
     return *wifi_status;
 }
 
-cmdst_tonerEnd VopProtocol::wifi_getTonerEnd()
+cmdst_tonerEnd VopProtocol::printer_getTonerEnd()
 {
     QMutexLocker locker(&device_manager->mutex_ctrl);
     return *tonerEnd;
 }
 
-void VopProtocol::wifi_setTonerEnd(cmdst_tonerEnd* p)
+void VopProtocol::printer_setTonerEnd(cmdst_tonerEnd* p)
 {
     QMutexLocker locker(&device_manager->mutex_ctrl);
-    memcpy(tonerEnd ,p ,sizeof(cmdst_tonerEnd));
+    memcpy(tonerEnd ,p ,sizeof(*p));
 }
 
-cmdst_PSave_time VopProtocol::wifi_getPSaveTime()
+cmdst_PSave_time VopProtocol::printer_getPSaveTime()
 {
     QMutexLocker locker(&device_manager->mutex_ctrl);
     return *pSaveTime;
 }
 
-void VopProtocol::wifi_setPSaveTime(cmdst_PSave_time* p)
+void VopProtocol::printer_setPSaveTime(cmdst_PSave_time* p)
 {
     QMutexLocker locker(&device_manager->mutex_ctrl);
-    memcpy(pSaveTime ,p ,sizeof(cmdst_PSave_time));
+    memcpy(pSaveTime ,p ,sizeof(*p));
 }
 
-cmdst_powerOff_time VopProtocol::wifi_getPowerOffTime()
+cmdst_powerOff_time VopProtocol::printer_getPowerOffTime()
 {
     QMutexLocker locker(&device_manager->mutex_ctrl);
     return *powerOffTime;
 }
 
-void VopProtocol::wifi_setPowerOffTime(cmdst_powerOff_time* p)
+void VopProtocol::printer_setPowerOffTime(cmdst_powerOff_time* p)
 {
     QMutexLocker locker(&device_manager->mutex_ctrl);
-    memcpy(powerOffTime ,p ,sizeof(cmdst_powerOff_time));
+    memcpy(powerOffTime ,p ,sizeof(*p));
 }
 
 void VopProtocol::passwd_set(const char* p)
 {
+    QMutexLocker locker(&device_manager->mutex_ctrl);
     memset(passwd ,0 ,32);
     strcpy(passwd->passwd ,p);
+}
+
+net_info_st VopProtocol::net_getV4()
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    return *ip_info;
+}
+
+void VopProtocol::net_setV4(net_info_st* p)
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    memcpy(ip_info ,p ,sizeof(*p));
+}
+
+net_ipv6_st VopProtocol::net_getV6()
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    return *ipv6_info;
+}
+
+void VopProtocol::net_setV6(net_ipv6_st* p)
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    memcpy(ipv6_info ,p ,sizeof(*p));
 }
 
 int VopProtocol::cmd(int _cmd)
@@ -593,14 +632,33 @@ int VopProtocol::cmd(int _cmd)
     case CMD_PRN_PSaveTime_Get:{
         err = vop_getPsaveTime(pSaveTime);
     }
+        break;
     case CMD_PRN_PSaveTime_Set:{
         err = vop_setPsaveTime(pSaveTime);
     }
+        break;
     case CMD_PRN_PowerOff_Get:{
         err = vop_getPowerOff(powerOffTime);
     }
+        break;
     case CMD_PRN_PowerOff_Set:{
         err = vop_setPowerOff(powerOffTime);
+    }
+        break;
+        case CMD_NET_GetV4:{
+        err = vop_getv4(ip_info);
+    }
+        break;
+        case CMD_NET_SetV4:{
+        err = vop_setv4(ip_info);
+    }
+        break;
+        case CMD_NET_GetV6:{
+        err = vop_getv6(ipv6_info);
+    }
+        break;
+        case CMD_NET_SetV6:{
+        err = vop_setv6(ipv6_info);
     }
         break;
     default:

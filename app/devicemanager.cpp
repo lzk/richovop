@@ -225,37 +225,34 @@ void DeviceManager::passwd_set(const char* p)
     protocol->passwd_set(p);
 }
 
-cmdst_tonerEnd DeviceManager::wifi_getTonerEnd()
+cmdst_tonerEnd DeviceManager::printer_getTonerEnd()
 {
-    return
-            protocol->wifi_getTonerEnd();
+    return protocol->printer_getTonerEnd();
 }
 
-void DeviceManager::wifi_setTonerEnd(cmdst_tonerEnd* p)
+void DeviceManager::printer_setTonerEnd(cmdst_tonerEnd* p)
 {
-    protocol->wifi_setTonerEnd(p);
+    protocol->printer_setTonerEnd(p);
 }
 
-cmdst_PSave_time DeviceManager::wifi_getPSaveTime()
+cmdst_PSave_time DeviceManager::printer_getPSaveTime()
 {
-    return
-            protocol->wifi_getPSaveTime();
+    return  protocol->printer_getPSaveTime();
 }
 
-void DeviceManager::wifi_setPSaveTime(cmdst_PSave_time* p)
+void DeviceManager::printer_setPSaveTime(cmdst_PSave_time* p)
 {
-    protocol->wifi_setPSaveTime(p);
+    protocol->printer_setPSaveTime(p);
 }
 
-cmdst_powerOff_time DeviceManager::wifi_getPowerOffTime()
+cmdst_powerOff_time DeviceManager::printer_getPowerOffTime()
 {
-    return
-            protocol->wifi_getPowerOffTime();
+    return  protocol->printer_getPowerOffTime();
 }
 
-void DeviceManager::wifi_setPowerOffTime(cmdst_powerOff_time* p)
+void DeviceManager::printer_setPowerOffTime(cmdst_powerOff_time* p)
 {
-    protocol->wifi_setPowerOffTime(p);
+    protocol->printer_setPowerOffTime(p);
 }
 
 DeviceApp* DeviceManager::deviceApp()
@@ -263,11 +260,26 @@ DeviceApp* DeviceManager::deviceApp()
     return device_app;
 }
 
-bool DeviceManager::emit_cmd(int cmd)
+void DeviceManager::emit_cmd(int cmd)
 {
     if(device_app){
-        return device_app->emit_cmd(cmd);
-    }else{
-        return false;
+        if(device_app->emit_cmd(cmd)){
+//            messagebox_exec(tr("The machine is busy, please try later..."));
+        }
     }
+}
+
+void DeviceManager::set_tmp_passwd(const char* p)
+{
+    QMutexLocker locker(&mutex_ctrl);
+    passwd_to_set = p;
+}
+
+void DeviceManager::load_tmp_passwd_to_set()
+{
+    QString str;
+    mutex_ctrl.lock();
+    str = passwd_to_set;
+    mutex_ctrl.unlock();
+    passwd_set(str.toLatin1());
 }

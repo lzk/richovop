@@ -21,10 +21,12 @@ public:
     static int device_getDeviceStatus(char* buffer ,int buffer_size);
 
 private:
+    DeviceManager* device_manager;
     VopDevice* device;
     VopProtocol* protocol;
-//    DeviceManager* device_manager;
-
+    bool confirmed;
+    int cmd_setting_confirm();
+    int cmd_wifi_status();
 
 public:
     enum{
@@ -50,17 +52,24 @@ public:
 
         CMD_WIFI_GetWifiStatus_immediately,
 
+        CMD_WIFI_apply_plus,
+        CMD_PASSWD_set_plus,
+        CMD_WIFI_refresh_plus,
+        CMD_PRN_PowerSave_Get,
 
         CMD_STATUS_COMPLETE,
 
         CMD_MAX,
     };
+    bool get_confirmed();
+    void set_confirmed(bool);
 
 signals:
     void signals_cmd_result(int ,int);
 
 public slots:
     void slots_cmd(int);
+    void slots_cmd_plus(int);
     void slots_deviceChanged(const QString& devicename);
 };
 

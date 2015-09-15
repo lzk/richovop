@@ -21,10 +21,9 @@ public:
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
-public:
+private:
     Ui::TabCopy *ui;
 
-private:
     MainWidget* main_widget;
     DeviceManager* device_manager;
     QStringList stringlist_output_size;

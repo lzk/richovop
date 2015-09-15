@@ -5,14 +5,14 @@
 #include "app/devicecontrol.h"
 #include "app/deviceapp.h"
 #include "app/devicemanager.h"
-TabSetting::TabSetting(DeviceManager* dm ,QWidget *parent) :
+TabSetting::TabSetting(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TabSetting),
+    main_widget(widget),
     device_manager(dm)
 {
-//    ui->setupUi(this);
-    ui->setupUi(parent);
-#if 0
+    ui->setupUi(this);
+
     ui->stackedWidget->setStyleSheet("#pageWidget{ \
                                 min-height:420; \
                                 max-height:420; \
@@ -57,21 +57,52 @@ TabSetting::TabSetting(DeviceManager* dm ,QWidget *parent) :
 
 
     ui->pageWidget->installEventFilter(this);
+    ui->page3Widget->installEventFilter(this);
+    ui->page4Widget->installEventFilter(this);
     ui->cb_encryptionType->installEventFilter(this);
     ui->cb_keyIndex->installEventFilter(this);
     ui->cb_ssid->installEventFilter(this);
-//    ui->tab_4->installEventFilter(this);
 
     wifi_update();
     wifi_update_checkbox(ui->checkBox->isChecked());
     ui->checkBox->hide();//checkbox hide
     ui->checkBox_powerOff->hide();
-#endif
+
 }
 
 TabSetting::~TabSetting()
 {
     delete ui;
+}
+
+bool TabSetting::eventFilter(QObject *obj, QEvent *event)
+{
+    QEvent::Type type = event->type();
+    switch(type){
+    case QEvent::Wheel:
+        if(qobject_cast<QComboBox*>(obj))
+            return true;
+        break;
+    case QEvent::Show:
+        if(obj == ui->pageWidget)
+            wifi_init();
+        else if(obj == ui->page3Widget)
+            device_manager->emit_cmd(DeviceContrl::CMD_PRN_TonerEnd_Get);
+        else if(obj == ui->page4Widget){
+            device_manager->emit_cmd(DeviceContrl::CMD_PRN_PSaveTime_Get);
+//            device_manager->emit_cmd(DeviceContrl::CMD_PRN_PowerOff_Get);
+        }
+        break;
+default:
+        break;
+    }
+    return QWidget::eventFilter(obj, event);
+}
+
+void TabSetting::hideEvent(QHideEvent * e)
+{
+    passwd_checked = false;
+    QWidget::hideEvent(e);
 }
 
 void TabSetting::wifi_update_encryptionType()
@@ -212,13 +243,13 @@ bool TabSetting::wifi_validate_ssidPassword()
 
 void TabSetting::wifi_init()
 {
-//    emit_cmd(DeviceContrl::CMD_WIFI_get);//for last version
+//    device_manager->emit_cmd(DeviceContrl::CMD_WIFI_get);//for last version
     DeviceApp* device_app = device_manager->deviceApp();
     if(device_app){
 //        if(DeviceContrl::CMD_STATUS_COMPLETE == device_app->get_cmdStatus())
         {
             install_next_callback(SLOT(slots_wifi_refreshAplist()));
-            emit_cmd(DeviceContrl::CMD_WIFI_get);
+            device_manager->emit_cmd(DeviceContrl::CMD_WIFI_get);
         }
     }
 }
@@ -226,7 +257,7 @@ void TabSetting::wifi_init()
 void TabSetting::slots_wifi_getStatusToRefreshAplist()
 {
     if(wifi_getStatus()){
-        emit_cmd(DeviceContrl::CMD_WIFI_getAplist);
+        device_manager->emit_cmd(DeviceContrl::CMD_WIFI_getAplist);
     }
 }
 
@@ -246,13 +277,13 @@ int TabSetting::wifi_getStatus()
 void TabSetting::wifi_getStatusToRefreshAplist()
 {
     //only wifi enabled can do
-//    emit_cmd(DeviceContrl::CMD_WIFI_get);//for last version
+//    device_manager->emit_cmd(DeviceContrl::CMD_WIFI_get);//for last version
     DeviceApp* device_app = device_manager->deviceApp();
     if(device_app){
 //        if(DeviceContrl::CMD_STATUS_COMPLETE == device_app->get_cmdStatus())
         {
             install_next_callback(SLOT(slots_wifi_getStatusToRefreshAplist()));
-            emit_cmd(DeviceContrl::CMD_WIFI_GetWifiStatus);
+            device_manager->emit_cmd(DeviceContrl::CMD_WIFI_GetWifiStatus);
         }
     }
 }
@@ -267,7 +298,7 @@ void TabSetting::slots_wifi_refreshAplist()
     if(wifi_para.wifiEnable & 1){//wifi enabled then refresh aplist
 //        wifi_refreshAplist();
         install_next_callback(SLOT(slots_wifi_getStatusToRefreshAplist()));
-        emit_cmd(DeviceContrl::CMD_WIFI_GetWifiStatus_immediately);
+        device_manager->emit_cmd(DeviceContrl::CMD_WIFI_GetWifiStatus_immediately);
     }else{
         DeviceApp* device_app = device_manager->deviceApp();
         device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
@@ -295,7 +326,7 @@ void TabSetting::slots_wifi_enable()
     device_manager->wifi_set_para(&wifi_para);
 
 //    install_next_callback(SLOT(slots_cmd_complete()));
-    emit_cmd(DeviceContrl::CMD_WIFI_apply);
+    device_manager->emit_cmd(DeviceContrl::CMD_WIFI_apply);
 }
 
 
@@ -314,7 +345,7 @@ void TabSetting::slots_wifi_checkbox(bool checked)
 //        if(DeviceContrl::CMD_STATUS_COMPLETE == device_app->get_cmdStatus())
         {
             install_next_callback(SLOT(slots_wifi_enable()));
-            emit_cmd(DeviceContrl::CMD_WIFI_get);
+            device_manager->emit_cmd(DeviceContrl::CMD_WIFI_get);
         }
     }
 }
@@ -340,7 +371,7 @@ void TabSetting::cmdResult_passwd_confirmed(int err)
 void TabSetting::slots_passwd_comfirmed()
 {
     install_next_callback(SLOT(slots_wifi_getStatusToApply()));
-    emit_cmd(DeviceContrl::CMD_WIFI_GetWifiStatus_immediately);
+    device_manager->emit_cmd(DeviceContrl::CMD_WIFI_GetWifiStatus_immediately);
 }
 
 #include <QInputDialog>
@@ -348,16 +379,16 @@ void TabSetting::slots_passwd_comfirmed()
 void TabSetting::wifi_passwd_doConfirm()
 {
     if(passwd_checked){
-//        emit_cmd(DeviceContrl::CMD_PASSWD_confirmForApply);//last version
-        emit_cmd(DeviceContrl::CMD_PASSWD_confirm);
+//        device_manager->emit_cmd(DeviceContrl::CMD_PASSWD_confirmForApply);//last version
+        device_manager->emit_cmd(DeviceContrl::CMD_PASSWD_confirm);
     }else{
         bool ok;
         passwd = DialogLogin::getPasswd(this ,&ok);
 //        passwd = QInputDialog::getText(this ,tr("IDS_ST_Login") ,tr("IDS_ST_Password") ,QLineEdit::Password ,QString() ,&ok);
         if (ok && !passwd.isEmpty()){
             device_manager->passwd_set(passwd.toLatin1());
-//            emit_cmd(DeviceContrl::CMD_PASSWD_confirmForApply);//last version
-            emit_cmd(DeviceContrl::CMD_PASSWD_confirm);
+//            device_manager->emit_cmd(DeviceContrl::CMD_PASSWD_confirmForApply);//last version
+            device_manager->emit_cmd(DeviceContrl::CMD_PASSWD_confirm);
         }else{
             DeviceApp* device_app = device_manager->deviceApp();
             device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
@@ -369,7 +400,7 @@ void TabSetting::wifi_passwd_doConfirm(const char *member)
 {
     if(passwd_checked){
         install_next_callback(member);
-        emit_cmd(DeviceContrl::CMD_PASSWD_confirm);
+        device_manager->emit_cmd(DeviceContrl::CMD_PASSWD_confirm);
     }else{
         bool ok;
         passwd = DialogLogin::getPasswd(this ,&ok);
@@ -377,7 +408,7 @@ void TabSetting::wifi_passwd_doConfirm(const char *member)
         if (ok && !passwd.isEmpty()){
             device_manager->passwd_set(passwd.toLatin1());
             install_next_callback(member);
-            emit_cmd(DeviceContrl::CMD_PASSWD_confirm);
+            device_manager->emit_cmd(DeviceContrl::CMD_PASSWD_confirm);
         }else{
             DeviceApp* device_app = device_manager->deviceApp();
             device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
@@ -403,7 +434,7 @@ void TabSetting::wifi_apply()
     wifi_para.wifiEnable &= ~1;
     wifi_para.wifiEnable |= ui->checkBox->isChecked() ? 1 : 0;//bit 0
     device_manager->wifi_set_para(&wifi_para);
-    emit_cmd(DeviceContrl::CMD_WIFI_apply);
+    device_manager->emit_cmd(DeviceContrl::CMD_WIFI_apply);
 }
 
 void TabSetting::passwd_set_doConfirm()
@@ -421,7 +452,7 @@ void TabSetting::passwd_set_doConfirm()
 //            if(!passwd.isEmpty()){
                 device_manager->passwd_set(passwd.toLatin1());
 //                install_next_callback(SLOT(slots_passwd_set()));
-                emit_cmd(DeviceContrl::CMD_PASSWD_confirmForSetPasswd);
+                device_manager->emit_cmd(DeviceContrl::CMD_PASSWD_confirmForSetPasswd);
 //            }
         }else{
             DeviceApp* device_app = device_manager->deviceApp();
@@ -433,7 +464,7 @@ void TabSetting::passwd_set_doConfirm()
 void TabSetting::slots_passwd_set()
 {
     device_manager->passwd_set(ui->le_newPassword->text().toLatin1());
-    emit_cmd(DeviceContrl::CMD_PASSWD_set);
+    device_manager->emit_cmd(DeviceContrl::CMD_PASSWD_set);
 }
 
 //update all wifi para
@@ -531,27 +562,6 @@ void TabSetting::result_wifi_getAplist()
 //    emit ui->cb_ssid->activated(ui->cb_ssid->currentText());
 }
 
-void TabSetting::emit_cmd(int cmd)
-{
-    DeviceApp* device_app = device_manager->deviceApp();
-    if(device_app && !device_app->emit_cmd(cmd)){
-//            messagebox_exec(tr("The machine is busy, please try later..."));
-    }
-}
-
-void TabSetting::slots_cmd_result(int cmd ,int err)
-{
-    switch(cmd)
-    {
-//    case DeviceContrl::CMD_DEVICE_status:
-//        cmdResult_getDeviceStatus(err);
-//        break;
-    default:
-//        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
-        break;
-    }
-}
-
 void TabSetting::slots_cmd()
 {
     QObject* sd = sender();
@@ -568,20 +578,191 @@ void TabSetting::slots_cmd()
 void TabSetting::on_spinBox_PSaveTime_valueChanged(int arg1)
 {
     cmdst_PSave_time pSave_time = arg1;
-    device_manager->wifi_setPSaveTime(&pSave_time);
-    emit_cmd(DeviceContrl::CMD_PRN_PSaveTime_Set);
+    device_manager->printer_setPSaveTime(&pSave_time);
+    device_manager->emit_cmd(DeviceContrl::CMD_PRN_PSaveTime_Set);
 }
 
 void TabSetting::on_checkBox_powerOff_toggled(bool checked)
 {
     cmdst_powerOff_time powerOff_time = checked ? 1 : 0;
-    device_manager->wifi_setPowerOffTime(&powerOff_time);
-    emit_cmd(DeviceContrl::CMD_PRN_PowerOff_Set);
+    device_manager->printer_setPowerOffTime(&powerOff_time);
+    device_manager->emit_cmd(DeviceContrl::CMD_PRN_PowerOff_Set);
 }
 
 void TabSetting::on_checkBox_tonerEnd_toggled(bool checked)
 {
     cmdst_tonerEnd tonerEnd = checked ? 1 : 0;
-    device_manager->wifi_setTonerEnd(&tonerEnd);
-    emit_cmd(DeviceContrl::CMD_PRN_TonerEnd_Set);
+    device_manager->printer_setTonerEnd(&tonerEnd);
+    device_manager->emit_cmd(DeviceContrl::CMD_PRN_TonerEnd_Set);
+}
+
+void TabSetting::slots_cmd_complete()
+{
+    disconnect(SIGNAL(signals_cmd_next()));
+    DeviceApp* device_app = device_manager->deviceApp();
+    device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+}
+
+void TabSetting::cmdResult_passwd_confirmForApply(int err)
+{
+    DeviceApp* device_app = device_manager->deviceApp();
+    if(!device_app)
+        return;
+    if(!err){//no err,ACK
+        passwd_checked = true;
+        wifi_apply();
+    }else if(ERR_Password_incorrect == err){//password incorrect
+        passwd_checked = false;
+        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+        wifi_passwd_doConfirm();
+    }else{
+        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+    }
+}
+
+void TabSetting::cmdResult_wifi_apply(int err)
+{
+    DeviceApp* device_app = device_manager->deviceApp();
+    if(!device_app)
+        return;
+    if(!err){
+        //clear passwd
+        wifi_ms_password.clear();
+        wifi_sw_password.clear();
+        ui->le_passphrase->clear();
+        ui->le_wepkey->clear();
+        wifi_update();
+    }
+    device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+}
+
+void TabSetting::cmdResult_passwd_confirmForSetPasswd(int err)
+{
+    DeviceApp* device_app = device_manager->deviceApp();
+    if(!device_app)
+        return;
+    if(!err){//no err,ACK
+        slots_passwd_set();
+    }else if(ERR_Password_incorrect == err){//password incorrect
+        passwd_checked = false;
+        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+        passwd_set_doConfirm();
+    }else{
+        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+    }
+}
+
+void TabSetting::cmdResult_passwd_set(int err)
+{
+    DeviceApp* device_app = device_manager->deviceApp();
+    if(!device_app)
+        return;
+    if(!err){
+        ui->le_confirmPassword->clear();
+        ui->le_newPassword->clear();
+    }
+    device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+}
+
+void TabSetting::cmdResult_wifi_getAplist(int err)
+{
+    DeviceApp* device_app = device_manager->deviceApp();
+    if(!device_app)
+        return;
+    if(!err){
+        result_wifi_getAplist();
+    }
+    device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+}
+
+int TabSetting::cmdResult_emit_next(int err)
+{
+    DeviceApp* device_app = device_manager->deviceApp();
+    if(!err){
+        emit signals_cmd_next();
+    }else{
+        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+    }
+    return err;
+}
+
+void TabSetting::cmdResult_wifi_get(int err)
+{
+    //for last version
+//    DeviceApp* device_app = device_manager->deviceApp();
+//    if(!device_app)
+//        return;
+//    if(!err){
+//        emit_cmd(DeviceContrl::CMD_WIFI_getAplist);
+//    }else{
+//        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+//        wifi_update_checkbox(ui->checkBox->isChecked());
+//    }
+    if(!cmdResult_emit_next(err)){
+        wifi_update_checkbox(ui->checkBox->isChecked());
+    }
+}
+
+void TabSetting::slots_cmd_result(int cmd ,int err)
+{
+    DeviceApp* device_app = device_manager->deviceApp();
+    if(!device_app)
+        return;
+    //handle cmd result
+    switch(cmd)
+    {
+    case DeviceContrl::CMD_DEVICE_status:
+        break;
+    case DeviceContrl::CMD_PASSWD_confirm:
+        cmdResult_passwd_confirmed(err);
+        break;
+    case DeviceContrl::CMD_PASSWD_confirmForApply:
+        cmdResult_passwd_confirmForApply(err);
+        break;
+    case DeviceContrl::CMD_PASSWD_confirmForSetPasswd:
+        cmdResult_passwd_confirmForSetPasswd(err);
+        break;
+    case DeviceContrl::CMD_PASSWD_set:
+        cmdResult_passwd_set(err);
+        break;
+    case DeviceContrl::CMD_WIFI_apply:
+        cmdResult_wifi_apply(err);
+        break;
+    case DeviceContrl::CMD_WIFI_getAplist:
+        cmdResult_wifi_getAplist(err);
+        break;
+    case DeviceContrl::CMD_WIFI_get:
+        cmdResult_wifi_get(err);
+        break;
+    case DeviceContrl::CMD_WIFI_GetWifiStatus:
+    case DeviceContrl::CMD_WIFI_GetWifiStatus_immediately:
+        cmdResult_emit_next(err);
+        break;
+    case DeviceContrl::CMD_PRN_TonerEnd_Get:{
+        cmdst_tonerEnd para = device_manager->printer_getTonerEnd();
+        if(para)
+            ui->checkBox_tonerEnd->setChecked(true);
+        else
+            ui->checkBox_tonerEnd->setChecked(false);
+        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+    }
+        break;
+    case DeviceContrl::CMD_PRN_PSaveTime_Get:{
+        cmdst_PSave_time para = device_manager->printer_getPSaveTime();
+        ui->spinBox_PSaveTime->setValue(para);
+        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+    }
+        break;
+    case DeviceContrl::CMD_PRN_PowerOff_Get:{
+        cmdst_powerOff_time para = device_manager->printer_getPowerOffTime();
+        if(para)
+            ui->checkBox_powerOff->setChecked(true);
+        else
+            ui->checkBox_powerOff->setChecked(false);
+        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
+    }
+        break;
+    default:
+        break;
+    }
 }

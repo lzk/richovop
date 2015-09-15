@@ -94,13 +94,13 @@ max-height:50;
 background-color:white;
 }
 
-QComboBox
+#TabCopy QComboBox
 {
 min-width:180px;
 max-width:180px;
 }
 
-QToolButton
+#TabCopy QToolButton
 {
  border-radius: 45px;
 min-width:90px;
@@ -113,16 +113,16 @@ font:20px;
 	color: #4c4c4c;
 }
 
-#IDCardCopy:pressed
+#TabCopy #IDCardCopy:pressed
 {
 	background-color:gray;
 }
-#IDCardCopy:!enabled
+#TabCopy #IDCardCopy:!enabled
 {
 	background-color:gray;
 }
 
-#copy
+#TabCopy #copy
 {
 min-width:100px;
 max-width:100px;
@@ -130,21 +130,21 @@ max-width:100px;
 border:none;
 }
 
-#copy:!enabled
+#TabCopy #copy:!enabled
 {
 	background-color:#9d9b98;
 }
-#copy:enabled:!pressed
+#TabCopy #copy:enabled:!pressed
 {
 	background-color:#faaf40;
 }
-#copy:pressed
+#TabCopy #copy:pressed
 {
 /*	background-color:#71c2cd;*/
 	background-color:#9d9b98;
 }
 
-QPushButton
+#TabCopy QPushButton
 {
 	min-width:80;
 	max-width:80;
@@ -152,7 +152,7 @@ QPushButton
 	max-height:25;
 }
 
-#btn_default
+#TabCopy #btn_default
 {
 	min-width:100;
 	max-width:100;
