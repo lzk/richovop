@@ -14,7 +14,8 @@ DeviceContrl::DeviceContrl(DeviceManager* dm):
     device_manager(dm),
     device(dm->device),
     protocol(dm->protocol),
-    confirmed(false)
+    confirmed(false),
+    cmd_status(CMD_STATUS_COMPLETE)
 {
 }
 
@@ -47,79 +48,12 @@ void DeviceContrl::slots_deviceChanged(const QString& devicename)
     current_devicename = devicename;
 }
 
-void DeviceContrl::slots_cmd(int cmd)
-{
-//    assert(cmd < CMD_MAX);
-//    mutex.lock();
-//    current_devicename = selected_devicename;
-//    mutex.unlock();
-    if(current_devicename == QString())
-        return;
-    int err = -1;
-    switch(cmd){
-    case CMD_DEVICE_status:
-        err = protocol->cmd(VopProtocol::CMD_GetStatus);
-        break;
-    case CMD_GetCopy:
-        err = protocol->cmd(VopProtocol::CMD_GetCopy);
-        break;
-    case CMD_COPY:
-        err = protocol->cmd(VopProtocol::CMD_COPY);
-        break;
-    case CMD_WIFI_apply:
-        err = protocol->cmd(VopProtocol::CMD_WIFI_apply);
-        break;
-    case CMD_WIFI_get:
-        err = protocol->cmd(VopProtocol::CMD_WIFI_get);
-        break;
-    case CMD_WIFI_getAplist:
-        err = protocol->cmd(VopProtocol::CMD_WIFI_getAplist);
-        break;
-    case CMD_PASSWD_set:
-        err = protocol->cmd(VopProtocol::CMD_PASSWD_set);
-        break;
-    case CMD_PASSWD_get:
-        err = protocol->cmd(VopProtocol::CMD_PASSWD_get);
-        break;
-    case CMD_WIFI_GetWifiStatus:
-    case CMD_WIFI_GetWifiStatus_immediately:
-        err = protocol->cmd(VopProtocol::CMD_WIFI_GetWifiStatus);
-        break;
-    case CMD_PASSWD_confirm:
-    case CMD_PASSWD_confirmForApply:
-    case CMD_PASSWD_confirmForSetPasswd:
-        err = protocol->cmd(VopProtocol::CMD_PASSWD_confirm);
-        break;
-    case CMD_PRN_TonerEnd_Get:
-        err = protocol->cmd(VopProtocol::CMD_PRN_TonerEnd_Get);
-        break;
-    case CMD_PRN_TonerEnd_Set:
-        err = protocol->cmd(VopProtocol::CMD_PRN_TonerEnd_Set);
-        break;
-    case CMD_PRN_PSaveTime_Get:
-        err = protocol->cmd(VopProtocol::CMD_PRN_PSaveTime_Get);
-        break;
-    case CMD_PRN_PSaveTime_Set:
-        err = protocol->cmd(VopProtocol::CMD_PRN_PSaveTime_Set);
-        break;
-    case CMD_PRN_PowerOff_Get:
-        err = protocol->cmd(VopProtocol::CMD_PRN_PowerOff_Get);
-        break;
-    case CMD_PRN_PowerOff_Set:
-        err = protocol->cmd(VopProtocol::CMD_PRN_PowerOff_Set);
-        break;
-    default:
-        break;
-    }
-    emit signals_cmd_result(cmd ,err);
-}
-
-bool DeviceContrl::get_confirmed()
+bool DeviceContrl::get_passwd_confirmed()
 {
     QMutexLocker locker(&device_manager->mutex_ctrl);
     return confirmed;
 }
-void DeviceContrl::set_confirmed(bool b)
+void DeviceContrl::set_passwd_confirmed(bool b)
 {
     QMutexLocker locker(&device_manager->mutex_ctrl);
     confirmed = b;
@@ -127,11 +61,12 @@ void DeviceContrl::set_confirmed(bool b)
 
 int DeviceContrl::cmd_setting_confirm()
 {
-    int err;
-    if(!get_confirmed())
+    int err = 0;
+    if(!get_passwd_confirmed()){
         err = protocol->cmd(VopProtocol::CMD_PASSWD_confirm);
-    if(!err){
-        set_confirmed(true);
+        if(!err){
+            set_passwd_confirmed(true);
+        }
     }
     return err;
 }
@@ -157,6 +92,7 @@ void DeviceContrl::slots_cmd_plus(int cmd)
         return;
     }
     int err = -1;
+    set_cmdStatus(cmd);
     switch(cmd){
     case CMD_DEVICE_status:
         err = protocol->cmd(VopProtocol::CMD_GetStatus);
@@ -169,72 +105,87 @@ void DeviceContrl::slots_cmd_plus(int cmd)
     case CMD_WIFI_apply_plus:
         err = cmd_setting_confirm();
         if(err){
-            emit signals_cmd_result(cmd ,err);
-            return;
+            break;
         }
         err = cmd_wifi_status();
         if(err){
-            emit signals_cmd_result(cmd ,err);
-            return;
+            break;
         }
         err = protocol->cmd(VopProtocol::CMD_WIFI_apply);
-        emit signals_cmd_result(cmd ,err);
         break;
 
     case CMD_WIFI_refresh_plus:
         err = protocol->cmd(VopProtocol::CMD_WIFI_get);
         if(err){
-            emit signals_cmd_result(cmd ,err);
-            return;
+            break;
         }
         err = cmd_wifi_status();
         if(err){
-            emit signals_cmd_result(cmd ,err);
-            return;
+            break;
         }
+        emit signals_progress(cmd ,50);
         err = protocol->cmd(VopProtocol::CMD_WIFI_getAplist);
-        emit signals_cmd_result(cmd ,err);
         break;
 
     case CMD_PASSWD_set_plus:
         err = protocol->cmd(VopProtocol::CMD_PASSWD_confirm);
         if(err){
-            emit signals_cmd_result(cmd ,err);
-            return;
+            break;
         }
-        set_confirmed(false);
+        emit signals_progress(cmd ,50);
+        set_passwd_confirmed(false);
         //load passwd
         device_manager->load_tmp_passwd_to_set();
         err = protocol->cmd(VopProtocol::CMD_PASSWD_set);
-        emit signals_cmd_result(cmd ,err);
         break;
 
     case CMD_PRN_TonerEnd_Get:
         err = protocol->cmd(VopProtocol::CMD_PRN_TonerEnd_Get);
-        emit signals_cmd_result(cmd ,err);
         break;
     case CMD_PRN_TonerEnd_Set:
+        err = cmd_setting_confirm();
+        if(err){
+            break;
+        }
         err = protocol->cmd(VopProtocol::CMD_PRN_TonerEnd_Set);
-        emit signals_cmd_result(cmd ,err);
         break;
     case CMD_PRN_PowerSave_Get:
         err = protocol->cmd(VopProtocol::CMD_PRN_PSaveTime_Get);
         if(err){
-            emit signals_cmd_result(cmd ,err);
-            return;
+            break;
         }
 //        err = protocol->cmd(VopProtocol::CMD_PRN_PowerOff_Get);
-        emit signals_cmd_result(cmd ,err);
         break;
     case CMD_PRN_PSaveTime_Set:
+        err = cmd_setting_confirm();
+        if(err){
+            break;
+        }
         err = protocol->cmd(VopProtocol::CMD_PRN_PSaveTime_Set);
-        emit signals_cmd_result(cmd ,err);
         break;
     case CMD_PRN_PowerOff_Set:
+        err = cmd_setting_confirm();
+        if(err){
+            break;
+        }
         err = protocol->cmd(VopProtocol::CMD_PRN_PowerOff_Set);
-        emit signals_cmd_result(cmd ,err);
         break;
     default:
         break;
     }
+    emit signals_progress(cmd ,80);
+    set_cmdStatus(CMD_STATUS_COMPLETE);
+    emit signals_cmd_result(cmd ,err);
+}
+
+void DeviceContrl::set_cmdStatus(int status)
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    cmd_status = status;
+}
+
+int DeviceContrl::get_cmdStatus()
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    return cmd_status;
 }

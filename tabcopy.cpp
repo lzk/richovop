@@ -61,7 +61,6 @@ TabCopy::TabCopy(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
     }
 
     updateCopy();
-//    connect(ui->btn_default ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
     connect(ui->scaling_minus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
     connect(ui->scaling_plus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
     connect(ui->copies_minus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
@@ -69,14 +68,12 @@ TabCopy::TabCopy(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
     connect(ui->density_minus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
     connect(ui->density_plus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
 //    connect(ui->text ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_pushbutton()));
-//    connect(ui->IDCardCopy ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
     connect(ui->photo ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_radio(bool)));
     connect(ui->combo_documentType ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(ui->combo_documentSize ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(ui->combo_outputSize ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(ui->combo_nIn1Copy ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(ui->combo_dpi ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
-//    connect(ui->copy ,SIGNAL(clicked()) ,this ,SLOT(slots_cmd()));
 
 //    action_copy_default = new QAction(this);
 //    connect(action_copy_default ,SIGNAL(triggered()) ,this ,SLOT(slots_copy_default()));
@@ -88,13 +85,13 @@ TabCopy::TabCopy(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
     ui->combo_nIn1Copy->installEventFilter(this);
     ui->combo_dpi->installEventFilter(this);
 
-//    ui->copy->installEventFilter(this);
-
+//    keyboard_scaling = new ScalingSettingKeyboard;
     keyboard_scaling = new ScalingSettingKeyboard(this);
     keyboard_scaling->hide();
     ui->scaling->installEventFilter(this);
     connect(keyboard_scaling ,SIGNAL(sendScalingData(QString)) ,this ,SLOT(slots_copy_keyboard(QString)));
 
+//    keyboard_copies = new CopiesSettingKeyboard;
     keyboard_copies = new CopiesSettingKeyboard(this);
     keyboard_copies->hide();
     ui->copies->installEventFilter(this);
@@ -360,9 +357,6 @@ void TabCopy::slots_cmd_result(int cmd ,int err)
 void TabCopy::cmdResult_getDeviceStatus(int err)
 {
     static bool idCardMode = false;
-    DeviceApp* device_app = device_manager->deviceApp();
-    if(!device_app)
-        return;
     if(!err){
         int _status=device_manager->get_deviceStatus();
         switch(_status){
@@ -399,13 +393,12 @@ void TabCopy::cmdResult_getDeviceStatus(int err)
     }
 //        updateCopy();//disable copy or enable
     ui->copy->setEnabled(device_status);
-    device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
 }
 
 void TabCopy::on_copy_clicked()
 {
     ui->copy->setEnabled(false);
-    device_manager->emit_cmd(DeviceContrl::CMD_COPY);
+    device_manager->emit_cmd_plus(DeviceContrl::CMD_COPY);
 }
 
 void TabCopy::on_IDCardCopy_clicked()

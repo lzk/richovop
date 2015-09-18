@@ -569,17 +569,45 @@ void VopProtocol::net_setV6(net_ipv6_st* p)
     memcpy(ipv6_info ,p ,sizeof(*p));
 }
 
+static const char* get_cmd_string(int cmd)
+{
+    switch(cmd){
+    case VopProtocol::CMD_GetStatus:        return "get device id";
+    case VopProtocol::CMD_GetCopy:        return "copy get";
+    case VopProtocol::CMD_COPY:        return "copy set";
+    case VopProtocol::CMD_WIFI_apply:        return "wifi set";
+    case VopProtocol::CMD_WIFI_get:        return "wifi get";
+    case VopProtocol::CMD_WIFI_getAplist:        return "wifi get aplist";
+    case VopProtocol::CMD_PASSWD_set:        return "password set";
+    case VopProtocol::CMD_PASSWD_get:        return "password get";
+    case VopProtocol::CMD_PASSWD_confirm:        return "password confirm";
+    case VopProtocol::CMD_WIFI_GetWifiStatus:        return "wifi get status";
+    case VopProtocol::CMD_PRN_TonerEnd_Get:        return "tonerend get";
+    case VopProtocol::CMD_PRN_TonerEnd_Set:        return "tonerend set";
+    case VopProtocol::CMD_PRN_PSaveTime_Get:        return "psave time get";
+    case VopProtocol::CMD_PRN_PSaveTime_Set:        return "psave time set";
+    case VopProtocol::CMD_PRN_PowerOff_Get:        return "power off get";
+    case VopProtocol::CMD_PRN_PowerOff_Set:        return "power off set";
+    case VopProtocol::CMD_NET_GetV4:        return "net get v4";
+    case VopProtocol::CMD_NET_SetV4:        return "net set v4";
+    case VopProtocol::CMD_NET_GetV6:        return "net get v6";
+    case VopProtocol::CMD_NET_SetV6:        return "net set v6";
+    default:return "none";
+    }
+}
+
+
 int VopProtocol::cmd(int _cmd)
 {
     int err = ERR_vop_cannot_support;
-    qLog1(QString().sprintf("exec cmd:%d" ,_cmd));
+    qLog1(QString().sprintf("exec cmd:%s" ,get_cmd_string(_cmd)));
     switch(_cmd)    {
     case CMD_GetStatus:{
         char buffer[1024];
         memset(buffer ,0 ,sizeof(buffer));
         err = DeviceContrl::device_getDeviceStatus(buffer ,sizeof(buffer));
         buffer[1023] = 0;//make sure buffer is a c string.
-        qLog1(QString().sprintf("buffer size:%lu" ,strlen(buffer)));
+//        qLog1(QString().sprintf("buffer size:%lu" ,strlen(buffer)));
         if(!err){
             if(DecodeStatusFromDeviceID(buffer ,status))
                 err = ERR_decode_status;

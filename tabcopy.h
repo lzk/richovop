@@ -23,18 +23,17 @@ protected:
 
 private:
     Ui::TabCopy *ui;
-
     MainWidget* main_widget;
     DeviceManager* device_manager;
-    QStringList stringlist_output_size;
     ScalingSettingKeyboard* keyboard_scaling;
     CopiesSettingKeyboard* keyboard_copies;
 
+    QStringList stringlist_output_size;
     bool device_status;
 
     void updateCopy();
-
     void cmdResult_getDeviceStatus(int err);
+
 public slots:
    void slots_cmd_result(int ,int);
 

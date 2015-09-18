@@ -25,7 +25,8 @@ extern QMainWindow* gMainWidow;
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::MainWidget)
+    ui(new Ui::MainWidget),
+    model(VopDevice::Device_3in1_wifi)
 {
     device_manager = new DeviceManager(this);
     ui->setupUi(this);
@@ -50,23 +51,26 @@ void MainWidget::createActions()
 
 void MainWidget::initializeUi()
 {
-    ui->tabWidget->clear();
-    TabCopy* tabCopy = new TabCopy(this ,device_manager ,this);
-    delete ui->tab_copy;
-    ui->tab_copy = tabCopy;
-    TabSetting* tabSetting = new TabSetting(this ,device_manager ,this);
-    delete ui->tab_setting;
-    ui->tab_setting = tabSetting;
-    ts = tabSetting->ui;
-    TabAbout* tabAbout = new TabAbout(this);
-    delete ui->tab_about;
-    ui->tab_about = tabAbout;
-    ui->tabWidget->addTab(ui->tab_copy ,tr("IDS_Tab_Copy"));
-    ui->tabWidget->addTab(ui->tab_setting ,tr("IDS_Tab_Setting"));
-    ui->tabWidget->addTab(ui->tab_about ,tr("IDS_Tab_About"));
+    ui->comboBox_deviceList->setView(new QListView);
+    ui->comboBox_deviceList->view()->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-    initializeTabCopy();
-    initializeTabSetting();
+    tab_copy = new TabCopy(this ,device_manager);
+    tab_setting = new TabSetting(this ,device_manager);
+    tab_about = new TabAbout();
+    listWidget = tab_setting->ui->listWidget;
+
+    ui->tabWidget->clear();
+    delete ui->tab_about;
+    delete ui->tab_copy;
+    delete ui->tab_setting;
+    ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
+    ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
+    ui->tabWidget->addTab(tab_about ,tr("IDS_Tab_About"));
+
+    qLog("setting parent is " + tab_setting->parent()->objectName());
+    tab_copy->installEventFilter(this);
+    connect(this ,SIGNAL(signals_cmd_result(int,int)) ,tab_copy ,SLOT(slots_cmd_result(int,int)));
+    connect(this ,SIGNAL(signals_cmd_result(int,int)) ,tab_setting ,SLOT(slots_cmd_result(int,int)));
  }
 
 void MainWidget::retranslateUi()
@@ -90,17 +94,6 @@ void MainWidget::initialize()
 
 }
 
-void MainWidget::initializeTabCopy()
-{
-    ui->tab_copy->installEventFilter(this);
-    connect(this ,SIGNAL(signals_cmd_result_copy(int,int)) ,ui->tab_copy ,SLOT(slots_cmd_result(int,int)));
-}
-
-void MainWidget::initializeTabSetting()
-{
-    connect(this ,SIGNAL(signals_cmd_result_setting(int,int)) ,ui->tab_setting ,SLOT(slots_cmd_result(int,int)));
-}
-
 bool MainWidget::eventFilter(QObject *obj, QEvent *event)
 {
     QEvent::Type type = event->type();
@@ -110,8 +103,8 @@ bool MainWidget::eventFilter(QObject *obj, QEvent *event)
             return true;
         break;
     case QEvent::Show:
-        if(obj == ui->tab_copy)
-            device_manager->emit_cmd(DeviceContrl::CMD_DEVICE_status);
+        if(obj == tab_copy)
+            device_manager->emit_cmd_plus(DeviceContrl::CMD_DEVICE_status);
         break;
 default:
         break;
@@ -122,40 +115,39 @@ default:
 void MainWidget::updateUi()
 {
     QString device_name = device_manager->get_deviceName();
-
-    int model = device_manager->getDeviceModel(device_name);
-    ui->tabWidget->hide();
+    model = device_manager->getDeviceModel(device_name);
+    ui->tabWidget->hide();//revoid cmd
     ui->tabWidget->clear();
     switch(model){
     case VopDevice::Device_3in1:
-        ts->listWidget->item(0)->setHidden(false);
-        ts->listWidget->setCurrentRow(0);
-        ui->tabWidget->addTab(ui->tab_copy ,tr("IDS_Tab_Copy"));
-//            ui->tabWidget->addTab(ui->tab_setting ,tr("IDS_Tab_Setting"));
+        listWidget->item(0)->setHidden(false);
+        listWidget->setCurrentRow(0);
+        ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
+//            ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
         break;
     case VopDevice::Device_3in1_wifi:
-        ts->listWidget->item(0)->setHidden(false);
-        ts->listWidget->setCurrentRow(0);
-        ui->tabWidget->addTab(ui->tab_copy ,tr("IDS_Tab_Copy"));
-        ui->tabWidget->addTab(ui->tab_setting ,tr("IDS_Tab_Setting"));
+        listWidget->item(0)->setHidden(false);
+        listWidget->setCurrentRow(0);
+        ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
+        ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
         break;
     case VopDevice::Device_sfp:
-        ui->tabWidget->addTab(ui->tab_setting ,tr("IDS_Tab_Setting"));
-        ts->listWidget->item(0)->setHidden(true);
-        ts->listWidget->setCurrentRow(1);
+        ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
+        listWidget->item(0)->setHidden(true);
+        listWidget->setCurrentRow(1);
         break;
     case VopDevice::Device_sfp_wifi:
     default:
-        ts->listWidget->item(0)->setHidden(false);
-        ts->listWidget->setCurrentRow(0);
-//            ui->tabWidget->addTab(ui->tab_copy ,tr("IDS_Tab_Copy"));
-        ui->tabWidget->addTab(ui->tab_setting ,tr("IDS_Tab_Setting"));
+        listWidget->item(0)->setHidden(false);
+        listWidget->setCurrentRow(0);
+//            ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
+        ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
         break;
     }
-    ui->tabWidget->addTab(ui->tab_about ,tr("IDS_Tab_About"));
-    ui->tabWidget->setCurrentWidget(ui->tab_about);
-    ui->tabWidget->show();
+    ui->tabWidget->addTab(tab_about ,tr("IDS_Tab_About"));
+    ui->tabWidget->show();//revoid cmd
 
+    ui->tabWidget->setCurrentWidget(tab_about);
     if(!device_name.isEmpty()){
         QString device_uri = device_manager->getCurrentDeviceURI();
         if(gMainWidow)
@@ -175,18 +167,12 @@ void MainWidget::slots_progressBar(int cmd ,int value)
     //value = 0, show progress bar
     if(!value){
         switch(cmd){
-        case DeviceContrl::CMD_DEVICE_status:
-            //do not show progress bar
-            break;
-//        case DeviceContrl::CMD_PASSWD_set:
-//        case DeviceContrl::CMD_WIFI_apply:
         case DeviceContrl::CMD_COPY:
-        case DeviceContrl::CMD_PASSWD_confirm:
-        case DeviceContrl::CMD_PASSWD_confirmForApply:
-        case DeviceContrl::CMD_PASSWD_confirmForSetPasswd:
         case DeviceContrl::CMD_PRN_TonerEnd_Set:
         case DeviceContrl::CMD_PRN_PSaveTime_Set:
         case DeviceContrl::CMD_PRN_PowerOff_Set:
+        case DeviceContrl::CMD_PASSWD_set_plus:
+        case DeviceContrl::CMD_WIFI_apply_plus:
 //            progressDialog->setLabel(new QLabel("\n\n" + tr("IDS_MSG_SetInfo") +"\t\t\t\t\t\n"));
             progressDialog->setLabelText("\n\n" + tr("IDS_MSG_SetInfo") +"\t\t\t\t\t\n");
             progressDialog->setValue(value);
@@ -194,13 +180,19 @@ void MainWidget::slots_progressBar(int cmd ,int value)
             progressDialog->move((QApplication::desktop()->width() - progressDialog->width())/2,
                   (QApplication::desktop()->height() - progressDialog->height())/2);
             break;
-        default:
+        case DeviceContrl::CMD_PRN_TonerEnd_Get:
+        case DeviceContrl::CMD_WIFI_refresh_plus:
+        case DeviceContrl::CMD_PRN_PowerSave_Get:
 //            progressDialog->setLabel(new QLabel("\n\n" + tr("IDS_MSG_GetInfo") +"\t\t\t\t\t\n"));
             progressDialog->setLabelText("\n\n" + tr("IDS_MSG_GetInfo") +"\t\t\t\t\t\n");
             progressDialog->setValue(value);
             progressDialog->show();
             progressDialog->move((QApplication::desktop()->width() - progressDialog->width())/2,
                   (QApplication::desktop()->height() - progressDialog->height())/2);
+            break;
+        //do not show progress bar
+        case DeviceContrl::CMD_DEVICE_status:
+        default:
             break;
         }
     }else{
@@ -213,20 +205,10 @@ void MainWidget::slots_progressBar(int cmd ,int value)
 void MainWidget::slots_timeout()
 {
     static int count = 0;
-    DeviceApp* device_app = device_manager->deviceApp();
-    if(device_app){
-        switch(device_app->get_cmdStatus())
-        {
-        case DeviceContrl::CMD_STATUS_COMPLETE://jobs complete,no job
-            if(0 == count % 5  && ui->tab_copy->isVisible())
-                device_manager->emit_cmd(DeviceContrl::CMD_DEVICE_status);
-            break;
 
-        //others cmd not complete
-        default://
-            break;
-        }
-    }
+    if(0 == count % 5
+            && (model == VopDevice::Device_3in1_wifi || model == VopDevice::Device_3in1))
+        device_manager->emit_cmd_plus(DeviceContrl::CMD_DEVICE_status);
 
     count ++;
     if(count >= 100)
@@ -235,26 +217,23 @@ void MainWidget::slots_timeout()
 
 void MainWidget::slots_cmd_result(int cmd ,int err)
 {
-    DeviceApp* device_app = device_manager->deviceApp();
-    if(!device_app)
-        return;
     qLog(QString("cmd return:") + VopProtocol::getErrString(err));
+    //cmd complete
+    slots_progressBar(cmd ,100);
     //handle err message box
     switch(err){
     case ERR_communication ://communication err
         if(DeviceContrl::CMD_DEVICE_status != cmd)
             messagebox_exec(tr("IDS_ERR_AcquireInformation"));
-        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
         break;
     case ERR_Password_incorrect :
-        if(     (DeviceContrl::CMD_PASSWD_confirmForApply == cmd)
-                ||(DeviceContrl::CMD_PASSWD_confirm == cmd)
-                ||(DeviceContrl::CMD_PASSWD_confirmForSetPasswd == cmd)
-                )
+//        if(     (DeviceContrl::CMD_WIFI_apply_plus == cmd)
+//                ||(DeviceContrl::CMD_PASSWD_set_plus == cmd)
+//                )
             messagebox_exec(tr("IDS_ERR_Authentication"));
         break;
     case ERR_Printer_busy :
-        if(DeviceContrl::CMD_COPY == cmd)
+//        if(DeviceContrl::CMD_COPY == cmd)
             messagebox_exec(tr("IDS_MSG_MachineBusy"));
         break;
     case ERR_CMD_invalid :
@@ -271,29 +250,7 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
         break;
     }
     //handle cmd result
-    switch(cmd)
-    {
-    case DeviceContrl::CMD_DEVICE_status:
-        emit signals_cmd_result_copy(cmd ,err);
-        break;
-    case DeviceContrl::CMD_PASSWD_confirm:
-    case DeviceContrl::CMD_PASSWD_confirmForApply:
-    case DeviceContrl::CMD_PASSWD_confirmForSetPasswd:
-    case DeviceContrl::CMD_PASSWD_set:
-    case DeviceContrl::CMD_WIFI_apply:
-    case DeviceContrl::CMD_WIFI_getAplist:
-    case DeviceContrl::CMD_WIFI_get:
-    case DeviceContrl::CMD_WIFI_GetWifiStatus:
-    case DeviceContrl::CMD_WIFI_GetWifiStatus_immediately:
-    case DeviceContrl::CMD_PRN_TonerEnd_Get:
-    case DeviceContrl::CMD_PRN_PSaveTime_Get:
-    case DeviceContrl::CMD_PRN_PowerOff_Get:
-        emit signals_cmd_result_setting(cmd ,err);
-        break;
-    default:
-        device_app->set_cmdStatus(DeviceContrl::CMD_STATUS_COMPLETE);
-        break;
-    }
+    emit signals_cmd_result(cmd ,err);
 }
 
 
@@ -303,8 +260,6 @@ void MainWidget::on_refresh_clicked()
     QStringList printerNames;
     int selected_printer = device_manager->getDeviceList(printerNames);
     if(-1 != selected_printer){//has printer
-        ui->tabWidget->setTabEnabled(0 ,true);
-        ui->tabWidget->setTabEnabled(1,true);
         ui->comboBox_deviceList->insertItems(0 ,printerNames);
         ui->comboBox_deviceList->setCurrentIndex(selected_printer);
     }

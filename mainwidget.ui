@@ -136,7 +136,7 @@ border: 1px solid darkgray;
           <item>
            <widget class="QLabel" name="logo">
             <property name="pixmap">
-             <pixmap resource="vop.qrc">:/images/Ricoh.bmp</pixmap>
+             <pixmap resource="vop.qrc">:/images/RICOH_logo_171x055.gif</pixmap>
             </property>
            </widget>
           </item>

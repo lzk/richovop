@@ -12,6 +12,7 @@ CopiesSettingKeyboard::CopiesSettingKeyboard(QWidget *parent) :
     ui->lineEdit_ShowCopiesPercent->setValidator(Validator);
 //    ui->lineEdit_ShowCopiesPercent->setText(QString::number(Temp::copiesTemp,10));
 }
+
 void CopiesSettingKeyboard::set_num(int num)
 {
     ui->lineEdit_ShowCopiesPercent->setText(QString::number(num,10));

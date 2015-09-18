@@ -11,7 +11,7 @@
 DeviceManager::DeviceManager(MainWidget* widget):
     device_app(NULL),
     main_widget(widget)
-{   
+{
     devices.clear();
     device = new VopDevice();
     protocol = new VopProtocol(this);
@@ -260,6 +260,12 @@ DeviceApp* DeviceManager::deviceApp()
     return device_app;
 }
 
+void DeviceManager::emit_cmd_plus(int cmd)
+{
+    if(device_app)
+        device_app->emit_cmd_plus(cmd);
+}/*
+
 void DeviceManager::emit_cmd(int cmd)
 {
     if(device_app){
@@ -267,7 +273,7 @@ void DeviceManager::emit_cmd(int cmd)
 //            messagebox_exec(tr("The machine is busy, please try later..."));
         }
     }
-}
+}*/
 
 void DeviceManager::set_tmp_passwd(const char* p)
 {
@@ -282,4 +288,18 @@ void DeviceManager::load_tmp_passwd_to_set()
     str = passwd_to_set;
     mutex_ctrl.unlock();
     passwd_set(str.toLatin1());
+}
+
+bool DeviceManager::get_passwd_confirmed()
+{
+    if(device_app)
+        return device_app->get_passwd_confirmed();
+    else
+        return false;
+}
+
+void DeviceManager::set_passwd_confirmed(bool b)
+{
+    if(device_app)
+        device_app->set_passwd_confirmed(b);
 }

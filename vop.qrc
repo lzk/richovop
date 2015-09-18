@@ -1,20 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/HotLine.png</file>
-        <file>images/Logo.png</file>
-        <file>images/Promotion.png</file>
-        <file>images/Update.png</file>
         <file>images/about.png</file>
-        <file>images/LENOVO.png</file>
-        <file>images/printer_184X171.ico</file>
-        <file>images/roundIDCopy.png</file>
-        <file>images/squareCopy.png</file>
-        <file>images/squareCopyAlt.png</file>
-        <file>images/squareCopyDisabled.png</file>
-        <file>images/Ricoh.bmp</file>
         <file>styles/default.qss</file>
         <file>translations/vop.zh_CN.qm</file>
         <file>translations/vop.en.qm</file>
         <file>translations/vop.ru.qm</file>
+        <file>images/RICOH_logo_171x055.gif</file>
     </qresource>
 </RCC>

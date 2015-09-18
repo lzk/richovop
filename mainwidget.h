@@ -11,10 +11,12 @@
 
 class QProgressDialog;
 class DeviceManager;
-
+class TabSetting;
+class TabCopy;
+class TabAbout;
+class QListWidget;
 namespace Ui {
 class MainWidget;
-class TabSetting;
 }
 
 class MessageBox:public QMessageBox
@@ -44,23 +46,24 @@ protected:
 
 private:
     Ui::MainWidget *ui;
-    Ui::TabSetting *ts;
 
-//    QAction* action_refresh;
-    QTimer timer;
-    QProgressDialog* progressDialog;
     DeviceManager* device_manager;
+    QListWidget *listWidget;
+    TabCopy* tab_copy;
+    TabSetting* tab_setting;
+    TabAbout* tab_about;
+//    QAction* action_refresh;
+    QProgressDialog* progressDialog;
+    int model;
     MessageBox msgBox;
     MessageBox msgBox_info;
+    QTimer timer;
 
     void initializeUi();
     void retranslateUi();
     void createActions();
     void updateUi();
     void initialize();
-
-    void initializeTabCopy();
-    void initializeTabSetting();
 
 public:
     QMessageBox::StandardButton messagebox_exec(const QString &text,
@@ -78,8 +81,6 @@ public:
 signals:
    void signals_deviceChanged(const QString&);
    void signals_cmd_result(int ,int);
-   void signals_cmd_result_copy(int ,int);
-   void signals_cmd_result_setting(int ,int);
 
 public slots:
    void slots_cmd_result(int ,int);

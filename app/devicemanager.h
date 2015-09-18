@@ -51,10 +51,14 @@ public:
 
     void passwd_set(const char*);
 
-    void emit_cmd(int);
+//    void emit_cmd(int);
+    void emit_cmd_plus(int);
 
     void set_tmp_passwd(const char*);
     void load_tmp_passwd_to_set();
+    bool get_passwd_confirmed();
+    void set_passwd_confirmed(bool b);
+
 private:
     QStringList devices;
     QString selected_devicename;

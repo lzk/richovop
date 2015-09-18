@@ -52,6 +52,10 @@ max-width:100;
 min-width:100;
 max-width:100;
 }
+/*#pageWidget #cb_ssid{
+min-width:250;
+max-width:250;
+}*/
 /*page2*/
 #page2Widget QLabel{
 min-width:150;
@@ -861,34 +865,34 @@ max-width:50;
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_psave_minus</sender>
-   <signal>clicked()</signal>
-   <receiver>spinBox_PSaveTime</receiver>
-   <slot>stepDown()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>255</x>
-     <y>124</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>493</x>
-     <y>124</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>pushButton_psave_plus</sender>
    <signal>clicked()</signal>
    <receiver>spinBox_PSaveTime</receiver>
    <slot>stepUp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>731</x>
-     <y>124</y>
+     <x>548</x>
+     <y>161</y>
     </hint>
     <hint type="destinationlabel">
      <x>493</x>
-     <y>124</y>
+     <y>161</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_psave_minus</sender>
+   <signal>clicked()</signal>
+   <receiver>spinBox_PSaveTime</receiver>
+   <slot>stepDown()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>438</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>493</x>
+     <y>161</y>
     </hint>
    </hints>
   </connection>
