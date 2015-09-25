@@ -46,6 +46,10 @@ public:
         CMD_PRN_PowerSave_Get,
         CMD_PRN_TonerEnd_Get,
 
+        CMD_IPv4_Get,
+        CMD_IPv4_Set,
+        CMD_IPv6_Get,
+        CMD_IPv6_Set,
         CMD_STATUS_COMPLETE,
 
         CMD_MAX,

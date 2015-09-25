@@ -35,6 +35,14 @@ MainWidget::MainWidget(QWidget *parent) :
     retranslateUi();
 
     initialize();
+    QList<QWidget*> widgets = findChildren<QWidget*>();
+    foreach(QWidget* widget ,widgets){
+        if(qobject_cast<QAbstractButton*>(widget)
+                || qobject_cast<QComboBox*>(widget)
+                ){
+            widget->setFocusPolicy(Qt::NoFocus);
+        }
+    }
 }
 
 MainWidget::~MainWidget()
@@ -137,11 +145,12 @@ void MainWidget::updateUi()
         listWidget->setCurrentRow(1);
         break;
     case VopDevice::Device_sfp_wifi:
-    default:
         listWidget->item(0)->setHidden(false);
         listWidget->setCurrentRow(0);
 //            ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
         ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
+        break;
+    default:
         break;
     }
     ui->tabWidget->addTab(tab_about ,tr("IDS_Tab_About"));
@@ -173,6 +182,8 @@ void MainWidget::slots_progressBar(int cmd ,int value)
         case DeviceContrl::CMD_PRN_PowerOff_Set:
         case DeviceContrl::CMD_PASSWD_set_plus:
         case DeviceContrl::CMD_WIFI_apply_plus:
+        case DeviceContrl::CMD_IPv4_Set:
+        case DeviceContrl::CMD_IPv6_Set:
 //            progressDialog->setLabel(new QLabel("\n\n" + tr("IDS_MSG_SetInfo") +"\t\t\t\t\t\n"));
             progressDialog->setLabelText("\n\n" + tr("IDS_MSG_SetInfo") +"\t\t\t\t\t\n");
             progressDialog->setValue(value);
@@ -183,6 +194,8 @@ void MainWidget::slots_progressBar(int cmd ,int value)
         case DeviceContrl::CMD_PRN_TonerEnd_Get:
         case DeviceContrl::CMD_WIFI_refresh_plus:
         case DeviceContrl::CMD_PRN_PowerSave_Get:
+        case DeviceContrl::CMD_IPv4_Get:
+        case DeviceContrl::CMD_IPv6_Get:
 //            progressDialog->setLabel(new QLabel("\n\n" + tr("IDS_MSG_GetInfo") +"\t\t\t\t\t\n"));
             progressDialog->setLabelText("\n\n" + tr("IDS_MSG_GetInfo") +"\t\t\t\t\t\n");
             progressDialog->setValue(value);

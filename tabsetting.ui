@@ -21,7 +21,8 @@ max-height:120;
 
 #stackedWidget,
 #pageWidget,#page2Widget,
-#page3Widget,#page4Widget
+#page3Widget,#page4Widget,
+#page5Widget
 {
 min-width:600;
 max-width:600;
@@ -78,6 +79,23 @@ padding:10;
 #pushButton_psave_minus,#pushButton_psave_plus{
 min-width:50;
 max-width:50;
+}
+/*page5*/
+#page5Widget QLabel{
+min-width:150;
+max-width:150;
+}
+#page5Widget #label_4{
+min-width:10;
+max-width:10;
+}
+#widget_ipv4,#widget_ipv6{
+min-height:400;
+max-height:400;
+}
+#ipv6_sb_manualAddressMask{
+min-width:40;
+max-width:40;
 }</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
@@ -114,6 +132,11 @@ max-width:50;
          <string>IDS_ST_PowerSave</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>IDS_ST_ipAddress</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>
@@ -136,7 +159,7 @@ max-width:50;
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="page">
         <widget class="QWidget" name="pageWidget" native="true">
@@ -207,6 +230,9 @@ max-width:50;
                    </property>
                    <property name="text">
                     <string>IDS_ST_SearchWifi</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
                    </property>
                   </widget>
                  </item>
@@ -798,6 +824,446 @@ max-width:50;
          </layout>
         </widget>
        </widget>
+       <widget class="QWidget" name="page_5">
+        <widget class="QWidget" name="page5Widget" native="true">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>600</width>
+           <height>600</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <property name="spacing">
+           <number>20</number>
+          </property>
+          <property name="topMargin">
+           <number>50</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QRadioButton" name="ipa_rb_ipv4">
+              <property name="text">
+               <string>IDS_IPA_IPv4</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">buttonGroup</string>
+              </attribute>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="ipa_rb_ipv6">
+              <property name="text">
+               <string>IDS_IPA_IPv6</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">buttonGroup</string>
+              </attribute>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_ipv4" native="true">
+            <layout class="QFormLayout" name="formLayout_4">
+             <property name="horizontalSpacing">
+              <number>50</number>
+             </property>
+             <property name="verticalSpacing">
+              <number>20</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>IDS_IPA_get</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_8">
+               <item>
+                <widget class="QRadioButton" name="ipa_rb_autoGet">
+                 <property name="text">
+                  <string>IDS_IPA_autoGet</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="ipa_rb_stable">
+                 <property name="text">
+                  <string>IDS_IPA_stable</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="iDS_IPA_IpAddressLabel">
+               <property name="text">
+                <string>IDS_IPA_ipAddress</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="iDS_IPA_gatewayLabel">
+               <property name="text">
+                <string>IDS_IPA_gateway</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="iDS_IPA_subnetMaskLabel">
+               <property name="text">
+                <string>IDS_IPA_subnetMask</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_13">
+               <item>
+                <widget class="QSpinBox" name="ipa_sb_ipAddress">
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::NoButtons</enum>
+                 </property>
+                 <property name="maximum">
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="ipa_sb_ipAddress_2">
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::NoButtons</enum>
+                 </property>
+                 <property name="maximum">
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="ipa_sb_ipAddress_3">
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::NoButtons</enum>
+                 </property>
+                 <property name="maximum">
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="ipa_sb_ipAddress_4">
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::NoButtons</enum>
+                 </property>
+                 <property name="maximum">
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="2" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_14">
+               <item>
+                <widget class="QSpinBox" name="ipa_sb_gateway">
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::NoButtons</enum>
+                 </property>
+                 <property name="maximum">
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="ipa_sb_gateway_2">
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::NoButtons</enum>
+                 </property>
+                 <property name="maximum">
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="ipa_sb_gateway_3">
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::NoButtons</enum>
+                 </property>
+                 <property name="maximum">
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="ipa_sb_gateway_4">
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::NoButtons</enum>
+                 </property>
+                 <property name="maximum">
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="3" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_15">
+               <item>
+                <widget class="QSpinBox" name="ipa_sb_subnetMask">
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::NoButtons</enum>
+                 </property>
+                 <property name="maximum">
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="ipa_sb_subnetMask_2">
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::NoButtons</enum>
+                 </property>
+                 <property name="maximum">
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="ipa_sb_subnetMask_3">
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::NoButtons</enum>
+                 </property>
+                 <property name="maximum">
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="ipa_sb_subnetMask_4">
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::NoButtons</enum>
+                 </property>
+                 <property name="maximum">
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_ipv6" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+             <property name="spacing">
+              <number>20</number>
+             </property>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_9">
+               <item>
+                <widget class="QCheckBox" name="ipv6_cb_dhcp">
+                 <property name="text">
+                  <string>IDS_IPv6_dhcp</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="ipv6_cb_UMA">
+                 <property name="text">
+                  <string>IDS_IPv6_useManualAddress</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QFormLayout" name="formLayout_5">
+               <property name="verticalSpacing">
+                <number>20</number>
+               </property>
+               <item row="0" column="0">
+                <widget class="QLabel" name="iDS_IPv6_manualAddressLabel">
+                 <property name="text">
+                  <string>IDS_IPv6_manualAddress</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLineEdit" name="ipv6_le_manualAddress"/>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_4">
+                   <property name="text">
+                    <string notr="true">/</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="ipv6_sb_manualAddressMask">
+                   <property name="buttonSymbols">
+                    <enum>QAbstractSpinBox::NoButtons</enum>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="iDS_IPv6_manualGatewayAddressLabel">
+                 <property name="text">
+                  <string>IDS_IPv6_manualGatewayAddress</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_11">
+                 <item>
+                  <widget class="QLineEdit" name="ipv6_le_manualGatewayAddress"/>
+                 </item>
+                </layout>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="iDS_IPv6_SA1Label">
+                 <property name="text">
+                  <string>IDS_IPv6_SA1</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QLabel" name="ipv6_lb_SA1">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="iDS_IPv6_SA2Label">
+                 <property name="text">
+                  <string>IDS_ipv6_SA2</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QLabel" name="ipv6_lb_SA2">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="iDS_IPv6_SA3Label">
+                 <property name="text">
+                  <string>IDS_IPv6_SA3</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QLabel" name="ipv6_lb_SA3">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="iDS_IPv6_ASALabel">
+                 <property name="text">
+                  <string>IDS_IPv6_ASA</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QLabel" name="ipv6_lb_ASA">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0">
+                <widget class="QLabel" name="iDS_IPv6_LLALabel">
+                 <property name="text">
+                  <string>IDS_IPv6_LLA</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="1">
+                <widget class="QLabel" name="ipv6_lb_LLA">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0">
+                <widget class="QLabel" name="iDS_IPv6_AGALabel">
+                 <property name="text">
+                  <string>IDS_IPv6_AGA</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="1">
+                <widget class="QLabel" name="ipv6_lb_AGA">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_12">
+            <item>
+             <spacer name="horizontalSpacer_6">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="ip_btn_apply">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>IDS_ST_Apply</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_7">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </widget>
       </widget>
      </item>
      <item>
@@ -896,5 +1362,40 @@ max-width:50;
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ipa_rb_ipv4</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>widget_ipv4</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>347</x>
+     <y>41</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>493</x>
+     <y>243</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ipa_rb_ipv4</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>widget_ipv6</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>347</x>
+     <y>41</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>493</x>
+     <y>472</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+ </buttongroups>
 </ui>

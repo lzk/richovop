@@ -38,6 +38,10 @@ private slots:
     void on_btn_apply_mp_clicked();
     void on_btn_refresh_clicked();
 
+    void on_ipa_rb_ipv4_toggled(bool checked);
+
+    void on_ip_btn_apply_clicked();
+
 public:
     Ui::TabSetting *ui;
 
@@ -45,19 +49,20 @@ private:
     MainWidget* main_widget;
     DeviceManager* device_manager;
 
-    int wifi_encryptionType;
     QString wifi_ssid;
     QString wifi_password;
-    int wifi_wepIndex;
-    QString wifi_ms_password;
-    QString wifi_sw_password;
-    int wifi_ms_wepIndex;
-    int wifi_sw_wepIndex;
 #define NUM_OF_APLIST 10
-    int wifi_sw_encryptionType[NUM_OF_APLIST];
-    QString machine_wifi_ssid;
-//    QString machine_wifi_password;
-    QString passwd;
+    int wifi_aplist_encryptionType[NUM_OF_APLIST];
+    int wifi_encryptionType;
+    int wifi_wepIndex;
+
+    QString wifi_ms_password;
+    int wifi_ms_encryptionType;
+    int wifi_ms_wepIndex;
+
+    QString wifi_sw_password;
+    int wifi_sw_encryptionType;
+    int wifi_sw_wepIndex;
 
     static const int wifi_default_encryptionType = 2;//WPA2-PSK-AES
     static const int wifi_default_wepIndex = 0;
@@ -66,10 +71,16 @@ private:
     bool disable_emit;
 
 private:
+    void init_wifi();
+    void init_ip();
+
     bool wifi_validate_ssidPassword();
+    bool wifi_validate_ssidPassword(QString,QString,int);
     void wifi_update_encryptionType();
+    void wifi_update_encryptionType(int);
     void wifi_update_Data();
     void wifi_update();
+    void wifi_update(QString,QString,int);
     void result_wifi_getAplist();
     void wifi_update_checkbox(bool);
     bool setting_confirmPasswd();

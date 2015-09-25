@@ -19,10 +19,10 @@ DeviceManager::DeviceManager(MainWidget* widget):
 
 DeviceManager::~DeviceManager()
 {
-    delete device;
-    delete protocol;
     if(device_app)
         delete device_app;
+    delete device;
+    delete protocol;
 }
 
 const QString DeviceManager::get_deviceName()
@@ -253,6 +253,26 @@ cmdst_powerOff_time DeviceManager::printer_getPowerOffTime()
 void DeviceManager::printer_setPowerOffTime(cmdst_powerOff_time* p)
 {
     protocol->printer_setPowerOffTime(p);
+}
+
+net_info_st DeviceManager::net_getIpv4info()
+{
+    return protocol->net_getV4();
+}
+
+void DeviceManager::net_setIpv4info(net_info_st* p)
+{
+    protocol->net_setV4(p);
+}
+
+net_ipv6_st DeviceManager::net_getIpv6info()
+{
+    return protocol->net_getV6();
+}
+
+void DeviceManager::net_setIpv6info(net_ipv6_st* p)
+{
+    protocol->net_setV6(p);
 }
 
 DeviceApp* DeviceManager::deviceApp()

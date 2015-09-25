@@ -170,6 +170,26 @@ void DeviceContrl::slots_cmd_plus(int cmd)
         }
         err = protocol->cmd(VopProtocol::CMD_PRN_PowerOff_Set);
         break;
+    case CMD_IPv4_Get:
+        err = protocol->cmd(VopProtocol::CMD_NET_GetV4);
+        break;
+    case CMD_IPv4_Set:
+        err = cmd_setting_confirm();
+        if(err){
+            break;
+        }
+        err = protocol->cmd(VopProtocol::CMD_NET_SetV4);
+        break;
+    case CMD_IPv6_Get:
+        err = protocol->cmd(VopProtocol::CMD_NET_GetV6);
+        break;
+    case CMD_IPv6_Set:
+        err = cmd_setting_confirm();
+        if(err){
+            break;
+        }
+        err = protocol->cmd(VopProtocol::CMD_NET_SetV6);
+        break;
     default:
         break;
     }

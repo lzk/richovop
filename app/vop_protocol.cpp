@@ -421,14 +421,14 @@ int VopProtocol::vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size)
         device_manager->mutex_ctrl.unlock();
     }
 
-//    qLog("Write:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
+//    qLog(QString().sprintf("Write:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
 //           ,buffer[0],buffer[1],buffer[2],buffer[3],buffer[4],
-//            buffer[5],buffer[6],buffer[7],buffer[8],buffer[9],buffer[10]);
+//            buffer[5],buffer[6],buffer[7],buffer[8],buffer[9],buffer[10]));
     err = DeviceContrl::device_writeThenRead(buffer ,sizeof(COMM_HEADER)+data_buffer_size * direct
                                                ,buffer ,sizeof(COMM_HEADER)+data_buffer_size * (1 - direct));
-//    qLog("read:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
+//    qLog(QString().sprintf("read:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
 //           ,buffer[0],buffer[1],buffer[2],buffer[3],buffer[4],
-//            buffer[5],buffer[6],buffer[7],buffer[8],buffer[9],buffer[10]);
+//            buffer[5],buffer[6],buffer[7],buffer[8],buffer[9],buffer[10]));
     //check result
     if(!err && MAGIC_NUM == ppkg->magic){//ACK
         if(!direct){//get

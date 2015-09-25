@@ -48,6 +48,10 @@ public:
     void printer_setPSaveTime(cmdst_PSave_time*);
     cmdst_powerOff_time printer_getPowerOffTime();
     void printer_setPowerOffTime(cmdst_powerOff_time*);
+    net_info_st net_getIpv4info();
+    void net_setIpv4info(net_info_st* p);
+    net_ipv6_st net_getIpv6info();
+    void net_setIpv6info(net_ipv6_st* p);
 
     void passwd_set(const char*);
 

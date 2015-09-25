@@ -164,14 +164,16 @@ typedef struct net_info_st
 typedef struct
 {
     UINT8 UseManualAddress;
-    UINT8 ManualAddress[40];
-    UINT8 ManualMask[4];
-    UINT8 StatelessAddress1[40];
-    UINT8 StatelessAddress2[40];
-    UINT8 StatelessAddress3[40];
-    UINT8 LinkLocalAddress1[40];
-    UINT8 LinkLocalAddress2[40];
-    UINT8 AutoGatewayAddress[40];
+    char ManualAddress[40];
+    UINT32 ManualMask;
+    char StatelessAddress1[40];
+    char StatelessAddress2[40];
+    char StatelessAddress3[40];
+    char LinkLocalAddress[40];
+    char IPv6ManualGatewayAddress[40];
+    char AutoGatewayAddress[40];
+    char AutoStatefulAddress[40];
+    UINT8 DHCPv6;
 }net_ipv6_st;
 
 enum

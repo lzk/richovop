@@ -49,6 +49,8 @@ int main(int argc, char *argv[])
 #ifdef Q_WS_X11
     qputenv("LIBOVERLAY_SCROLLBAR", 0);
 #endif
+//    qputenv("LANG" ,QLocale::system().uiLanguages().first().toLatin1());
+//    qputenv("LANGUAGE" ,QLocale::system().name().toLatin1());
     QApplication a(argc, argv);
     if(isRunning("/tmp/lock_Ricoh_Alto_VOP")){
         QMessageBox::warning(0,"Warnning" ,"The application is running!");
@@ -57,16 +59,11 @@ int main(int argc, char *argv[])
     Log::init();
 
     QTranslator trans;
-//    QString filename =":/translations/vop_" + QLocale::system().name();
-//    trans.load(filename);
-//    trans.load("vop" ,":/translations");
-//    if(!trans.load(QLocale::system(), "vop", ".", ":/translations"))
+//    if(!trans.load(QLocale(QLocale::system().uiLanguages().first()), "vop", ".", ":/translations"))
     if(!trans.load(QLocale(QLocale::system().name()), "vop", ".", ":/translations"))
         trans.load(QLocale(QLocale::English), "vop", ".", ":/translations");
-//        trans.load( "vop",":/translations");
     a.installTranslator(&trans);
 
-//    a.setStyle("gtk");
     QFile file(":/styles/default.qss");
     if(file.open(QFile::ReadOnly)){
         QString stylesheet = file.readAll();
