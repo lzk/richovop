@@ -86,3 +86,4 @@ contains(st ,ubuntu) {
     DEFINES += STATIC_BUILD
 }
 
+#DEFINES += FUTURE_SUPPORT

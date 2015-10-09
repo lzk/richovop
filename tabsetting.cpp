@@ -8,8 +8,7 @@
 
 #include <QInputDialog>
 #include "dialoglogin.h"
-#include <QDebug>
-#define OLD_CODE 0
+
 TabSetting::TabSetting(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TabSetting),
@@ -35,6 +34,11 @@ TabSetting::TabSetting(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
     ui->checkBox_powerOff->hide();
 
     init_ip();
+#ifndef FUTURE_SUPPORT
+    ui->listWidget->item(2)->setHidden(true);
+    ui->listWidget->item(3)->setHidden(true);
+    ui->listWidget->item(4)->setHidden(true);
+#endif
 
 }
 
@@ -92,7 +96,6 @@ void TabSetting::init_wifi()
     ui->cb_ssid->installEventFilter(this);
 
     wifi_update();
-//    wifi_update_checkbox(ui->checkBox->isChecked());
     ui->checkBox->hide();//checkbox hide
 }
 
@@ -101,8 +104,6 @@ void TabSetting::init_ip()
     ui->ipv6_sb_manualAddressMask->setMinimum(0x80000000);
     ui->ipv6_sb_manualAddressMask->setMaximum(0x7fffffff);
     ui->page5Widget->installEventFilter(this);
-
-    ui->listWidget->item(4)->setHidden(true);
 }
 
 bool TabSetting::eventFilter(QObject *obj, QEvent *event)
@@ -114,9 +115,9 @@ bool TabSetting::eventFilter(QObject *obj, QEvent *event)
             return true;
         break;
     case QEvent::Show:
-        if(obj == ui->pageWidget)
+        if(obj == ui->pageWidget){
             on_btn_refresh_clicked();
-        else if(obj == ui->page3Widget)
+        }else if(obj == ui->page3Widget)
             device_manager->emit_cmd_plus(DeviceContrl::CMD_PRN_TonerEnd_Get);
         else if(obj == ui->page4Widget){
             device_manager->emit_cmd_plus(DeviceContrl::CMD_PRN_PowerSave_Get);
@@ -303,45 +304,6 @@ bool TabSetting::wifi_validate_ssidPassword()
     return wifi_validate_ssidPassword(wifi_ssid ,wifi_password ,wifi_encryptionType);
 }
 
-void TabSetting::wifi_update_checkbox(bool checked)
-{
-    return;//checkbox hide
-    if(checked){
-        ui->frame->setEnabled(true);
-        ui->btn_apply_ws->setEnabled(wifi_validate_ssidPassword());
-    }else{//diable setting
-        ui->frame->setEnabled(false);
-        ui->btn_apply_ws->setEnabled(false);
-    }
-}
-#if OLD_CODE
-void TabSetting::slots_wifi_enable()
-{
-    cmdst_wifi_get wifi_para = device_manager->wifi_get_para();
-    //setting wifi enable only
-    wifi_para.wifiEnable &= ~1;
-    wifi_para.wifiEnable |= ui->checkBox->isChecked() ? 1 : 0;//bit 0
-    device_manager->wifi_set_para(&wifi_para);
-
-//    install_next_callback(SLOT(slots_cmd_complete()));
-    device_manager->emit_cmd(DeviceContrl::CMD_WIFI_apply);
-}
-
-
-void TabSetting::slots_wifi_checkbox(bool checked)
-{
-    wifi_update_checkbox(checked);
-
-    DeviceApp* device_app = device_manager->deviceApp();
-    if(device_app){
-//        if(DeviceContrl::CMD_STATUS_COMPLETE == device_app->get_cmdStatus())
-        {
-            install_next_callback(SLOT(slots_wifi_enable()));
-            device_manager->emit_cmd(DeviceContrl::CMD_WIFI_get);
-        }
-    }
-}
-#endif
 //update all wifi para
 void TabSetting::result_wifi_getAplist()
 {
@@ -387,25 +349,6 @@ void TabSetting::result_wifi_getAplist()
             }
         }
     }
-#if 0
-    for(int i = 0 ;i < NUM_OF_APLIST ;i++){
-        qLog(QString().sprintf("display ssid[%d] memory from FW:" ,i));
-        qLog(QString().sprintf("%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x"
-                               ,aplist.aplist[i].ssid[0] ,aplist.aplist[i].ssid[1],aplist.aplist[i].ssid[2] ,aplist.aplist[i].ssid[3]
-                                ,aplist.aplist[i].ssid[4] ,aplist.aplist[i].ssid[5],aplist.aplist[i].ssid[6] ,aplist.aplist[i].ssid[7]));
-        qLog(QString().sprintf("%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x"
-                               ,aplist.aplist[i].ssid[8] ,aplist.aplist[i].ssid[9],aplist.aplist[i].ssid[10] ,aplist.aplist[i].ssid[11]
-                                ,aplist.aplist[i].ssid[12] ,aplist.aplist[i].ssid[13],aplist.aplist[i].ssid[14] ,aplist.aplist[i].ssid[15]));
-        qLog(QString().sprintf("%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x"
-                               ,aplist.aplist[i].ssid[16] ,aplist.aplist[i].ssid[17],aplist.aplist[i].ssid[18] ,aplist.aplist[i].ssid[19]
-                                ,aplist.aplist[i].ssid[20] ,aplist.aplist[i].ssid[21],aplist.aplist[i].ssid[22] ,aplist.aplist[i].ssid[23]));
-        qLog(QString().sprintf("%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x,%#.2x"
-                               ,aplist.aplist[i].ssid[24] ,aplist.aplist[i].ssid[25],aplist.aplist[i].ssid[26] ,aplist.aplist[i].ssid[27]
-                                ,aplist.aplist[i].ssid[28] ,aplist.aplist[i].ssid[29],aplist.aplist[i].ssid[30] ,aplist.aplist[i].ssid[31]
-                                ,aplist.aplist[i].ssid[32]));
-        qLog(QString().sprintf("ssid[%d] encryptionType from FW:%d" ,i ,aplist.aplist[i].encryption));
-    }
-#endif
     if(-1 != current_ssid){
         wifi_encryptionType = wifi_aplist_encryptionType[current_ssid];//aplist.aplist[current_ssid].encryption;
         qLog(QString().sprintf("selected encryption[%d]:%d" ,current_ssid ,wifi_encryptionType));
@@ -429,39 +372,12 @@ void TabSetting::result_wifi_getAplist()
      wifi_ms_wepIndex = wifi_wepIndex;
      wifi_sw_wepIndex = wifi_wepIndex;
      ui->cb_keyIndex->setCurrentIndex(wifi_wepIndex);
-#if 0
-    if(-1 != current_ssid){
-        ui->cb_ssid->setCurrentIndex(current_ssid);
-        qLog(QString().sprintf("selected ssid:%d encryption:%d" ,current_ssid ,aplist.aplist[current_ssid].encryption));
-        //encryption
-         ui->cb_encryptionType->setCurrentIndex(wifi_aplist_encryptionType[current_ssid]);
-         //key index
-         qLog(QString().sprintf("wepKeyId:%d" ,wifi_para.wepKeyId));
-         if(wifi_para.wepKeyId){
-             wifi_ms_wepIndex = (wifi_para.wepKeyId - 1) % 4;
-             wifi_sw_wepIndex = wifi_ms_wepIndex;
-         }else{
-             wifi_ms_wepIndex = wifi_default_wepIndex;
-             wifi_sw_wepIndex = wifi_ms_wepIndex;
-         }
-         ui->cb_keyIndex->setCurrentIndex(wifi_sw_wepIndex);
-    }else{
-        qLog("no ssid");
-        //encryption
-         ui->cb_encryptionType->setCurrentIndex(wifi_default_encryptionType);
-         //key index
-         wifi_ms_wepIndex = wifi_default_wepIndex;
-         wifi_sw_wepIndex = wifi_ms_wepIndex;
-         ui->cb_keyIndex->setCurrentIndex(wifi_default_wepIndex);
-    }
-#endif
     //clear passwd
     wifi_sw_password.clear();//Qt4
     ui->le_passphrase->clear();
     ui->le_wepkey->clear();
     wifi_update();
     //update ui else
-//    emit ui->cb_ssid->activated(ui->cb_ssid->currentText());
 }
 
 void TabSetting::on_spinBox_PSaveTime_valueChanged(int arg1)
@@ -563,23 +479,23 @@ void TabSetting::slots_cmd_result(int cmd ,int err)
         break;
     case DeviceContrl::CMD_IPv4_Get:
         if(!err){
-        net_info_st info = device_manager->net_getIpv4info();
-        if(4 == info.IPAddressMode)
-            ui->ipa_rb_stable->setChecked(true);
-        else
-            ui->ipa_rb_autoGet->setChecked(true);
-        ui->ipa_sb_ipAddress->setValue(info.IPAddress[0]);
-        ui->ipa_sb_ipAddress_2->setValue(info.IPAddress[1]);
-        ui->ipa_sb_ipAddress_3->setValue(info.IPAddress[2]);
-        ui->ipa_sb_ipAddress_4->setValue(info.IPAddress[3]);
-        ui->ipa_sb_subnetMask->setValue(info.SubnetMask[0]);
-        ui->ipa_sb_subnetMask_2->setValue(info.SubnetMask[1]);
-        ui->ipa_sb_subnetMask_3->setValue(info.SubnetMask[2]);
-        ui->ipa_sb_subnetMask_4->setValue(info.SubnetMask[3]);
-        ui->ipa_sb_gateway->setValue(info.GatewayAddress[0]);
-        ui->ipa_sb_gateway_2->setValue(info.GatewayAddress[1]);
-        ui->ipa_sb_gateway_3->setValue(info.GatewayAddress[2]);
-        ui->ipa_sb_gateway_4->setValue(info.GatewayAddress[3]);
+            net_info_st info = device_manager->net_getIpv4info();
+            if(4 == info.IPAddressMode)
+                ui->ipa_rb_stable->setChecked(true);
+            else
+                ui->ipa_rb_autoGet->setChecked(true);
+            ui->ipa_sb_ipAddress->setValue(info.IPAddress[0]);
+            ui->ipa_sb_ipAddress_2->setValue(info.IPAddress[1]);
+            ui->ipa_sb_ipAddress_3->setValue(info.IPAddress[2]);
+            ui->ipa_sb_ipAddress_4->setValue(info.IPAddress[3]);
+            ui->ipa_sb_subnetMask->setValue(info.SubnetMask[0]);
+            ui->ipa_sb_subnetMask_2->setValue(info.SubnetMask[1]);
+            ui->ipa_sb_subnetMask_3->setValue(info.SubnetMask[2]);
+            ui->ipa_sb_subnetMask_4->setValue(info.SubnetMask[3]);
+            ui->ipa_sb_gateway->setValue(info.GatewayAddress[0]);
+            ui->ipa_sb_gateway_2->setValue(info.GatewayAddress[1]);
+            ui->ipa_sb_gateway_3->setValue(info.GatewayAddress[2]);
+            ui->ipa_sb_gateway_4->setValue(info.GatewayAddress[3]);
         }
         break;
     case DeviceContrl::CMD_IPv6_Get:
@@ -642,6 +558,7 @@ void TabSetting::on_btn_apply_ws_clicked()
         wifi_para.wepKeyId = ui->cb_keyIndex->currentIndex() + 1;
         qLog(QString().sprintf("wep key ID to FW:%d" ,wifi_para.wepKeyId));
         //wifi enable
+        qLog(QString().sprintf("wifiEnable:%d" ,wifi_para.wifiEnable));
         wifi_para.wifiEnable &= ~1;
         wifi_para.wifiEnable |= 1;//bit 0
 //        wifi_para.wifiEnable |= ui->checkBox->isChecked() ? 1 : 0;//bit 0

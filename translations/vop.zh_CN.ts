@@ -52,32 +52,35 @@
     </message>
     <message>
         <location filename="../mainwidget.ui" line="168"/>
+        <location filename="../mainwidget.cpp" line="74"/>
         <location filename="../mainwidget.cpp" line="134"/>
-        <location filename="../mainwidget.cpp" line="140"/>
+        <location filename="../mainwidget.cpp" line="141"/>
         <source>IDS_Tab_Copy</source>
         <translation>复印</translation>
     </message>
     <message>
         <location filename="../mainwidget.ui" line="173"/>
-        <location filename="../mainwidget.cpp" line="141"/>
-        <location filename="../mainwidget.cpp" line="144"/>
-        <location filename="../mainwidget.cpp" line="153"/>
+        <location filename="../mainwidget.cpp" line="75"/>
+        <location filename="../mainwidget.cpp" line="142"/>
+        <location filename="../mainwidget.cpp" line="145"/>
+        <location filename="../mainwidget.cpp" line="155"/>
         <source>IDS_Tab_Setting</source>
         <translation>设定</translation>
     </message>
     <message>
         <location filename="../mainwidget.ui" line="178"/>
-        <location filename="../mainwidget.cpp" line="156"/>
+        <location filename="../mainwidget.cpp" line="76"/>
+        <location filename="../mainwidget.cpp" line="160"/>
         <source>IDS_Tab_About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="189"/>
+        <location filename="../mainwidget.cpp" line="192"/>
         <source>IDS_MSG_SetInfo</source>
         <translation>设定打印机信息。</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="197"/>
+        <location filename="../mainwidget.cpp" line="204"/>
         <source>IDS_MSG_GetInfo</source>
         <translation>获得打印机信息。</translation>
     </message>
@@ -90,17 +93,17 @@
         <translation type="obsolete">放置下一页</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="232"/>
+        <location filename="../mainwidget.cpp" line="244"/>
         <source>IDS_ERR_AcquireInformation</source>
         <translation>获取信息失败</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="238"/>
+        <location filename="../mainwidget.cpp" line="250"/>
         <source>IDS_ERR_Authentication</source>
         <translation>认证错误，请重新输入密码。</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="243"/>
+        <location filename="../mainwidget.cpp" line="254"/>
         <source>IDS_MSG_MachineBusy</source>
         <translation>机器正在工作中，请稍后再试。</translation>
     </message>
@@ -319,12 +322,12 @@
         <translation>默认</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="377"/>
+        <location filename="../tabcopy.cpp" line="379"/>
         <source>IDS_MSG_TurnCardOver</source>
         <translation>翻转卡片，并放在扫描板上</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="380"/>
+        <location filename="../tabcopy.cpp" line="382"/>
         <source>IDS_MSG_PlaceNextPage</source>
         <translation>放置下一页</translation>
     </message>
@@ -332,120 +335,216 @@
 <context>
     <name>TabSetting</name>
     <message>
-        <location filename="../tabsetting.ui" line="95"/>
-        <location filename="../tabsetting.ui" line="193"/>
+        <location filename="../tabsetting.ui" line="117"/>
+        <location filename="../tabsetting.ui" line="220"/>
         <source>IDS_ST_WifiSetup</source>
         <translation>Wi-Fi安装</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="100"/>
+        <location filename="../tabsetting.ui" line="122"/>
         <source>IDS_ST_ModifyPasswd</source>
         <translation>管理员密码修改</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="205"/>
+        <location filename="../tabsetting.ui" line="137"/>
+        <source>IDS_ST_ipAddress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="232"/>
         <source>IDS_ST_SearchWifi</source>
         <translation>搜索Wi-Fi</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="215"/>
+        <location filename="../tabsetting.ui" line="245"/>
         <source>IDS_ST_ManualSetup</source>
         <translation>手动安装</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="247"/>
-        <location filename="../tabsetting.ui" line="321"/>
+        <location filename="../tabsetting.ui" line="277"/>
+        <location filename="../tabsetting.ui" line="351"/>
         <source>IDS_ST_SSID</source>
         <translation>网络名称</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="257"/>
+        <location filename="../tabsetting.ui" line="287"/>
         <source>IDS_ST_EncryptionType</source>
         <translation>加密类型</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="268"/>
+        <location filename="../tabsetting.ui" line="298"/>
         <source>IDS_ST_NoSecurity</source>
         <translation>不使用</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="273"/>
+        <location filename="../tabsetting.ui" line="303"/>
         <source>IDS_ST_WEP</source>
         <translation>WEP</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="278"/>
+        <location filename="../tabsetting.ui" line="308"/>
         <source>IDS_ST_WPA2-PSK-AES</source>
         <translation>WPA2-PSK-AES</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="283"/>
+        <location filename="../tabsetting.ui" line="313"/>
         <source>IDS_ST_MixedModePSK</source>
         <translation>混合模式PSK</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="343"/>
+        <location filename="../tabsetting.ui" line="373"/>
         <source>IDS_MW_Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="376"/>
+        <location filename="../tabsetting.ui" line="406"/>
         <source>IDS_ST_WepKey</source>
         <translation>WEP密钥</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="390"/>
+        <location filename="../tabsetting.ui" line="420"/>
         <source>IDS_ST_KeyIndex</source>
         <translation>密钥索引</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="455"/>
+        <location filename="../tabsetting.ui" line="485"/>
         <source>IDS_ST_Passphrase</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="499"/>
-        <location filename="../tabsetting.ui" line="596"/>
+        <location filename="../tabsetting.ui" line="529"/>
+        <location filename="../tabsetting.ui" line="626"/>
+        <location filename="../tabsetting.ui" line="1245"/>
         <source>IDS_ST_Apply</source>
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="545"/>
+        <location filename="../tabsetting.ui" line="575"/>
         <source>IDS_ST_NewPassword</source>
         <translation>新密码</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="559"/>
+        <location filename="../tabsetting.ui" line="589"/>
         <source>IDS_ST_ConfirmPassword</source>
         <translation>确认密码</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="694"/>
+        <location filename="../tabsetting.ui" line="724"/>
         <source>IDS_PS_PSaveTime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="777"/>
+        <location filename="../tabsetting.ui" line="807"/>
         <source>IDS_PS_PowerOff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="105"/>
+        <location filename="../tabsetting.ui" line="849"/>
+        <source>IDS_IPA_IPv4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="859"/>
+        <source>IDS_IPA_IPv6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="880"/>
+        <source>IDS_IPA_get</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="889"/>
+        <source>IDS_IPA_autoGet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="899"/>
+        <source>IDS_IPA_stable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="908"/>
+        <source>IDS_IPA_ipAddress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="915"/>
+        <source>IDS_IPA_gateway</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="922"/>
+        <source>IDS_IPA_subnetMask</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="1072"/>
+        <source>IDS_IPv6_dhcp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="1079"/>
+        <source>IDS_IPv6_useManualAddress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="1093"/>
+        <source>IDS_IPv6_manualAddress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="1124"/>
+        <source>IDS_IPv6_manualGatewayAddress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="1138"/>
+        <source>IDS_IPv6_SA1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="1152"/>
+        <source>IDS_ipv6_SA2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="1166"/>
+        <source>IDS_IPv6_SA3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="1180"/>
+        <source>IDS_IPv6_ASA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="1194"/>
+        <source>IDS_IPv6_LLA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="1208"/>
+        <source>IDS_IPv6_AGA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="127"/>
         <source>IDS_ST_TonerEnd</source>
         <translation type="unfinished">Toner End</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="110"/>
+        <location filename="../tabsetting.ui" line="132"/>
         <source>IDS_ST_PowerSave</source>
         <translation type="unfinished">Power Save</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="638"/>
+        <location filename="../tabsetting.ui" line="668"/>
         <source>IDS_TE_checkBox</source>
         <translation type="unfinished">Stop Printing after toner life end</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="651"/>
+        <location filename="../tabsetting.ui" line="681"/>
         <source>IDS_TE_Caution</source>
         <translation type="unfinished">CAUTION:
 Although you can keep using the printer after the end of its service life by changing the setting to Keep Printing,the printing quality is not guaranteed.</translation>

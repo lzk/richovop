@@ -77,6 +77,7 @@ void MainWidget::initializeUi()
 
     qLog("setting parent is " + tab_setting->parent()->objectName());
     tab_copy->installEventFilter(this);
+    tab_setting->installEventFilter(this);
     connect(this ,SIGNAL(signals_cmd_result(int,int)) ,tab_copy ,SLOT(slots_cmd_result(int,int)));
     connect(this ,SIGNAL(signals_cmd_result(int,int)) ,tab_setting ,SLOT(slots_cmd_result(int,int)));
  }
@@ -94,8 +95,10 @@ void MainWidget::initialize()
     progressDialog = new QProgressDialog(this);
     progressDialog->setWindowFlags(Qt::SplashScreen);
 
+    progressDialog->setRange(0,100);
     progressDialog->setCancelButton(NULL);
     progressDialog->setModal(true);
+//    progressDialog->setWindowModality(Qt::WindowModal);
 
     msgBox.setWindowTitle(" ");
     msgBox_info.setWindowTitle(" ");
@@ -113,6 +116,12 @@ bool MainWidget::eventFilter(QObject *obj, QEvent *event)
     case QEvent::Show:
         if(obj == tab_copy)
             device_manager->emit_cmd_plus(DeviceContrl::CMD_DEVICE_status);
+        if(obj == tab_setting){
+            if(!listWidget->item(0)->isHidden())
+                listWidget->setCurrentRow(0);
+            else
+                listWidget->setCurrentRow(1);
+        }
         break;
 default:
         break;
@@ -128,13 +137,19 @@ void MainWidget::updateUi()
     ui->tabWidget->clear();
     switch(model){
     case VopDevice::Device_3in1:
-        listWidget->item(0)->setHidden(false);
+        listWidget->item(0)->setHidden(true);
+#ifdef FUTURE_SUPPORT
+        listWidget->item(4)->setHidden(true);
+#endif
         listWidget->setCurrentRow(0);
         ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
 //            ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
         break;
     case VopDevice::Device_3in1_wifi:
         listWidget->item(0)->setHidden(false);
+#ifdef FUTURE_SUPPORT
+        listWidget->item(4)->setHidden(false);
+#endif
         listWidget->setCurrentRow(0);
         ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
         ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
@@ -142,10 +157,16 @@ void MainWidget::updateUi()
     case VopDevice::Device_sfp:
         ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
         listWidget->item(0)->setHidden(true);
+#ifdef FUTURE_SUPPORT
+        listWidget->item(4)->setHidden(true);
+#endif
         listWidget->setCurrentRow(1);
         break;
     case VopDevice::Device_sfp_wifi:
         listWidget->item(0)->setHidden(false);
+#ifdef FUTURE_SUPPORT
+        listWidget->item(4)->setHidden(false);
+#endif
         listWidget->setCurrentRow(0);
 //            ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
         ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));

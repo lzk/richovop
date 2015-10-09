@@ -28,8 +28,6 @@ public slots:
 private slots:
     void slots_wifi_radiobutton(bool);
     void slots_wifi_textChanged(const QString &arg1);
-//    void slots_wifi_checkbox(bool);
-//    void slots_wifi_enable();
 
     void on_spinBox_PSaveTime_valueChanged(int arg1);
     void on_checkBox_powerOff_toggled(bool checked);
@@ -82,7 +80,6 @@ private:
     void wifi_update();
     void wifi_update(QString,QString,int);
     void result_wifi_getAplist();
-    void wifi_update_checkbox(bool);
     bool setting_confirmPasswd();
 };
 

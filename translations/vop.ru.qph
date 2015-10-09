@@ -9,7 +9,7 @@
 
 	<phrase>
 		<source>IDS_Tab_Copy</source>
-		<target>Копирование</target>
+		<target>Копия</target>
 	</phrase>
 
 	<phrase>
@@ -49,7 +49,7 @@
 
 	<phrase>
 		<source>IDS_CP_Default</source>
-		<target>Значения по умолчанию</target>
+		<target>По умолчанию</target>
 	</phrase>
 
 	<phrase>
@@ -143,7 +143,7 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_IDCardCopy</source>
+		<source>IDS_CP_IDCardCopy_old</source>
 		<target>Копирование удостоверения личности</target>
 	</phrase>
 
@@ -264,7 +264,7 @@
 
 	<phrase>
 		<source>IDS_MSG_No</source>
-		<target></target>
+		<target>Нет</target>
 	</phrase>
 
 	<phrase>
@@ -425,6 +425,11 @@
 	<phrase>
 		<source>IDS_ERR_Authentication</source>
 		<target>Ошибка аутентификации, введите пароль повторно.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_IDCardCopy</source>
+		<target>Копир. удостовер.</target>
 	</phrase>
 
 </QPH>

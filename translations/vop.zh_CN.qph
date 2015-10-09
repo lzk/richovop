@@ -143,7 +143,7 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_IDCardCopy</source>
+		<source>IDS_CP_IDCardCopy_old</source>
 		<target>身份证
 复印</target>
 	</phrase>
@@ -426,6 +426,12 @@
 	<phrase>
 		<source>IDS_ERR_Authentication</source>
 		<target>认证错误，请重新输入密码。</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_IDCardCopy</source>
+		<target>身份证
+复印</target>
 	</phrase>
 
 </QPH>

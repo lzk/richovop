@@ -143,9 +143,8 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_IDCardCopy</source>
-		<target>ID Card
-Copy</target>
+		<source>IDS_CP_IDCardCopy_old</source>
+		<target>ID Card Copy</target>
 	</phrase>
 
 	<phrase>
@@ -426,6 +425,12 @@ Copy</target>
 	<phrase>
 		<source>IDS_ERR_Authentication</source>
 		<target>Authentication error, please enter the password again.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_IDCardCopy</source>
+		<target>ID Card
+Copy</target>
 	</phrase>
 
 </QPH>
