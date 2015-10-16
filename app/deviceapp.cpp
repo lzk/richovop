@@ -39,8 +39,14 @@ void DeviceApp::disconnect_App()
 
 bool DeviceApp::emit_cmd_plus(int cmd)
 {
-    emit signals_progress(cmd ,0);
-    emit signals_progress(cmd ,20);
+    if(cmd == DeviceContrl::CMD_DEVICE_status){
+        //avoid too many get device id
+        if(DeviceContrl::CMD_STATUS_COMPLETE != ctrl->get_cmdStatus())
+            return true;
+    }else{
+        emit signals_progress(cmd ,0);
+        emit signals_progress(cmd ,20);
+    }
     emit signals_cmd_plus(cmd);
     return true;
 }

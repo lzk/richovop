@@ -14,6 +14,12 @@
    <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>100</number>
+   </property>
+   <property name="bottomMargin">
+    <number>50</number>
+   </property>
    <item>
     <spacer name="verticalSpacer_2">
      <property name="orientation">
@@ -43,11 +49,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="label">
-       <property name="pixmap">
-        <pixmap resource="vop.qrc">:/images/about.png</pixmap>
-       </property>
-      </widget>
+      <widget class="QLabel" name="label"/>
      </item>
      <item>
       <spacer name="horizontalSpacer">
@@ -79,8 +81,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="vop.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -433,5 +433,10 @@
 Copy</target>
 	</phrase>
 
+	<phrase>
+		<source>IDS_ST_AdministratorAuthentication</source>
+		<target>Administrator Authentication</target>
+	</phrase>
+
 </QPH>
 

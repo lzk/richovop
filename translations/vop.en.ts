@@ -33,14 +33,18 @@
     <name>DialogLogin</name>
     <message>
         <location filename="../dialoglogin.ui" line="14"/>
-        <location filename="../dialoglogin.ui" line="58"/>
-        <source>IDS_ST_Login</source>
-        <translation>Login</translation>
+        <source>IDS_ST_AdministratorAuthentication</source>
+        <translation>Administrator Authentication</translation>
     </message>
     <message>
         <location filename="../dialoglogin.ui" line="44"/>
         <source>IDS_ST_Password</source>
         <translation>Password</translation>
+    </message>
+    <message>
+        <location filename="../dialoglogin.ui" line="58"/>
+        <source>IDS_ST_Login</source>
+        <translation>Login</translation>
     </message>
 </context>
 <context>
@@ -53,63 +57,51 @@
     <message>
         <location filename="../mainwidget.ui" line="168"/>
         <location filename="../mainwidget.cpp" line="74"/>
-        <location filename="../mainwidget.cpp" line="134"/>
-        <location filename="../mainwidget.cpp" line="141"/>
+        <location filename="../mainwidget.cpp" line="144"/>
+        <location filename="../mainwidget.cpp" line="153"/>
         <source>IDS_Tab_Copy</source>
         <translation>Copy</translation>
     </message>
     <message>
         <location filename="../mainwidget.ui" line="173"/>
         <location filename="../mainwidget.cpp" line="75"/>
-        <location filename="../mainwidget.cpp" line="142"/>
-        <location filename="../mainwidget.cpp" line="145"/>
-        <location filename="../mainwidget.cpp" line="155"/>
+        <location filename="../mainwidget.cpp" line="154"/>
+        <location filename="../mainwidget.cpp" line="157"/>
+        <location filename="../mainwidget.cpp" line="171"/>
         <source>IDS_Tab_Setting</source>
         <translation>Setting</translation>
     </message>
     <message>
         <location filename="../mainwidget.ui" line="178"/>
         <location filename="../mainwidget.cpp" line="76"/>
-        <location filename="../mainwidget.cpp" line="160"/>
+        <location filename="../mainwidget.cpp" line="176"/>
         <source>IDS_Tab_About</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="192"/>
+        <location filename="../mainwidget.cpp" line="208"/>
         <source>IDS_MSG_SetInfo</source>
         <translation>Set Printer Information.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="204"/>
+        <location filename="../mainwidget.cpp" line="220"/>
         <source>IDS_MSG_GetInfo</source>
         <translation>Get Printer Information.</translation>
     </message>
     <message>
-        <source>IDS_MSG_TurnCardOver</source>
-        <translation type="obsolete">Turn card over to copy the reverse.</translation>
-    </message>
-    <message>
-        <source>IDS_MSG_PlaceNextPage</source>
-        <translation type="obsolete">Place Next Page</translation>
-    </message>
-    <message>
-        <location filename="../mainwidget.cpp" line="244"/>
+        <location filename="../mainwidget.cpp" line="260"/>
         <source>IDS_ERR_AcquireInformation</source>
         <translation>Failed to acquire the information.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="250"/>
+        <location filename="../mainwidget.cpp" line="266"/>
         <source>IDS_ERR_Authentication</source>
         <translation>Authentication error, please enter the password again.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="254"/>
+        <location filename="../mainwidget.cpp" line="270"/>
         <source>IDS_MSG_MachineBusy</source>
         <translation>The machine is busy,please try later…</translation>
-    </message>
-    <message>
-        <source>IDS_ST_PasswordsDifferent</source>
-        <translation type="obsolete">The passwords you entered are different, please try again.</translation>
     </message>
 </context>
 <context>
@@ -151,173 +143,173 @@
 <context>
     <name>TabCopy</name>
     <message>
-        <location filename="../tabcopy.ui" line="225"/>
+        <location filename="../tabcopy.ui" line="226"/>
         <source>IDS_CP_Copies</source>
         <translation>Copies</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="328"/>
+        <location filename="../tabcopy.ui" line="329"/>
         <source>IDS_CP_Scaling</source>
         <translation>Scaling</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="431"/>
+        <location filename="../tabcopy.ui" line="432"/>
         <source>IDS_CP_Density</source>
         <translation>Density</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="672"/>
+        <location filename="../tabcopy.ui" line="673"/>
         <source>IDS_CP_ScanningMode</source>
         <translation>Scanning Mode</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="697"/>
+        <location filename="../tabcopy.ui" line="698"/>
         <source>IDS_SM_Photo</source>
         <translation>Photo</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="710"/>
+        <location filename="../tabcopy.ui" line="711"/>
         <source>IDS_SM_Text</source>
         <translation>Text</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="730"/>
+        <location filename="../tabcopy.ui" line="731"/>
         <source>IDS_CP_MediaType</source>
         <translation>Media Type</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="741"/>
+        <location filename="../tabcopy.ui" line="742"/>
         <source>IDS_MT_Plain</source>
         <translation>Plain</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="746"/>
+        <location filename="../tabcopy.ui" line="747"/>
         <source>IDS_MT_Recycled</source>
         <translation>Recycled</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="751"/>
+        <location filename="../tabcopy.ui" line="752"/>
         <source>IDS_MT_Thick</source>
         <translation>Thick</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="756"/>
+        <location filename="../tabcopy.ui" line="757"/>
         <source>IDS_MT_Thin</source>
         <translation>Thin</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="761"/>
+        <location filename="../tabcopy.ui" line="762"/>
         <source>IDS_MT_Label</source>
         <translation>Label</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="769"/>
+        <location filename="../tabcopy.ui" line="770"/>
         <source>IDS_CP_DocumentSize</source>
         <translation>Document Size</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="780"/>
-        <location filename="../tabcopy.ui" line="819"/>
+        <location filename="../tabcopy.ui" line="781"/>
+        <location filename="../tabcopy.ui" line="820"/>
         <source>IDS_SIZE_Letter</source>
         <translation>Letter (8.5 x 11&quot;)</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="785"/>
-        <location filename="../tabcopy.ui" line="824"/>
+        <location filename="../tabcopy.ui" line="786"/>
+        <location filename="../tabcopy.ui" line="825"/>
         <source>IDS_SIZE_A4</source>
         <translation>A4 (210 x 297mm)</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="790"/>
-        <location filename="../tabcopy.ui" line="829"/>
+        <location filename="../tabcopy.ui" line="791"/>
+        <location filename="../tabcopy.ui" line="830"/>
         <source>IDS_SIZE_A5</source>
         <translation>A5 (148 x 210mm)</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="795"/>
-        <location filename="../tabcopy.ui" line="839"/>
+        <location filename="../tabcopy.ui" line="796"/>
+        <location filename="../tabcopy.ui" line="840"/>
         <source>IDS_SIZE_B5</source>
         <translation>B5 (182 x 257mm)</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="800"/>
-        <location filename="../tabcopy.ui" line="849"/>
+        <location filename="../tabcopy.ui" line="801"/>
+        <location filename="../tabcopy.ui" line="850"/>
         <source>IDS_SIZE_Executive</source>
         <translation>Executive (7.25 x 10.5&quot;)</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="808"/>
+        <location filename="../tabcopy.ui" line="809"/>
         <source>IDS_CP_OutputSize</source>
         <translation>Output Size</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="834"/>
+        <location filename="../tabcopy.ui" line="835"/>
         <source>IDS_SIZE_A6</source>
         <translation>A6 (105 x 148mm)</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="844"/>
+        <location filename="../tabcopy.ui" line="845"/>
         <source>IDS_SIZE_B6</source>
         <translation>B6 (128 x 182mm)</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="854"/>
+        <location filename="../tabcopy.ui" line="855"/>
         <source>IDS_SIZE_16K</source>
         <translation>16K</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="862"/>
+        <location filename="../tabcopy.ui" line="863"/>
         <source>IDS_CP_Nin1Copy</source>
         <translation>N in 1 Copy</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="873"/>
+        <location filename="../tabcopy.ui" line="874"/>
         <source>IDS_Nin1_1</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="878"/>
+        <location filename="../tabcopy.ui" line="879"/>
         <source>IDS_Nin1_2</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="883"/>
+        <location filename="../tabcopy.ui" line="884"/>
         <source>IDS_Nin1_4</source>
         <translation>4</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="888"/>
+        <location filename="../tabcopy.ui" line="889"/>
         <source>IDS_Nin1_9</source>
         <translation>9</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="896"/>
+        <location filename="../tabcopy.ui" line="897"/>
         <source>IDS_CP_DPI</source>
         <translation>DPI</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="907"/>
+        <location filename="../tabcopy.ui" line="908"/>
         <source>IDS_DPI_300</source>
         <translation>300 x 300</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="912"/>
+        <location filename="../tabcopy.ui" line="913"/>
         <source>IDS_DPI_600</source>
         <translation>600 x 600</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="958"/>
+        <location filename="../tabcopy.ui" line="959"/>
         <source>IDS_CP_IDCardCopy</source>
         <translation>ID Card
 Copy</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="968"/>
+        <location filename="../tabcopy.ui" line="969"/>
         <source>IDS_Tab_Copy</source>
         <translation>Copy</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="1008"/>
+        <location filename="../tabcopy.ui" line="1009"/>
         <source>IDS_CP_Default</source>
         <translation>Default</translation>
     </message>
@@ -344,6 +336,16 @@ Copy</translation>
         <location filename="../tabsetting.ui" line="122"/>
         <source>IDS_ST_ModifyPasswd</source>
         <translation>Modify Password</translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="127"/>
+        <source>IDS_ST_TonerEnd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="132"/>
+        <source>IDS_ST_PowerSave</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tabsetting.ui" line="137"/>
@@ -427,6 +429,16 @@ Copy</translation>
         <location filename="../tabsetting.ui" line="589"/>
         <source>IDS_ST_ConfirmPassword</source>
         <translation>Confirm Password</translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="668"/>
+        <source>IDS_TE_checkBox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.ui" line="681"/>
+        <source>IDS_TE_Caution</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tabsetting.ui" line="724"/>
@@ -529,25 +541,9 @@ Copy</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="127"/>
-        <source>IDS_ST_TonerEnd</source>
-        <translation type="unfinished">Toner End</translation>
-    </message>
-    <message>
-        <location filename="../tabsetting.ui" line="132"/>
-        <source>IDS_ST_PowerSave</source>
-        <translation type="unfinished">Power Save</translation>
-    </message>
-    <message>
-        <location filename="../tabsetting.ui" line="668"/>
-        <source>IDS_TE_checkBox</source>
-        <translation type="unfinished">Stop printing after toner life end</translation>
-    </message>
-    <message>
-        <location filename="../tabsetting.ui" line="681"/>
-        <source>IDS_TE_Caution</source>
-        <translation type="unfinished">CAUTION:
-Although you can keep using the printer after the end of its service life by changing the setting to Keep Printing,the printing quality is not guaranteed.</translation>
+        <location filename="../tabsetting.cpp" line="580"/>
+        <source>IDS_ST_PasswordsDifferent</source>
+        <translation>The passwords you entered are different, please try again.</translation>
     </message>
 </context>
 </TS>

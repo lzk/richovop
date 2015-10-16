@@ -429,7 +429,13 @@
 
 	<phrase>
 		<source>IDS_CP_IDCardCopy</source>
-		<target>Копир. удостовер.</target>
+		<target>Копир.
+удостовер.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_AdministratorAuthentication</source>
+		<target>Аутентификация администратора</target>
 	</phrase>
 
 </QPH>

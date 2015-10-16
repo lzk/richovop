@@ -29,7 +29,6 @@ private:
     int cmd_setting_confirm();
     int cmd_wifi_status();
     void set_cmdStatus(int);
-    int get_cmdStatus();
 
 public:
     enum{
@@ -56,6 +55,7 @@ public:
     };
     bool get_passwd_confirmed();
     void set_passwd_confirmed(bool b);
+    int get_cmdStatus();
 
 signals:
     void signals_cmd_result(int ,int);

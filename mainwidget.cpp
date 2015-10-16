@@ -75,7 +75,6 @@ void MainWidget::initializeUi()
     ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
     ui->tabWidget->addTab(tab_about ,tr("IDS_Tab_About"));
 
-    qLog("setting parent is " + tab_setting->parent()->objectName());
     tab_copy->installEventFilter(this);
     tab_setting->installEventFilter(this);
     connect(this ,SIGNAL(signals_cmd_result(int,int)) ,tab_copy ,SLOT(slots_cmd_result(int,int)));

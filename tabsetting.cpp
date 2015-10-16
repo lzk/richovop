@@ -8,6 +8,7 @@
 
 #include <QInputDialog>
 #include "dialoglogin.h"
+#include "mainwidget.h"
 
 TabSetting::TabSetting(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
     QWidget(parent),
@@ -575,6 +576,8 @@ void TabSetting::on_btn_apply_mp_clicked()
             device_manager->set_tmp_passwd(ui->le_newPassword->text().toLatin1());
             device_manager->emit_cmd_plus(DeviceContrl::CMD_PASSWD_set_plus);
         }
+    }else{
+        main_widget->messagebox_exec(tr("IDS_ST_PasswordsDifferent"));
     }
 }
 

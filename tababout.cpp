@@ -1,5 +1,7 @@
 #include "tababout.h"
 #include "ui_tababout.h"
+#define VERSION_DEFINE 1
+#include "version.h"
 
 TabAbout::TabAbout(QWidget *parent) :
     QWidget(parent),
@@ -7,6 +9,13 @@ TabAbout::TabAbout(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->label->setText(
+                QString().sprintf("<html><head/><body>"
+                                  "<p><span style=\" font-size:18pt;\">%s</span></p>"
+                                  "<p>%s</p>"
+                                  "<p>%s</p>"
+                                  "</body></html>"
+                                  ,vop_name ,vop_version ,copy_right));
     ui->label->installEventFilter(this);
 }
 
