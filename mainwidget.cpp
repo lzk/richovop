@@ -67,16 +67,14 @@ void MainWidget::initializeUi()
     tab_about = new TabAbout();
     listWidget = tab_setting->ui->listWidget;
 
-    ui->tabWidget->clear();
-    delete ui->tab_about;
-    delete ui->tab_copy;
-    delete ui->tab_setting;
-    ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
-    ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
-    ui->tabWidget->addTab(tab_about ,tr("IDS_Tab_About"));
+//    ui->tabWidget->clear();
+//    delete ui->tab_about;
+//    delete ui->tab_copy;
+//    delete ui->tab_setting;
+//    ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
+//    ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
+//    ui->tabWidget->addTab(tab_about ,tr("IDS_Tab_About"));
 
-    tab_copy->installEventFilter(this);
-    tab_setting->installEventFilter(this);
     connect(this ,SIGNAL(signals_cmd_result(int,int)) ,tab_copy ,SLOT(slots_cmd_result(int,int)));
     connect(this ,SIGNAL(signals_cmd_result(int,int)) ,tab_setting ,SLOT(slots_cmd_result(int,int)));
  }
@@ -112,16 +110,6 @@ bool MainWidget::eventFilter(QObject *obj, QEvent *event)
         if(qobject_cast<QComboBox*>(obj))
             return true;
         break;
-    case QEvent::Show:
-        if(obj == tab_copy)
-            device_manager->emit_cmd_plus(DeviceContrl::CMD_DEVICE_status);
-        if(obj == tab_setting){
-            if(!listWidget->item(0)->isHidden())
-                listWidget->setCurrentRow(0);
-            else
-                listWidget->setCurrentRow(1);
-        }
-        break;
 default:
         break;
     }
@@ -132,7 +120,8 @@ void MainWidget::updateUi()
 {
     QString device_name = device_manager->get_deviceName();
     model = device_manager->getDeviceModel(device_name);
-    ui->tabWidget->hide();//revoid cmd
+
+    ui->tabWidget->disconnect(this ,SLOT(on_tabWidget_currentChanged(int)));
     ui->tabWidget->clear();
     switch(model){
     case VopDevice::Device_3in1:
@@ -140,7 +129,6 @@ void MainWidget::updateUi()
 #ifdef FUTURE_SUPPORT
         listWidget->item(4)->setHidden(true);
 #endif
-        listWidget->setCurrentRow(0);
         ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
 //            ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
         break;
@@ -149,7 +137,6 @@ void MainWidget::updateUi()
 #ifdef FUTURE_SUPPORT
         listWidget->item(4)->setHidden(false);
 #endif
-        listWidget->setCurrentRow(0);
         ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
         ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
         break;
@@ -159,14 +146,12 @@ void MainWidget::updateUi()
 #ifdef FUTURE_SUPPORT
         listWidget->item(4)->setHidden(true);
 #endif
-        listWidget->setCurrentRow(1);
         break;
     case VopDevice::Device_sfp_wifi:
         listWidget->item(0)->setHidden(false);
 #ifdef FUTURE_SUPPORT
         listWidget->item(4)->setHidden(false);
 #endif
-        listWidget->setCurrentRow(0);
 //            ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
         ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
         break;
@@ -174,9 +159,9 @@ void MainWidget::updateUi()
         break;
     }
     ui->tabWidget->addTab(tab_about ,tr("IDS_Tab_About"));
-    ui->tabWidget->show();//revoid cmd
-
     ui->tabWidget->setCurrentWidget(tab_about);
+    connect(ui->tabWidget ,SIGNAL(currentChanged(int)), this, SLOT(on_tabWidget_currentChanged(int)));
+
     if(!device_name.isEmpty()){
         QString device_uri = device_manager->getCurrentDeviceURI();
         if(gMainWidow)
@@ -289,6 +274,7 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
 
 void MainWidget::on_refresh_clicked()
 {
+    ui->refresh->setEnabled(false);
     ui->comboBox_deviceList->clear();
     QStringList printerNames;
     int selected_printer = device_manager->getDeviceList(printerNames);
@@ -297,6 +283,7 @@ void MainWidget::on_refresh_clicked()
         ui->comboBox_deviceList->setCurrentIndex(selected_printer);
     }
     on_comboBox_deviceList_activated(selected_printer);
+    ui->refresh->setEnabled(true);
 }
 
 void MainWidget::on_comboBox_deviceList_activated(int index)
@@ -309,7 +296,7 @@ void MainWidget::on_comboBox_deviceList_activated(int index)
 QMessageBox::StandardButton MainWidget::messagebox_exec(const QString &text,
           QMessageBox::StandardButtons buttons ,
          QMessageBox::StandardButton defaultButton,
-         const QString &title )
+         QString title )
 {
     MessageBox* mb;
     mb = &msgBox;
@@ -337,7 +324,7 @@ QMessageBox::StandardButton MainWidget::messagebox_exec(const QString &text,
 void MainWidget::messagebox_show(const QString &text,
           QMessageBox::StandardButtons buttons ,
          QMessageBox::StandardButton defaultButton,
-         const QString &title )
+         QString title )
 {
     MessageBox* mb;
     mb = &msgBox_info;
@@ -360,5 +347,20 @@ void MainWidget::messagebox_show(const QString &text,
         mb->move((QApplication::desktop()->width() - mb->width())/2,
               (QApplication::desktop()->height() - mb->height())/2);
 #endif
+    }
+}
+
+void MainWidget::on_tabWidget_currentChanged(int index)
+{
+    if(tab_setting == ui->tabWidget->currentWidget()){
+        if(!listWidget->item(0)->isHidden()){
+            if(listWidget->currentRow()){
+                listWidget->setCurrentRow(0);
+            }else
+                tab_setting->on_listWidget_currentRowChanged(0);
+        }else
+            listWidget->setCurrentRow(1);
+    }else if(tab_copy == ui->tabWidget->currentWidget()){
+        device_manager->emit_cmd_plus(DeviceContrl::CMD_DEVICE_status);
     }
 }

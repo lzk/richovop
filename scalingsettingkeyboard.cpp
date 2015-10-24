@@ -7,6 +7,7 @@ ScalingSettingKeyboard::ScalingSettingKeyboard(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    setFixedSize(400,300);
     //限制在LineEdit輸入整數25~9999
     QValidator *Validator = new QIntValidator(25,999,this);
     ui->lineEdit_ShowScalingPercent->setValidator(Validator);

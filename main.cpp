@@ -23,7 +23,7 @@ Q_IMPORT_PLUGIN(qgif)
 
 
 MainWindow* gMainWidow;
-
+#include <QDebug>
 QLocalServer* m_localServer;
 bool isRunning(const QString& serverName)
 {
@@ -31,6 +31,9 @@ bool isRunning(const QString& serverName)
     QLocalSocket socket;
     socket.connectToServer(serverName);
     if (!socket.waitForConnected()) {
+        Log::init();
+        qLog(socket.errorString());
+
         m_localServer = new QLocalServer(qApp);
         if (!m_localServer->listen(serverName)) {
             if (m_localServer->serverError() == QAbstractSocket::AddressInUseError
@@ -39,6 +42,7 @@ bool isRunning(const QString& serverName)
                 m_localServer->listen(serverName);
             }
         }
+        system(("chmod a+w " + serverName).toLatin1());
         running = false;
     }
     return running;
@@ -56,7 +60,6 @@ int main(int argc, char *argv[])
         QMessageBox::warning(0,"Warnning" ,"The application is running!");
         return 0;
     }
-    Log::init();
 
     QTranslator trans;
 //    if(!trans.load(QLocale(QLocale::system().uiLanguages().first()), "vop", ".", ":/translations"))

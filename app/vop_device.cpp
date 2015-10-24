@@ -148,6 +148,7 @@ static int get_deviceID(struct device_control* dc ,const char* device_uri ,char*
         err = 0;
     dc->closePrinter();
     return err;
+//    return 0;
 }
 
 #include <QApplication>

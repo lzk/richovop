@@ -446,10 +446,10 @@ int VopProtocol::vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size)
     return err;
 }
 
-void VopProtocol::copy_set_defaultPara()
+void VopProtocol::copy_set_defaultPara(copycmdset* p)
 {    
     QMutexLocker locker(&device_manager->mutex_ctrl);
-    memcpy(copy_parameter ,&default_copy_parameter ,sizeof(default_copy_parameter));
+    memcpy(p ,&default_copy_parameter ,sizeof(default_copy_parameter));
 }
 
 void VopProtocol::copy_set_para(copycmdset* p)

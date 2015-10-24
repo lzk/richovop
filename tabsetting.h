@@ -25,6 +25,7 @@ signals:
 
 public slots:
    void slots_cmd_result(int ,int);
+   void on_listWidget_currentRowChanged(int currentRow);
 private slots:
     void slots_wifi_radiobutton(bool);
     void slots_wifi_textChanged(const QString &arg1);
@@ -40,12 +41,20 @@ private slots:
 
     void on_ip_btn_apply_clicked();
 
+
+    void on_le_newPassword_textEdited(const QString &arg1);
+
+    void on_le_confirmPassword_textEdited(const QString &arg1);
+
 public:
     Ui::TabSetting *ui;
 
 private:
     MainWidget* main_widget;
     DeviceManager* device_manager;
+
+    QString last_newPassword;
+    QString last_confirmPassword;
 
     QString wifi_ssid;
     QString wifi_password;

@@ -69,14 +69,12 @@ public:
     QMessageBox::StandardButton messagebox_exec(const QString &text,
                                                 QMessageBox::StandardButtons buttons = QMessageBox::Ok,
                                                QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
-                                                const QString &title = "");
-//                                               const QString &title = "<h3>" + tr("Lenovo Virtual Panel") + "</h3>");
+                                                QString title = "<h3>" + tr("Ricoh Virtual Panel") + "</h3>");
     void messagebox_show(const QString &text,
                          QMessageBox::StandardButtons buttons = QMessageBox::NoButton,
                         QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
-                         const QString &title = "");
-//                        const QString &title = "<h3>" + tr("Lenovo Virtual Panel") + "</h3>");
-    void messagebox_hide(){msgBox_info.hide();}
+                         QString title = "<h3>" + tr("Ricoh Virtual Panel") + "</h3>");
+    void messagebox_hide(){if(msgBox_info.isVisible())msgBox_info.hide();}
 
 signals:
    void signals_deviceChanged(const QString&);
@@ -91,6 +89,7 @@ public slots:
 private slots:
     void on_comboBox_deviceList_activated(int index);
 
+    void on_tabWidget_currentChanged(int index);
 };
 
 #endif // MAINWIDGET_H

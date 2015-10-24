@@ -21,16 +21,6 @@ TabSetting::TabSetting(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
 
     init_wifi();
 
-    //init password
-    QRegExp regexp;
-    regexp.setPattern("^[0-9a-zA-Z]{1,32}$");
-    QValidator* validator2 =  new QRegExpValidator(regexp, this);
-    ui->le_newPassword->setValidator(validator2);
-    ui->le_confirmPassword->setValidator(validator2);
-
-    connect(ui->le_newPassword,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_wifi_textChanged(QString)));
-    connect(ui->le_confirmPassword,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_wifi_textChanged(QString)));
-
     //init power save
     ui->checkBox_powerOff->hide();
 
@@ -89,12 +79,11 @@ void TabSetting::init_wifi()
     connect(ui->cb_ssid,SIGNAL(activated(QString)) ,this ,SLOT(slots_wifi_textChanged(QString)));
 //    connect(ui->checkBox ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_wifi_checkbox(bool)));
 
-    ui->pageWidget->installEventFilter(this);
-    ui->page3Widget->installEventFilter(this);
-    ui->page4Widget->installEventFilter(this);
+
     ui->cb_encryptionType->installEventFilter(this);
     ui->cb_keyIndex->installEventFilter(this);
     ui->cb_ssid->installEventFilter(this);
+    ui->le_ssid->installEventFilter(this);
 
     wifi_update();
     ui->checkBox->hide();//checkbox hide
@@ -115,21 +104,16 @@ bool TabSetting::eventFilter(QObject *obj, QEvent *event)
         if(qobject_cast<QComboBox*>(obj))
             return true;
         break;
+    case QEvent::FocusOut:
+        if(obj == ui->le_ssid){
+            ui->le_ssid->home(false);
+        }
     case QEvent::Show:
-        if(obj == ui->pageWidget){
-            on_btn_refresh_clicked();
-        }else if(obj == ui->page3Widget)
-            device_manager->emit_cmd_plus(DeviceContrl::CMD_PRN_TonerEnd_Get);
-        else if(obj == ui->page4Widget){
-            device_manager->emit_cmd_plus(DeviceContrl::CMD_PRN_PowerSave_Get);
-        }else if(obj == ui->page5Widget){
-            if(ui->ipa_rb_ipv4->isChecked()){
-                on_ipa_rb_ipv4_toggled(true);
-            }else{
-                ui->ipa_rb_ipv4->setChecked(true);
+        if(obj == ui->le_ssid){
+            if(!ui->le_ssid->hasFocus()){
+                ui->le_ssid->home(false);
             }
         }
-        break;
 default:
         break;
     }
@@ -235,6 +219,7 @@ void TabSetting::wifi_update_Data()
     }
 }
 
+#include <QDebug>
 void TabSetting::slots_wifi_textChanged(const QString &arg1)
 {
     QObject* sd = sender();
@@ -270,12 +255,6 @@ void TabSetting::slots_wifi_textChanged(const QString &arg1)
             wifi_sw_wepIndex = ui->cb_keyIndex->currentIndex();
         }else{
             wifi_ms_wepIndex = ui->cb_keyIndex->currentIndex();
-        }
-    }else if(sd == ui->le_newPassword || sd == ui->le_confirmPassword){
-        if(ui->le_newPassword->text().isEmpty() || ui->le_confirmPassword->text().isEmpty()){
-            ui->btn_apply_mp->setEnabled(false);
-        }else{
-            ui->btn_apply_mp->setEnabled(true);
         }
     }
 }
@@ -641,5 +620,61 @@ void TabSetting::on_ip_btn_apply_clicked()
                 device_manager->emit_cmd_plus(DeviceContrl::CMD_IPv6_Set);
             }
         }
+    }
+}
+
+void TabSetting::on_listWidget_currentRowChanged(int currentRow)
+{
+    switch(currentRow){
+    case 0:
+        on_btn_refresh_clicked();
+        break;
+    case 2:
+        device_manager->emit_cmd_plus(DeviceContrl::CMD_PRN_TonerEnd_Get);
+        break;
+    case 3:
+        device_manager->emit_cmd_plus(DeviceContrl::CMD_PRN_PowerSave_Get);
+        break;
+    case 4:
+        if(ui->ipa_rb_ipv4->isChecked()){
+            on_ipa_rb_ipv4_toggled(true);
+        }else{
+            ui->ipa_rb_ipv4->setChecked(true);
+        }
+        break;
+    default:
+         break;
+    }
+}
+
+void TabSetting::on_le_newPassword_textEdited(const QString &arg1)
+{
+    QRegExp regexp;
+    regexp.setPattern("^[0-9a-zA-Z]{0,32}$");
+    if( -1 != regexp.indexIn(arg1)){
+        last_newPassword = arg1;
+        if(ui->le_newPassword->text().isEmpty() || ui->le_confirmPassword->text().isEmpty()){
+            ui->btn_apply_mp->setEnabled(false);
+        }else{
+            ui->btn_apply_mp->setEnabled(true);
+        }
+    }else{
+        ui->le_newPassword->setText(last_newPassword);
+    }
+}
+
+void TabSetting::on_le_confirmPassword_textEdited(const QString &arg1)
+{
+    QRegExp regexp;
+    regexp.setPattern("^[0-9a-zA-Z]{0,32}$");
+    if( -1 != regexp.indexIn(arg1)){
+        last_confirmPassword = arg1;
+        if(ui->le_newPassword->text().isEmpty() || ui->le_confirmPassword->text().isEmpty()){
+            ui->btn_apply_mp->setEnabled(false);
+        }else{
+            ui->btn_apply_mp->setEnabled(true);
+        }
+    }else{
+        ui->le_confirmPassword->setText(last_confirmPassword);
     }
 }

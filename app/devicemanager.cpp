@@ -81,6 +81,7 @@ QString DeviceManager::getDeviceURI(const QString& devicename)
             }
         }
     }
+    qLog("devicename:"+devicename + "\ndevice_uri:"+device_uri);
     return device_uri;
 }
 
@@ -185,9 +186,9 @@ copycmdset DeviceManager::copy_get_para()
     return protocol->copy_get_para();
 }
 
-void DeviceManager::copy_set_defaultPara()
+void DeviceManager::copy_set_defaultPara(copycmdset* p)
 {
-    protocol->copy_set_defaultPara();
+    protocol->copy_set_defaultPara(p);
 }
 
 void DeviceManager::wifi_set_ssid(cmdst_wifi_get* p ,const char* ssid)

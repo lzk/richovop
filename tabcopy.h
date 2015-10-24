@@ -2,6 +2,7 @@
 #define TABCOPY_H
 
 #include <QWidget>
+#include "app/vop_protocol.h"
 
 namespace Ui {
 class TabCopy;
@@ -28,6 +29,8 @@ private:
     ScalingSettingKeyboard* keyboard_scaling;
     CopiesSettingKeyboard* keyboard_copies;
 
+    copycmdset copyPara;
+    copycmdset* pCopyPara;
     QStringList stringlist_output_size;
     bool device_status;
 

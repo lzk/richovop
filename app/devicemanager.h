@@ -32,7 +32,7 @@ public:
 
     int get_deviceStatus();
 
-    void copy_set_defaultPara();
+    void copy_set_defaultPara(copycmdset* p);
     void copy_set_para(copycmdset* p);
     copycmdset copy_get_para();
 

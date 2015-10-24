@@ -7,6 +7,7 @@ CopiesSettingKeyboard::CopiesSettingKeyboard(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    setFixedSize(400,300);
     //限制在LineEdit輸入整數1~999
     QValidator *Validator = new QIntValidator(1,99,this);
     ui->lineEdit_ShowCopiesPercent->setValidator(Validator);
