@@ -29,10 +29,10 @@ private:
     ScalingSettingKeyboard* keyboard_scaling;
     CopiesSettingKeyboard* keyboard_copies;
 
-    copycmdset copyPara;
-    copycmdset* pCopyPara;
     QStringList stringlist_output_size;
+    copycmdset* pCopyPara;
     bool device_status;
+    copycmdset copyPara;
 
     void updateCopy();
     void cmdResult_getDeviceStatus(int err);

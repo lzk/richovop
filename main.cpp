@@ -23,7 +23,6 @@ Q_IMPORT_PLUGIN(qgif)
 
 
 MainWindow* gMainWidow;
-#include <QDebug>
 QLocalServer* m_localServer;
 bool isRunning(const QString& serverName)
 {
@@ -56,7 +55,8 @@ int main(int argc, char *argv[])
 //    qputenv("LANG" ,QLocale::system().uiLanguages().first().toLatin1());
 //    qputenv("LANGUAGE" ,QLocale::system().name().toLatin1());
     QApplication a(argc, argv);
-    if(isRunning("/tmp/lock_Ricoh_Alto_VOP")){
+    QString serverName("/tmp/lock_Ricoh_Alto_VOP");
+    if(isRunning(serverName)){
         QMessageBox::warning(0,"Warnning" ,"The application is running!");
         return 0;
     }

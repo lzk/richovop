@@ -69,11 +69,11 @@ TabCopy::TabCopy(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
     connect(ui->density_plus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
 //    connect(ui->text ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_pushbutton()));
     connect(ui->photo ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_radio(bool)));
-//    connect(ui->combo_documentType ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
-//    connect(ui->combo_documentSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
-//    connect(ui->combo_outputSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
-//    connect(ui->combo_nIn1Copy ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
-//    connect(ui->combo_dpi ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
+    connect(ui->combo_documentType ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
+    connect(ui->combo_documentSize ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
+    connect(ui->combo_outputSize ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
+    connect(ui->combo_nIn1Copy ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
+    connect(ui->combo_dpi ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
 
 //    action_copy_default = new QAction(this);
 //    connect(action_copy_default ,SIGNAL(triggered()) ,this ,SLOT(slots_copy_default()));
@@ -144,8 +144,8 @@ void TabCopy::updateCopy()
 //    copycmdset copyPara = device_manager->copy_get_para();
 //    copycmdset* pCopyPara = &copyPara;
     disconnect(ui->combo_documentType ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
-    disconnect(ui->combo_documentSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
-    disconnect(ui->combo_outputSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
+//    disconnect(ui->combo_documentSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
+//    disconnect(ui->combo_outputSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
     disconnect(ui->combo_nIn1Copy ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
     disconnect(ui->combo_dpi ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
     //scaling ui
@@ -260,8 +260,8 @@ void TabCopy::updateCopy()
     }
     ui->copy->setEnabled(device_status);
     connect(ui->combo_documentType ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
-    connect(ui->combo_documentSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
-    connect(ui->combo_outputSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
+//    connect(ui->combo_documentSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
+//    connect(ui->combo_outputSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(ui->combo_nIn1Copy ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(ui->combo_dpi ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
 }

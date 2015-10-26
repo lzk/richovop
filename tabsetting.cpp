@@ -433,8 +433,8 @@ void TabSetting::slots_cmd_result(int cmd ,int err)
         break;
     case DeviceContrl::CMD_PASSWD_set_plus:
         if(!err){//no err,ACK
-            ui->le_confirmPassword->clear();
-            ui->le_newPassword->clear();
+//            ui->le_confirmPassword->clear();
+//            ui->le_newPassword->clear();
         }else if(ERR_Password_incorrect == err){//password incorrect
             on_btn_apply_mp_clicked();
         }

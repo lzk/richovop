@@ -21,7 +21,16 @@ class MainWidget;
 
 class MessageBox:public QMessageBox
 {
-protected:
+public:
+    MessageBox(){
+        QWidget* label = findChild<QWidget*>("qt_msgbox_label");
+        if(label){
+//            label->setMinimumSize(400,300);
+            label->setMinimumWidth(400);
+        }
+    }
+
+protected:/*
     void showEvent(QShowEvent* event)
     {
         QWidget* label = findChild<QWidget*>("qt_msgbox_label");
@@ -30,7 +39,7 @@ protected:
             label->setMinimumWidth(400);
         }
         QMessageBox::showEvent(event);
-    }
+    }*/
 };
 
 class MainWidget : public QWidget
@@ -54,10 +63,10 @@ private:
     TabAbout* tab_about;
 //    QAction* action_refresh;
     QProgressDialog* progressDialog;
-    int model;
     MessageBox msgBox;
     MessageBox msgBox_info;
     QTimer timer;
+    int model;
 
     void initializeUi();
     void retranslateUi();

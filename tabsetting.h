@@ -55,19 +55,19 @@ private:
 
     QString last_newPassword;
     QString last_confirmPassword;
-
     QString wifi_ssid;
     QString wifi_password;
+    QString wifi_ms_password;
+    QString wifi_sw_password;
+
 #define NUM_OF_APLIST 10
     int wifi_aplist_encryptionType[NUM_OF_APLIST];
     int wifi_encryptionType;
     int wifi_wepIndex;
 
-    QString wifi_ms_password;
     int wifi_ms_encryptionType;
     int wifi_ms_wepIndex;
 
-    QString wifi_sw_password;
     int wifi_sw_encryptionType;
     int wifi_sw_wepIndex;
 
