@@ -192,7 +192,7 @@ VopDevice::~VopDevice()
     }
 }
 
-int VopDevice::isValidDevice(const char* printer_info)
+int VopDevice::getDeviceModel(const char* printer_info)
 {
     int device = Device_invalid;
     QString str(printer_info);

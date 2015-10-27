@@ -402,13 +402,32 @@ void TabSetting::on_checkBox_tonerEnd_toggled(bool checked)
     }
 }
 
+bool TabSetting::cmd_result_validate(int err)
+{
+    switch(err){
+    case STATUS_busy_printing:
+        main_widget->messagebox_exec(tr("IDS_MSG_Printering"));
+        break;
+    case STATUS_busy_scanningOrCoping:
+    case STATUS_CopyScanNextPage:
+        main_widget->messagebox_exec(tr("IDS_MSG_MachineBusy"));
+        break;
+    case STATUS_jam:
+        main_widget->messagebox_exec(tr("IDS_ERR_JAM"));
+        break;
+    default:
+        break;
+    }
+    return !err;
+}
+
 void TabSetting::slots_cmd_result(int cmd ,int err)
 {
     //handle cmd result
     switch(cmd)
     {
     case DeviceContrl::CMD_PRN_TonerEnd_Get:
-        if(!err){
+        if(cmd_result_validate(err)){
         cmdst_tonerEnd para = device_manager->printer_getTonerEnd();
         disable_emit = true;
         if(para)
@@ -420,7 +439,7 @@ void TabSetting::slots_cmd_result(int cmd ,int err)
         break;
 
     case DeviceContrl::CMD_WIFI_apply_plus:
-        if(!err){//no err,ACK
+        if(cmd_result_validate(err)){
             //clear passwd
             wifi_ms_password.clear();
             wifi_sw_password.clear();
@@ -432,7 +451,7 @@ void TabSetting::slots_cmd_result(int cmd ,int err)
         }
         break;
     case DeviceContrl::CMD_PASSWD_set_plus:
-        if(!err){//no err,ACK
+        if(cmd_result_validate(err)){
 //            ui->le_confirmPassword->clear();
 //            ui->le_newPassword->clear();
         }else if(ERR_Password_incorrect == err){//password incorrect
@@ -440,11 +459,11 @@ void TabSetting::slots_cmd_result(int cmd ,int err)
         }
         break;
     case DeviceContrl::CMD_WIFI_refresh_plus:
-        if(!err)
+        if(cmd_result_validate(err))
             result_wifi_getAplist();
         break;
     case DeviceContrl::CMD_PRN_PowerSave_Get:
-        if(!err){
+        if(cmd_result_validate(err)){
             cmdst_PSave_time para = device_manager->printer_getPSaveTime();
             disable_emit = true;
             ui->spinBox_PSaveTime->setValue(para);
@@ -458,7 +477,7 @@ void TabSetting::slots_cmd_result(int cmd ,int err)
         }
         break;
     case DeviceContrl::CMD_IPv4_Get:
-        if(!err){
+        if(cmd_result_validate(err)){
             net_info_st info = device_manager->net_getIpv4info();
             if(4 == info.IPAddressMode)
                 ui->ipa_rb_stable->setChecked(true);
@@ -479,7 +498,7 @@ void TabSetting::slots_cmd_result(int cmd ,int err)
         }
         break;
     case DeviceContrl::CMD_IPv6_Get:
-        if(!err){
+        if(cmd_result_validate(err)){
             net_ipv6_st info = device_manager->net_getIpv6info();
             ui->ipv6_cb_dhcp->setChecked(!!info.DHCPv6);
             ui->ipv6_cb_UMA->setChecked(!!info.UseManualAddress);
@@ -551,7 +570,7 @@ void TabSetting::on_btn_apply_ws_clicked()
 void TabSetting::on_btn_apply_mp_clicked()
 {
     if(!QString::compare(ui->le_newPassword->text() ,ui->le_confirmPassword->text())){
-        if (setting_confirmPasswd()){
+        if (device_manager->get_passwd_confirmed() ||setting_confirmPasswd()){
             device_manager->set_tmp_passwd(ui->le_newPassword->text().toLatin1());
             device_manager->emit_cmd_plus(DeviceContrl::CMD_PASSWD_set_plus);
         }

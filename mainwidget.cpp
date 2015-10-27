@@ -241,8 +241,37 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     //handle err message box
     switch(err){
     case ERR_communication ://communication err
-        if(DeviceContrl::CMD_DEVICE_status != cmd)
+    case ERR_decode_status:
+    case ERR_decode_device:
+        switch(cmd){
+        case DeviceContrl::CMD_COPY:
+            messagebox_exec(tr("IDS_ERR_Communication"));
+            break;
+        case DeviceContrl::CMD_PRN_TonerEnd_Set:
+        case DeviceContrl::CMD_PRN_PSaveTime_Set:
+        case DeviceContrl::CMD_PRN_PowerOff_Set:
+        case DeviceContrl::CMD_PASSWD_set_plus:
+        case DeviceContrl::CMD_WIFI_apply_plus:
+        case DeviceContrl::CMD_IPv4_Set:
+        case DeviceContrl::CMD_IPv6_Set:
+            if(device_manager->get_passwd_confirmed())
+                messagebox_exec(tr("IDS_ERR_Communication"));
+            else
+                messagebox_exec(tr("IDS_ERR_AcquireInformation"));
+
+            break;
+        case DeviceContrl::CMD_PRN_TonerEnd_Get:
+        case DeviceContrl::CMD_WIFI_refresh_plus:
+        case DeviceContrl::CMD_PRN_PowerSave_Get:
+        case DeviceContrl::CMD_IPv4_Get:
+        case DeviceContrl::CMD_IPv6_Get:
             messagebox_exec(tr("IDS_ERR_AcquireInformation"));
+            break;
+        //do not show err msg
+        case DeviceContrl::CMD_DEVICE_status:
+        default:
+            break;
+        }
         break;
     case ERR_Password_incorrect :
 //        if(     (DeviceContrl::CMD_WIFI_apply_plus == cmd)

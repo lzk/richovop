@@ -32,6 +32,8 @@ bool isRunning(const QString& serverName)
     if (!socket.waitForConnected()) {
         Log::init();
         qLog(socket.errorString());
+        if(QFile::exists(serverName))
+            QFile::remove(serverName);
 
         m_localServer = new QLocalServer(qApp);
         if (!m_localServer->listen(serverName)) {
@@ -47,8 +49,17 @@ bool isRunning(const QString& serverName)
     return running;
 }
 
+void quit(int)
+{
+    qLog("ctrl+c quit");
+    if(qApp)
+        qApp->quit();
+}
+
+#include <sys/wait.h>
 int main(int argc, char *argv[])
 {
+    signal(SIGINT ,quit);
 #ifdef Q_WS_X11
     qputenv("LIBOVERLAY_SCROLLBAR", 0);
 #endif

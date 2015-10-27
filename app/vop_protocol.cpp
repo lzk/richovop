@@ -105,6 +105,80 @@ static size_t Base64Decode(char *source, unsigned char *target, size_t targetlen
     return converted;
 }
 
+int VopProtocol::getDESfromDeviceID(char* device_id ,char* str)
+{
+    if (device_id==NULL) {
+        return -1;
+    }
+    char *p = device_id;
+
+    while (*p && strncmp(p,"DES:",4)!=0) // Look for "DES:"
+        p++;
+
+    if (!*p)	{ // "DES:" not found
+        qLog1("DES: not found");
+        return -1;
+    }
+    p += 4;	// Skip "DES:"
+
+    char* q = p;
+    while(*q && ';'!= *q)
+        q++;
+    if(!*q){
+        qLog1("DES:no \';\'");
+        return -1;
+    }
+
+    memcpy(str ,p ,q-p);
+    str[q - p] = 0;
+    return 0;
+}
+
+int VopProtocol::getStatusFromDeviceID(char* device_id)
+{
+    int err = ERR_ACK;
+    if(DecodeStatusFromDeviceID(device_id ,status))
+        err = ERR_decode_status;
+    else{
+        int _status = get_deviceStatus();
+        qLog(QString().sprintf("get_deviceStatus correct:%#.2x" ,_status));
+        switch(_status){
+        case PSTATUS_Ready:
+            err = STATUS_ready;
+            break;
+        case PSTATUS_PowerSaving:
+            err = STATUS_sleep;
+            break;
+        case PSTATUS_CopyScanNextPage:
+            err = STATUS_CopyScanNextPage;
+            break;
+
+        case PSTATUS_Printing:
+            err = STATUS_busy_printing;
+            break;
+        case PSTATUS_CopyScanning:
+            err = STATUS_busy_scanningOrCoping;
+            break;
+        case PSTATUS_InitializeJam:
+        case PSTATUS_NofeedJam:
+        case PSTATUS_JamAtRegistStayOn:
+        case PSTATUS_JamAtExitNotReach:
+        case PSTATUS_JamAtExitStayOn:
+            err = STATUS_jam;
+            break;
+        case PSTATUS_TonerEnd1:
+        case PSTATUS_TonerEnd2:
+        case PSTATUS_TonerNearEnd:
+            err = STATUS_TonerEnd;
+            break;
+        default:
+            err = STATUS_no_defined;
+            break;
+        }
+    }
+    return err;
+}
+
 int VopProtocol::DecodeStatusFromDeviceID(char* device_id, PRINTER_STATUS* status)
 {
     if (device_id==NULL || status==NULL) {
@@ -345,10 +419,37 @@ const char* VopProtocol::getErrString(int err)
         str = STR_PREFIX("FW do not support");
         break;
     case ERR_decode_status:
-        str = STR_PREFIX("VOP defined error: status decode err");
+        str = STR_PREFIX("VOP defined error: decode status err");
+        break;
+    case ERR_decode_device:
+        str = STR_PREFIX("VOP defined error: decode device err");
         break;
     case ERR_wifi_have_not_been_inited:
         str = STR_PREFIX("VOP defined error: wifi have not been inited");
+        break;
+    case STATUS_ready:
+        str = STR_PREFIX("VOP ACK status: ready");
+        break;
+    case STATUS_sleep:
+        str = STR_PREFIX("VOP ACK status: sleep");
+        break;
+    case STATUS_busy_printing:
+        str = STR_PREFIX("VOP ACK status: printing");
+        break;
+    case STATUS_busy_scanningOrCoping:
+        str = STR_PREFIX("VOP ACK status: scanning or coping");
+        break;
+    case STATUS_CopyScanNextPage:
+        str = STR_PREFIX("VOP ACK status: copy scan next page");
+        break;
+    case STATUS_jam:
+        str = STR_PREFIX("VOP ACK status: jam");
+        break;
+    case STATUS_TonerEnd:
+        str = STR_PREFIX("VOP ACK status: toner end");
+        break;
+    case STATUS_no_defined:
+        str = STR_PREFIX("VOP ACK status: no defined");
         break;
     case ERR_vop_cannot_support:
     default:
@@ -596,7 +697,6 @@ static const char* get_cmd_string(int cmd)
     }
 }
 
-
 int VopProtocol::cmd(int _cmd)
 {
     int err = ERR_vop_cannot_support;
@@ -609,8 +709,7 @@ int VopProtocol::cmd(int _cmd)
         buffer[1023] = 0;//make sure buffer is a c string.
 //        qLog1(QString().sprintf("buffer size:%lu" ,strlen(buffer)));
         if(!err){
-            if(DecodeStatusFromDeviceID(buffer ,status))
-                err = ERR_decode_status;
+            err = getStatusFromDeviceID(buffer);
         }
         break;
     }

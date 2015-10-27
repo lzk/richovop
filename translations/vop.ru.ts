@@ -37,12 +37,12 @@
         <translation>Аутентификация администратора</translation>
     </message>
     <message>
-        <location filename="../dialoglogin.ui" line="44"/>
+        <location filename="../dialoglogin.ui" line="47"/>
         <source>IDS_ST_Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../dialoglogin.ui" line="58"/>
+        <location filename="../dialoglogin.ui" line="61"/>
         <source>IDS_ST_Login</source>
         <translation>Имя</translation>
     </message>
@@ -56,52 +56,62 @@
     </message>
     <message>
         <location filename="../mainwidget.ui" line="168"/>
-        <location filename="../mainwidget.cpp" line="74"/>
-        <location filename="../mainwidget.cpp" line="144"/>
-        <location filename="../mainwidget.cpp" line="153"/>
+        <location filename="../mainwidget.cpp" line="132"/>
+        <location filename="../mainwidget.cpp" line="140"/>
         <source>IDS_Tab_Copy</source>
         <translation>Копия</translation>
     </message>
     <message>
         <location filename="../mainwidget.ui" line="173"/>
-        <location filename="../mainwidget.cpp" line="75"/>
-        <location filename="../mainwidget.cpp" line="154"/>
-        <location filename="../mainwidget.cpp" line="157"/>
-        <location filename="../mainwidget.cpp" line="171"/>
+        <location filename="../mainwidget.cpp" line="141"/>
+        <location filename="../mainwidget.cpp" line="144"/>
+        <location filename="../mainwidget.cpp" line="156"/>
         <source>IDS_Tab_Setting</source>
         <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../mainwidget.ui" line="178"/>
-        <location filename="../mainwidget.cpp" line="76"/>
-        <location filename="../mainwidget.cpp" line="176"/>
+        <location filename="../mainwidget.cpp" line="161"/>
         <source>IDS_Tab_About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="208"/>
+        <location filename="../mainwidget.cpp" line="193"/>
         <source>IDS_MSG_SetInfo</source>
         <translation>Задание информации о принтере.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="220"/>
+        <location filename="../mainwidget.cpp" line="205"/>
         <source>IDS_MSG_GetInfo</source>
         <translation>Получение информации о принтере.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="260"/>
+        <location filename="../mainwidget.cpp" line="246"/>
+        <location filename="../mainwidget.cpp" line="256"/>
+        <source>IDS_ERR_Communication</source>
+        <translation>Ошибка связи с принтером.</translation>
+    </message>
+    <message>
+        <location filename="../mainwidget.cpp" line="258"/>
+        <location filename="../mainwidget.cpp" line="266"/>
         <source>IDS_ERR_AcquireInformation</source>
         <translation>Не удалось получить информацию.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="266"/>
+        <location filename="../mainwidget.cpp" line="278"/>
         <source>IDS_ERR_Authentication</source>
         <translation>Ошибка аутентификации, введите пароль повторно.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="270"/>
+        <location filename="../mainwidget.cpp" line="282"/>
         <source>IDS_MSG_MachineBusy</source>
         <translation>Устройство занято, повторите попытку позднее.</translation>
+    </message>
+    <message>
+        <location filename="../mainwidget.h" line="81"/>
+        <location filename="../mainwidget.h" line="85"/>
+        <source>RICOH Printer</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -314,12 +324,14 @@
         <translation>По умолчанию</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="379"/>
+        <location filename="../tabcopy.cpp" line="391"/>
+        <location filename="../tabcopy.cpp" line="420"/>
         <source>IDS_MSG_TurnCardOver</source>
         <translation>Переверните удостоверение, чтобы скопировать обратную сторону</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="382"/>
+        <location filename="../tabcopy.cpp" line="394"/>
+        <location filename="../tabcopy.cpp" line="423"/>
         <source>IDS_MSG_PlaceNextPage</source>
         <translation>Поместите следующую страницу</translation>
     </message>
@@ -327,221 +339,236 @@
 <context>
     <name>TabSetting</name>
     <message>
-        <location filename="../tabsetting.ui" line="117"/>
-        <location filename="../tabsetting.ui" line="220"/>
+        <location filename="../tabsetting.ui" line="118"/>
+        <location filename="../tabsetting.ui" line="221"/>
         <source>IDS_ST_WifiSetup</source>
         <translation>Установка WIFI</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="122"/>
+        <location filename="../tabsetting.ui" line="123"/>
         <source>IDS_ST_ModifyPasswd</source>
         <translation>Изменить пароль</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="127"/>
+        <location filename="../tabsetting.ui" line="128"/>
         <source>IDS_ST_TonerEnd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="132"/>
+        <location filename="../tabsetting.ui" line="133"/>
         <source>IDS_ST_PowerSave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="137"/>
+        <location filename="../tabsetting.ui" line="138"/>
         <source>IDS_ST_ipAddress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="232"/>
+        <location filename="../tabsetting.ui" line="233"/>
         <source>IDS_ST_SearchWifi</source>
         <translation>Поиск WIFI</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="245"/>
+        <location filename="../tabsetting.ui" line="246"/>
         <source>IDS_ST_ManualSetup</source>
         <translation>Установка вручную</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="277"/>
-        <location filename="../tabsetting.ui" line="351"/>
+        <location filename="../tabsetting.ui" line="278"/>
+        <location filename="../tabsetting.ui" line="352"/>
         <source>IDS_ST_SSID</source>
         <translation>SSID</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="287"/>
+        <location filename="../tabsetting.ui" line="288"/>
         <source>IDS_ST_EncryptionType</source>
         <translation>Тип шифрования</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="298"/>
+        <location filename="../tabsetting.ui" line="299"/>
         <source>IDS_ST_NoSecurity</source>
         <translation>Без режима безопасности</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="303"/>
+        <location filename="../tabsetting.ui" line="304"/>
         <source>IDS_ST_WEP</source>
         <translation>WEP</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="308"/>
+        <location filename="../tabsetting.ui" line="309"/>
         <source>IDS_ST_WPA2-PSK-AES</source>
         <translation>WPA2-PSK-AES</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="313"/>
+        <location filename="../tabsetting.ui" line="314"/>
         <source>IDS_ST_MixedModePSK</source>
         <translation>Смеш. режим PSK</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="373"/>
+        <location filename="../tabsetting.ui" line="374"/>
         <source>IDS_MW_Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="406"/>
+        <location filename="../tabsetting.ui" line="407"/>
         <source>IDS_ST_WepKey</source>
         <translation>WEP-ключ</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="420"/>
+        <location filename="../tabsetting.ui" line="424"/>
         <source>IDS_ST_KeyIndex</source>
         <translation>Индекс ключа</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="485"/>
+        <location filename="../tabsetting.ui" line="492"/>
         <source>IDS_ST_Passphrase</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="529"/>
-        <location filename="../tabsetting.ui" line="626"/>
-        <location filename="../tabsetting.ui" line="1245"/>
+        <location filename="../tabsetting.ui" line="536"/>
+        <location filename="../tabsetting.ui" line="639"/>
+        <location filename="../tabsetting.ui" line="1258"/>
         <source>IDS_ST_Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="575"/>
+        <location filename="../tabsetting.ui" line="582"/>
         <source>IDS_ST_NewPassword</source>
         <translation>Новый пароль</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="589"/>
+        <location filename="../tabsetting.ui" line="599"/>
         <source>IDS_ST_ConfirmPassword</source>
         <translation>Подтвердить пароль</translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="668"/>
+        <location filename="../tabsetting.ui" line="681"/>
         <source>IDS_TE_checkBox</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="681"/>
+        <location filename="../tabsetting.ui" line="694"/>
         <source>IDS_TE_Caution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="724"/>
+        <location filename="../tabsetting.ui" line="737"/>
         <source>IDS_PS_PSaveTime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="807"/>
+        <location filename="../tabsetting.ui" line="820"/>
         <source>IDS_PS_PowerOff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="849"/>
+        <location filename="../tabsetting.ui" line="862"/>
         <source>IDS_IPA_IPv4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="859"/>
+        <location filename="../tabsetting.ui" line="872"/>
         <source>IDS_IPA_IPv6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="880"/>
+        <location filename="../tabsetting.ui" line="893"/>
         <source>IDS_IPA_get</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="889"/>
+        <location filename="../tabsetting.ui" line="902"/>
         <source>IDS_IPA_autoGet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="899"/>
+        <location filename="../tabsetting.ui" line="912"/>
         <source>IDS_IPA_stable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="908"/>
+        <location filename="../tabsetting.ui" line="921"/>
         <source>IDS_IPA_ipAddress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="915"/>
+        <location filename="../tabsetting.ui" line="928"/>
         <source>IDS_IPA_gateway</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="922"/>
+        <location filename="../tabsetting.ui" line="935"/>
         <source>IDS_IPA_subnetMask</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="1072"/>
+        <location filename="../tabsetting.ui" line="1085"/>
         <source>IDS_IPv6_dhcp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="1079"/>
+        <location filename="../tabsetting.ui" line="1092"/>
         <source>IDS_IPv6_useManualAddress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="1093"/>
+        <location filename="../tabsetting.ui" line="1106"/>
         <source>IDS_IPv6_manualAddress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="1124"/>
+        <location filename="../tabsetting.ui" line="1137"/>
         <source>IDS_IPv6_manualGatewayAddress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="1138"/>
+        <location filename="../tabsetting.ui" line="1151"/>
         <source>IDS_IPv6_SA1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="1152"/>
+        <location filename="../tabsetting.ui" line="1165"/>
         <source>IDS_ipv6_SA2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="1166"/>
+        <location filename="../tabsetting.ui" line="1179"/>
         <source>IDS_IPv6_SA3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="1180"/>
+        <location filename="../tabsetting.ui" line="1193"/>
         <source>IDS_IPv6_ASA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="1194"/>
+        <location filename="../tabsetting.ui" line="1207"/>
         <source>IDS_IPv6_LLA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.ui" line="1208"/>
+        <location filename="../tabsetting.ui" line="1221"/>
         <source>IDS_IPv6_AGA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.cpp" line="580"/>
+        <location filename="../tabsetting.cpp" line="409"/>
+        <source>IDS_MSG_Printering</source>
+        <translation>Устройство печатает, попробуйте позднее...</translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.cpp" line="413"/>
+        <source>IDS_MSG_MachineBusy</source>
+        <translation>Устройство занято, повторите попытку позднее.</translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.cpp" line="416"/>
+        <source>IDS_ERR_JAM</source>
+        <translation>ЗАМЯТИЕ：откройте крышку и выньте бумагу</translation>
+    </message>
+    <message>
+        <location filename="../tabsetting.cpp" line="578"/>
         <source>IDS_ST_PasswordsDifferent</source>
         <translation>Указанные пароли разные, повторите ввод.</translation>
     </message>

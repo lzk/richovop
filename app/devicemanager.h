@@ -28,7 +28,7 @@ public:
     QString getCurrentDeviceURI();
     static QString getDeviceURI(const QString&);
     const QString get_deviceName();
-    int getDeviceModel(const QString& devicename);
+    static int getDeviceModel(const QString& devicename);
 
     int get_deviceStatus();
 

@@ -123,7 +123,7 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
    {
        if (dest->instance == NULL){
             value = cupsGetOption("printer-make-and-model", dest->num_options, dest->options);
-           if(VopDevice::isValidDevice(value)){
+           if(VopDevice::getDeviceModel(value)){
                 devices << dest->name;
                 printerNames << dest->name;
                 if(dest->is_default){
@@ -166,7 +166,7 @@ int DeviceManager::getDeviceModel(const QString& devicename)
     if(!dest)
         return VopDevice::Device_invalid;
     value = cupsGetOption("printer-make-and-model", dest->num_options, dest->options);
-    int model =  VopDevice::isValidDevice(value);
+    int model =  VopDevice::getDeviceModel(value);
     cupsFreeDests(num_dests ,dests);
     return model;
 }

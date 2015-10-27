@@ -68,12 +68,12 @@ TabCopy::TabCopy(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
     connect(ui->density_minus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
     connect(ui->density_plus ,SIGNAL(clicked()) ,this ,SLOT(slots_copy_pushbutton()));
 //    connect(ui->text ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_pushbutton()));
-    connect(ui->photo ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_radio(bool)));
-    connect(ui->combo_documentType ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
+//    connect(ui->photo ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_radio(bool)));
+//    connect(ui->combo_documentType ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(ui->combo_documentSize ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
     connect(ui->combo_outputSize ,SIGNAL(activated(int)) ,this ,SLOT(slots_copy_combo(int)));
-    connect(ui->combo_nIn1Copy ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
-    connect(ui->combo_dpi ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
+//    connect(ui->combo_nIn1Copy ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
+//    connect(ui->combo_dpi ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
 
 //    action_copy_default = new QAction(this);
 //    connect(action_copy_default ,SIGNAL(triggered()) ,this ,SLOT(slots_copy_default()));
@@ -143,6 +143,7 @@ void TabCopy::updateCopy()
 {
 //    copycmdset copyPara = device_manager->copy_get_para();
 //    copycmdset* pCopyPara = &copyPara;
+    disconnect(ui->photo ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_radio(bool)));
     disconnect(ui->combo_documentType ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
 //    disconnect(ui->combo_documentSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
 //    disconnect(ui->combo_outputSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
@@ -259,6 +260,7 @@ void TabCopy::updateCopy()
         }
     }
     ui->copy->setEnabled(device_status);
+    connect(ui->photo ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_radio(bool)));
     connect(ui->combo_documentType ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
 //    connect(ui->combo_documentSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
 //    connect(ui->combo_outputSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
@@ -369,6 +371,34 @@ void TabCopy::slots_cmd_result(int cmd ,int err)
 void TabCopy::cmdResult_getDeviceStatus(int err)
 {
     static bool idCardMode = false;
+    switch(err){
+    case STATUS_ready:
+    case STATUS_sleep:
+    case STATUS_TonerEnd:
+        device_status = true;
+        if(idCardMode){
+            idCardMode = false;
+            on_IDCardCopy_clicked();
+        }
+        break;
+    default:
+        device_status = false;
+        break;
+    }
+    if(STATUS_CopyScanNextPage == err){
+        copycmdset copyPara = device_manager->copy_get_para();
+        copycmdset* pCopyPara = &copyPara;
+        if(pCopyPara->nUp == 4){//IsIDCardCopyMode(pCopyPara))
+            main_widget->messagebox_show(tr("IDS_MSG_TurnCardOver"));
+            idCardMode = true;
+        }else{
+            main_widget->messagebox_show(tr("IDS_MSG_PlaceNextPage"));
+        }
+    }
+    else{
+        main_widget->messagebox_hide();
+    }
+#if 0
     if(!err){
         int _status=device_manager->get_deviceStatus();
         switch(_status){
@@ -405,6 +435,7 @@ void TabCopy::cmdResult_getDeviceStatus(int err)
         device_status = false;
     }
 //        updateCopy();//disable copy or enable
+#endif
     ui->copy->setEnabled(device_status);
 }
 

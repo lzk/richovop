@@ -29,6 +29,7 @@ private:
     int cmd_setting_confirm();
     int cmd_wifi_status();
     void set_cmdStatus(int);
+    bool cmd_status_validate(int& err);
 
 public:
     enum{

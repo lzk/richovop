@@ -78,12 +78,23 @@ enum{
     ERR_Password_incorrect = 0x0a,
     ERR_Scanner_operation_NG =0x0b,
 
-    ERR_NOERR = 0,
+    //err self defined
     ERR_communication = -1,
     ERR_library = -2,
     ERR_decode_status = -3,
     ERR_wifi_have_not_been_inited = -4,
-    ERR_vop_cannot_support = -99,
+    ERR_decode_device = -5,
+    ERR_vop_cannot_support = -10,
+
+    //status self defined
+    STATUS_ready= -100,
+    STATUS_sleep,
+    STATUS_busy_printing,
+    STATUS_busy_scanningOrCoping,
+    STATUS_jam,
+    STATUS_CopyScanNextPage,
+    STATUS_TonerEnd,
+    STATUS_no_defined,
 };
 
 typedef struct _copycmdset
@@ -273,6 +284,8 @@ public:
     ~VopProtocol();
     static const char* getErrString(int err);
     static int DecodeStatusFromDeviceID(char* device_id, PRINTER_STATUS* status);
+    static int getDESfromDeviceID(char* device_id ,char*);
+    int getStatusFromDeviceID(char* device_id);
 
     PRINTER_STATUS get_status();
     int get_deviceStatus();

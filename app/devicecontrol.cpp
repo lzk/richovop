@@ -40,6 +40,21 @@ int DeviceContrl::device_getDeviceStatus(char* buffer ,int buffer_size)
     int err = 0;
     QString device_uri = DeviceManager::getDeviceURI(current_devicename);
     err = VopDevice::getDeviceStatus(device_uri.toLatin1() ,buffer ,buffer_size);
+    char str[buffer_size];
+    if(!err){
+        if(!VopProtocol::getDESfromDeviceID(buffer ,str)){
+            qLog(QString("DES:") + str);
+            if(VopDevice::getDeviceModel(str) != DeviceManager::getDeviceModel(current_devicename)){
+                err = ERR_decode_device;
+                qLog("device name and driver name not matched");
+            }else{
+                qLog("device name and driver name matched");
+            }
+        }else{
+            err = ERR_decode_device;
+            qLog("device name and driver name not matched");
+        }
+    }
     return err;
 }
 
@@ -59,14 +74,39 @@ void DeviceContrl::set_passwd_confirmed(bool b)
     confirmed = b;
 }
 
+bool DeviceContrl::cmd_status_validate(int& err)
+{
+    bool valid = true;
+    err = protocol->cmd(VopProtocol::CMD_GetStatus);
+    if(err > 0){
+        valid = false;
+    }
+    switch(err){
+    case STATUS_busy_printing:
+    case STATUS_busy_scanningOrCoping:
+    case STATUS_jam:
+    case STATUS_CopyScanNextPage:
+
+    case ERR_communication:
+    case ERR_library:
+    case ERR_decode_status:
+    case ERR_wifi_have_not_been_inited:
+    case  ERR_decode_device:
+    case  ERR_vop_cannot_support:
+        valid = false;
+    }
+    return valid;
+}
+
 int DeviceContrl::cmd_setting_confirm()
 {
     int err = 0;
     if(!get_passwd_confirmed()){
         err = protocol->cmd(VopProtocol::CMD_PASSWD_confirm);
-        if(!err){
-            set_passwd_confirmed(true);
-        }
+        //set confirmed when the cmd complete.
+//        if(!err){
+//            set_passwd_confirmed(true);
+//        }
     }
     return err;
 }
@@ -99,10 +139,16 @@ void DeviceContrl::slots_cmd_plus(int cmd)
         break;
 
     case CMD_COPY:
+        if(!cmd_status_validate(err)){
+            break;
+        }
         err = protocol->cmd(VopProtocol::CMD_COPY);
         break;
 
     case CMD_WIFI_apply_plus:
+        if(!cmd_status_validate(err)){
+            break;
+        }
         err = cmd_setting_confirm();
         if(err){
             break;
@@ -112,9 +158,16 @@ void DeviceContrl::slots_cmd_plus(int cmd)
             break;
         }
         err = protocol->cmd(VopProtocol::CMD_WIFI_apply);
+        if(!get_passwd_confirmed())
+        if(!err){
+            set_passwd_confirmed(true);
+        }
         break;
 
     case CMD_WIFI_refresh_plus:
+        if(!cmd_status_validate(err)){
+            break;
+        }
         err = protocol->cmd(VopProtocol::CMD_WIFI_get);
         if(err){
             break;
@@ -128,28 +181,48 @@ void DeviceContrl::slots_cmd_plus(int cmd)
         break;
 
     case CMD_PASSWD_set_plus:
-        err = protocol->cmd(VopProtocol::CMD_PASSWD_confirm);
+        if(!cmd_status_validate(err)){
+            break;
+        }
+        err = cmd_setting_confirm();
         if(err){
             break;
         }
         emit signals_progress(cmd ,50);
-        set_passwd_confirmed(false);
+//        set_passwd_confirmed(false);
         //load passwd
         device_manager->load_tmp_passwd_to_set();
         err = protocol->cmd(VopProtocol::CMD_PASSWD_set);
+        if(!get_passwd_confirmed())
+        if(!err){
+            set_passwd_confirmed(true);
+        }
         break;
 
     case CMD_PRN_TonerEnd_Get:
+        if(!cmd_status_validate(err)){
+            break;
+        }
         err = protocol->cmd(VopProtocol::CMD_PRN_TonerEnd_Get);
         break;
     case CMD_PRN_TonerEnd_Set:
+        if(!cmd_status_validate(err)){
+            break;
+        }
         err = cmd_setting_confirm();
         if(err){
             break;
         }
         err = protocol->cmd(VopProtocol::CMD_PRN_TonerEnd_Set);
+        if(!get_passwd_confirmed())
+        if(!err){
+            set_passwd_confirmed(true);
+        }
         break;
     case CMD_PRN_PowerSave_Get:
+        if(!cmd_status_validate(err)){
+            break;
+        }
         err = protocol->cmd(VopProtocol::CMD_PRN_PSaveTime_Get);
         if(err){
             break;
@@ -157,38 +230,72 @@ void DeviceContrl::slots_cmd_plus(int cmd)
 //        err = protocol->cmd(VopProtocol::CMD_PRN_PowerOff_Get);
         break;
     case CMD_PRN_PSaveTime_Set:
+        if(!cmd_status_validate(err)){
+            break;
+        }
         err = cmd_setting_confirm();
         if(err){
             break;
         }
         err = protocol->cmd(VopProtocol::CMD_PRN_PSaveTime_Set);
+        if(!get_passwd_confirmed())
+        if(!err){
+            set_passwd_confirmed(true);
+        }
         break;
     case CMD_PRN_PowerOff_Set:
+        if(!cmd_status_validate(err)){
+            break;
+        }
         err = cmd_setting_confirm();
         if(err){
             break;
         }
         err = protocol->cmd(VopProtocol::CMD_PRN_PowerOff_Set);
+        if(!get_passwd_confirmed())
+        if(!err){
+            set_passwd_confirmed(true);
+        }
         break;
     case CMD_IPv4_Get:
+        if(!cmd_status_validate(err)){
+            break;
+        }
         err = protocol->cmd(VopProtocol::CMD_NET_GetV4);
         break;
     case CMD_IPv4_Set:
+        if(!cmd_status_validate(err)){
+            break;
+        }
         err = cmd_setting_confirm();
         if(err){
             break;
         }
         err = protocol->cmd(VopProtocol::CMD_NET_SetV4);
+        if(!get_passwd_confirmed())
+        if(!err){
+            set_passwd_confirmed(true);
+        }
         break;
     case CMD_IPv6_Get:
+        if(!cmd_status_validate(err)){
+            break;
+        }
         err = protocol->cmd(VopProtocol::CMD_NET_GetV6);
         break;
     case CMD_IPv6_Set:
+        if(!cmd_status_validate(err)){
+            break;
+        }
         err = cmd_setting_confirm();
         if(err){
             break;
         }
         err = protocol->cmd(VopProtocol::CMD_NET_SetV6);
+        if(!get_passwd_confirmed())
+        if(!err){
+            set_passwd_confirmed(true);
+        }
         break;
     default:
         break;

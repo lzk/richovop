@@ -24,7 +24,7 @@ public:
     };
     static bool is_usbDevice(const QString&);
     static bool is_netDevice(const QString&);
-    static int isValidDevice(const char* printer_info);    
+    static int getDeviceModel(const char* printer_info);
     static int writeThenRead(const char* device_uri ,char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize);
     static int getDeviceStatus(const char* device_uri ,char* buffer ,int buffer_size);
 
