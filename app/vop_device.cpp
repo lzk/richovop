@@ -196,21 +196,21 @@ int VopDevice::getDeviceModel(const char* printer_info)
 {
     int device = Device_invalid;
     QString str(printer_info);
-    if(str.startsWith("Ricoh SP 150SU v")){
+    if(str.startsWith("RICOH SP 150SU v")){
         device = Device_3in1;
-    }else if(str.startsWith("Ricoh SP 150SUw v")){
+    }else if(str.startsWith("RICOH SP 150SUw v")){
         device = Device_3in1_wifi;
-    }else if(str.startsWith("Ricoh SP 150 v")){
+    }else if(str.startsWith("RICOH SP 150 v")){
         device = Device_sfp;
-    }else if(str.startsWith("Ricoh SP 150w v")){
+    }else if(str.startsWith("RICOH SP 150w v")){
         device = Device_sfp_wifi;
-    }else  if(!str.compare("Ricoh SP 150SU")){
+    }else  if(!str.compare("RICOH SP 150SU")){
         device = Device_3in1;
-    }else if(!str.compare("Ricoh SP 150SUw")){
+    }else if(!str.compare("RICOH SP 150SUw")){
         device = Device_3in1_wifi;
-    }else if(!str.compare("Ricoh SP 150")){
+    }else if(!str.compare("RICOH SP 150")){
         device = Device_sfp;
-    }else if(!str.compare("Ricoh SP 150w")){
+    }else if(!str.compare("RICOH SP 150w")){
         device = Device_sfp_wifi;
     }
     else if(str.startsWith("Lenovo M7208W v")){
