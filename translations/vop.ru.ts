@@ -86,24 +86,24 @@
         <translation>Получение информации о принтере.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="246"/>
-        <location filename="../mainwidget.cpp" line="256"/>
+        <location filename="../mainwidget.cpp" line="248"/>
+        <location filename="../mainwidget.cpp" line="258"/>
         <source>IDS_ERR_Communication</source>
         <translation>Ошибка связи с принтером.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="258"/>
-        <location filename="../mainwidget.cpp" line="266"/>
+        <location filename="../mainwidget.cpp" line="260"/>
+        <location filename="../mainwidget.cpp" line="268"/>
         <source>IDS_ERR_AcquireInformation</source>
         <translation>Не удалось получить информацию.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="278"/>
+        <location filename="../mainwidget.cpp" line="280"/>
         <source>IDS_ERR_Authentication</source>
         <translation>Ошибка аутентификации, введите пароль повторно.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="282"/>
+        <location filename="../mainwidget.cpp" line="284"/>
         <source>IDS_MSG_MachineBusy</source>
         <translation>Устройство занято, повторите попытку позднее.</translation>
     </message>
@@ -120,6 +120,11 @@
         <location filename="../mainwindow.ui" line="39"/>
         <source>IDS_Menu_Exit</source>
         <translation>Выход</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="71"/>
+        <source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
+        <translation>Сейчас работает другая RICOH Pinter. Закройте её и снова запустите эту утилиту.</translation>
     </message>
 </context>
 <context>
@@ -324,14 +329,14 @@
         <translation>По умолчанию</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="391"/>
-        <location filename="../tabcopy.cpp" line="420"/>
+        <location filename="../tabcopy.cpp" line="392"/>
+        <location filename="../tabcopy.cpp" line="421"/>
         <source>IDS_MSG_TurnCardOver</source>
         <translation>Переверните удостоверение, чтобы скопировать обратную сторону</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="394"/>
-        <location filename="../tabcopy.cpp" line="423"/>
+        <location filename="../tabcopy.cpp" line="395"/>
+        <location filename="../tabcopy.cpp" line="424"/>
         <source>IDS_MSG_PlaceNextPage</source>
         <translation>Поместите следующую страницу</translation>
     </message>

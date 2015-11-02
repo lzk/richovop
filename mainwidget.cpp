@@ -125,10 +125,10 @@ void MainWidget::updateUi()
     ui->tabWidget->clear();
     switch(model){
     case VopDevice::Device_3in1:
-        listWidget->item(0)->setHidden(true);
-#ifdef FUTURE_SUPPORT
-        listWidget->item(4)->setHidden(true);
-#endif
+//        listWidget->item(0)->setHidden(true);
+//#ifdef FUTURE_SUPPORT
+//        listWidget->item(4)->setHidden(true);
+//#endif
         ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
 //            ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
         break;
@@ -141,11 +141,11 @@ void MainWidget::updateUi()
         ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
         break;
     case VopDevice::Device_sfp:
-        ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
-        listWidget->item(0)->setHidden(true);
-#ifdef FUTURE_SUPPORT
-        listWidget->item(4)->setHidden(true);
-#endif
+//        ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
+//        listWidget->item(0)->setHidden(true);
+//#ifdef FUTURE_SUPPORT
+//        listWidget->item(4)->setHidden(true);
+//#endif
         break;
     case VopDevice::Device_sfp_wifi:
         listWidget->item(0)->setHidden(false);
@@ -224,12 +224,12 @@ void MainWidget::slots_timeout()
 {
     static int count = 0;
 
-    if(0 == count % 5
+    if((0 == count % 3)
             && (model == VopDevice::Device_3in1_wifi || model == VopDevice::Device_3in1))
         device_manager->emit_cmd_plus(DeviceContrl::CMD_DEVICE_status);
 
     count ++;
-    if(count >= 100)
+    if(count >= 300)
         count = 0;
 }
 
@@ -241,8 +241,11 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     //handle err message box
     switch(err){
     case ERR_communication ://communication err
+    case ERR_library:
     case ERR_decode_status:
+    case ERR_wifi_have_not_been_inited:
     case ERR_decode_device:
+    case ERR_vop_cannot_support:
         switch(cmd){
         case DeviceContrl::CMD_COPY:
             messagebox_exec(tr("IDS_ERR_Communication"));
@@ -338,7 +341,7 @@ QMessageBox::StandardButton MainWidget::messagebox_exec(const QString &text,
     mb->setInformativeText(text);
     mb->setStandardButtons(buttons);
     mb->setDefaultButton(defaultButton);
-    mb->setWindowFlags(Qt::FramelessWindowHint);//
+    mb->setWindowFlags(Qt::FramelessWindowHint);
 #if 1
     mb->show();//show first before get real size
 //    QPoint widget_pos = mapToGlobal(pos());

@@ -438,5 +438,10 @@ Copy</target>
 		<target>Administrator Authentication</target>
 	</phrase>
 
+	<phrase>
+		<source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
+		<target>Another RICOH Pinter is currently running, please close it, then launch this tool again.</target>
+	</phrase>
+
 </QPH>
 

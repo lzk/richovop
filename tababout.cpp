@@ -16,7 +16,7 @@ TabAbout::TabAbout(QWidget *parent) :
                                   "<p>%s</p>"
                                   "</body></html>"
                                   ,vop_name ,vop_version ,copy_right));
-    ui->label->installEventFilter(this);
+//    ui->label->installEventFilter(this);
 }
 
 TabAbout::~TabAbout()
@@ -47,10 +47,10 @@ bool TabAbout::eventFilter(QObject *obj, QEvent *event)
     return QWidget::eventFilter(obj, event);
 }
 
-#include <QDesktopServices>
-#include<QUrl>
+//#include <QDesktopServices>
+//#include<QUrl>
 void TabAbout::slots_about_update()
 {
-    if(!QDesktopServices::openUrl(QUrl("http://www.lenovo.com"))){
-    }
+//    if(!QDesktopServices::openUrl(QUrl("http://www.lenovo.com"))){
+//    }
 }

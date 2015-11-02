@@ -1,10 +1,11 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/about.png</file>
         <file>styles/default.qss</file>
         <file>translations/vop.zh_CN.qm</file>
         <file>translations/vop.en.qm</file>
         <file>translations/vop.ru.qm</file>
         <file>images/RICOH_logo_171x055.gif</file>
+        <file>translations/qt_ru.qm</file>
+        <file>translations/qt_zh_CN.qm</file>
     </qresource>
 </RCC>

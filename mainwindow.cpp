@@ -38,34 +38,25 @@ void MainWindow::refresh()
     mainWidget->on_refresh_clicked();
 }
 
-
-//#include <QMessageBox>
 void MainWindow::slots_exit()
 {
     qApp->quit();
-//    int ret = mainWidget->messagebox_exec(tr("Exit")+"?" ,QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
-//    switch (ret) {
-//    case QMessageBox::Ok:
-//        exit(0);
-//        break;
-//    case QMessageBox::Cancel:
-//        // Cancel was clicked
-//        break;
-//    default:
-//        // should never be reached
-//        break;
-//  }
 }
 
-#if 0
 #include <QCloseEvent>
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    event->ignore();
-    slots_exit();
-//    ui->actionExit_Lenovo_Virtual_Panel->trigger();
+    int ret = QMessageBox::question(this ,tr("RICOH Printer") ,tr("IDS_Menu_Exit")+"?" ,QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
+//    int ret = mainWidget->messagebox_exec(tr("IDS_Menu_Exit")+"?" ,QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
+    switch (ret) {
+    case QMessageBox::Cancel:
+        event->ignore();
+        break;
+    case QMessageBox::Ok:
+    default:
+        break;
+  }
 }
-#endif
 
 void MainWindow::slots_desktopResized(int )
 {

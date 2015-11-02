@@ -438,5 +438,10 @@
 		<target>Аутентификация администратора</target>
 	</phrase>
 
+	<phrase>
+		<source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
+		<target>Сейчас работает другая RICOH Pinter. Закройте её и снова запустите эту утилиту.</target>
+	</phrase>
+
 </QPH>
 

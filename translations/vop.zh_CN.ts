@@ -86,24 +86,24 @@
         <translation>获得打印机信息。</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="246"/>
-        <location filename="../mainwidget.cpp" line="256"/>
+        <location filename="../mainwidget.cpp" line="248"/>
+        <location filename="../mainwidget.cpp" line="258"/>
         <source>IDS_ERR_Communication</source>
         <translation>打印机通信失败</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="258"/>
-        <location filename="../mainwidget.cpp" line="266"/>
+        <location filename="../mainwidget.cpp" line="260"/>
+        <location filename="../mainwidget.cpp" line="268"/>
         <source>IDS_ERR_AcquireInformation</source>
         <translation>获取信息失败</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="278"/>
+        <location filename="../mainwidget.cpp" line="280"/>
         <source>IDS_ERR_Authentication</source>
         <translation>认证错误，请重新输入密码。</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="282"/>
+        <location filename="../mainwidget.cpp" line="284"/>
         <source>IDS_MSG_MachineBusy</source>
         <translation>机器正在工作中，请稍后再试。</translation>
     </message>
@@ -120,6 +120,11 @@
         <location filename="../mainwindow.ui" line="39"/>
         <source>IDS_Menu_Exit</source>
         <translation>退出</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="71"/>
+        <source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
+        <translation>正在执行另一个RICOH Pinter，请将其关闭后，重新启动本工具。</translation>
     </message>
 </context>
 <context>
@@ -324,14 +329,14 @@
         <translation>默认</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="391"/>
-        <location filename="../tabcopy.cpp" line="420"/>
+        <location filename="../tabcopy.cpp" line="392"/>
+        <location filename="../tabcopy.cpp" line="421"/>
         <source>IDS_MSG_TurnCardOver</source>
         <translation>翻转卡片，并放在扫描板上</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="394"/>
-        <location filename="../tabcopy.cpp" line="423"/>
+        <location filename="../tabcopy.cpp" line="395"/>
+        <location filename="../tabcopy.cpp" line="424"/>
         <source>IDS_MSG_PlaceNextPage</source>
         <translation>放置下一页</translation>
     </message>

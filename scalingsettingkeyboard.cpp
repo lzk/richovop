@@ -6,6 +6,9 @@ ScalingSettingKeyboard::ScalingSettingKeyboard(QWidget *parent) :
     ui(new Ui::ScalingSettingKeyboard)
 {
     ui->setupUi(this);
+    Qt::WindowFlags wf = windowFlags();
+    wf &= ~Qt::WindowMinMaxButtonsHint;
+    setWindowFlags(wf);
 
     setFixedSize(400,300);
     //限制在LineEdit輸入整數25~9999

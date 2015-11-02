@@ -29,17 +29,6 @@ public:
             label->setMinimumWidth(400);
         }
     }
-
-protected:/*
-    void showEvent(QShowEvent* event)
-    {
-        QWidget* label = findChild<QWidget*>("qt_msgbox_label");
-        if(label){
-//            label->setMinimumSize(400,300);
-            label->setMinimumWidth(400);
-        }
-        QMessageBox::showEvent(event);
-    }*/
 };
 
 class MainWidget : public QWidget

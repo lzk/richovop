@@ -213,7 +213,7 @@ int VopDevice::getDeviceModel(const char* printer_info)
     }else if(!str.compare("RICOH SP 150w")){
         device = Device_sfp_wifi;
     }
-    else if(str.startsWith("Lenovo M7208W v")){
+/*    else if(str.startsWith("Lenovo M7208W v")){
         device = Device_3in1_wifi;
     }else if(str.startsWith("Lenovo M7208 v")){
         device = Device_3in1;
@@ -229,7 +229,7 @@ int VopDevice::getDeviceModel(const char* printer_info)
         device = Device_sfp_wifi;
     }else if(!str.compare("Lenovo LJ2208")){
         device = Device_sfp;
-    }
+    }//*/
     return device;
 }
 

@@ -6,7 +6,9 @@ CopiesSettingKeyboard::CopiesSettingKeyboard(QWidget *parent) :
     ui(new Ui::CopiesSettingKeyboard)
 {
     ui->setupUi(this);
-
+    Qt::WindowFlags wf = windowFlags();
+    wf &= ~Qt::WindowMinMaxButtonsHint;
+    setWindowFlags(wf);
     setFixedSize(400,300);
     //限制在LineEdit輸入整數1~999
     QValidator *Validator = new QIntValidator(1,99,this);

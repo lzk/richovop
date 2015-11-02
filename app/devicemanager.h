@@ -69,6 +69,7 @@ private:
     DeviceApp* device_app;
     MainWidget* main_widget;
     QString passwd_to_set;
+    static QString getStringFromShell(const QString& cmd ,int mode = 0);
 };
 
 #endif // DEVICEMANAGER_H

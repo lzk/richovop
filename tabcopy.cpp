@@ -117,12 +117,12 @@ bool TabCopy::eventFilter(QObject *obj, QEvent *event)
         if(obj == ui->copies){
             if(!keyboard_copies->isVisible()){
                 keyboard_copies->set_num(ui->copies->text().toInt());
-                keyboard_copies->show();
+                keyboard_copies->exec();
             }
         }else if(obj == ui->scaling){
             if(!keyboard_scaling->isVisible() && ui->label_scaling->isEnabled()){
                 keyboard_scaling->set_num(ui->scaling->text().remove(QChar('%')).toInt());
-                keyboard_scaling->show();
+                keyboard_scaling->exec();
             }
         }
         break;

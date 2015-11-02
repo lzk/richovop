@@ -70,20 +70,22 @@ TRANSLATIONS = translations/vop.en.ts translations/vop.zh_CN.ts translations/vop
 #                                translations/vop.ru.ts translations/vop.tr.ts translations/vop.pt.ts translations/vop.pt_br.ts translations/vop.pl.ts \
 #                                translations/vop.cs.ts translations/vop.hu.ts translations/vop.zh_TW.ts translations/vop.el.ts translations/vop.fi.ts translations/vop.ca.ts
 
-LIBS += -Wl,-rpath,"/opt/RICOH/app/Ricoh SP 150SU_SP 150" -ldl
+LIBS += -Wl,-rpath,"/opt/RICOH/app/RICOH SP 150SU_SP 150" -ldl
 
-st = $$system("cat /etc/issue|awk '{print tolower($1)}' ")
-contains(st ,ubuntu) {
-    LIBS += `cups-config --libs`
-}else{
-    lb=$$system(getconf LONG_BIT)
-    contains(lb ,64){
-        LIBS += /usr/lib64/libcups.so.2
-    }else{
-        LIBS += /usr/lib/libcups.so.2
-    }
+#st = $$system("cat /etc/issue|awk '{print tolower($1)}' ")
+#contains(st ,ubuntu) {
+#    LIBS += `cups-config --libs`
+#}else{
+#    lb=$$system(getconf LONG_BIT)
+#    contains(lb ,64){
+#        LIBS += /usr/lib64/libcups.so.2
+#    }else{
+#        LIBS += /usr/lib/libcups.so.2
+#    }
+#    QTPLUGIN += qjpeg qtiff qmng qgif
+#    DEFINES += STATIC_BUILD
+#}
     QTPLUGIN += qjpeg qtiff qmng qgif
     DEFINES += STATIC_BUILD
-}
 
 #DEFINES += FUTURE_SUPPORT

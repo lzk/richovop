@@ -66,17 +66,20 @@ int main(int argc, char *argv[])
 //    qputenv("LANG" ,QLocale::system().uiLanguages().first().toLatin1());
 //    qputenv("LANGUAGE" ,QLocale::system().name().toLatin1());
     QApplication a(argc, argv);
-    QString serverName("/tmp/lock_Ricoh_Alto_VOP");
-    if(isRunning(serverName)){
-        QMessageBox::warning(0,"Warnning" ,"The application is running!");
-        return 0;
-    }
-
     QTranslator trans;
 //    if(!trans.load(QLocale(QLocale::system().uiLanguages().first()), "vop", ".", ":/translations"))
     if(!trans.load(QLocale(QLocale::system().name()), "vop", ".", ":/translations"))
         trans.load(QLocale(QLocale::English), "vop", ".", ":/translations");
+
+    QTranslator qtTranslator;
+    qtTranslator.load("qt_" + QLocale::system().name() ,":/translations");
     a.installTranslator(&trans);
+    a.installTranslator(&qtTranslator);
+
+    if(isRunning("/tmp/lock_Ricoh_Alto_VOP")){
+        QMessageBox::warning(0,a.translate("MainWindow" ,"RICOH Printer") ,a.translate("MainWindow" ,"IDS_ANOTHER_LAUNCHER_RUNNING"));
+        return 0;
+    }
 
     QFile file(":/styles/default.qss");
     if(file.open(QFile::ReadOnly)){

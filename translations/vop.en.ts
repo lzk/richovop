@@ -86,24 +86,24 @@
         <translation>Get Printer Information.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="246"/>
-        <location filename="../mainwidget.cpp" line="256"/>
+        <location filename="../mainwidget.cpp" line="248"/>
+        <location filename="../mainwidget.cpp" line="258"/>
         <source>IDS_ERR_Communication</source>
         <translation>Communication with printer failed.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="258"/>
-        <location filename="../mainwidget.cpp" line="266"/>
+        <location filename="../mainwidget.cpp" line="260"/>
+        <location filename="../mainwidget.cpp" line="268"/>
         <source>IDS_ERR_AcquireInformation</source>
         <translation>Failed to acquire the information.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="278"/>
+        <location filename="../mainwidget.cpp" line="280"/>
         <source>IDS_ERR_Authentication</source>
         <translation>Authentication error, please enter the password again.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="282"/>
+        <location filename="../mainwidget.cpp" line="284"/>
         <source>IDS_MSG_MachineBusy</source>
         <translation>The machine is busy,please try later…</translation>
     </message>
@@ -120,6 +120,11 @@
         <location filename="../mainwindow.ui" line="39"/>
         <source>IDS_Menu_Exit</source>
         <translation>Exit</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="71"/>
+        <source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
+        <translation>Another RICOH Pinter is currently running, please close it, then launch this tool again.</translation>
     </message>
 </context>
 <context>
@@ -324,14 +329,14 @@ Copy</translation>
         <translation>Default</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="391"/>
-        <location filename="../tabcopy.cpp" line="420"/>
+        <location filename="../tabcopy.cpp" line="392"/>
+        <location filename="../tabcopy.cpp" line="421"/>
         <source>IDS_MSG_TurnCardOver</source>
         <translation>Turn card over to copy the reverse.</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="394"/>
-        <location filename="../tabcopy.cpp" line="423"/>
+        <location filename="../tabcopy.cpp" line="395"/>
+        <location filename="../tabcopy.cpp" line="424"/>
         <source>IDS_MSG_PlaceNextPage</source>
         <translation>Place Next Page</translation>
     </message>

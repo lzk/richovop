@@ -8,6 +8,9 @@ DialogLogin::DialogLogin(QWidget *parent) :
     ui(new Ui::DialogLogin)
 {
     ui->setupUi(this);
+    Qt::WindowFlags wf = windowFlags();
+    wf &= ~Qt::WindowMinMaxButtonsHint;
+    setWindowFlags(wf);
     ui->pushButton->setEnabled(false);
     passwd.clear();
 }

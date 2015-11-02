@@ -439,5 +439,10 @@
 		<target>管理者权限认证</target>
 	</phrase>
 
+	<phrase>
+		<source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
+		<target>正在执行另一个RICOH Pinter，请将其关闭后，重新启动本工具。</target>
+	</phrase>
+
 </QPH>
 
