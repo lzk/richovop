@@ -20,10 +20,13 @@
      <height>28</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuLenovo_Virtual_Panel">
-    <addaction name="actionExit_Lenovo_Virtual_Panel"/>
+   <widget class="QMenu" name="menuExit">
+    <property name="title">
+     <string/>
+    </property>
+    <addaction name="actionExit"/>
    </widget>
-   <addaction name="menuLenovo_Virtual_Panel"/>
+   <addaction name="menuExit"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -34,7 +37,7 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionExit_Lenovo_Virtual_Panel">
+  <action name="actionExit">
    <property name="text">
     <string>IDS_Menu_Exit</string>
    </property>

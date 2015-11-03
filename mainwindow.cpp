@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     statusBar()->hide();
     slots_desktopResized(-1);
    connect(QApplication::desktop() ,SIGNAL(resized(int)) ,this ,SLOT(slots_desktopResized(int)));
-    connect(ui->actionExit_Lenovo_Virtual_Panel ,SIGNAL(triggered()) ,this ,SLOT(slots_exit()));
+    connect(ui->actionExit ,SIGNAL(triggered()) ,this ,SLOT(slots_exit()));
     menuBar()->hide();
 }
 
@@ -46,13 +46,14 @@ void MainWindow::slots_exit()
 #include <QCloseEvent>
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    int ret = QMessageBox::question(this ,tr("RICOH Printer") ,tr("IDS_Menu_Exit")+"?" ,QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
+    int ret = QMessageBox::question(this ,tr("RICOH Printer") ,tr("IDS_Menu_Exit")+"?                                    " ,QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
 //    int ret = mainWidget->messagebox_exec(tr("IDS_Menu_Exit")+"?" ,QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
     switch (ret) {
+    case QMessageBox::Ok:
+        event->accept();
+        break;
     case QMessageBox::Cancel:
         event->ignore();
-        break;
-    case QMessageBox::Ok:
     default:
         break;
   }

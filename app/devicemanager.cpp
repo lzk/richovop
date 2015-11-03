@@ -64,7 +64,7 @@ QString DeviceManager::getDeviceURI(const QString& devicename)
 
     QString str("LANG=en lpstat -v ");
     str += devicename;
-    str += " 2>/dev/null |awk \'{print $NF}\'";
+    str += " 2>>/tmp/AltoVOP.log |awk \'{print $NF}\'";
     qLog("uri cmd:" + str);
     device_uri = getStringFromShell(str);
 //        device_uri = device_uri.section(' ' ,-1);
@@ -91,10 +91,9 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
 
     //get default printer
     QString default_printer_name;
-    QString str("LANG=en lpstat  -d  2>/dev/null |awk \'{print $NF}\' ");
+    QString str("LANG=en lpstat -d 2>>/tmp/AltoVOP.log |awk \'{print $NF}\' ");
     qLog("defaut printer cmd:" + str);
     default_printer_name = getStringFromShell(str);
-    qLog("default_printer_name is:" + default_printer_name);
     if(default_printer_name.isEmpty()){
         qLog("there is no printer");
         return -1;
@@ -102,7 +101,7 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
 
     QStringList printers;
     QString print;
-    str = QString("LANG=en lpstat  -a  2>/dev/null|awk \'{print $1}\' ");
+    str = QString("LANG=en lpstat -a 2>>/tmp/AltoVOP.log|awk \'{print $1}\' ");
     qLog("prints cmd:" + str);
     print = getStringFromShell(str ,1);
     if(print.isEmpty()){
@@ -162,6 +161,7 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
            }
        }
    }
+//   cupsFreeDests(num_dests, dests);
 #endif
 #endif
    if(devices.isEmpty())
@@ -181,7 +181,6 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
        qLog("the printer isn't selected,select the first printer");
        selected_printer = 0;
    }
-//   cupsFreeDests(num_dests, dests);
    return selected_printer;
 }
 
@@ -205,8 +204,7 @@ int DeviceManager::getDeviceModel(const QString& devicename)
 
     QString str("LANG=en lpstat -l -p ");
     str += devicename;
-    str += QString(" 2>/dev/null |awk '/Interface/{printf $NF}' ");
-//    str += tmp_file;
+    str += QString(" 2>>/tmp/AltoVOP.log |awk '/Interface/{printf $NF}' ");
     qLog("file name cmd:" + str);
     QString filename;
     filename = getStringFromShell(str);
@@ -218,8 +216,7 @@ int DeviceManager::getDeviceModel(const QString& devicename)
 
     str = QString("awk -F\\\" '/\\*NickName/{print $2}'  ");
     str += filename;
-    str += QString(" 2>/dev/null ");
-//    str += tmp_file;
+    str += QString(" 2>>/tmp/AltoVOP.log ");
     qLog("make and model cmd:" + str);
     QString makeAndModel;
     makeAndModel = getStringFromShell(str);
