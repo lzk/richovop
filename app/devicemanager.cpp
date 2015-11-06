@@ -64,7 +64,7 @@ QString DeviceManager::getDeviceURI(const QString& devicename)
 
     QString str("LANG=en lpstat -v ");
     str += devicename;
-    str += " 2>>/tmp/AltoVOP.log |awk \'{print $NF}\'";
+    str += " 2>>/tmp/AltoVOP.log |awk 'NR==1{print $NF}'";
     qLog("uri cmd:" + str);
     device_uri = getStringFromShell(str);
 //        device_uri = device_uri.section(' ' ,-1);
@@ -91,7 +91,7 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
 
     //get default printer
     QString default_printer_name;
-    QString str("LANG=en lpstat -d 2>>/tmp/AltoVOP.log |awk \'{print $NF}\' ");
+    QString str("LANG=en lpstat -d 2>>/tmp/AltoVOP.log |awk 'NR==1{print $NF}' ");
     qLog("defaut printer cmd:" + str);
     default_printer_name = getStringFromShell(str);
     if(default_printer_name.isEmpty()){
@@ -222,6 +222,7 @@ int DeviceManager::getDeviceModel(const QString& devicename)
     makeAndModel = getStringFromShell(str);
     return VopDevice::getDeviceModel(makeAndModel.toLatin1());
 }
+
 QString DeviceManager::getStringFromShell(const QString& cmd ,int mode)
 {
     QString str;

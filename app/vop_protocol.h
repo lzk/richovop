@@ -84,6 +84,7 @@ enum{
     ERR_decode_status = -3,
     ERR_wifi_have_not_been_inited = -4,
     ERR_decode_device = -5,
+    ERR_printer_have_jobs = -6,
     ERR_vop_cannot_support = -10,
 
     //status self defined

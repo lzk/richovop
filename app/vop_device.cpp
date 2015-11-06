@@ -31,10 +31,10 @@ static int write_then_read(struct device_control* dc ,const char* device_uri ,ch
 {
     if(dc->openPrinter && dc->write && dc->read &&dc->closePrinter && dc->get_device_id){
     }else{
-        return -2;
+        return ERR_library;
     }
 
-    int err = -1;
+    int err = ERR_communication;
     int _write_size = 0,_read_size = 0;
     int i ,j;
     char readBuffer[0x3ff];
@@ -43,10 +43,10 @@ static int write_then_read(struct device_control* dc ,const char* device_uri ,ch
 
     for(i = 0 ;i < 3 ;i++){
 
-        if(1 != dc->openPrinter((char*)device_uri)){
-            qLog("can not open printer");
-            return -1;
-        }
+//        if(1 != dc->openPrinter((char*)device_uri)){
+//            qLog("can not open printer");
+//            return -1;
+//        }
 
         //porting from windows
         if(dc == &usb_dc){
@@ -79,7 +79,7 @@ static int write_then_read(struct device_control* dc ,const char* device_uri ,ch
         if(_write_size == wrSize){
             break;
         }else{
-            dc->closePrinter();
+//            dc->closePrinter();
         }
     }
     USB_DELAY(10);
@@ -120,33 +120,33 @@ static int write_then_read(struct device_control* dc ,const char* device_uri ,ch
         }
         qLog(QString().sprintf("try times:%d" ,j));
         if(_read_size == rdSize -2){
-            err = 0;
+            err = ERR_ACK;
             i++;
             qLog("read complete");
         }else{
             qLog("read wrong");
         }
     }
-    dc->closePrinter();
+//    dc->closePrinter();
     return err;
 }
 static int get_deviceID(struct device_control* dc ,const char* device_uri ,char* buffer ,int buffer_size)
 {
     if(dc->openPrinter && dc->get_device_id && dc->closePrinter){
     }else{
-        return -2;
+        return ERR_library;
     }
-    if(1 != dc->openPrinter((char*)device_uri)){
-        qLog("can not open printer");
-        return -1;
-    }
-    int err = -1;
+//    if(1 != dc->openPrinter((char*)device_uri)){
+//        qLog("can not open printer");
+//        return ERR_communication;
+//    }
+    int err = ERR_communication;
     err = dc->get_device_id(buffer ,buffer_size);
     if(1 != err){
-        err = -1;
+        err = ERR_communication;
     }else
-        err = 0;
-    dc->closePrinter();
+        err = ERR_ACK;
+//    dc->closePrinter();
     return err;
 //    return 0;
 }
@@ -251,7 +251,7 @@ bool VopDevice::is_netDevice(const QString& str)
 
 int VopDevice::writeThenRead(const char* device_uri ,char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize)
 {
-    int err = -1;
+    int err = ERR_communication;
     if(is_usbDevice(device_uri)){
         err = write_then_read(&usb_dc ,device_uri ,wrBuffer ,wrSize ,rdBuffer ,rdSize);
     }else if(is_netDevice(device_uri)){
@@ -264,7 +264,7 @@ int VopDevice::writeThenRead(const char* device_uri ,char* wrBuffer ,int wrSize 
 
 int VopDevice::getDeviceStatus(const char* device_uri ,char* buffer ,int buffer_size)
 {
-    int err = -1;
+    int err = ERR_communication;
     if(is_usbDevice(device_uri)){
         err = get_deviceID(&usb_dc ,device_uri ,buffer ,buffer_size);
     }else if(is_netDevice(device_uri)){
@@ -275,3 +275,48 @@ int VopDevice::getDeviceStatus(const char* device_uri ,char* buffer ,int buffer_
     return err;
 }
 
+static int open_printer(struct device_control* dc ,const char* device_uri)
+{
+    if(dc->openPrinter && dc->write && dc->read &&dc->closePrinter && dc->get_device_id){
+    }else{
+        return ERR_library;
+    }
+    if(1 != dc->openPrinter((char*)device_uri)){
+        qLog("can not open printer");
+        return ERR_communication;
+    }
+    return ERR_ACK;
+}
+
+static void close_printer(struct device_control* dc)
+{
+    if(dc->openPrinter && dc->write && dc->read &&dc->closePrinter && dc->get_device_id){
+    }else{
+        return;
+    }
+    dc->closePrinter();
+}
+
+int VopDevice::open(const char* device_uri)
+{
+    int err = ERR_communication;
+    if(is_usbDevice(device_uri)){
+        err = open_printer(&usb_dc ,device_uri);
+    }else if(is_netDevice(device_uri)){
+        err = open_printer(&net_dc ,device_uri);
+    }else{
+        qLog(" the uri is not supported");
+    }
+    return err;
+}
+
+void VopDevice::close(const char* device_uri)
+{
+    if(is_usbDevice(device_uri)){
+        close_printer(&usb_dc );
+    }else if(is_netDevice(device_uri)){
+        close_printer(&net_dc );
+    }else{
+        qLog(" the uri is not supported");
+    }
+}

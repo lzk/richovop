@@ -19,6 +19,9 @@ public:
     static QString current_devicename;
     static int device_writeThenRead(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize);
     static int device_getDeviceStatus(char* buffer ,int buffer_size);
+    static int open();
+    static void close();
+    static bool isUsbDevice();
 
 private:
     DeviceManager* device_manager;

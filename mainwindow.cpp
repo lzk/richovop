@@ -13,6 +13,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+//    Qt::WindowFlags wf = windowFlags();
+//    wf &= ~Qt::WindowMaximizeButtonHint;
+//    setWindowFlags(wf);
     mainWidget = new MainWidget;
     QScrollArea* sa = new QScrollArea;
     sa->setFocusPolicy(Qt::NoFocus);
@@ -64,14 +67,16 @@ void MainWindow::slots_desktopResized(int )
     QDesktopWidget *dwsktopwidget = QApplication::desktop();
     QRect screenrect = dwsktopwidget->screenGeometry();
 
-    if(screenrect.width() <=  800 || screenrect.height() <= 600){
-        setMinimumSize(screenrect.size() - QSize(400 ,300));
+    if(screenrect.width() <  926 || screenrect.height() < 660){
+//        setMinimumSize(screenrect.size() - QSize(400 ,300));
         setMaximumSize(screenrect.size() - QSize(200 ,100));
-        resize(screenrect.size() - QSize(300 ,200));
+//        resize(screenrect.size() - QSize(300 ,200));
+           setMinimumSize(QSize(400 ,300));
+           resize(QSize(400 ,300));
     }else{
 //        setMaximumSize(926,660);
-        setFixedSize(926,660);
 //        resize(926,660);
+        setFixedSize(926,660);
     }
     move((screenrect.width() - width())/2,
          (screenrect.size().height() - height())/2);

@@ -23,23 +23,44 @@ DeviceContrl::~DeviceContrl()
 {
 }
 
+bool DeviceContrl::isUsbDevice()
+{
+    if(current_devicename.isEmpty())
+        return false;
+    QString device_uri = DeviceManager::getDeviceURI(current_devicename);
+    return VopDevice::is_usbDevice(device_uri);
+}
+
+int DeviceContrl::open()
+{
+    if(current_devicename.isEmpty())
+        return ERR_communication;
+    QString device_uri = DeviceManager::getDeviceURI(current_devicename);
+    return VopDevice::open(device_uri.toLatin1());
+}
+
+void DeviceContrl::close()
+{
+    if(!current_devicename.isEmpty()){
+        QString device_uri = DeviceManager::getDeviceURI(current_devicename);
+        VopDevice::close(device_uri.toLatin1());
+    }
+}
+
 int DeviceContrl::device_writeThenRead(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize)
 {
     if(current_devicename.isEmpty())
-        return -1;
-    int err = 0;
+        return ERR_communication;
     QString device_uri = DeviceManager::getDeviceURI(current_devicename);
-    err = VopDevice::writeThenRead(device_uri.toLatin1() ,wrBuffer ,wrSize ,rdBuffer ,rdSize);
-    return err;
+    return VopDevice::writeThenRead(device_uri.toLatin1() ,wrBuffer ,wrSize ,rdBuffer ,rdSize);
 }
 
 int DeviceContrl::device_getDeviceStatus(char* buffer ,int buffer_size)
 {
     if(current_devicename.isEmpty())
-        return -1;
-    int err = 0;
+        return ERR_communication;
     QString device_uri = DeviceManager::getDeviceURI(current_devicename);
-    err = VopDevice::getDeviceStatus(device_uri.toLatin1() ,buffer ,buffer_size);
+    int err = VopDevice::getDeviceStatus(device_uri.toLatin1() ,buffer ,buffer_size);
     char str[buffer_size];
     if(!err){
         if(!VopProtocol::getDESfromDeviceID(buffer ,str)){
@@ -125,180 +146,215 @@ int DeviceContrl::cmd_wifi_status()
     return err;
 }
 
+#include <unistd.h>
 void DeviceContrl::slots_cmd_plus(int cmd)
 {
     if(current_devicename == QString()){
         emit signals_cmd_result(cmd ,-1);
         return;
     }
-    int err = -1;
-    set_cmdStatus(cmd);
-    switch(cmd){
-    case CMD_DEVICE_status:
-        err = protocol->cmd(VopProtocol::CMD_GetStatus);
-        break;
 
-    case CMD_COPY:
-        if(!cmd_status_validate(err)){
-            break;
-        }
-        err = protocol->cmd(VopProtocol::CMD_COPY);
-        break;
+    int err;
 
-    case CMD_WIFI_apply_plus:
-        if(!cmd_status_validate(err)){
-            break;
-        }
-        err = cmd_setting_confirm();
-        if(err){
-            break;
-        }
-        err = cmd_wifi_status();
-        if(err){
-            break;
-        }
-        err = protocol->cmd(VopProtocol::CMD_WIFI_apply);
-        if(!get_passwd_confirmed())
-        if(!err){
-            set_passwd_confirmed(true);
-        }
-        break;
+    err = DeviceContrl::open();
 
-    case CMD_WIFI_refresh_plus:
-        if(!cmd_status_validate(err)){
-            break;
-        }
-        err = protocol->cmd(VopProtocol::CMD_WIFI_get);
-        if(err){
-            break;
-        }
-        err = cmd_wifi_status();
-        if(err){
-            break;
-        }
-        emit signals_progress(cmd ,50);
-        err = protocol->cmd(VopProtocol::CMD_WIFI_getAplist);
-        break;
+    if(isUsbDevice() && !err){
 
-    case CMD_PASSWD_set_plus:
-        if(!cmd_status_validate(err)){
-            break;
-        }
-        err = cmd_setting_confirm();
-        if(err){
-            break;
-        }
-        emit signals_progress(cmd ,50);
-//        set_passwd_confirmed(false);
-        //load passwd
-        device_manager->load_tmp_passwd_to_set();
-        err = protocol->cmd(VopProtocol::CMD_PASSWD_set);
-        if(!get_passwd_confirmed())
-        if(!err){
-            set_passwd_confirmed(true);
-        }
-        break;
+//        QString printer_status_cmd("LANG=en lpstat -p ");
+//        printer_status_cmd += current_devicename;
+//        printer_status_cmd += QString(" 2>>/tmp/AltoVOP.log |awk 'NR==1{printf $4}' ");
+//        QString printer_status;
 
-    case CMD_PRN_TonerEnd_Get:
-        if(!cmd_status_validate(err)){
+        QString printer_jobs_cmd("LANG=en lpstat -o ");
+        printer_jobs_cmd += current_devicename;
+        printer_jobs_cmd += QString(" 2>>/tmp/AltoVOP.log");
+        QString printer_jobs;
+
+//        qLog("printer_status cmd:" + printer_status_cmd);
+//        printer_status = DeviceManager::getStringFromShell(printer_status_cmd);
+        qLog("printer_jobs cmd:" + printer_jobs_cmd);
+        printer_jobs = DeviceManager::getStringFromShell(printer_jobs_cmd);
+        if(printer_jobs.isEmpty()
+//                &&  !printer_status.compare("idle.")
+                ){
+            err = ERR_ACK;
+        }else{
+            err = ERR_printer_have_jobs;
+            DeviceContrl::close();
+        }
+    }
+
+    if(!err){
+        set_cmdStatus(cmd);
+        switch(cmd){
+        case CMD_DEVICE_status:
+            err = protocol->cmd(VopProtocol::CMD_GetStatus);
+            break;
+
+        case CMD_COPY:
+            if(!cmd_status_validate(err)){
+                break;
+            }
+            err = protocol->cmd(VopProtocol::CMD_COPY);
+            break;
+
+        case CMD_WIFI_apply_plus:
+            if(!cmd_status_validate(err)){
+                break;
+            }
+            err = cmd_setting_confirm();
+            if(err){
+                break;
+            }
+            err = cmd_wifi_status();
+            if(err){
+                break;
+            }
+            err = protocol->cmd(VopProtocol::CMD_WIFI_apply);
+            if(!get_passwd_confirmed())
+            if(!err){
+                set_passwd_confirmed(true);
+            }
+            break;
+
+        case CMD_WIFI_refresh_plus:
+            if(!cmd_status_validate(err)){
+                break;
+            }
+            err = protocol->cmd(VopProtocol::CMD_WIFI_get);
+            if(err){
+                break;
+            }
+            err = cmd_wifi_status();
+            if(err){
+                break;
+            }
+            emit signals_progress(cmd ,50);
+            err = protocol->cmd(VopProtocol::CMD_WIFI_getAplist);
+            break;
+
+        case CMD_PASSWD_set_plus:
+            if(!cmd_status_validate(err)){
+                break;
+            }
+            err = cmd_setting_confirm();
+            if(err){
+                break;
+            }
+            emit signals_progress(cmd ,50);
+    //        set_passwd_confirmed(false);
+            //load passwd
+            device_manager->load_tmp_passwd_to_set();
+            err = protocol->cmd(VopProtocol::CMD_PASSWD_set);
+            if(!get_passwd_confirmed())
+            if(!err){
+                set_passwd_confirmed(true);
+            }
+            break;
+
+        case CMD_PRN_TonerEnd_Get:
+            if(!cmd_status_validate(err)){
+                break;
+            }
+            err = protocol->cmd(VopProtocol::CMD_PRN_TonerEnd_Get);
+            break;
+        case CMD_PRN_TonerEnd_Set:
+            if(!cmd_status_validate(err)){
+                break;
+            }
+            err = cmd_setting_confirm();
+            if(err){
+                break;
+            }
+            err = protocol->cmd(VopProtocol::CMD_PRN_TonerEnd_Set);
+            if(!get_passwd_confirmed())
+            if(!err){
+                set_passwd_confirmed(true);
+            }
+            break;
+        case CMD_PRN_PowerSave_Get:
+            if(!cmd_status_validate(err)){
+                break;
+            }
+            err = protocol->cmd(VopProtocol::CMD_PRN_PSaveTime_Get);
+            if(err){
+                break;
+            }
+    //        err = protocol->cmd(VopProtocol::CMD_PRN_PowerOff_Get);
+            break;
+        case CMD_PRN_PSaveTime_Set:
+            if(!cmd_status_validate(err)){
+                break;
+            }
+            err = cmd_setting_confirm();
+            if(err){
+                break;
+            }
+            err = protocol->cmd(VopProtocol::CMD_PRN_PSaveTime_Set);
+            if(!get_passwd_confirmed())
+            if(!err){
+                set_passwd_confirmed(true);
+            }
+            break;
+        case CMD_PRN_PowerOff_Set:
+            if(!cmd_status_validate(err)){
+                break;
+            }
+            err = cmd_setting_confirm();
+            if(err){
+                break;
+            }
+            err = protocol->cmd(VopProtocol::CMD_PRN_PowerOff_Set);
+            if(!get_passwd_confirmed())
+            if(!err){
+                set_passwd_confirmed(true);
+            }
+            break;
+        case CMD_IPv4_Get:
+            if(!cmd_status_validate(err)){
+                break;
+            }
+            err = protocol->cmd(VopProtocol::CMD_NET_GetV4);
+            break;
+        case CMD_IPv4_Set:
+            if(!cmd_status_validate(err)){
+                break;
+            }
+            err = cmd_setting_confirm();
+            if(err){
+                break;
+            }
+            err = protocol->cmd(VopProtocol::CMD_NET_SetV4);
+            if(!get_passwd_confirmed())
+            if(!err){
+                set_passwd_confirmed(true);
+            }
+            break;
+        case CMD_IPv6_Get:
+            if(!cmd_status_validate(err)){
+                break;
+            }
+            err = protocol->cmd(VopProtocol::CMD_NET_GetV6);
+            break;
+        case CMD_IPv6_Set:
+            if(!cmd_status_validate(err)){
+                break;
+            }
+            err = cmd_setting_confirm();
+            if(err){
+                break;
+            }
+            err = protocol->cmd(VopProtocol::CMD_NET_SetV6);
+            if(!get_passwd_confirmed())
+            if(!err){
+                set_passwd_confirmed(true);
+            }
+            break;
+        default:
             break;
         }
-        err = protocol->cmd(VopProtocol::CMD_PRN_TonerEnd_Get);
-        break;
-    case CMD_PRN_TonerEnd_Set:
-        if(!cmd_status_validate(err)){
-            break;
-        }
-        err = cmd_setting_confirm();
-        if(err){
-            break;
-        }
-        err = protocol->cmd(VopProtocol::CMD_PRN_TonerEnd_Set);
-        if(!get_passwd_confirmed())
-        if(!err){
-            set_passwd_confirmed(true);
-        }
-        break;
-    case CMD_PRN_PowerSave_Get:
-        if(!cmd_status_validate(err)){
-            break;
-        }
-        err = protocol->cmd(VopProtocol::CMD_PRN_PSaveTime_Get);
-        if(err){
-            break;
-        }
-//        err = protocol->cmd(VopProtocol::CMD_PRN_PowerOff_Get);
-        break;
-    case CMD_PRN_PSaveTime_Set:
-        if(!cmd_status_validate(err)){
-            break;
-        }
-        err = cmd_setting_confirm();
-        if(err){
-            break;
-        }
-        err = protocol->cmd(VopProtocol::CMD_PRN_PSaveTime_Set);
-        if(!get_passwd_confirmed())
-        if(!err){
-            set_passwd_confirmed(true);
-        }
-        break;
-    case CMD_PRN_PowerOff_Set:
-        if(!cmd_status_validate(err)){
-            break;
-        }
-        err = cmd_setting_confirm();
-        if(err){
-            break;
-        }
-        err = protocol->cmd(VopProtocol::CMD_PRN_PowerOff_Set);
-        if(!get_passwd_confirmed())
-        if(!err){
-            set_passwd_confirmed(true);
-        }
-        break;
-    case CMD_IPv4_Get:
-        if(!cmd_status_validate(err)){
-            break;
-        }
-        err = protocol->cmd(VopProtocol::CMD_NET_GetV4);
-        break;
-    case CMD_IPv4_Set:
-        if(!cmd_status_validate(err)){
-            break;
-        }
-        err = cmd_setting_confirm();
-        if(err){
-            break;
-        }
-        err = protocol->cmd(VopProtocol::CMD_NET_SetV4);
-        if(!get_passwd_confirmed())
-        if(!err){
-            set_passwd_confirmed(true);
-        }
-        break;
-    case CMD_IPv6_Get:
-        if(!cmd_status_validate(err)){
-            break;
-        }
-        err = protocol->cmd(VopProtocol::CMD_NET_GetV6);
-        break;
-    case CMD_IPv6_Set:
-        if(!cmd_status_validate(err)){
-            break;
-        }
-        err = cmd_setting_confirm();
-        if(err){
-            break;
-        }
-        err = protocol->cmd(VopProtocol::CMD_NET_SetV6);
-        if(!get_passwd_confirmed())
-        if(!err){
-            set_passwd_confirmed(true);
-        }
-        break;
-    default:
-        break;
+        DeviceContrl::close();
+//        system("killall eggcups 2>>/tmp/AltoVOP.log");
     }
     emit signals_progress(cmd ,80);
     set_cmdStatus(CMD_STATUS_COMPLETE);

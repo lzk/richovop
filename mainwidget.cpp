@@ -240,6 +240,11 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     slots_progressBar(cmd ,100);
     //handle err message box
     switch(err){
+    case ERR_printer_have_jobs:
+        if(DeviceContrl::CMD_DEVICE_status != cmd){
+            messagebox_exec(tr("IDS_MSG_MachineBusy"));
+        }
+        break;
     case ERR_communication ://communication err
     case ERR_library:
     case ERR_decode_status:

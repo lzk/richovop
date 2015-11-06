@@ -27,6 +27,8 @@ public:
     static int getDeviceModel(const char* printer_info);
     static int writeThenRead(const char* device_uri ,char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize);
     static int getDeviceStatus(const char* device_uri ,char* buffer ,int buffer_size);
+    static int open(const char* device_uri);
+    static void close(const char* device_uri);
 
 private:
     void* hLLD_usb;
