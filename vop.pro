@@ -85,9 +85,11 @@ LIBS += -Wl,-rpath,"/opt/RICOH/app/RICOH SP 150SU_SP 150" -ldl
 #    QTPLUGIN += qjpeg qtiff qmng qgif
 #    DEFINES += STATIC_BUILD
 #}
+
+equals(QT_MAJOR_VERSION,4){
     QTPLUGIN += qjpeg qtiff qmng qgif
     DEFINES += STATIC_BUILD
-
+}
 #DEFINES += FUTURE_SUPPORT
 
 #RC_FILE = images/RICOH_logo_171x055.gif

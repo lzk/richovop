@@ -230,6 +230,9 @@ QString DeviceManager::getStringFromShell(const QString& cmd ,int mode)
     QString _cmd(cmd);
     _cmd += ">";
     _cmd += tmp_file;
+    _cmd += "&&chmod 666 ";
+    _cmd += tmp_file;
+    _cmd += " 2>>/tmp/AltoVOP.log";
     if(!system(_cmd.toLatin1())){
         QFile fl(tmp_file);
         if(fl.open(QFile::ReadOnly)){
