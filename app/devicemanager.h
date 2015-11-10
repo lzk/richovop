@@ -8,7 +8,7 @@
 #include <QStringList>
 #include <QMutex>
 #include "vop_protocol.h"
-class VopDevice;
+class Device;
 class MainWidget;
 class DeviceApp;
 class DeviceManager
@@ -16,10 +16,9 @@ class DeviceManager
 public:
     DeviceManager(MainWidget* widget);
     ~DeviceManager();
-    VopDevice* device;
-    VopProtocol* protocol;
     QMutex mutex_ctrl;
     QMutex mutex_app;
+    static QMutex mutex;
 
     DeviceApp* deviceApp();
 
@@ -67,9 +66,14 @@ public:
 private:
     QStringList devices;
     QString selected_devicename;
+    QString passwd_to_set;
     DeviceApp* device_app;
     MainWidget* main_widget;
-    QString passwd_to_set;
+
+public:
+    Device* usb_device;
+    Device* net_device;
+    VopProtocol* protocol;
 };
 
 #endif // DEVICEMANAGER_H

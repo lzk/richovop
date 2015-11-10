@@ -16,7 +16,7 @@
 #include "app/devicecontrol.h"
 #include "app/deviceapp.h"
 #include "app/devicemanager.h"
-#include "app/vop_device.h"
+#include "app/device.h"
 extern QMainWindow* gMainWidow;
 
 #include "tabcopy.h"
@@ -26,7 +26,7 @@ extern QMainWindow* gMainWidow;
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainWidget),
-    model(VopDevice::Device_3in1_wifi)
+    model(Device::Device_3in1_wifi)
 {
     device_manager = new DeviceManager(this);
     ui->setupUi(this);
@@ -124,7 +124,7 @@ void MainWidget::updateUi()
     ui->tabWidget->disconnect(this ,SLOT(on_tabWidget_currentChanged(int)));
     ui->tabWidget->clear();
     switch(model){
-    case VopDevice::Device_3in1:
+    case Device::Device_3in1:
 //        listWidget->item(0)->setHidden(true);
 //#ifdef FUTURE_SUPPORT
 //        listWidget->item(4)->setHidden(true);
@@ -132,7 +132,7 @@ void MainWidget::updateUi()
         ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
 //            ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
         break;
-    case VopDevice::Device_3in1_wifi:
+    case Device::Device_3in1_wifi:
         listWidget->item(0)->setHidden(false);
 #ifdef FUTURE_SUPPORT
         listWidget->item(4)->setHidden(false);
@@ -140,14 +140,14 @@ void MainWidget::updateUi()
         ui->tabWidget->addTab(tab_copy ,tr("IDS_Tab_Copy"));
         ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
         break;
-    case VopDevice::Device_sfp:
+    case Device::Device_sfp:
 //        ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
 //        listWidget->item(0)->setHidden(true);
 //#ifdef FUTURE_SUPPORT
 //        listWidget->item(4)->setHidden(true);
 //#endif
         break;
-    case VopDevice::Device_sfp_wifi:
+    case Device::Device_sfp_wifi:
         listWidget->item(0)->setHidden(false);
 #ifdef FUTURE_SUPPORT
         listWidget->item(4)->setHidden(false);
@@ -225,7 +225,7 @@ void MainWidget::slots_timeout()
     static int count = 0;
 
     if((0 == count % 3)
-            && (model == VopDevice::Device_3in1_wifi || model == VopDevice::Device_3in1))
+            && (model == Device::Device_3in1_wifi || model == Device::Device_3in1))
         device_manager->emit_cmd_plus(DeviceContrl::CMD_DEVICE_status);
 
     count ++;

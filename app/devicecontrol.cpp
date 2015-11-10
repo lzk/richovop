@@ -3,16 +3,20 @@
 /// Version:
 /////////////////////////////////////////
 #include "devicecontrol.h"
-#include"vop_device.h"
+#include"device.h"
 #include "vop_protocol.h"
 #include "devicemanager.h"
 #include "log.h"
+#include "usbdevice.h"
+#include "netdevice.h"
 
+Device* DeviceContrl::device = NULL;
 QString DeviceContrl::current_devicename = QString();
 
 DeviceContrl::DeviceContrl(DeviceManager* dm):
     device_manager(dm),
-    device(dm->device),
+    usb_device(dm->usb_device),
+    net_device(dm->net_device),
     protocol(dm->protocol),
     confirmed(false),
     cmd_status(CMD_STATUS_COMPLETE)
@@ -25,47 +29,41 @@ DeviceContrl::~DeviceContrl()
 
 bool DeviceContrl::isUsbDevice()
 {
-    if(current_devicename.isEmpty())
-        return false;
-    QString device_uri = DeviceManager::getDeviceURI(current_devicename);
-    return VopDevice::is_usbDevice(device_uri);
+    return (device == usb_device);
 }
 
 int DeviceContrl::open()
 {
-    if(current_devicename.isEmpty())
+    if(current_devicename.isEmpty() || !device)
         return ERR_communication;
     QString device_uri = DeviceManager::getDeviceURI(current_devicename);
-    return VopDevice::open(device_uri.toLatin1());
+    return device->openPrinter(device_uri.toLatin1());
 }
 
 void DeviceContrl::close()
 {
-    if(!current_devicename.isEmpty()){
-        QString device_uri = DeviceManager::getDeviceURI(current_devicename);
-        VopDevice::close(device_uri.toLatin1());
+    if(!current_devicename.isEmpty() && device){
+        device->closePrinter();
     }
 }
 
 int DeviceContrl::device_writeThenRead(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize)
 {
-    if(current_devicename.isEmpty())
+    if(current_devicename.isEmpty() || !device)
         return ERR_communication;
-    QString device_uri = DeviceManager::getDeviceURI(current_devicename);
-    return VopDevice::writeThenRead(device_uri.toLatin1() ,wrBuffer ,wrSize ,rdBuffer ,rdSize);
+    return device->write_then_read(wrBuffer ,wrSize ,rdBuffer ,rdSize);
 }
 
 int DeviceContrl::device_getDeviceStatus(char* buffer ,int buffer_size)
 {
-    if(current_devicename.isEmpty())
+    if(current_devicename.isEmpty() || !device)
         return ERR_communication;
-    QString device_uri = DeviceManager::getDeviceURI(current_devicename);
-    int err = VopDevice::getDeviceStatus(device_uri.toLatin1() ,buffer ,buffer_size);
+    int err = device->get_device_id(buffer ,buffer_size);
     char str[buffer_size];
     if(!err){
         if(!VopProtocol::getDESfromDeviceID(buffer ,str)){
             qLog(QString("DES:") + str);
-            if(VopDevice::getDeviceModel(str) != DeviceManager::getDeviceModel(current_devicename)){
+            if(Device::getDeviceModel(str) != DeviceManager::getDeviceModel(current_devicename)){
                 err = ERR_decode_device;
                 qLog("device name and driver name not matched");
             }else{
@@ -79,9 +77,30 @@ int DeviceContrl::device_getDeviceStatus(char* buffer ,int buffer_size)
     return err;
 }
 
+#include <QUrl>
 void DeviceContrl::slots_deviceChanged(const QString& devicename)
 {
     current_devicename = devicename;
+    if(current_devicename.isEmpty()){
+        device = NULL;
+    }else{
+        QString device_uri = DeviceManager::getDeviceURI(current_devicename);
+        QString scheme = QUrl(device_uri).scheme();
+        qLog("scheme:" + scheme);
+        if(!scheme.compare("usb")){
+            device = usb_device;
+        }else if(!scheme.compare("socket")
+                         || !scheme.compare("dnssd")
+                         || !scheme.compare("lpd")
+                         || !scheme.compare("ipp")
+                         || !scheme.compare("lpr")
+             //            || !scheme.compare("mdns")
+                 ){
+            device = net_device;
+        }else{
+            device = NULL;
+        }
+    }
 }
 
 bool DeviceContrl::get_passwd_confirmed()

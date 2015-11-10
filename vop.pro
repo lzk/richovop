@@ -16,7 +16,6 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     mainwidget.cpp \
     app/vop_protocol.cpp \
-    app/vop_device.cpp \
     app/deviceapp.cpp \
     copiessettingkeyboard.cpp \
     scalingsettingkeyboard.cpp \
@@ -26,12 +25,15 @@ SOURCES += main.cpp \
     dialoglogin.cpp \
     tabsetting.cpp \
     tabcopy.cpp \
-    tababout.cpp
+    tababout.cpp \
+    app/usbdevice.cpp \
+    app/memcpy.c \
+    app/netdevice.cpp \
+    app/device.cpp
 
 HEADERS  += mainwindow.h \
     mainwidget.h \
     app/vop_protocol.h \
-    app/vop_device.h \
     lib/usb.h \
     lib/NetDevice.h \
     app/deviceapp.h \
@@ -44,7 +46,10 @@ HEADERS  += mainwindow.h \
     dialoglogin.h \
     tabsetting.h \
     tabcopy.h \
-    tababout.h
+    tababout.h \
+    app/usbdevice.h \
+    app/netdevice.h \
+    app/device.h
 
 FORMS    += mainwindow.ui \
     mainwidget.ui \
@@ -70,7 +75,9 @@ TRANSLATIONS = translations/vop.en.ts translations/vop.zh_CN.ts translations/vop
 #                                translations/vop.ru.ts translations/vop.tr.ts translations/vop.pt.ts translations/vop.pt_br.ts translations/vop.pl.ts \
 #                                translations/vop.cs.ts translations/vop.hu.ts translations/vop.zh_TW.ts translations/vop.el.ts translations/vop.fi.ts translations/vop.ca.ts
 
-LIBS += -Wl,-rpath,"/opt/RICOH/app/RICOH SP 150SU_SP 150" -ldl
+LIBS += -Wl,-rpath,"/opt/RICOH/app/RICOH SP 150SU_SP 150" -ldl \
+     -Wl,--wrap=memcpy \
+# -Xlinker --hash-style=sysv -Xlinker -fno-stack-protector
 
 #st = $$system("cat /etc/issue|awk '{print tolower($1)}' ")
 #contains(st ,ubuntu) {

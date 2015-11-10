@@ -8,7 +8,7 @@
 #include <QObject>
 #include "vop_protocol.h"
 class DeviceManager;
-class VopDevice;
+class Device;
 class DeviceContrl : public QObject
 {
     Q_OBJECT
@@ -21,11 +21,13 @@ public:
     static int device_getDeviceStatus(char* buffer ,int buffer_size);
     static int open();
     static void close();
-    static bool isUsbDevice();
+    bool isUsbDevice();
 
 private:
     DeviceManager* device_manager;
-    VopDevice* device;
+    static Device* device;
+    Device* usb_device;
+    Device* net_device;
     VopProtocol* protocol;
     bool confirmed;
     int cmd_status;

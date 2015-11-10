@@ -4,16 +4,19 @@
 /////////////////////////////////////////
 #include "devicemanager.h"
 #include<QStringList>
-#include "vop_device.h"
+#include "device.h"
 #include "deviceapp.h"
 #include "log.h"
 //#include <cups/cups.h>
+#include "usbdevice.h"
+#include "netdevice.h"
 DeviceManager::DeviceManager(MainWidget* widget):
     device_app(NULL),
-    main_widget(widget)
+    main_widget(widget),
+    usb_device(new UsbDevice),
+    net_device(new NetDevice)
 {
     devices.clear();
-    device = new VopDevice();
     protocol = new VopProtocol(this);
 }
 
@@ -21,8 +24,9 @@ DeviceManager::~DeviceManager()
 {
     if(device_app)
         delete device_app;
-    delete device;
     delete protocol;
+    delete usb_device;
+    delete net_device;
 }
 
 const QString DeviceManager::get_deviceName()
@@ -112,7 +116,7 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
     qLog("printers are:" + printers.join(";"));
     foreach (print, printers) {
         if(!print.isEmpty()){
-                if(VopDevice::Device_invalid != getDeviceModel(print)){
+                if(Device::Device_invalid != getDeviceModel(print)){
                     devices << print;
                     printerNames << print;
                 }
@@ -200,7 +204,7 @@ int DeviceManager::getDeviceModel(const QString& devicename)
 //    return model;
 
     if(devicename.isEmpty())
-        return VopDevice::Device_invalid;
+        return Device::Device_invalid;
 
     QString str("LANG=en lpstat -l -p ");
     str += devicename;
@@ -209,10 +213,10 @@ int DeviceManager::getDeviceModel(const QString& devicename)
     QString filename;
     filename = getStringFromShell(str);
     if(filename.isEmpty())
-        return VopDevice::Device_invalid;
+        return Device::Device_invalid;
     QFile fn(filename);
     if(!fn.exists())
-        return VopDevice::Device_invalid;
+        return Device::Device_invalid;
 
     str = QString("awk -F\\\" '/\\*NickName/{print $2}'  ");
     str += filename;
@@ -220,11 +224,13 @@ int DeviceManager::getDeviceModel(const QString& devicename)
     qLog("make and model cmd:" + str);
     QString makeAndModel;
     makeAndModel = getStringFromShell(str);
-    return VopDevice::getDeviceModel(makeAndModel.toLatin1());
+    return Device::getDeviceModel(makeAndModel.toLatin1());
 }
 
+QMutex DeviceManager::mutex;
 QString DeviceManager::getStringFromShell(const QString& cmd ,int mode)
 {
+    QMutexLocker locker(&mutex);
     QString str;
     QString tmp_file("/tmp/lpstattmpfile123456789");
     QString _cmd(cmd);
