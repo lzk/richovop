@@ -1,22 +1,28 @@
 #include "device.h"
 #include "log.h"
 #include "vop_protocol.h"
+extern "C"{
+#include "dlfcn.h"
+}
 
 Device::Device()
+    :ifdelay(1)
 {
 
 }
 Device::~Device()
 {
-
+    if(hLLD){
+        dlclose(hLLD);
+        hLLD = 0;
+    }
 }
 
-int Device ::write_then_read(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize)
+int Device::write_no_read(char* wrBuffer ,int wrSize)
 {
-
     int err = ERR_communication;
     int _write_size = 0,_read_size = 0;
-    int i ,j;
+    int i;
     char readBuffer[0x3ff];
     char writeBuffer[wrSize];
     memcpy(writeBuffer ,wrBuffer ,wrSize);
@@ -48,40 +54,46 @@ int Device ::write_then_read(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdS
         _write_size = write(writeBuffer ,wrSize);
         qLog(QString().sprintf("write size:%d......%d" ,wrSize ,_write_size));
         if(_write_size == wrSize){
+            err = ERR_ACK;
             break;
         }else{
 //            closePrinter();
         }
     }
-    delay (10);
-//    delay (5);//for test
+    return err;
+}
 
-    if(_write_size == wrSize){
+#include <unistd.h>
+#define delay100ms(x) {usleep((x) * ifdelay * 100 * 1000);}
+int Device ::write_then_read(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize)
+{
+    int err = write_no_read(wrBuffer ,wrSize);
+    delay100ms (10);
+
+    int j;
+    int _read_size = 0;
+    if(!err){
         int nocheck=0;
-        for(j = 0 ;j < 5 ;j++){
+        for(j = 0 ;j < 40 ;j++){
             if(!nocheck){
                 if(1 == read(rdBuffer,1)){
                     if(0x4d != rdBuffer[0]){
                         qLog(QString().sprintf("waiting for 0x4d:%#.2x" ,rdBuffer[0]));
-                        delay (1);
+                        delay100ms (1);
                         continue;
                     }
                 }else{
                     qLog("cannot read now,wait 100 ms read again");
-                    delay (1);
+                    delay100ms (1);
                     continue;
                 }
             }
             nocheck = 0;
-            delay (1);
+            delay100ms (1);
             if(1 == read(rdBuffer+1,1)){
-//                qLog(QString().sprintf("waiting for 0x3c:%#.2x" ,rdBuffer[1]));
                 if(0x3c == rdBuffer[1]){
-                    delay (1);
+                    delay100ms (1);
                     _read_size = read(rdBuffer+2 ,rdSize-2);
-//                    qLog("read:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
-//                           ,rdBuffer[0],rdBuffer[1],rdBuffer[2],rdBuffer[3],rdBuffer[4],
-//                            rdBuffer[5],rdBuffer[6],rdBuffer[7],rdBuffer[8],rdBuffer[9],rdBuffer[10]);
                     j++;
                     break;
                 }else if(0x4d == rdBuffer[1]){
@@ -92,7 +104,6 @@ int Device ::write_then_read(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdS
         qLog(QString().sprintf("try times:%d" ,j));
         if(_read_size == rdSize -2){
             err = ERR_ACK;
-            i++;
             qLog("read complete");
         }else{
             qLog("read wrong");

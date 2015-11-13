@@ -17,8 +17,7 @@ public:
     virtual  int get_device_id(char *buffer, int bufsize);
     virtual  int get_driver();
     virtual  int attach_driver();
-protected:
-    virtual void delay(int);
+    virtual int write_no_read(char* wrBuffer ,int wrSize);
 
 };
 

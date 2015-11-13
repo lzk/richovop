@@ -68,13 +68,12 @@ void MainWindow::slots_desktopResized(int )
     QRect screenrect = dwsktopwidget->screenGeometry();
 
     if(screenrect.width() <  926 || screenrect.height() < 660){
-//        setMinimumSize(screenrect.size() - QSize(400 ,300));
-        setMaximumSize(screenrect.size() - QSize(200 ,100));
 //        resize(screenrect.size() - QSize(300 ,200));
-           setMinimumSize(QSize(400 ,300));
-           resize(QSize(400 ,300));
+           setMinimumSize(400 ,300);
+           resize(400 ,300);
+//           showFullScreen();
     }else{
-//        setMaximumSize(926,660);
+        showNormal();
 //        resize(926,660);
         setFixedSize(926,660);
     }

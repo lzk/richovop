@@ -25,11 +25,12 @@ public:
     virtual int get_device_id(char *buffer, int bufsize) = 0;
     virtual int get_driver() = 0;
     virtual int attach_driver() = 0;
+    virtual int write_no_read(char* wrBuffer ,int wrSize);
     int write_then_read(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize);
 
     static int getDeviceModel(const char* printer_info);
 protected:
-    virtual void delay(int) = 0;
+    int ifdelay;
     void* hLLD;
 };
 

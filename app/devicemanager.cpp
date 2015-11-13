@@ -69,10 +69,10 @@ QString DeviceManager::getDeviceURI(const QString& devicename)
     QString str("LANG=en lpstat -v ");
     str += devicename;
     str += " 2>>/tmp/AltoVOP.log |awk 'NR==1{print $NF}'";
-    qLog("uri cmd:" + str);
+    qLog("uri cmd:");// + str);
     device_uri = getStringFromShell(str);
 //        device_uri = device_uri.section(' ' ,-1);
-    qLog("devicename:"+devicename + "\ndevice_uri:"+device_uri);
+//    qLog("devicename:"+devicename + "\ndevice_uri:"+device_uri);
     return device_uri;
 }
 
@@ -96,7 +96,7 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
     //get default printer
     QString default_printer_name;
     QString str("LANG=en lpstat -d 2>>/tmp/AltoVOP.log |awk 'NR==1{print $NF}' ");
-    qLog("defaut printer cmd:" + str);
+    qLog("defaut printer cmd:");// + str);
     default_printer_name = getStringFromShell(str);
     if(default_printer_name.isEmpty()){
         qLog("there is no printer");
@@ -106,7 +106,7 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
     QStringList printers;
     QString print;
     str = QString("LANG=en lpstat -a 2>>/tmp/AltoVOP.log|awk \'{print $1}\' ");
-    qLog("prints cmd:" + str);
+    qLog("prints cmd:");// + str);
     print = getStringFromShell(str ,1);
     if(print.isEmpty()){
         qLog("there is no printer");
@@ -209,7 +209,7 @@ int DeviceManager::getDeviceModel(const QString& devicename)
     QString str("LANG=en lpstat -l -p ");
     str += devicename;
     str += QString(" 2>>/tmp/AltoVOP.log |awk '/Interface/{printf $NF}' ");
-    qLog("file name cmd:" + str);
+    qLog("file name cmd:");// + str);
     QString filename;
     filename = getStringFromShell(str);
     if(filename.isEmpty())
@@ -221,7 +221,7 @@ int DeviceManager::getDeviceModel(const QString& devicename)
     str = QString("awk -F\\\" '/\\*NickName/{print $2}'  ");
     str += filename;
     str += QString(" 2>>/tmp/AltoVOP.log ");
-    qLog("make and model cmd:" + str);
+    qLog("make and model cmd:");// + str);
     QString makeAndModel;
     makeAndModel = getStringFromShell(str);
     return Device::getDeviceModel(makeAndModel.toLatin1());

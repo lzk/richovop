@@ -427,6 +427,9 @@ const char* VopProtocol::getErrString(int err)
     case ERR_wifi_have_not_been_inited:
         str = STR_PREFIX("VOP defined error: wifi have not been inited");
         break;
+    case ERR_WIFI_SET_SSID:
+        str = STR_PREFIX("VOP defined error: wifi set ssid");
+        break;
     case STATUS_ready:
         str = STR_PREFIX("VOP ACK status: ready");
         break;
@@ -474,6 +477,7 @@ int VopProtocol::get_deviceStatus()
 #define vop_copy(buffer)                            vop_cmd(_LS_CPYCMD ,1 ,buffer ,sizeof(*buffer))
 #define vop_getWifiInfo(buffer)                 vop_cmd(_LS_WIFICMD ,0 ,buffer ,sizeof(*buffer))
 #define vop_setWifiInfo(buffer)                 vop_cmd(_LS_WIFICMD ,1 ,buffer ,sizeof(*buffer))
+#define vop_setWifiInfo_noread(buffer)             vop_cmd(_LS_WIFICMD ,0xff ,buffer ,sizeof(*buffer))
 #define vop_getApList(buffer)                    vop_cmd(_LS_WIFICMD ,0x07 ,buffer ,sizeof(*buffer))
 #define vop_getWifiStatus(buffer)             vop_cmd(_LS_WIFICMD ,0x08 ,buffer ,sizeof(*buffer))
 #define vop_setPasswd(buffer)                  vop_cmd(_LS_PRNCMD ,0x06 ,buffer ,sizeof(*buffer))
@@ -498,7 +502,10 @@ static const unsigned char INIT_VALUE = 0xfe;
 int VopProtocol::vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size)
 {
     int direct=0 ,data_buffer_size=0;
-    int err = vop_getCmdDirect(cmd ,sub_cmd ,direct ,data_buffer_size);
+    int real_sub_cmd = sub_cmd;
+    if(cmd == _LS_WIFICMD  && sub_cmd == 0xff)
+        real_sub_cmd = 0x01;
+    int err = vop_getCmdDirect(cmd ,real_sub_cmd ,direct ,data_buffer_size);
     if(err)
         return ERR_vop_cannot_support;//not support
 
@@ -515,21 +522,18 @@ int VopProtocol::vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size)
     // it just stand for the sub id. The real data length is defined by the lib
     ppkg->subid = 0x13;
     ppkg->len2 = 1;
-    ppkg->subcmd = sub_cmd;
+    ppkg->subcmd = real_sub_cmd;
     if(data){
         device_manager->mutex_ctrl.lock();
         memcpy(buffer + sizeof(COMM_HEADER) ,data ,data_size);
         device_manager->mutex_ctrl.unlock();
     }
 
-//    qLog(QString().sprintf("Write:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
-//           ,buffer[0],buffer[1],buffer[2],buffer[3],buffer[4],
-//            buffer[5],buffer[6],buffer[7],buffer[8],buffer[9],buffer[10]));
-    err = DeviceContrl::device_writeThenRead(buffer ,sizeof(COMM_HEADER)+data_buffer_size * direct
+    if(cmd == _LS_WIFICMD  && sub_cmd == 0xff)
+        err = DeviceContrl::device_write_no_Read(buffer ,sizeof(COMM_HEADER)+data_buffer_size * direct);
+    else
+        err = DeviceContrl::device_writeThenRead(buffer ,sizeof(COMM_HEADER)+data_buffer_size * direct
                                                ,buffer ,sizeof(COMM_HEADER)+data_buffer_size * (1 - direct));
-//    qLog(QString().sprintf("read:%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x-%#.2x"
-//           ,buffer[0],buffer[1],buffer[2],buffer[3],buffer[4],
-//            buffer[5],buffer[6],buffer[7],buffer[8],buffer[9],buffer[10]));
     //check result
     if(!err && MAGIC_NUM == ppkg->magic){//ACK
         if(!direct){//get
@@ -539,7 +543,10 @@ int VopProtocol::vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size)
                 device_manager->mutex_ctrl.unlock();
             }
         }else{//set
-            err = ppkg->subcmd;
+            if(cmd == _LS_WIFICMD  && sub_cmd == 0xff)
+                err = ERR_WIFI_SET_SSID;
+            else
+                err = ppkg->subcmd;
         }
     }else
         err = -1;
@@ -676,9 +683,10 @@ static const char* get_cmd_string(int cmd)
     case VopProtocol::CMD_GetStatus:        return "get device id";
     case VopProtocol::CMD_GetCopy:        return "copy get";
     case VopProtocol::CMD_COPY:        return "copy set";
-    case VopProtocol::CMD_WIFI_apply:        return "wifi set";
+    case VopProtocol::CMD_WIFI_apply:        return "apply wifi";
+    case VopProtocol::CMD_WIFI_apply_noread:        return "wifi apply wifi";
     case VopProtocol::CMD_WIFI_get:        return "wifi get";
-    case VopProtocol::CMD_WIFI_getAplist:        return "wifi get aplist";
+    case VopProtocol::CMD_WIFI_getAplist:        return "get wifi aplist";
     case VopProtocol::CMD_PASSWD_set:        return "password set";
     case VopProtocol::CMD_PASSWD_get:        return "password get";
     case VopProtocol::CMD_PASSWD_confirm:        return "password confirm";
@@ -722,6 +730,10 @@ int VopProtocol::cmd(int _cmd)
         break;
     case CMD_WIFI_apply:{
         err =  vop_setWifiInfo(wifi_parameter);
+    }
+        break;
+    case CMD_WIFI_apply_noread:{
+        err = vop_setWifiInfo_noread(wifi_parameter);
     }
         break;
     case CMD_WIFI_get:{
@@ -793,62 +805,3 @@ int VopProtocol::cmd(int _cmd)
     }
     return err;
 }
-# if 0
-int  VopProtocol::cmd_copy()
-{
-    device_manager->mutex_ctrl.lock();
-    copycmdset _para = *copy_parameter;
-    device_manager->mutex_ctrl.unlock();
-
-    _para.scale = change_16bit_edian(_para.scale);
-    return vop_copy(&_para);
-}
-
-int  VopProtocol::cmd_wifi_get()
-{
-    device_manager->mutex_ctrl.lock();
-    cmdst_wifi_get _para = *wifi_parameter;
-    device_manager->mutex_ctrl.unlock();
-    return vop_getWifiInfo(&_para);
-}
-
-int VopProtocol::cmd_wifi_set()
-{
-    device_manager->mutex_ctrl.lock();
-    cmdst_wifi_get _para = *wifi_parameter;
-    device_manager->mutex_ctrl.unlock();
-    return vop_setWifiInfo(&_para);
-}
-
-int  VopProtocol::cmd_wifi_getAplist()
-{
-    device_manager->mutex_ctrl.lock();
-    cmdst_aplist_get _para = *wifi_aplist;
-    device_manager->mutex_ctrl.unlock();
-    return vop_getApList(&_para);
-}
-
-int VopProtocol::cmd_passwd_set()
-{
-    device_manager->mutex_ctrl.lock();
-    cmdst_passwd _para = *passwd;
-    device_manager->mutex_ctrl.unlock();
-    return vop_setPasswd(&_para);
-}
-
-int VopProtocol::cmd_passwd_get()
-{
-    device_manager->mutex_ctrl.lock();
-    cmdst_passwd _para = *passwd;
-    device_manager->mutex_ctrl.unlock();
-    return vop_getPasswd(&_para);
-}
-
-int VopProtocol::cmd_passwd_confirm()
-{
-    device_manager->mutex_ctrl.lock();
-    cmdst_passwd _para = *passwd;
-    device_manager->mutex_ctrl.unlock();
-    return vop_confirmPasswd(&_para);
-}
-#endif

@@ -43,7 +43,7 @@ bool isRunning(const QString& serverName)
                 m_localServer->listen(serverName);
             }
         }
-        system(("chmod a+w " + serverName).toLatin1());
+        (void)system(("chmod a+w " + serverName).toLatin1() + " 2>/dev/null");
         running = false;
     }
     return running;

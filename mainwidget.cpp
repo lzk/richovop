@@ -248,7 +248,6 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     case ERR_communication ://communication err
     case ERR_library:
     case ERR_decode_status:
-    case ERR_wifi_have_not_been_inited:
     case ERR_decode_device:
     case ERR_vop_cannot_support:
         switch(cmd){
@@ -280,6 +279,9 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
         default:
             break;
         }
+        break;
+    case ERR_wifi_have_not_been_inited:
+        messagebox_exec(tr("IDS_MSG_WirelessDisabled"));
         break;
     case ERR_Password_incorrect :
 //        if(     (DeviceContrl::CMD_WIFI_apply_plus == cmd)

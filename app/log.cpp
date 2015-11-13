@@ -73,7 +73,7 @@ void  Log::init()
         out << str.sprintf("----------------AltoVOP %s  %s  ------------------" ,vop_version ,copy_right) << endl;
         file.close();
     }
-    system("chmod 666 /tmp/AltoVOP.log 2>>/tmp/AltoVOP.log");
+    (void)system("chmod 666 /tmp/AltoVOP.log 2>>/tmp/AltoVOP.log");
 #if 0
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
     qInstallMessageHandler(myMessageOutput);

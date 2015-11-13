@@ -14,6 +14,7 @@ static int (*hLLD_get_device_id)(char *buffer, size_t bufsize) = NULL;
 
 NetDevice::NetDevice()
 {
+    ifdelay = 0;
     QString path = QApplication::applicationDirPath();
     hLLD = dlopen((path + "/libsocket.so").toLatin1() , RTLD_LAZY);
     if(hLLD)    {
@@ -30,9 +31,6 @@ NetDevice::NetDevice()
 
 NetDevice::~NetDevice()
 {
-    if(hLLD)    {
-        dlclose(hLLD);
-    }
 }
 
 void NetDevice::init(char*)
@@ -46,7 +44,7 @@ int NetDevice::openPrinter(const char* device_uri)
         return ERR_library;
     int err = hLLD_openPrinter((char*)device_uri);
     if(1 != err){
-        qLog("can not open printer");
+        qLog("can not open net printer");
         err = ERR_communication;
     }else
         err = ERR_ACK;
@@ -106,7 +104,21 @@ int NetDevice::attach_driver()
     return ERR_ACK;
 }
 
-void NetDevice::delay(int)
+int NetDevice::write_no_read(char* wrBuffer ,int wrSize)
 {
+    int err = ERR_communication;
+    int _write_size = 0;
+    int i;
+    char writeBuffer[wrSize];
+    memcpy(writeBuffer ,wrBuffer ,wrSize);
 
+    for(i = 0 ;i < 3 ;i++){
+        _write_size = write(writeBuffer ,wrSize);
+        qLog(QString().sprintf("write size:%d......%d" ,wrSize ,_write_size));
+        if(_write_size == wrSize){
+            err = ERR_ACK;
+            break;
+        }
+    }
+    return err;
 }

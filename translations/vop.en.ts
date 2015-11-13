@@ -64,7 +64,6 @@
     <message>
         <location filename="../mainwidget.ui" line="173"/>
         <location filename="../mainwidget.cpp" line="141"/>
-        <location filename="../mainwidget.cpp" line="144"/>
         <location filename="../mainwidget.cpp" line="156"/>
         <source>IDS_Tab_Setting</source>
         <translation>Setting</translation>
@@ -86,30 +85,36 @@
         <translation>Get Printer Information.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="248"/>
-        <location filename="../mainwidget.cpp" line="258"/>
+        <location filename="../mainwidget.cpp" line="255"/>
+        <location filename="../mainwidget.cpp" line="265"/>
         <source>IDS_ERR_Communication</source>
         <translation>Communication with printer failed.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="260"/>
-        <location filename="../mainwidget.cpp" line="268"/>
+        <location filename="../mainwidget.cpp" line="267"/>
+        <location filename="../mainwidget.cpp" line="275"/>
         <source>IDS_ERR_AcquireInformation</source>
         <translation>Failed to acquire the information.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="280"/>
+        <location filename="../mainwidget.cpp" line="284"/>
+        <source>IDS_MSG_WirelessDisabled</source>
+        <translation>Wireless Disabled</translation>
+    </message>
+    <message>
+        <location filename="../mainwidget.cpp" line="290"/>
         <source>IDS_ERR_Authentication</source>
         <translation>Authentication error, please enter the password again.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="284"/>
+        <location filename="../mainwidget.cpp" line="245"/>
+        <location filename="../mainwidget.cpp" line="294"/>
         <source>IDS_MSG_MachineBusy</source>
         <translation>The machine is busy,please try later…</translation>
     </message>
     <message>
-        <location filename="../mainwidget.h" line="81"/>
-        <location filename="../mainwidget.h" line="85"/>
+        <location filename="../mainwidget.h" line="70"/>
+        <location filename="../mainwidget.h" line="74"/>
         <source>RICOH Printer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -117,14 +122,21 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.ui" line="39"/>
+        <location filename="../mainwindow.ui" line="42"/>
+        <location filename="../mainwindow.cpp" line="52"/>
         <source>IDS_Menu_Exit</source>
         <translation>Exit</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="71"/>
+        <location filename="../main.cpp" line="80"/>
         <source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
         <translation>Another RICOH Pinter is currently running, please close it, then launch this tool again.</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="80"/>
+        <location filename="../mainwindow.cpp" line="52"/>
+        <source>RICOH Printer</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

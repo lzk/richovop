@@ -31,8 +31,12 @@ bool DeviceContrl::isUsbDevice()
 {
     return (device == usb_device);
 }
+bool DeviceContrl::isNetDevice()
+{
+    return (device == net_device);
+}
 
-int DeviceContrl::open()
+int DeviceContrl::openPrinter()
 {
     if(current_devicename.isEmpty() || !device)
         return ERR_communication;
@@ -40,11 +44,18 @@ int DeviceContrl::open()
     return device->openPrinter(device_uri.toLatin1());
 }
 
-void DeviceContrl::close()
+void DeviceContrl::closePrinter()
 {
     if(!current_devicename.isEmpty() && device){
         device->closePrinter();
     }
+}
+
+int DeviceContrl::device_write_no_Read(char* wrBuffer ,int wrSize)
+{
+    if(current_devicename.isEmpty() || !device)
+        return ERR_communication;
+    return device->write_no_read(wrBuffer ,wrSize);
 }
 
 int DeviceContrl::device_writeThenRead(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize)
@@ -86,8 +97,9 @@ void DeviceContrl::slots_deviceChanged(const QString& devicename)
     }else{
         QString device_uri = DeviceManager::getDeviceURI(current_devicename);
         QString scheme = QUrl(device_uri).scheme();
-        qLog("scheme:" + scheme);
-        if(!scheme.compare("usb")){
+        if(!scheme.compare("usb")
+                || !scheme.compare("hal")
+                ){
             device = usb_device;
         }else if(!scheme.compare("socket")
                          || !scheme.compare("dnssd")
@@ -174,8 +186,7 @@ void DeviceContrl::slots_cmd_plus(int cmd)
     }
 
     int err;
-
-    err = DeviceContrl::open();
+    err = DeviceContrl::openPrinter();
 
     if(isUsbDevice() && !err){
 
@@ -191,7 +202,7 @@ void DeviceContrl::slots_cmd_plus(int cmd)
 
 //        qLog("printer_status cmd:" + printer_status_cmd);
 //        printer_status = DeviceManager::getStringFromShell(printer_status_cmd);
-        qLog("printer_jobs cmd:" + printer_jobs_cmd);
+        qLog("printer_jobs cmd:");// + printer_jobs_cmd);
         printer_jobs = DeviceManager::getStringFromShell(printer_jobs_cmd);
         if(printer_jobs.isEmpty()
 //                &&  !printer_status.compare("idle.")
@@ -199,7 +210,7 @@ void DeviceContrl::slots_cmd_plus(int cmd)
             err = ERR_ACK;
         }else{
             err = ERR_printer_have_jobs;
-            DeviceContrl::close();
+            DeviceContrl::closePrinter();
         }
     }
 
@@ -229,7 +240,10 @@ void DeviceContrl::slots_cmd_plus(int cmd)
             if(err){
                 break;
             }
-            err = protocol->cmd(VopProtocol::CMD_WIFI_apply);
+            if(isNetDevice())
+                err = protocol->cmd(VopProtocol::CMD_WIFI_apply_noread);
+            else
+                err = protocol->cmd(VopProtocol::CMD_WIFI_apply);
             if(!get_passwd_confirmed())
             if(!err){
                 set_passwd_confirmed(true);
@@ -372,7 +386,7 @@ void DeviceContrl::slots_cmd_plus(int cmd)
         default:
             break;
         }
-        DeviceContrl::close();
+        DeviceContrl::closePrinter();
 //        system("killall eggcups 2>>/tmp/AltoVOP.log");
     }
     emit signals_progress(cmd ,80);

@@ -85,6 +85,7 @@ enum{
     ERR_wifi_have_not_been_inited = -4,
     ERR_decode_device = -5,
     ERR_printer_have_jobs = -6,
+    ERR_WIFI_SET_SSID = -7,
     ERR_vop_cannot_support = -10,
 
     //status self defined
@@ -263,6 +264,7 @@ public:
         CMD_GetCopy,
         CMD_COPY,
         CMD_WIFI_apply,
+        CMD_WIFI_apply_noread,
         CMD_WIFI_get,
         CMD_WIFI_getAplist,
         CMD_PASSWD_set,

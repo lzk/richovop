@@ -18,10 +18,12 @@ public:
 
     static QString current_devicename;
     static int device_writeThenRead(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdSize);
+    static int device_write_no_Read(char* wrBuffer ,int wrSize);
     static int device_getDeviceStatus(char* buffer ,int buffer_size);
-    static int open();
-    static void close();
+    static int openPrinter();
+    static void closePrinter();
     bool isUsbDevice();
+    bool isNetDevice();
 
 private:
     DeviceManager* device_manager;

@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = VOP
 TEMPLATE = app
-CONFIG += debug
+#CONFIG += debug
 
 SOURCES += main.cpp \
     mainwindow.cpp \
@@ -27,7 +27,6 @@ SOURCES += main.cpp \
     tabcopy.cpp \
     tababout.cpp \
     app/usbdevice.cpp \
-    app/memcpy.c \
     app/netdevice.cpp \
     app/device.cpp
 

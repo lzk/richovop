@@ -50,6 +50,9 @@ border:none;
      </item>
      <item>
       <widget class="QLineEdit" name="lineEdit">
+       <property name="maxLength">
+        <number>32</number>
+       </property>
        <property name="echoMode">
         <enum>QLineEdit::Password</enum>
        </property>
