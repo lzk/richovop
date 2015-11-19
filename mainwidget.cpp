@@ -17,7 +17,8 @@
 #include "app/deviceapp.h"
 #include "app/devicemanager.h"
 #include "app/device.h"
-extern QMainWindow* gMainWidow;
+#include "app/linux_api.h"
+extern QMainWindow* gMainWindow;
 
 #include "tabcopy.h"
 #include "tabsetting.h"
@@ -26,7 +27,9 @@ extern QMainWindow* gMainWidow;
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainWidget),
-    model(Device::Device_3in1_wifi)
+    model(Device::Device_3in1_wifi),
+    no_space(false),
+    donot_cmd_times(0)
 {
     device_manager = new DeviceManager(this);
     ui->setupUi(this);
@@ -99,7 +102,6 @@ void MainWidget::initialize()
 
     msgBox.setWindowTitle(" ");
     msgBox_info.setWindowTitle(" ");
-
 }
 
 bool MainWidget::eventFilter(QObject *obj, QEvent *event)
@@ -164,14 +166,17 @@ void MainWidget::updateUi()
 
     if(!device_name.isEmpty()){
         QString device_uri = device_manager->getCurrentDeviceURI();
-        if(gMainWidow)
-            gMainWidow->setWindowTitle(device_name + " - " + device_uri);
+//        setWindowTitle(device_name + " - " + device_uri);
+        if(gMainWindow){
+            gMainWindow->setWindowTitle(device_name + " - " + device_uri);
+        }
 
         qLog("current device: " + device_name);
         qLog("device uri: "+ device_uri);
     }else{
-        if(gMainWidow)
-            gMainWidow->setWindowTitle(" ");
+//        setWindowTitle(" ");
+        if(gMainWindow)
+            gMainWindow->setWindowTitle(" ");
         qLog("no device");
     }
 
@@ -223,10 +228,26 @@ void MainWidget::slots_progressBar(int cmd ,int value)
 void MainWidget::slots_timeout()
 {
     static int count = 0;
-
-    if((0 == count % 3)
-            && (model == Device::Device_3in1_wifi || model == Device::Device_3in1))
-        device_manager->emit_cmd_plus(DeviceContrl::CMD_DEVICE_status);
+    static bool _no_space = false;
+    if(0 == count % 3){
+        no_space = device_no_space("/tmp");
+        if(no_space){
+            _no_space = true;
+            on_refresh_clicked();
+            messagebox_show(tr("IDS_NOT_ENOUGH_SPACE"));
+        }else{
+            if(_no_space){
+                _no_space = false;
+                messagebox_hide();
+            }
+            if(donot_cmd_times){
+               donot_cmd_times --;
+            }else{
+                if(model == Device::Device_3in1_wifi || model == Device::Device_3in1)
+                    device_manager->emit_cmd_plus(DeviceContrl::CMD_DEVICE_status);
+            }
+        }
+    }
 
     count ++;
     if(count >= 300)
@@ -306,6 +327,14 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     default:
         break;
     }
+    switch(cmd)
+    {
+    case DeviceContrl::CMD_COPY:
+        donot_cmd_times = 2;
+        break;
+    default:
+        break;
+    }
     //handle cmd result
     emit signals_cmd_result(cmd ,err);
 }
@@ -316,10 +345,13 @@ void MainWidget::on_refresh_clicked()
     ui->refresh->setEnabled(false);
     ui->comboBox_deviceList->clear();
     QStringList printerNames;
-    int selected_printer = device_manager->getDeviceList(printerNames);
-    if(-1 != selected_printer){//has printer
-        ui->comboBox_deviceList->insertItems(0 ,printerNames);
-        ui->comboBox_deviceList->setCurrentIndex(selected_printer);
+    int selected_printer = -1;
+    if(!no_space){
+        selected_printer = device_manager->getDeviceList(printerNames);
+        if(-1 != selected_printer){//has printer
+            ui->comboBox_deviceList->insertItems(0 ,printerNames);
+            ui->comboBox_deviceList->setCurrentIndex(selected_printer);
+        }
     }
     on_comboBox_deviceList_activated(selected_printer);
     ui->refresh->setEnabled(true);
@@ -344,7 +376,7 @@ QMessageBox::StandardButton MainWidget::messagebox_exec(const QString &text,
         mb->hide();
     }
     mb->setText(title);
-    mb->setIcon(QMessageBox::Information);
+    mb->setIconPixmap(QPixmap(":/images/printer.ico"));
     mb->setInformativeText(text);
     mb->setStandardButtons(buttons);
     mb->setDefaultButton(defaultButton);
@@ -367,16 +399,18 @@ void MainWidget::messagebox_show(const QString &text,
 {
     MessageBox* mb;
     mb = &msgBox_info;
-    if(text.compare(mb->informativeText()) && mb->isVisible()){
-        mb->hide();
+    if(!text.compare(mb->informativeText()) && mb->isVisible()){
+//        mb->hide();
+        return;
     }
-    if(!mb->isVisible()){
+//    if(!mb->isVisible()){
         mb->setText(title);
-        mb->setIcon(QMessageBox::Information);
+        mb->setIconPixmap(QPixmap(":/images/printer.ico"));
         mb->setInformativeText(text);
         mb->setStandardButtons(buttons);
         mb->setDefaultButton(defaultButton);
         mb->setWindowFlags(Qt::FramelessWindowHint);
+        mb->setModal(false);
         mb->adjustSize();
         mb->show();//show first before get real size
 #if 1
@@ -386,7 +420,7 @@ void MainWidget::messagebox_show(const QString &text,
         mb->move((QApplication::desktop()->width() - mb->width())/2,
               (QApplication::desktop()->height() - mb->height())/2);
 #endif
-    }
+//    }
 }
 
 void MainWidget::on_tabWidget_currentChanged(int index)

@@ -67,13 +67,17 @@ void  Log::init()
 {
 //    system("echo \"----------------AltoVOP debug log------------------\" > /tmp/AltoVOP.log");
     QFile file("/tmp/AltoVOP.log");
+    if(file.exists())
+        file.remove();
+    system("touch /tmp/AltoVOP.log && chmod 666 /tmp/AltoVOP.log 2>>/tmp/AltoVOP.log");
     if(file.open(QIODevice::WriteOnly | QIODevice::Truncate)){
         QTextStream out(&file);
         QString str;
-        out << str.sprintf("----------------AltoVOP %s  %s  ------------------" ,vop_version ,copy_right) << endl;
+        out << str.sprintf("----------------AltoVOP %s  %s  ------------------" ,vop_version ,copy_right) << endl;        
         file.close();
     }
-    (void)system("chmod 666 /tmp/AltoVOP.log 2>>/tmp/AltoVOP.log");
+    system("uname -a >> /tmp/AltoVOP.log");
+    system("cat /etc/issue >> /tmp/AltoVOP.log");
 #if 0
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
     qInstallMessageHandler(myMessageOutput);
@@ -95,3 +99,4 @@ void Log::logout(const QString& msg)
         file.close();
     }
 }
+

@@ -42,7 +42,7 @@
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../dialoglogin.ui" line="61"/>
+        <location filename="../dialoglogin.ui" line="64"/>
         <source>IDS_ST_Login</source>
         <translation>Login</translation>
     </message>
@@ -56,65 +56,71 @@
     </message>
     <message>
         <location filename="../mainwidget.ui" line="168"/>
-        <location filename="../mainwidget.cpp" line="132"/>
-        <location filename="../mainwidget.cpp" line="140"/>
+        <location filename="../mainwidget.cpp" line="133"/>
+        <location filename="../mainwidget.cpp" line="141"/>
         <source>IDS_Tab_Copy</source>
         <translation>Copy</translation>
     </message>
     <message>
         <location filename="../mainwidget.ui" line="173"/>
-        <location filename="../mainwidget.cpp" line="141"/>
-        <location filename="../mainwidget.cpp" line="156"/>
+        <location filename="../mainwidget.cpp" line="142"/>
+        <location filename="../mainwidget.cpp" line="157"/>
         <source>IDS_Tab_Setting</source>
         <translation>Setting</translation>
     </message>
     <message>
         <location filename="../mainwidget.ui" line="178"/>
-        <location filename="../mainwidget.cpp" line="161"/>
+        <location filename="../mainwidget.cpp" line="162"/>
         <source>IDS_Tab_About</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="193"/>
+        <location filename="../mainwidget.cpp" line="197"/>
         <source>IDS_MSG_SetInfo</source>
         <translation>Set Printer Information.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="205"/>
+        <location filename="../mainwidget.cpp" line="209"/>
         <source>IDS_MSG_GetInfo</source>
         <translation>Get Printer Information.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="255"/>
-        <location filename="../mainwidget.cpp" line="265"/>
+        <location filename="../mainwidget.cpp" line="234"/>
+        <source>IDS_NOT_ENOUGH_SPACE</source>
+        <translation>Operation cannot be carried out due to insufficient hard disk space.
+Try again after freeing hard disk space.</translation>
+    </message>
+    <message>
+        <location filename="../mainwidget.cpp" line="266"/>
+        <location filename="../mainwidget.cpp" line="276"/>
         <source>IDS_ERR_Communication</source>
         <translation>Communication with printer failed.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="267"/>
-        <location filename="../mainwidget.cpp" line="275"/>
+        <location filename="../mainwidget.cpp" line="278"/>
+        <location filename="../mainwidget.cpp" line="286"/>
         <source>IDS_ERR_AcquireInformation</source>
         <translation>Failed to acquire the information.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="284"/>
+        <location filename="../mainwidget.cpp" line="295"/>
         <source>IDS_MSG_WirelessDisabled</source>
         <translation>Wireless Disabled</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="290"/>
+        <location filename="../mainwidget.cpp" line="301"/>
         <source>IDS_ERR_Authentication</source>
         <translation>Authentication error, please enter the password again.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="245"/>
-        <location filename="../mainwidget.cpp" line="294"/>
+        <location filename="../mainwidget.cpp" line="256"/>
+        <location filename="../mainwidget.cpp" line="305"/>
         <source>IDS_MSG_MachineBusy</source>
         <translation>The machine is busy,please try later…</translation>
     </message>
     <message>
-        <location filename="../mainwidget.h" line="70"/>
-        <location filename="../mainwidget.h" line="74"/>
+        <location filename="../mainwidget.h" line="71"/>
+        <location filename="../mainwidget.h" line="75"/>
         <source>RICOH Printer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -123,18 +129,17 @@
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.ui" line="42"/>
-        <location filename="../mainwindow.cpp" line="52"/>
+        <location filename="../mainwindow.cpp" line="54"/>
         <source>IDS_Menu_Exit</source>
         <translation>Exit</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="80"/>
+        <location filename="../main.cpp" line="85"/>
         <source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
         <translation>Another RICOH Pinter is currently running, please close it, then launch this tool again.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="80"/>
-        <location filename="../mainwindow.cpp" line="52"/>
+        <location filename="../mainwindow.h" line="27"/>
         <source>RICOH Printer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -341,14 +346,12 @@ Copy</translation>
         <translation>Default</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="392"/>
-        <location filename="../tabcopy.cpp" line="421"/>
+        <location filename="../tabcopy.cpp" line="404"/>
         <source>IDS_MSG_TurnCardOver</source>
         <translation>Turn card over to copy the reverse.</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="395"/>
-        <location filename="../tabcopy.cpp" line="424"/>
+        <location filename="../tabcopy.cpp" line="406"/>
         <source>IDS_MSG_PlaceNextPage</source>
         <translation>Place Next Page</translation>
     </message>

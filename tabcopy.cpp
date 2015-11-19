@@ -50,7 +50,8 @@ TabCopy::TabCopy(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
     main_widget(widget),
     device_manager(dm),
   device_status(false),
-  idCard_mode(false)
+  idCard_mode(false),
+  this_copy(false)
 {
     ui->setupUi(this);
 
@@ -377,6 +378,9 @@ void TabCopy::slots_cmd_result(int cmd ,int err)
     case DeviceContrl::CMD_DEVICE_status:
         cmdResult_getDeviceStatus(err);
         break;
+    case DeviceContrl::CMD_COPY:
+        this_copy = true;
+        break;
     default:
         break;
     }
@@ -389,6 +393,7 @@ void TabCopy::cmdResult_getDeviceStatus(int err)
     case STATUS_sleep:
     case STATUS_TonerEnd:
         device_status = true;
+        this_copy = false;
         if(idCard_mode){
             idCard_mode = false;
             if(IsIDCardCopyMode(pCopyPara))
@@ -399,18 +404,13 @@ void TabCopy::cmdResult_getDeviceStatus(int err)
         device_status = false;
         break;
     }
-    if(STATUS_CopyScanNextPage == err){
-//        copycmdset copyPara = device_manager->copy_get_para();
-//        copycmdset* pCopyPara = &copyPara;
-//        if(pCopyPara->nUp == 4){//IsIDCardCopyMode(pCopyPara))
+    if(this_copy && STATUS_CopyScanNextPage == err){
         if(idCard_mode){
             main_widget->messagebox_show(tr("IDS_MSG_TurnCardOver"));
-//            idCard_mode = true;
         }else{
             main_widget->messagebox_show(tr("IDS_MSG_PlaceNextPage"));
         }
-    }
-    else{
+    }else{
         main_widget->messagebox_hide();
     }
     ui->copy->setEnabled(device_status);

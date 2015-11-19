@@ -630,11 +630,19 @@ void TabSetting::on_ip_btn_apply_clicked()
                 net_ipv6_st info = device_manager->net_getIpv6info();
                 info.UseManualAddress = ui->ipv6_cb_UMA->isChecked() ?1 :0;
                 info.DHCPv6 = ui->ipv6_cb_dhcp->isChecked() ?1 :0;
-                memset(info.ManualAddress ,0 ,40);
-                strcpy(info.ManualAddress ,ui->ipv6_le_manualAddress->text().toLatin1());
+                if(ui->ipv6_le_manualAddress->text().count() >= 40){
+                    memcpy(info.ManualAddress ,ui->ipv6_le_manualAddress->text().toLatin1() ,40);
+                }else{
+                    memset(info.ManualAddress ,0 ,40);
+                    strcpy(info.ManualAddress ,ui->ipv6_le_manualAddress->text().toLatin1());
+                }
                 info.ManualMask = ui->ipv6_sb_manualAddressMask->value();
-                memset(info.IPv6ManualGatewayAddress ,0 ,40);
-                strcpy(info.IPv6ManualGatewayAddress ,ui->ipv6_le_manualGatewayAddress->text().toLatin1());
+                if(ui->ipv6_le_manualGatewayAddress->text().count() >= 40){
+                    memcpy(info.IPv6ManualGatewayAddress ,ui->ipv6_le_manualGatewayAddress->text().toLatin1() ,40);
+                }else{
+                    memset(info.IPv6ManualGatewayAddress ,0 ,40);
+                    strcpy(info.IPv6ManualGatewayAddress ,ui->ipv6_le_manualGatewayAddress->text().toLatin1());
+                }
                 device_manager->net_setIpv6info(&info);
                 device_manager->emit_cmd_plus(DeviceContrl::CMD_IPv6_Set);
             }

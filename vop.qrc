@@ -7,5 +7,6 @@
         <file>images/RICOH_logo_171x055.gif</file>
         <file>translations/qt_ru.qm</file>
         <file>translations/qt_zh_CN.qm</file>
+        <file>images/printer.ico</file>
     </qresource>
 </RCC>

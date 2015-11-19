@@ -31,9 +31,10 @@ private:
 
     QStringList stringlist_output_size;
     copycmdset* pCopyPara;
+    copycmdset copyPara;
     bool device_status;
     bool idCard_mode;
-    copycmdset copyPara;
+    bool this_copy;
 
     void updateCopy();
     void cmdResult_getDeviceStatus(int err);

@@ -56,6 +56,8 @@ private:
     MessageBox msgBox_info;
     QTimer timer;
     int model;
+    bool no_space;
+    int donot_cmd_times;
 
     void initializeUi();
     void retranslateUi();

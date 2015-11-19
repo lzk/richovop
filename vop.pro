@@ -28,7 +28,8 @@ SOURCES += main.cpp \
     tababout.cpp \
     app/usbdevice.cpp \
     app/netdevice.cpp \
-    app/device.cpp
+    app/device.cpp \
+    app/linux_api.cpp
 
 HEADERS  += mainwindow.h \
     mainwidget.h \
@@ -48,7 +49,8 @@ HEADERS  += mainwindow.h \
     tababout.h \
     app/usbdevice.h \
     app/netdevice.h \
-    app/device.h
+    app/device.h \
+    app/linux_api.h
 
 FORMS    += mainwindow.ui \
     mainwidget.ui \
@@ -93,7 +95,7 @@ LIBS += -Wl,-rpath,"/opt/RICOH/app/RICOH SP 150SU_SP 150" -ldl \
 #}
 
 equals(QT_MAJOR_VERSION,4){
-    QTPLUGIN += qjpeg qtiff qmng qgif
+    QTPLUGIN += qjpeg qtiff qmng qgif qico
     DEFINES += STATIC_BUILD
 }
 #DEFINES += FUTURE_SUPPORT

@@ -443,5 +443,11 @@ Copy</target>
 		<target>Another RICOH Pinter is currently running, please close it, then launch this tool again.</target>
 	</phrase>
 
+	<phrase>
+		<source>IDS_NOT_ENOUGH_SPACE</source>
+		<target>Operation cannot be carried out due to insufficient hard disk space.
+Try again after freeing hard disk space.</target>
+	</phrase>
+
 </QPH>
 

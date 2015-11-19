@@ -19,10 +19,11 @@ Q_IMPORT_PLUGIN(qjpeg)
 Q_IMPORT_PLUGIN(qtiff)
 Q_IMPORT_PLUGIN(qmng)
 Q_IMPORT_PLUGIN(qgif)
+Q_IMPORT_PLUGIN(qico)
 #endif
 
 
-MainWindow* gMainWidow;
+MainWindow* gMainWindow;
 QLocalServer* m_localServer;
 bool isRunning(const QString& serverName)
 {
@@ -66,6 +67,10 @@ int main(int argc, char *argv[])
 //    qputenv("LANG" ,QLocale::system().uiLanguages().first().toLatin1());
 //    qputenv("LANGUAGE" ,QLocale::system().name().toLatin1());
     QApplication a(argc, argv);
+    a.setWindowIcon(QIcon(":/images/printer.ico"));
+//    a.setApplicationName("RICOH Printer");
+//    a.setOrganizationName("RICOH Printer");
+
     QTranslator trans;
 //    if(!trans.load(QLocale(QLocale::system().uiLanguages().first()), "vop", ".", ":/translations"))
     if(!trans.load(QLocale(QLocale::system().name()), "vop", ".", ":/translations"))
@@ -77,7 +82,7 @@ int main(int argc, char *argv[])
     a.installTranslator(&qtTranslator);
 
     if(isRunning("/tmp/lock_Ricoh_Alto_VOP")){
-        QMessageBox::warning(0,a.translate("MainWindow" ,"RICOH Printer") ,a.translate("MainWindow" ,"IDS_ANOTHER_LAUNCHER_RUNNING"));
+        MainWindow::messagebox_exec(a.translate("MainWindow" ,"IDS_ANOTHER_LAUNCHER_RUNNING"));
         return 0;
     }
 
@@ -89,11 +94,11 @@ int main(int argc, char *argv[])
     }
 
     MainWindow w;
-    gMainWidow = &w;
-//    gMainWidow = new MainWindow;
-    gMainWidow->refresh();
-    gMainWidow->show();
+    gMainWindow = &w;
+//    gMainWindow = new MainWindow;
+    gMainWindow->refresh();
+    gMainWindow->show();
     int ret = a.exec();
-//    delete gMainWidow;
+//    delete gMainWindow;
     return ret;
 }

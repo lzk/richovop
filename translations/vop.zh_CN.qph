@@ -444,5 +444,11 @@
 		<target>正在执行另一个RICOH Pinter，请将其关闭后，重新启动本工具。</target>
 	</phrase>
 
+	<phrase>
+		<source>IDS_NOT_ENOUGH_SPACE</source>
+		<target>硬盘空间不足，操作无法进行。
+请释放硬盘空间后再试。</target>
+	</phrase>
+
 </QPH>
 

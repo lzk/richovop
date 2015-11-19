@@ -575,15 +575,23 @@ copycmdset VopProtocol::copy_get_para()
 void VopProtocol::wifi_set_ssid(cmdst_wifi_get* p ,const char* ssid)
 {
     QMutexLocker locker(&device_manager->mutex_ctrl);
-    memset(p->ssid ,0 ,32);
-    strcpy(p->ssid ,ssid);
+    if(strlen(ssid) >= 32)
+        memcpy(p->ssid ,ssid ,32);
+    else{
+        memset(p->ssid ,0 ,32);
+        strcpy(p->ssid ,ssid);
+    }
 }
 
 void VopProtocol::wifi_set_password(cmdst_wifi_get* p ,const char* password)
 {
     QMutexLocker locker(&device_manager->mutex_ctrl);
-    memset(p->pwd ,0 ,64);
-    strcpy(p->pwd ,password);
+    if(strlen(password) >= 64)
+        memcpy(p->pwd ,password ,64);
+    else{
+        memset(p->pwd ,0 ,64);
+        strcpy(p->pwd ,password);
+    }
 }
 
 void VopProtocol::wifi_set_para(cmdst_wifi_get* p)
@@ -649,8 +657,12 @@ void VopProtocol::printer_setPowerOffTime(cmdst_powerOff_time* p)
 void VopProtocol::passwd_set(const char* p)
 {
     QMutexLocker locker(&device_manager->mutex_ctrl);
-    memset(passwd ,0 ,32);
-    strcpy(passwd->passwd ,p);
+    if(strlen(p) >= 32)
+        memcpy(passwd->passwd ,p ,32);
+    else{
+        memset(passwd ,0 ,32);
+        strcpy(passwd->passwd ,p);
+    }
 }
 
 net_info_st VopProtocol::net_getV4()
