@@ -11,6 +11,7 @@
 class Device;
 class MainWidget;
 class DeviceApp;
+class DeviceData;
 class DeviceManager
 {
 public:
@@ -18,17 +19,14 @@ public:
     ~DeviceManager();
     QMutex mutex_ctrl;
     QMutex mutex_app;
-    static QMutex mutex;
 
     DeviceApp* deviceApp();
 
     int getDeviceList(QStringList& printerNames);
-    void selectDevice(int selected_device);
+    bool selectDevice(int selected_device);
     QString getCurrentDeviceURI();
-    static QString getDeviceURI(const QString&);
     const QString get_deviceName();
     static int getDeviceModel(const QString& devicename);
-    static QString getStringFromShell(const QString& cmd ,int mode = 0);
 
     int get_deviceStatus();
 
@@ -69,11 +67,11 @@ private:
     QString passwd_to_set;
     DeviceApp* device_app;
     MainWidget* main_widget;
-
 public:
     Device* usb_device;
     Device* net_device;
     VopProtocol* protocol;
+    DeviceData* device_data;
 };
 
 #endif // DEVICEMANAGER_H

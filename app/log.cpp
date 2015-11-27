@@ -2,6 +2,8 @@
 /// Author:Jacky Liang
 /// Version:
 /////////////////////////////////////////
+
+#if 0
 #include "log.h"
 #include <qapplication.h>
 #include <stdio.h>
@@ -99,4 +101,4 @@ void Log::logout(const QString& msg)
         file.close();
     }
 }
-
+#endif

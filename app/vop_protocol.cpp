@@ -116,7 +116,7 @@ int VopProtocol::getDESfromDeviceID(char* device_id ,char* str)
         p++;
 
     if (!*p)	{ // "DES:" not found
-        qLog1("DES: not found");
+        _Q_LOG("DES: not found");
         return -1;
     }
     p += 4;	// Skip "DES:"
@@ -125,7 +125,7 @@ int VopProtocol::getDESfromDeviceID(char* device_id ,char* str)
     while(*q && ';'!= *q)
         q++;
     if(!*q){
-        qLog1("DES:no \';\'");
+        _Q_LOG("DES:no \';\'");
         return -1;
     }
 
@@ -141,7 +141,7 @@ int VopProtocol::getStatusFromDeviceID(char* device_id)
         err = ERR_decode_status;
     else{
         int _status = get_deviceStatus();
-        qLog(QString().sprintf("get_deviceStatus correct:%#.2x" ,_status));
+        C_LOG("get_deviceStatus correct:%#.2x" ,_status);
         switch(_status){
         case PSTATUS_Ready:
             err = STATUS_ready;
@@ -154,9 +154,16 @@ int VopProtocol::getStatusFromDeviceID(char* device_id)
             break;
 
         case PSTATUS_Printing:
+        case PSTATUS_PrintCanceling:
             err = STATUS_busy_printing;
             break;
         case PSTATUS_CopyScanning:
+        case PSTATUS_CopyPrinting:
+        case PSTATUS_CopyCanceling:
+        case PSTATUS_ScanScanning:
+        case PSTATUS_ScanSending:
+        case PSTATUS_ScanCanceling:
+        case PSTATUS_ScannerBusy:
             err = STATUS_busy_scanningOrCoping;
             break;
         case PSTATUS_InitializeJam:
@@ -172,7 +179,7 @@ int VopProtocol::getStatusFromDeviceID(char* device_id)
             err = STATUS_TonerEnd;
             break;
         default:
-            err = STATUS_no_defined;
+            err = STATUS_other;
             break;
         }
     }
@@ -190,7 +197,7 @@ int VopProtocol::DecodeStatusFromDeviceID(char* device_id, PRINTER_STATUS* statu
         p++;
 
     if (!*p)	{ // "STS:" not found
-        qLog1("STS: not found");
+        _Q_LOG("STS: not found");
         return -1;
     }
     p += 4;	// Skip "STS:"
@@ -451,8 +458,8 @@ const char* VopProtocol::getErrString(int err)
     case STATUS_TonerEnd:
         str = STR_PREFIX("VOP ACK status: toner end");
         break;
-    case STATUS_no_defined:
-        str = STR_PREFIX("VOP ACK status: no defined");
+    case STATUS_other:
+        str = STR_PREFIX("VOP ACK status: other status");
         break;
     case ERR_vop_cannot_support:
     default:
@@ -720,14 +727,14 @@ static const char* get_cmd_string(int cmd)
 int VopProtocol::cmd(int _cmd)
 {
     int err = ERR_vop_cannot_support;
-    qLog1(QString().sprintf("exec cmd:%s" ,get_cmd_string(_cmd)));
+    C_LOG("exec protocol cmd:%s" ,get_cmd_string(_cmd));
     switch(_cmd)    {
     case CMD_GetStatus:{
         char buffer[1024];
         memset(buffer ,0 ,sizeof(buffer));
         err = DeviceContrl::device_getDeviceStatus(buffer ,sizeof(buffer));
         buffer[1023] = 0;//make sure buffer is a c string.
-//        qLog1(QString().sprintf("buffer size:%lu" ,strlen(buffer)));
+//        C_LOG("buffer size:%lu" ,strlen(buffer));
         if(!err){
             err = getStatusFromDeviceID(buffer);
         }

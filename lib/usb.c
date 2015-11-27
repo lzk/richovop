@@ -38,7 +38,7 @@ void *__wrap_fdelt_chk(void *dest, const void *src, size_t n)
     return fdelt_chk(dest, src, n);
 }
 
-#define ALTO_DEBUG
+//#define ALTO_DEBUG 1
 
 int verbose = 0;
 libusb_device *g_device = NULL;
@@ -446,7 +446,7 @@ size_t bufsize) /* I - Number of bytes in buffer */
 	 */
 
 	memmove(buffer, buffer + 2, length);
-	buffer[length] = '\0';
+        buffer[length] = 0;
 
 	result = libusb_release_interface(g_dev_h, g_interface); //release the claimed interface
 	if (result != 0) {

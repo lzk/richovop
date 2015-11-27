@@ -192,8 +192,8 @@ void TabSetting::wifi_update(QString ssid ,QString passwd ,int et)
 }
 void TabSetting::wifi_update()
 {
-    wifi_update_Data();
-    wifi_update(wifi_ssid ,wifi_password ,wifi_encryptionType);
+        wifi_update_Data();
+        wifi_update(wifi_ssid ,wifi_password ,wifi_encryptionType);
 }
 
 void TabSetting::wifi_update_Data()
@@ -221,7 +221,9 @@ void TabSetting::wifi_update_Data()
 
 #include <QDebug>
 void TabSetting::slots_wifi_textChanged(const QString &arg1)
-{
+{    
+    if(disable_emit)
+        return;
     QObject* sd = sender();
     if(sd == ui->le_passphrase){
         if(ui->radioButton_searchWifi->isChecked()){
@@ -294,56 +296,63 @@ void TabSetting::result_wifi_getAplist()
 //    ui->checkBox->setChecked(wifi_para.wifiEnable & 1 ?true :false);
 //    connect(ui->checkBox ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_wifi_checkbox(bool)));
     //ssid
-    QString ssid = QString(wifi_para.ssid).left(32);
-    ui->le_ssid->setText(ssid);
     wifi_ssid = QString(wifi_para.ssid).left(32);
     //ssid aplist
-    ui->cb_ssid->clear();
+    _Q_LOG("");
+    _Q_LOG("get aplist from FW");
     int current_ssid = -1;
+    int encryption;
+    QString ssid;
+    QStringList ssid_list;
     for(int i = 0 ;i < NUM_OF_APLIST ;i++){
         ssid = QString(aplist.aplist[i].ssid).left(32);
         if(ssid.isEmpty()){
             break;
         }else{
-            ui->cb_ssid->addItem( ssid);
-            int encryption = aplist.aplist[i].encryption & 7;
+            ssid_list << ssid;
+            encryption = aplist.aplist[i].encryption & 7;
             if(encryption > 4) encryption = 4;
             wifi_aplist_encryptionType[i] = encryption > 1 ?encryption -1 : encryption;
             if(0x80 == (0x80 & aplist.aplist[i].encryption)){//FW LShell spec 0811
-                qLog("use bit 7 after FW LShell spec 0811");
+//                _Q_LOG("use bit 7 and after FW LShell spec 0811");
                 if(!ssid.compare(wifi_ssid))
                     current_ssid = i;
             }
-            qLog("ssid:"+ ssid +QString().sprintf(" index:%d encryptionType:%d" ,i ,aplist.aplist[i].encryption));
+            _Q_LOG(QString().sprintf("index:%d encryptionType:%#.2x ssid:" ,i ,aplist.aplist[i].encryption) + ssid);
         }
     }
-    if(-1 == current_ssid){
+/*    if(-1 == current_ssid){
         for(int i = 0 ;i < NUM_OF_APLIST ;i++){
             QString ssid = QString(aplist.aplist[i].ssid).left(32);
             if(ssid.isEmpty()){
                 break;
             }else{
-                qLog("do not use bit 7 before FW LShell spec 0811");
+                _Q_LOG("do not use bit 7 and before FW LShell spec 0811");
                 if(!ssid.compare(wifi_ssid))
                     current_ssid = i;
             }
         }
+    }//*/
+    _Q_LOG("");
+    if(-1 == current_ssid){
+        _Q_LOG("do not connect any ssid");
     }
-    if(-1 != current_ssid){
-        wifi_encryptionType = wifi_aplist_encryptionType[current_ssid];//aplist.aplist[current_ssid].encryption;
-        qLog(QString().sprintf("selected encryption[%d]:%d" ,current_ssid ,wifi_encryptionType));
-        qLog(QString().sprintf("wifi_para.encryption:%d" ,wifi_para.encryption));
-        qLog(QString().sprintf("wepKeyId from FW:%d" ,wifi_para.wepKeyId));
-        if(wifi_para.wepKeyId){
-            wifi_wepIndex = (wifi_para.wepKeyId - 1) % 4;
-        }else{
-            wifi_wepIndex = wifi_default_wepIndex;
-        }
+    _Q_LOG("wifi_para.ssid:" + wifi_ssid);
+    C_LOG("wifi_para.encryption:%d" ,wifi_para.encryption);
+    C_LOG("wifi_para.wepKeyId:%d" ,wifi_para.wepKeyId);
+    encryption = wifi_para.encryption;
+    if(encryption > 4) encryption = 4;
+    wifi_encryptionType = encryption > 1 ?encryption -1 : encryption;
+    if(wifi_para.wepKeyId){
+        wifi_wepIndex = (wifi_para.wepKeyId - 1) % 4;
     }else{
-        qLog("no ssid");
-        wifi_encryptionType = wifi_default_encryptionType;
         wifi_wepIndex = wifi_default_wepIndex;
     }
+    disable_emit = true;
+    ui->cb_ssid->clear();
+    ui->cb_ssid->addItems(ssid_list);
+    ui->cb_ssid->setCurrentIndex(current_ssid);
+    ui->le_ssid->setText(wifi_ssid);
     //encryption
     wifi_ms_encryptionType = wifi_encryptionType;
     wifi_sw_encryptionType = wifi_encryptionType;
@@ -356,8 +365,11 @@ void TabSetting::result_wifi_getAplist()
     wifi_sw_password.clear();//Qt4
     ui->le_passphrase->clear();
     ui->le_wepkey->clear();
-    wifi_update();
+    wifi_password.clear();
+
     //update ui else
+    wifi_update(wifi_ssid ,wifi_password ,wifi_encryptionType);
+    disable_emit = false;
 }
 
 void TabSetting::on_spinBox_PSaveTime_valueChanged(int arg1)
@@ -544,23 +556,24 @@ void TabSetting::on_btn_apply_ws_clicked()
             passwd = ui->le_passphrase->text();
         }
         //ssid
-//        device_manager->wifi_set_ssid(&wifi_para ,wifi_ssid.toLatin1());
         device_manager->wifi_set_ssid(&wifi_para ,ssid.toLatin1());
+        _Q_LOG("wifi apply: wifi_para.ssid:" + ssid);
         //passwd
-//        device_manager->wifi_set_password(&wifi_para ,wifi_password.toLatin1());
         device_manager->wifi_set_password(&wifi_para ,passwd.toLatin1());
         //encryption type
-//        wifi_para.encryption = wifi_encryptionType > 1 ? wifi_encryptionType + 1 :wifi_encryptionType;
         wifi_para.encryption = encryptionType > 1 ? encryptionType + 1 :encryptionType;
+        C_LOG("wifi apply: wifi_para.encryption:%d" ,wifi_para.encryption);
         //wep key id
 //        wifi_para.wepKeyId = wifi_wepIndex + 1;
         wifi_para.wepKeyId = ui->cb_keyIndex->currentIndex() + 1;
-        qLog(QString().sprintf("wep key ID to FW:%d" ,wifi_para.wepKeyId));
+        C_LOG("wifi apply: wifi_para.wepKeyId:%d" ,wifi_para.wepKeyId);
         //wifi enable
-        qLog(QString().sprintf("wifiEnable:%d" ,wifi_para.wifiEnable));
-        wifi_para.wifiEnable &= ~1;
-        wifi_para.wifiEnable |= 1;//bit 0
-//        wifi_para.wifiEnable |= ui->checkBox->isChecked() ? 1 : 0;//bit 0
+        if(!(wifi_para.wifiEnable & 1)){
+            _Q_LOG("wifi apply:wifi have not been enable ,enable it");
+            wifi_para.wifiEnable &= ~1;
+            wifi_para.wifiEnable |= 1;//bit 0
+//            wifi_para.wifiEnable |= ui->checkBox->isChecked() ? 1 : 0;//bit 0
+        }
 
         device_manager->wifi_set_para(&wifi_para);
         device_manager->emit_cmd_plus(DeviceContrl::CMD_WIFI_apply_plus);

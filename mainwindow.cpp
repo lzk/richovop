@@ -102,7 +102,7 @@ QMessageBox::StandardButton MainWindow::messagebox_exec(const QString &text,
     mb->setStandardButtons(buttons);
     mb->setDefaultButton(defaultButton);
 //    mb->setWindowFlags(Qt::FramelessWindowHint);
-#if 0
+#if 1
     mb->show();//show first before get real size
 //    QPoint widget_pos = mapToGlobal(pos());
 //    mb->move(widget_pos.x() + (width() - mb->width())/2,

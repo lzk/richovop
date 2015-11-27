@@ -171,16 +171,13 @@ void MainWidget::updateUi()
             gMainWindow->setWindowTitle(device_name + " - " + device_uri);
         }
 
-        qLog("current device: " + device_name);
-        qLog("device uri: "+ device_uri);
     }else{
 //        setWindowTitle(" ");
         if(gMainWindow)
             gMainWindow->setWindowTitle(" ");
-        qLog("no device");
     }
-
 }
+
 void MainWidget::slots_progressBar(int cmd ,int value)
 {
     //value = 0, show progress bar
@@ -256,7 +253,7 @@ void MainWidget::slots_timeout()
 
 void MainWidget::slots_cmd_result(int cmd ,int err)
 {
-    qLog(QString("cmd return:") + VopProtocol::getErrString(err));
+    C_LOG("cmd return:%s" ,VopProtocol::getErrString(err));
     //cmd complete
     slots_progressBar(cmd ,100);
     //handle err message box
@@ -342,6 +339,9 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
 
 void MainWidget::on_refresh_clicked()
 {
+    _Q_LOG("");
+    _Q_LOG("");
+    _Q_LOG("refresh device list");
     ui->refresh->setEnabled(false);
     ui->comboBox_deviceList->clear();
     QStringList printerNames;
@@ -359,9 +359,10 @@ void MainWidget::on_refresh_clicked()
 
 void MainWidget::on_comboBox_deviceList_activated(int index)
 {
-    device_manager->selectDevice(index);
-    emit signals_deviceChanged(device_manager->get_deviceName());
-    updateUi();
+    if(device_manager->selectDevice(index)){
+        emit signals_deviceChanged(device_manager->get_deviceName());
+        updateUi();
+    }
 }
 
 QMessageBox::StandardButton MainWidget::messagebox_exec(const QString &text,
@@ -423,7 +424,7 @@ void MainWidget::messagebox_show(const QString &text,
 //    }
 }
 
-void MainWidget::on_tabWidget_currentChanged(int index)
+void MainWidget::on_tabWidget_currentChanged(int)
 {
     if(tab_setting == ui->tabWidget->currentWidget()){
         if(!listWidget->item(0)->isHidden()){

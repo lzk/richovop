@@ -6,20 +6,6 @@
 #include <string.h>
 extern "C"{
 #include <dlfcn.h>
-
-/* some systems do not have newest memcpy@@GLIBC_2.14 - stay with old good one */
-#ifdef __x86_64__
-asm (".symver memcpy, memcpy@GLIBC_2.2.5");
-#elif __i386__
-asm (".symver memcpy, memcpy@GLIBC_2.0");
-#endif
-
-//void *memcpy(void* ,const void* ,size_t);
-void *__wrap_memcpy(void *dest, const void *src, size_t n)
-{
-    return memcpy(dest, src, n);
-}
-
 }
 
 static int (*hLLD_openPrinter)(char*) = NULL;
@@ -39,8 +25,8 @@ UsbDevice::UsbDevice()
         hLLD_read  = (int (*)(char *, size_t ))dlsym(hLLD, "USBRead");
         hLLD_get_device_id  = (int (*)(char *, size_t ))dlsym(hLLD, "get_device_id");
     }else{
-        qLog("can not open usb backend.");
-        qLog(QString("dlerror:") + dlerror());
+        _Q_LOG("can not open usb backend.");
+        _Q_LOG(QString("dlerror:") + dlerror());
     }
 }
 
@@ -59,7 +45,7 @@ int UsbDevice::openPrinter(const char* device_uri)
         return ERR_library;
     int err = hLLD_openPrinter((char*)device_uri);
     if(1 != err){
-        qLog("can not open printer");
+        _Q_LOG("can not open usb printer");
         err = ERR_communication;
     }else
         err = ERR_ACK;
@@ -100,7 +86,7 @@ int UsbDevice::get_device_id(char *buffer, int bufsize)
         return ERR_library;
     int err = hLLD_get_device_id(buffer ,bufsize);
     if(1 != err){
-        qLog("can not get device id");
+        _Q_LOG("can not get device id");
         err = ERR_communication;
     }else
         err = ERR_ACK;

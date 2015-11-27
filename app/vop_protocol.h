@@ -96,7 +96,7 @@ enum{
     STATUS_jam,
     STATUS_CopyScanNextPage,
     STATUS_TonerEnd,
-    STATUS_no_defined,
+    STATUS_other,
 };
 
 typedef struct _copycmdset

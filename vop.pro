@@ -5,10 +5,11 @@
 #-------------------------------------------------
 
 QT       += core gui network
+#QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
-TARGET = VOP
+TARGET = "RICOH Printer"
 TEMPLATE = app
 #CONFIG += debug
 
@@ -29,7 +30,8 @@ SOURCES += main.cpp \
     app/usbdevice.cpp \
     app/netdevice.cpp \
     app/device.cpp \
-    app/linux_api.cpp
+    app/linux_api.cpp \
+    app/devicedata.cpp
 
 HEADERS  += mainwindow.h \
     mainwidget.h \
@@ -50,7 +52,8 @@ HEADERS  += mainwindow.h \
     app/usbdevice.h \
     app/netdevice.h \
     app/device.h \
-    app/linux_api.h
+    app/linux_api.h \
+    app/devicedata.h
 
 FORMS    += mainwindow.ui \
     mainwidget.ui \

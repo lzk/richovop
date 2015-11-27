@@ -8,6 +8,7 @@
 #include "scalingsettingkeyboard.h"
 #include "copiessettingkeyboard.h"
 #include "app/devicemanager.h"
+#include "app/devicedata.h"
 
 //static const char* output_size_list[] =
 //{
@@ -48,11 +49,9 @@ TabCopy::TabCopy(MainWidget* widget,DeviceManager* dm ,QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TabCopy),
     main_widget(widget),
-    device_manager(dm),
-  device_status(false),
-  idCard_mode(false),
-  this_copy(false)
+    device_manager(dm)
 {
+    copy_data = dm->device_data->get_copy_data();
     ui->setupUi(this);
 
     pCopyPara = &copyPara;
@@ -269,7 +268,7 @@ void TabCopy::updateCopy()
             ui->IDCardCopy->setEnabled(true);
         }
     }
-    ui->copy->setEnabled(device_status);
+    ui->copy->setEnabled(copy_data->status);
     connect(ui->photo ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_copy_radio(bool)));
     connect(ui->combo_documentType ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
 //    connect(ui->combo_documentSize ,SIGNAL(currentIndexChanged(int)) ,this ,SLOT(slots_copy_combo(int)));
@@ -281,8 +280,6 @@ void TabCopy::updateCopy()
 void TabCopy::slots_copy_combo(int value)
 {
     QObject* sd = sender();
-//    copycmdset copyPara = device_manager->copy_get_para();
-//    copycmdset* pCopyPara = &copyPara;
     if(sd == ui->combo_documentType)
         pCopyPara->mediaType = value;
     else if(sd == ui->combo_dpi)
@@ -317,14 +314,11 @@ void TabCopy::slots_copy_combo(int value)
             GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
         }
     }
-//    device_manager->copy_set_para(pCopyPara);
     updateCopy();
 }
 
 void TabCopy::slots_copy_pushbutton()
 {
-//    copycmdset copyPara = device_manager->copy_get_para();
-//    copycmdset* pCopyPara = &copyPara;
     QObject* sd = sender();
     if(sd == ui->scaling_minus){
         pCopyPara->scale --;
@@ -339,7 +333,6 @@ void TabCopy::slots_copy_pushbutton()
     }else if(sd == ui->copies_plus){
         pCopyPara->copyNum ++;
     }
-//    device_manager->copy_set_para(pCopyPara);
     updateCopy();
 }
 
@@ -347,27 +340,19 @@ void TabCopy::slots_copy_radio(bool checked)
 {
     QObject* sd = sender();
     if(sd == ui->photo){
-//        copycmdset copyPara = device_manager->copy_get_para();
-//        copycmdset* pCopyPara = &copyPara;
-//        if(2 != pCopyPara->scanMode){//not ID Card mode
             pCopyPara->scanMode = !checked;
-//            device_manager->copy_set_para(pCopyPara);
             updateCopy();
-//        }
     }
 }
 
 void TabCopy::slots_copy_keyboard(QString str)
 {
-//    copycmdset copyPara = device_manager->copy_get_para();
-//    copycmdset* pCopyPara = &copyPara;
     QObject* sd = sender();
     if(sd == keyboard_copies){
         pCopyPara->copyNum = str.toInt();
     }else if(sd == keyboard_scaling){
         pCopyPara->scale = str.toInt();
     }
-//    device_manager->copy_set_para(pCopyPara);
     updateCopy();
 }
 
@@ -379,7 +364,11 @@ void TabCopy::slots_cmd_result(int cmd ,int err)
         cmdResult_getDeviceStatus(err);
         break;
     case DeviceContrl::CMD_COPY:
-        this_copy = true;
+        if(!err){
+            copy_data->this_copy = true;
+            if(IsIDCardCopyMode(pCopyPara))
+                copy_data->idCard_mode = true;
+        }
         break;
     default:
         break;
@@ -388,44 +377,86 @@ void TabCopy::slots_cmd_result(int cmd ,int err)
 
 void TabCopy::cmdResult_getDeviceStatus(int err)
 {
-    switch(err){
-    case STATUS_ready:
-    case STATUS_sleep:
-    case STATUS_TonerEnd:
-        device_status = true;
-        this_copy = false;
-        if(idCard_mode){
-            idCard_mode = false;
-            if(IsIDCardCopyMode(pCopyPara))
-                on_IDCardCopy_clicked();
+    if(copy_data->this_copy){
+        switch(err){
+        case STATUS_ready:
+        case STATUS_sleep:
+        case STATUS_TonerEnd:
+            copy_data->status = true;
+            copy_data->this_copy = false;
+            if(copy_data->idCard_mode){
+                copy_data->idCard_mode = false;
+                if(IsIDCardCopyMode(pCopyPara))
+                    on_IDCardCopy_clicked();
+            }
+            break;
+        default:
+            copy_data->status = false;
+            break;
         }
-        break;
-    default:
-        device_status = false;
-        break;
-    }
-    if(this_copy && STATUS_CopyScanNextPage == err){
-        if(idCard_mode){
-            main_widget->messagebox_show(tr("IDS_MSG_TurnCardOver"));
+        if(STATUS_CopyScanNextPage == err){
+            if(copy_data->idCard_mode){
+                main_widget->messagebox_show(tr("IDS_MSG_TurnCardOver"));
+            }else{
+                main_widget->messagebox_show(tr("IDS_MSG_PlaceNextPage"));
+            }
         }else{
-            main_widget->messagebox_show(tr("IDS_MSG_PlaceNextPage"));
+            main_widget->messagebox_hide();
         }
     }else{
+        switch(err){
+        case STATUS_ready:
+        case STATUS_sleep:
+        case STATUS_busy_printing:
+        case STATUS_busy_scanningOrCoping:
+        case STATUS_jam:
+        case STATUS_CopyScanNextPage:
+        case STATUS_TonerEnd:
+        case STATUS_other:
+            copy_data->status = true;
+            break;
+        default:
+            copy_data->status = false;
+            break;
+        }
+        copy_data->idCard_mode = false;
         main_widget->messagebox_hide();
     }
-    ui->copy->setEnabled(device_status);
+
+//    switch(err){
+//    case STATUS_ready:
+//    case STATUS_sleep:
+//    case STATUS_TonerEnd:
+//        copy_data->status = true;
+//        copy_data->this_copy = false;
+//        if(copy_data->idCard_mode){
+//            copy_data->idCard_mode = false;
+//            if(IsIDCardCopyMode(pCopyPara))
+//                on_IDCardCopy_clicked();
+//        }
+//        break;
+//    default:
+//        copy_data->status = false;
+//        break;
+//    }
+//    if(copy_data->this_copy && STATUS_CopyScanNextPage == err){
+//        if(copy_data->idCard_mode){
+//            main_widget->messagebox_show(tr("IDS_MSG_TurnCardOver"));
+//        }else{
+//            main_widget->messagebox_show(tr("IDS_MSG_PlaceNextPage"));
+//        }
+//    }else{
+//        main_widget->messagebox_hide();
+//    }
+    ui->copy->setEnabled(copy_data->status);
 }
 
 void TabCopy::on_copy_clicked()
 {
-    device_status = false;
-    ui->copy->setEnabled(device_status);
-    if(IsIDCardCopyMode(pCopyPara))
-        idCard_mode = true;
+    copy_data->status = false;
+    ui->copy->setEnabled(copy_data->status);
     device_manager->copy_set_para(pCopyPara);
     device_manager->emit_cmd_plus(DeviceContrl::CMD_COPY);
-    qLog("do copy");
-    qLog("out put size:" + QString().sprintf("%d" ,pCopyPara->paperSize));
 }
 
 void TabCopy::on_IDCardCopy_clicked()
@@ -449,4 +480,9 @@ void TabCopy::on_btn_default_clicked()
 {
     device_manager->copy_set_defaultPara(pCopyPara);
     updateCopy();
+}
+
+void TabCopy::set_copy_data(struct CopyData* cd)
+{
+    copy_data = cd;
 }

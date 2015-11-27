@@ -24,8 +24,8 @@ NetDevice::NetDevice()
         hLLD_read  = (int (*)(char *, size_t ))dlsym(hLLD, "readFromNetDevice");
         hLLD_get_device_id  = (int (*)(char *, size_t ))dlsym(hLLD, "get_device_id_net");
     }else{
-        qLog("can not open net backend.");
-        qLog(QString("dlerror:") + dlerror());
+        _Q_LOG("can not open net backend.");
+        _Q_LOG(QString("dlerror:") + dlerror());
     }
 }
 
@@ -44,7 +44,7 @@ int NetDevice::openPrinter(const char* device_uri)
         return ERR_library;
     int err = hLLD_openPrinter((char*)device_uri);
     if(1 != err){
-        qLog("can not open net printer");
+        _Q_LOG("can not open net printer");
         err = ERR_communication;
     }else
         err = ERR_ACK;
@@ -85,7 +85,7 @@ int NetDevice::get_device_id(char *buffer, int bufsize)
         return ERR_library;
     int err = hLLD_get_device_id(buffer ,bufsize);
     if(1 != err){
-        qLog("can not get device id");
+        _Q_LOG("can not get device id");
         err = ERR_communication;
     }else
         err = ERR_ACK;
@@ -114,7 +114,7 @@ int NetDevice::write_no_read(char* wrBuffer ,int wrSize)
 
     for(i = 0 ;i < 3 ;i++){
         _write_size = write(writeBuffer ,wrSize);
-        qLog(QString().sprintf("write size:%d......%d" ,wrSize ,_write_size));
+        C_LOG("write size:%d......%d" ,wrSize ,_write_size);
         if(_write_size == wrSize){
             err = ERR_ACK;
             break;

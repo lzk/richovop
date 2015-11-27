@@ -12,6 +12,7 @@ class MainWidget;
 class DeviceManager;
 class CopiesSettingKeyboard;
 class ScalingSettingKeyboard;
+struct CopyData;
 class TabCopy : public QWidget
 {
     Q_OBJECT
@@ -20,10 +21,15 @@ public:
     explicit TabCopy(MainWidget* widget,DeviceManager* dm ,QWidget *parent = 0);
     ~TabCopy();
 protected:
-    bool eventFilter(QObject *obj, QEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event);    
 
 private:
     Ui::TabCopy *ui;
+
+public:
+    void set_copy_data(struct CopyData* cd);
+
+private:
     MainWidget* main_widget;
     DeviceManager* device_manager;
     ScalingSettingKeyboard* keyboard_scaling;
@@ -32,9 +38,7 @@ private:
     QStringList stringlist_output_size;
     copycmdset* pCopyPara;
     copycmdset copyPara;
-    bool device_status;
-    bool idCard_mode;
-    bool this_copy;
+    struct CopyData* copy_data;
 
     void updateCopy();
     void cmdResult_getDeviceStatus(int err);

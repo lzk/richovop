@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>IDS_CP_Scaling</string>
+    <string>IDS_CP_Scaling_coma</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btn_OK">

@@ -7,12 +7,7 @@
 
 #include <QString>
 
-#define qLog1(x)  Log::logout(x)
-//#define qLog1(x)
-
-//#include <QDebug>
-//#define qLog qDebug
-#define qLog(x) qLog1(x)
+#if 0
 class Log
 {
 public:
@@ -21,5 +16,15 @@ public:
     static void  init();
     static void logout(const QString&);
 };
+
+#define _Q_LOG(x) Log::logout(x)
+#define C_LOG(format, ...) Log::logout(QString().sprintf(format ,##__VA_ARGS__))
+#else
+#define _Q_LOG(x) logout(x)
+#define C_LOG(format, ...) logout(QString().sprintf(format ,##__VA_ARGS__))
+#endif
+void init_log_file();
+void init_log();
+void logout(const QString& msg);
 
 #endif // LOG_H

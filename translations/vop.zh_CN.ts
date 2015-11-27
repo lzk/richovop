@@ -25,8 +25,12 @@
     </message>
     <message>
         <location filename="../copiessettingkeyboard.ui" line="240"/>
+        <source>IDS_CP_Copies_coma</source>
+        <translation>份数:</translation>
+    </message>
+    <message>
         <source>IDS_CP_Copies</source>
-        <translation>份数</translation>
+        <translation type="obsolete">份数</translation>
     </message>
 </context>
 <context>
@@ -34,7 +38,7 @@
     <message>
         <location filename="../dialoglogin.ui" line="14"/>
         <source>IDS_ST_AdministratorAuthentication</source>
-        <translation>管理者权限认证</translation>
+        <translation>管理员权限认证</translation>
     </message>
     <message>
         <location filename="../dialoglogin.ui" line="47"/>
@@ -44,43 +48,43 @@
     <message>
         <location filename="../dialoglogin.ui" line="64"/>
         <source>IDS_ST_Login</source>
-        <translation>登陆</translation>
+        <translation>登录</translation>
     </message>
 </context>
 <context>
     <name>MainWidget</name>
     <message>
-        <location filename="../mainwidget.ui" line="113"/>
+        <location filename="../mainwidget.ui" line="118"/>
         <source>IDS_MW_Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="168"/>
-        <location filename="../mainwidget.cpp" line="133"/>
-        <location filename="../mainwidget.cpp" line="141"/>
+        <location filename="../mainwidget.ui" line="173"/>
+        <location filename="../mainwidget.cpp" line="134"/>
+        <location filename="../mainwidget.cpp" line="142"/>
         <source>IDS_Tab_Copy</source>
         <translation>复印</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="173"/>
-        <location filename="../mainwidget.cpp" line="142"/>
-        <location filename="../mainwidget.cpp" line="157"/>
+        <location filename="../mainwidget.ui" line="178"/>
+        <location filename="../mainwidget.cpp" line="143"/>
+        <location filename="../mainwidget.cpp" line="158"/>
         <source>IDS_Tab_Setting</source>
         <translation>设定</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="178"/>
-        <location filename="../mainwidget.cpp" line="162"/>
+        <location filename="../mainwidget.ui" line="183"/>
+        <location filename="../mainwidget.cpp" line="163"/>
         <source>IDS_Tab_About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="197"/>
+        <location filename="../mainwidget.cpp" line="195"/>
         <source>IDS_MSG_SetInfo</source>
         <translation>设定打印机信息。</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="209"/>
+        <location filename="../mainwidget.cpp" line="207"/>
         <source>IDS_MSG_GetInfo</source>
         <translation>获得打印机信息。</translation>
     </message>
@@ -91,36 +95,36 @@
 请释放硬盘空间后再试。</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="266"/>
-        <location filename="../mainwidget.cpp" line="276"/>
+        <location filename="../mainwidget.cpp" line="273"/>
+        <location filename="../mainwidget.cpp" line="283"/>
         <source>IDS_ERR_Communication</source>
         <translation>打印机通信失败</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="278"/>
-        <location filename="../mainwidget.cpp" line="286"/>
+        <location filename="../mainwidget.cpp" line="285"/>
+        <location filename="../mainwidget.cpp" line="293"/>
         <source>IDS_ERR_AcquireInformation</source>
         <translation>获取信息失败</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="295"/>
+        <location filename="../mainwidget.cpp" line="302"/>
         <source>IDS_MSG_WirelessDisabled</source>
         <translation>无线单元禁用</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="301"/>
+        <location filename="../mainwidget.cpp" line="308"/>
         <source>IDS_ERR_Authentication</source>
         <translation>认证错误，请重新输入密码。</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="256"/>
-        <location filename="../mainwidget.cpp" line="305"/>
+        <location filename="../mainwidget.cpp" line="263"/>
+        <location filename="../mainwidget.cpp" line="312"/>
         <source>IDS_MSG_MachineBusy</source>
         <translation>机器正在工作中，请稍后再试。</translation>
     </message>
     <message>
-        <location filename="../mainwidget.h" line="71"/>
-        <location filename="../mainwidget.h" line="75"/>
+        <location filename="../mainwidget.h" line="72"/>
+        <location filename="../mainwidget.h" line="76"/>
         <source>RICOH Printer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -134,14 +138,9 @@
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="85"/>
+        <location filename="../main.cpp" line="60"/>
         <source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
-        <translation>正在执行另一个RICOH Pinter，请将其关闭后，重新启动本工具。</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.h" line="27"/>
-        <source>RICOH Printer</source>
-        <translation type="unfinished"></translation>
+        <translation>正在执行另一个RICOH Printer，请将其关闭后，重新启动本工具。</translation>
     </message>
 </context>
 <context>
@@ -152,9 +151,13 @@
         <translation>缩放数值设置键盘</translation>
     </message>
     <message>
-        <location filename="../scalingsettingkeyboard.ui" line="26"/>
         <source>IDS_CP_Scaling</source>
-        <translation>缩放</translation>
+        <translation type="obsolete">缩放</translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="26"/>
+        <source>IDS_CP_Scaling_coma</source>
+        <translation>缩放:</translation>
     </message>
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="42"/>
@@ -346,12 +349,12 @@
         <translation>默认</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="404"/>
+        <location filename="../tabcopy.cpp" line="399"/>
         <source>IDS_MSG_TurnCardOver</source>
         <translation>翻转卡片，并放在扫描板上</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="406"/>
+        <location filename="../tabcopy.cpp" line="401"/>
         <source>IDS_MSG_PlaceNextPage</source>
         <translation>放置下一页</translation>
     </message>
@@ -573,22 +576,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.cpp" line="409"/>
+        <location filename="../tabsetting.cpp" line="421"/>
         <source>IDS_MSG_Printering</source>
         <translation>机器正在打印，请稍后再试</translation>
     </message>
     <message>
-        <location filename="../tabsetting.cpp" line="413"/>
+        <location filename="../tabsetting.cpp" line="425"/>
         <source>IDS_MSG_MachineBusy</source>
         <translation>机器正在工作中，请稍后再试。</translation>
     </message>
     <message>
-        <location filename="../tabsetting.cpp" line="416"/>
+        <location filename="../tabsetting.cpp" line="428"/>
         <source>IDS_ERR_JAM</source>
         <translation>JAM：请打开上盖并取出卡纸。</translation>
     </message>
     <message>
-        <location filename="../tabsetting.cpp" line="578"/>
+        <location filename="../tabsetting.cpp" line="591"/>
         <source>IDS_ST_PasswordsDifferent</source>
         <translation>输入密码不一致，请重新输入。</translation>
     </message>

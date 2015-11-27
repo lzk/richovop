@@ -9,3 +9,8 @@ QDialog  {    border:1px solid gray;}
 
 /*QComboBox QAbstractItemView{    background-color:white;  }*/
 
+
+/* Make the entire row selected in item views. */
+/*QAbstractItemView ,QListView{
+    show-decoration-selected: 1;
+}*/

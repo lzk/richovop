@@ -9,6 +9,7 @@
 #include "log.h"
 #include "usbdevice.h"
 #include "netdevice.h"
+#include "linux_api.h"
 
 Device* DeviceContrl::device = NULL;
 QString DeviceContrl::current_devicename = QString();
@@ -40,7 +41,7 @@ int DeviceContrl::openPrinter()
 {
     if(current_devicename.isEmpty() || !device)
         return ERR_communication;
-    QString device_uri = DeviceManager::getDeviceURI(current_devicename);
+    QString device_uri = get_device_uri(current_devicename);
     return device->openPrinter(device_uri.toLatin1());
 }
 
@@ -73,16 +74,15 @@ int DeviceContrl::device_getDeviceStatus(char* buffer ,int buffer_size)
     char str[buffer_size];
     if(!err){
         if(!VopProtocol::getDESfromDeviceID(buffer ,str)){
-            qLog(QString("DES:") + str);
             if(Device::getDeviceModel(str) != DeviceManager::getDeviceModel(current_devicename)){
+                _Q_LOG("device name and driver name not matched");
+                _Q_LOG(QString("DES:") + str);
                 err = ERR_decode_device;
-                qLog("device name and driver name not matched");
-            }else{
-                qLog("device name and driver name matched");
             }
         }else{
             err = ERR_decode_device;
-            qLog("device name and driver name not matched");
+            _Q_LOG("device name and driver name not matched");
+            _Q_LOG("can not get DES");
         }
     }
     return err;
@@ -91,16 +91,42 @@ int DeviceContrl::device_getDeviceStatus(char* buffer ,int buffer_size)
 #include <QUrl>
 void DeviceContrl::slots_deviceChanged(const QString& devicename)
 {
+    _Q_LOG("");
+    _Q_LOG("");
+    _Q_LOG("current device name:" + devicename);
     current_devicename = devicename;
     if(current_devicename.isEmpty()){
         device = NULL;
     }else{
-        QString device_uri = DeviceManager::getDeviceURI(current_devicename);
+        QString device_uri = get_device_uri(current_devicename);
+        _Q_LOG("current device uri:" + device_uri);
+
+        if(device_uri.startsWith("usb://")
+                || device_uri.startsWith("hal://")
+                ){
+            device = usb_device;
+            _Q_LOG("it is usb device");
+        }else if(device_uri.startsWith("socket://")
+                         || device_uri.startsWith("dnssd://")
+                         || device_uri.startsWith("lpd://")
+                         || device_uri.startsWith("ipp://")
+                         || device_uri.startsWith("lpr://")
+             //            || device_uri.startsWith("mdns://")
+                 ){
+            device = net_device;
+            _Q_LOG("it is net device");
+        }else{
+            device = NULL;
+            _Q_LOG("can not support the uri");
+        }
+
+ /*   //sometimes can not get scheme
         QString scheme = QUrl(device_uri).scheme();
         if(!scheme.compare("usb")
                 || !scheme.compare("hal")
                 ){
             device = usb_device;
+            _Q_LOG("it is usb device");
         }else if(!scheme.compare("socket")
                          || !scheme.compare("dnssd")
                          || !scheme.compare("lpd")
@@ -109,9 +135,12 @@ void DeviceContrl::slots_deviceChanged(const QString& devicename)
              //            || !scheme.compare("mdns")
                  ){
             device = net_device;
+            _Q_LOG("it is net device");
         }else{
             device = NULL;
+            _Q_LOG("can not support the scheme:" + scheme);
         }
+        //*/
     }
 }
 
@@ -146,6 +175,10 @@ bool DeviceContrl::cmd_status_validate(int& err)
     case  ERR_decode_device:
     case  ERR_vop_cannot_support:
         valid = false;
+        _Q_LOG("err: status is invalid");
+        break;
+    default:
+        break;
     }
     return valid;
 }
@@ -156,9 +189,10 @@ int DeviceContrl::cmd_setting_confirm()
     if(!get_passwd_confirmed()){
         err = protocol->cmd(VopProtocol::CMD_PASSWD_confirm);
         //set confirmed when the cmd complete.
-//        if(!err){
+        if(!err){
 //            set_passwd_confirmed(true);
-//        }
+            _Q_LOG("err: password not confirmed");
+        }
     }
     return err;
 }
@@ -172,6 +206,7 @@ int DeviceContrl::cmd_wifi_status()
         if(1 != wifi_status){
             //wifi don't init
             err = ERR_wifi_have_not_been_inited;
+            _Q_LOG("err: wifi have not been inited");
         }
     }
     return err;
@@ -185,50 +220,50 @@ void DeviceContrl::slots_cmd_plus(int cmd)
         return;
     }
 
-    int err;
-    err = DeviceContrl::openPrinter();
+    int err = ERR_ACK;
+    set_cmdStatus(cmd);
+
+    _Q_LOG("");
+    _Q_LOG("");
+    if(isUsbDevice() && scanner_locked()){
+        err = STATUS_busy_scanningOrCoping;
+        _Q_LOG("err: usb device scanner locked");
+    }
+
+    if(!err)
+        err = DeviceContrl::openPrinter();
 
     if(isUsbDevice() && !err){
-
-//        QString printer_status_cmd("LANG=en lpstat -p ");
-//        printer_status_cmd += current_devicename;
-//        printer_status_cmd += QString(" 2>>/tmp/AltoVOP.log |awk 'NR==1{printf $4}' ");
-//        QString printer_status;
-
-        QString printer_jobs_cmd("LANG=en lpstat -o ");
-        printer_jobs_cmd += current_devicename;
-        printer_jobs_cmd += QString(" 2>>/tmp/AltoVOP.log");
-        QString printer_jobs;
-
-//        qLog("printer_status cmd:" + printer_status_cmd);
-//        printer_status = DeviceManager::getStringFromShell(printer_status_cmd);
-        qLog("printer_jobs cmd:");// + printer_jobs_cmd);
-        printer_jobs = DeviceManager::getStringFromShell(printer_jobs_cmd);
+        QString printer_jobs = get_printer_jobs(current_devicename);
+//        QString printer_status = get_printer_status(current_devicename);
         if(printer_jobs.isEmpty()
 //                &&  !printer_status.compare("idle.")
                 ){
             err = ERR_ACK;
         }else{
+            _Q_LOG("err: printer have jobs");
             err = ERR_printer_have_jobs;
             DeviceContrl::closePrinter();
         }
     }
 
     if(!err){
-        set_cmdStatus(cmd);
         switch(cmd){
         case CMD_DEVICE_status:
+            _Q_LOG("exec control cmd: get device status");
             err = protocol->cmd(VopProtocol::CMD_GetStatus);
             break;
 
         case CMD_COPY:
-            if(!cmd_status_validate(err)){
-                break;
-            }
+            _Q_LOG("exec control cmd: copy");
+//            if(!cmd_status_validate(err)){
+//                break;
+//            }
             err = protocol->cmd(VopProtocol::CMD_COPY);
             break;
 
         case CMD_WIFI_apply_plus:
+            _Q_LOG("exec control cmd: wifi apply");
             if(!cmd_status_validate(err)){
                 break;
             }
@@ -251,11 +286,13 @@ void DeviceContrl::slots_cmd_plus(int cmd)
             break;
 
         case CMD_WIFI_refresh_plus:
+            _Q_LOG("exec control cmd: wifi refresh");
             if(!cmd_status_validate(err)){
                 break;
             }
             err = protocol->cmd(VopProtocol::CMD_WIFI_get);
             if(err){
+                _Q_LOG("err: can not get wifi");
                 break;
             }
             err = cmd_wifi_status();
@@ -267,6 +304,7 @@ void DeviceContrl::slots_cmd_plus(int cmd)
             break;
 
         case CMD_PASSWD_set_plus:
+            _Q_LOG("exec control cmd: set passwd");
             if(!cmd_status_validate(err)){
                 break;
             }
@@ -286,12 +324,14 @@ void DeviceContrl::slots_cmd_plus(int cmd)
             break;
 
         case CMD_PRN_TonerEnd_Get:
+            _Q_LOG("exec control cmd: get toner end");
             if(!cmd_status_validate(err)){
                 break;
             }
             err = protocol->cmd(VopProtocol::CMD_PRN_TonerEnd_Get);
             break;
         case CMD_PRN_TonerEnd_Set:
+            _Q_LOG("exec control cmd: set toner end");
             if(!cmd_status_validate(err)){
                 break;
             }
@@ -306,16 +346,19 @@ void DeviceContrl::slots_cmd_plus(int cmd)
             }
             break;
         case CMD_PRN_PowerSave_Get:
+            _Q_LOG("exec control cmd: get power save time");
             if(!cmd_status_validate(err)){
                 break;
             }
             err = protocol->cmd(VopProtocol::CMD_PRN_PSaveTime_Get);
             if(err){
+                _Q_LOG("err: can not set save time");
                 break;
             }
     //        err = protocol->cmd(VopProtocol::CMD_PRN_PowerOff_Get);
             break;
         case CMD_PRN_PSaveTime_Set:
+            _Q_LOG("exec control cmd: set power save time");
             if(!cmd_status_validate(err)){
                 break;
             }
@@ -330,6 +373,7 @@ void DeviceContrl::slots_cmd_plus(int cmd)
             }
             break;
         case CMD_PRN_PowerOff_Set:
+            _Q_LOG("exec control cmd: set pwoer off time");
             if(!cmd_status_validate(err)){
                 break;
             }
@@ -344,12 +388,14 @@ void DeviceContrl::slots_cmd_plus(int cmd)
             }
             break;
         case CMD_IPv4_Get:
+            _Q_LOG("exec control cmd: get ipv4");
             if(!cmd_status_validate(err)){
                 break;
             }
             err = protocol->cmd(VopProtocol::CMD_NET_GetV4);
             break;
         case CMD_IPv4_Set:
+            _Q_LOG("exec control cmd: set ipv4");
             if(!cmd_status_validate(err)){
                 break;
             }
@@ -364,12 +410,14 @@ void DeviceContrl::slots_cmd_plus(int cmd)
             }
             break;
         case CMD_IPv6_Get:
+            _Q_LOG("exec control cmd: get ipv6");
             if(!cmd_status_validate(err)){
                 break;
             }
             err = protocol->cmd(VopProtocol::CMD_NET_GetV6);
             break;
         case CMD_IPv6_Set:
+            _Q_LOG("exec control cmd: set ipv6");
             if(!cmd_status_validate(err)){
                 break;
             }
@@ -387,7 +435,6 @@ void DeviceContrl::slots_cmd_plus(int cmd)
             break;
         }
         DeviceContrl::closePrinter();
-//        system("killall eggcups 2>>/tmp/AltoVOP.log");
     }
     emit signals_progress(cmd ,80);
     set_cmdStatus(CMD_STATUS_COMPLETE);

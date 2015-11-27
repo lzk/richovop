@@ -237,7 +237,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>IDS_CP_Copies</string>
+    <string>IDS_CP_Copies_coma</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btn_8">

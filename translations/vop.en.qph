@@ -3,63 +3,18 @@
 <QPH language="en">
 
 	<phrase>
-		<source>IDS_Menu_Exit</source>
-		<target>Exit</target>
+		<source>IDS_SIZE_16K</source>
+		<target>16K</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_Tab_Copy</source>
-		<target>Copy</target>
+		<source>IDS_DPI_300</source>
+		<target>300 x 300</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_Tab_Setting</source>
-		<target>Setting</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_Tab_About</source>
-		<target>About</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MW_Refresh</source>
-		<target>Refresh</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_ScanningMode</source>
-		<target>Scanning Mode</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_SM_Photo</source>
-		<target>Photo</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_SM_Text</source>
-		<target>Text</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_Density</source>
-		<target>Density</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_Default</source>
-		<target>Default</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_DocumentSize</source>
-		<target>Document Size</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_OutputSize</source>
-		<target>Output Size</target>
+		<source>IDS_DPI_600</source>
+		<target>600 x 600</target>
 	</phrase>
 
 	<phrase>
@@ -73,23 +28,18 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_SIZE_B5</source>
-		<target>B5 (182 x 257mm)</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_SIZE_Letter</source>
-		<target>Letter (8.5 x 11")</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_SIZE_Executive</source>
-		<target>Executive (7.25 x 10.5")</target>
-	</phrase>
-
-	<phrase>
 		<source>IDS_SIZE_A6</source>
 		<target>A6 (105 x 148mm)</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Tab_About_</source>
+		<target>About</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SIZE_B5</source>
+		<target>B5 (182 x 257mm)</target>
 	</phrase>
 
 	<phrase>
@@ -98,13 +48,189 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_SIZE_16K</source>
-		<target>16K</target>
+		<source>IDS_SIZE_Executive</source>
+		<target>Executive (7.25 x 10.5")</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_Nin1Copy</source>
-		<target>N in 1 Copy</target>
+		<source>IDS_ST_Apply</source>
+		<target>Apply</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_ModifyPasswd</source>
+		<target>Modify Password</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_KB_Backspace</source>
+		<target>Backspace</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_IDCardCopy</source>
+		<target>ID Card
+Copy</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_KB_Clear</source>
+		<target>Clear</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_ConfirmPassword</source>
+		<target>Confirm Password</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_Communication</source>
+		<target>Communication with printer failed.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Copies</source>
+		<target>Copies</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Copies_coma</source>
+		<target>Copies:</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_CopiesSettingKeyboard</source>
+		<target>Copies Setting Keyboard</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_COPY</source>
+		<target>Copy</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Copy_Settings</source>
+		<target>Copy</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Copy_BTN</source>
+		<target>Copy</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_Copying</source>
+		<target>Copying</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Default</source>
+		<target>Default</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Density</source>
+		<target>Density</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_DocumentSize</source>
+		<target>Document Size</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_MediaType</source>
+		<target>Media Type</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_MediaType_</source>
+		<target>Media Type</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_DPI</source>
+		<target>DPI</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_EDIT</source>
+		<target>Edit</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_EncryptionType</source>
+		<target>Encryption Type</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_AcquireInformation</source>
+		<target>Failed to acquire the information.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_ConnectAccessPoint</source>
+		<target>Failed to connect Access Point.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_FixErrorFirst</source>
+		<target>Please fix error first and try later…</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_GetInfo</source>
+		<target>Get Printer Information.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_Authentication</source>
+		<target>Authentication error, please enter the password again.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_JAM</source>
+		<target>JAM：Please open the cover and remove the paper</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_KeyIndex</source>
+		<target>Key Index</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_AdministratorAuthentication</source>
+		<target>Administrator Authentication</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_Login</source>
+		<target>Login</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_MachineBusy</source>
+		<target>The machine is busy, please try later…</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_Printering</source>
+		<target>The machine is printing, please try later…</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_ManualSetup</source>
+		<target>Manual Setup</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_NewPassword</source>
+		<target>New Password</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_No</source>
+		<target>No</target>
 	</phrase>
 
 	<phrase>
@@ -128,53 +254,8 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_DPI</source>
-		<target>DPI</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_DPI_300</source>
-		<target>300 x 300</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_DPI_600</source>
-		<target>600 x 600</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_IDCardCopy_old</source>
-		<target>ID Card Copy</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_Scaling</source>
-		<target>Scaling</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_ScalingSettingKeyboard</source>
-		<target>Scaling Setting Keyboard</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_Copies</source>
-		<target>Copies</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_CopiesSettingKeyboard</source>
-		<target>Copies Setting Keyboard</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_KB_Backspace</source>
-		<target>Backspace</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_KB_Clear</source>
-		<target>Clear</target>
+		<source>IDS_CP_Nin1Copy</source>
+		<target>N in 1 Copy</target>
 	</phrase>
 
 	<phrase>
@@ -183,43 +264,8 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_MediaType_</source>
-		<target>Media Type</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_DPI_300dpi</source>
-		<target>300x300 dpi</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_DPI_600dpi</source>
-		<target>600x600 dpi</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_Apply</source>
-		<target>Apply</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_WifiSetup</source>
-		<target>WIFI Setup</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_SearchWifi</source>
-		<target>Search WIFI</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_ManualSetup</source>
-		<target>Manual Setup</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_SSID</source>
-		<target>SSID</target>
+		<source>IDS_CP_OutputSize</source>
+		<target>Output Size</target>
 	</phrase>
 
 	<phrase>
@@ -228,103 +274,8 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_ST_WepKey</source>
-		<target>WEP Key</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_EncryptionType</source>
-		<target>Encryption Type</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_NoSecurity</source>
-		<target>No Security</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_WEP</source>
-		<target>WEP</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_WPA2-PSK-AES</source>
-		<target>WPA2-PSK-AES</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_MixedModePSK</source>
-		<target>Mixed Mode PSK</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_KeyIndex</source>
-		<target>Key Index</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_No</source>
-		<target>No</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_Copying</source>
-		<target>Copying</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_PlaceNextPage</source>
-		<target>Place Next Page</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_TurnCardOver</source>
-		<target>Turn card over to copy the reverse.</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_Printering</source>
-		<target>The machine is printing, please try later…</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_FixErrorFirst</source>
-		<target>Please fix error first and try later…</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ERR_JAM</source>
-		<target>JAM：Please open the cover and remove the paper</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ERR_Malfunction</source>
-		<target>Malfunction： Please reset the machine. If the malfunction persists, then contact with the service personnel.</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ERR_AcquireInformation</source>
-		<target>Failed to acquire the information.</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ERR_Communication</source>
-		<target>Communication with printer failed.</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ERR_ConnectAccessPoint</source>
-		<target>Failed to connect Access Point.</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_EDIT</source>
-		<target>Edit</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_COPY</source>
-		<target>Copy</target>
+		<source>IDS_ST_PasswordsDifferent</source>
+		<target>The passwords you entered are different, please try again.</target>
 	</phrase>
 
 	<phrase>
@@ -333,13 +284,138 @@
 	</phrase>
 
 	<phrase>
+		<source>IDS_SM_Photo</source>
+		<target>Photo</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_Password</source>
+		<target>Password</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_Malfunction</source>
+		<target>Malfunction： Please reset the machine. If the malfunction persists, then contact with the service personnel.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Scaling</source>
+		<target>Scaling</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Scaling_coma</source>
+		<target>Scaling:</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_ScalingSettingKeyboard</source>
+		<target>Scaling Setting Keyboard</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_ScanningMode</source>
+		<target>Scanning Mode</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_PlaceNextPage</source>
+		<target>Place Next Page</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_SearchWifi</source>
+		<target>Search WIFI</target>
+	</phrase>
+
+	<phrase>
 		<source>IDS_SELECT_ALL</source>
 		<target>Select All</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_MediaType</source>
-		<target>Media Type</target>
+		<source>IDS_MSG_SendInfo</source>
+		<target>Send Printer Information.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_SetInfo</source>
+		<target>Set Printer Information.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_SSID</source>
+		<target>SSID</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Tab_About</source>
+		<target>About</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Tab_Copy</source>
+		<target>Copy</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Tab_Setting</source>
+		<target>Setting</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SM_Text</source>
+		<target>Text</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_TurnCardOver</source>
+		<target>Turn card over to copy the reverse.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_UTILITY_NAME</source>
+		<target>Ricoh Virtual Panel</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_WepKey</source>
+		<target>WEP Key</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_WifiSettings</source>
+		<target>WIFI Setup</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_WifiSetup</source>
+		<target>WIFI Setup</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_WirelessDisabled</source>
+		<target>Wireless Disabled</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MT_Label</source>
+		<target>Label</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SIZE_Letter</source>
+		<target>Letter (8.5 x 11")</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_MixedModePSK</source>
+		<target>Mixed Mode PSK</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_NoSecurity</source>
+		<target>No Security</target>
 	</phrase>
 
 	<phrase>
@@ -348,8 +424,18 @@
 	</phrase>
 
 	<phrase>
+		<source>IDS_Menu_Exit</source>
+		<target>Exit</target>
+	</phrase>
+
+	<phrase>
 		<source>IDS_MT_Recycled</source>
 		<target>Recycled</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MW_Refresh</source>
+		<target>Refresh</target>
 	</phrase>
 
 	<phrase>
@@ -363,90 +449,44 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_MT_Label</source>
-		<target>Label</target>
+		<source>IDS_ST_WEP</source>
+		<target>WEP</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_MSG_WirelessDisabled</source>
-		<target>Wireless Disabled</target>
+		<source>IDS_ST_WPA2-PSK-AES</source>
+		<target>WPA2-PSK-AES</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_MSG_GetInfo</source>
-		<target>Get Printer Information.</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_SetInfo</source>
-		<target>Set Printer Information.</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_SendInfo</source>
-		<target>Send Printer Information.</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_MachineBusy</source>
-		<target>The machine is busy,please try later…</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_ModifyPasswd</source>
-		<target>Modify Password</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_NewPassword</source>
-		<target>New Password</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_ConfirmPassword</source>
-		<target>Confirm Password</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_PasswordsDifferent</source>
-		<target>The passwords you entered are different, please try again.</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_Password</source>
-		<target>Password</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_Login</source>
-		<target>Login</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ERR_Authentication</source>
-		<target>Authentication error, please enter the password again.</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_IDCardCopy</source>
-		<target>ID Card
-Copy</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_AdministratorAuthentication</source>
-		<target>Administrator Authentication</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
-		<target>Another RICOH Pinter is currently running, please close it, then launch this tool again.</target>
+		<source>WPA-PSK-TKIP</source>
+		<target>WPA-PSK-TKIP</target>
 	</phrase>
 
 	<phrase>
 		<source>IDS_NOT_ENOUGH_SPACE</source>
 		<target>Operation cannot be carried out due to insufficient hard disk space.
 Try again after freeing hard disk space.</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_EXIT_CONFIRM</source>
+		<target>Do you want to exit?</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_OK</source>
+		<target>OK</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Cancel</source>
+		<target>Cancel</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
+		<target>Another RICOH Printer is currently running, please close it, then launch this tool again.</target>
 	</phrase>
 
 </QPH>

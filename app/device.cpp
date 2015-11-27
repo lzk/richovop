@@ -49,17 +49,19 @@ int Device::write_no_read(char* wrBuffer ,int wrSize)
         }
 
         _read_size = read(readBuffer ,0x3ff);
-        qLog(QString().sprintf("before write clear read buffer :%d" ,_read_size));
+        C_LOG("before write clear read buffer :%d" ,_read_size);
 
         _write_size = write(writeBuffer ,wrSize);
-        qLog(QString().sprintf("write size:%d......%d" ,wrSize ,_write_size));
+        C_LOG("write size:%d......%d" ,wrSize ,_write_size);
         if(_write_size == wrSize){
             err = ERR_ACK;
             break;
         }else{
-//            closePrinter();
+            err = ERR_communication;
         }
     }
+    if(err)
+        _Q_LOG("write wrong");
     return err;
 }
 
@@ -78,12 +80,12 @@ int Device ::write_then_read(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdS
             if(!nocheck){
                 if(1 == read(rdBuffer,1)){
                     if(0x4d != rdBuffer[0]){
-                        qLog(QString().sprintf("waiting for 0x4d:%#.2x" ,rdBuffer[0]));
+                        C_LOG("waiting for 0x4d:%#.2x" ,rdBuffer[0]);
                         delay100ms (1);
                         continue;
                     }
                 }else{
-                    qLog("cannot read now,wait 100 ms read again");
+                    _Q_LOG("cannot read now,wait 100 ms read again");
                     delay100ms (1);
                     continue;
                 }
@@ -101,15 +103,15 @@ int Device ::write_then_read(char* wrBuffer ,int wrSize ,char* rdBuffer ,int rdS
                 }
             }
         }
-        qLog(QString().sprintf("try times:%d" ,j));
+
+        C_LOG("try %d ms,%d times" ,ifdelay*(10+j) * 100 ,j);
         if(_read_size == rdSize -2){
             err = ERR_ACK;
-            qLog("read complete");
         }else{
-            qLog("read wrong");
+            _Q_LOG("read wrong");
+            err = ERR_communication;
         }
     }
-//    closePrinter();
     return err;
 }
 

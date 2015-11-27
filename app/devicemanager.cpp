@@ -7,14 +7,16 @@
 #include "device.h"
 #include "deviceapp.h"
 #include "log.h"
-//#include <cups/cups.h>
 #include "usbdevice.h"
 #include "netdevice.h"
+#include "devicedata.h"
+#include "linux_api.h"
 DeviceManager::DeviceManager(MainWidget* widget):
     device_app(NULL),
     main_widget(widget),
     usb_device(new UsbDevice),
-    net_device(new NetDevice)
+    net_device(new NetDevice),
+    device_data(new DeviceData)
 {
     devices.clear();
     protocol = new VopProtocol(this);
@@ -27,6 +29,7 @@ DeviceManager::~DeviceManager()
     delete protocol;
     delete usb_device;
     delete net_device;
+    delete device_data;
 }
 
 const QString DeviceManager::get_deviceName()
@@ -34,59 +37,43 @@ const QString DeviceManager::get_deviceName()
     return selected_devicename;
 }
 
-void DeviceManager::selectDevice(int selected_device)
+bool DeviceManager::selectDevice(int selected_device)
 {
-    if(device_app){
-        device_app->disconnect_App();
-        delete device_app;
-        device_app = NULL;
-    }
+    bool changed = false;
     if(!devices.isEmpty() && -1 != selected_device){
-        selected_devicename = devices.at(selected_device);
-        if(!device_app)
+        if(selected_devicename.compare(devices.at(selected_device))){
+            _Q_LOG("select another device");
+            changed = true;
+            selected_devicename = devices.at(selected_device);
+            if(device_app){
+                device_app->disconnect_App();
+                delete device_app;
+                device_app = NULL;
+            }
+            device_data->clear();
             device_app = new DeviceApp(this ,main_widget);
+        }
     }else{
-        selected_devicename = QString();
+        _Q_LOG("no device");
+        if(!selected_devicename.isEmpty()){
+            changed = true;
+            if(device_app){
+                device_app->disconnect_App();
+                delete device_app;
+                device_app = NULL;
+            }
+            device_data->clear();
+            selected_devicename = QString();
+        }
     }
-}
-#include<QFile>
-#include<QTextStream>
-QString DeviceManager::getDeviceURI(const QString& devicename)
-{
-    QString device_uri;
-
-    //rhel5 not work
-//    cups_dest_t *dests;
-//    int num_dests;
-//    num_dests = cupsGetDests(&dests);
-//    cups_dest_t* dest;
-//    dest = cupsGetDest(devicename.toLatin1() ,NULL ,num_dests ,dests);
-//    if(!dest)
-//        return NULL;
-//    device_uri =  cupsGetOption("device-uri", dest->num_options, dest->options);
-//    cupsFreeDests(num_dests ,dests);
-
-    QString str("LANG=en lpstat -v ");
-    str += devicename;
-    str += " 2>>/tmp/AltoVOP.log |awk 'NR==1{print $NF}'";
-    qLog("uri cmd:");// + str);
-    device_uri = getStringFromShell(str);
-//        device_uri = device_uri.section(' ' ,-1);
-//    qLog("devicename:"+devicename + "\ndevice_uri:"+device_uri);
-    return device_uri;
+    return changed;
 }
 
 QString DeviceManager::getCurrentDeviceURI()
 {
-    return getDeviceURI(selected_devicename);
+    return get_device_uri(selected_devicename);
 }
 
-//#include<QPrinterInfo>
-///
-/// \brief DeviceManager::getDeviceList :get printer names and set selected printer
-/// \param printerNames :return printer names
-/// \return :selected for current printer
-///
 int DeviceManager::getDeviceList(QStringList& printerNames)
 {
     int selected_printer = 0;
@@ -94,26 +81,15 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
     devices.clear();
 
     //get default printer
-    QString default_printer_name;
-    QString str("LANG=en lpstat -d 2>>/tmp/AltoVOP.log |awk 'NR==1{print $NF}' ");
-    qLog("defaut printer cmd:");// + str);
-    default_printer_name = getStringFromShell(str);
-    if(default_printer_name.isEmpty()){
-        qLog("there is no printer");
-        return -1;
-    }
+    QString default_printer_name = get_default_printer();
 
-    QStringList printers;
-    QString print;
-    str = QString("LANG=en lpstat -a 2>>/tmp/AltoVOP.log|awk \'{print $1}\' ");
-    qLog("prints cmd:");// + str);
-    print = getStringFromShell(str ,1);
-    if(print.isEmpty()){
-        qLog("there is no printer");
+    QStringList printers = get_printers();
+    if(printers.isEmpty()){
+        _Q_LOG("there is no printer");
         return -1;
     }
-    printers = print.split("\n");
-    qLog("printers are:" + printers.join(";"));
+//    _Q_LOG("printers are:" + printers.join(";"));
+    QString print;
     foreach (print, printers) {
         if(!print.isEmpty()){
                 if(Device::Device_invalid != getDeviceModel(print)){
@@ -122,67 +98,21 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
                 }
         }
     }
-
-
-
-#if 0
-#if 0
-    QList<QPrinterInfo> printerInfoList = QPrinterInfo::availablePrinters();
-    for(int i = 0 ; i < printerInfoList.count() ;i++)
-    {
-        devices << printerInfoList[i].printerName();
-        printerNames << printerInfoList[i].printerName();
-        if(printerInfoList[i].isDefault()){
-            default_printer = devices.indexOf(printerInfoList[i].printerName());
-        }
-        if(( !QString::compare(selected_devicename  ,printerInfoList[i].printerName()))){
-            selected_printer = devices.indexOf(printerInfoList[i].printerName());
-            selected = true;
-        }
-    }
-#else
-    cups_dest_t *dests;
-    int num_dests;
-    num_dests = cupsGetDests(&dests);
-    qLog("cupsDests:" +QString().sprintf("%d" ,num_dests));
-    cups_dest_t *dest;
-    int i;
-    const char *value;
-   for (i = num_dests, dest = dests; i > 0; i --, dest ++)
-   {
-       if (dest->instance == NULL){
-            value = cupsGetOption("printer-make-and-model", dest->num_options, dest->options);
-           if(VopDevice::getDeviceModel(value)){
-                devices << dest->name;
-                printerNames << dest->name;
-//                if(dest->is_default){
-//                    default_printer = devices.indexOf(dest->name);
-//                }
-//                if(( !QString::compare(selected_devicename  ,dest->name))){
-//                    selected_printer = devices.indexOf(dest->name);
-//                    selected = true;
-//                }
-           }
-       }
-   }
-//   cupsFreeDests(num_dests, dests);
-#endif
-#endif
    if(devices.isEmpty())
    {
-       qLog("there is no printer");
+       _Q_LOG("there is no printer");
        return -1;
    }
    default_printer = devices.indexOf(default_printer_name);
    selected_printer = devices.indexOf(selected_devicename);
    if(-1 != selected_printer)
-       qLog("the selected printer is founded");
+       _Q_LOG("the selected printer is founded");
    else if(-1 != default_printer){
            selected_printer =default_printer;
-           qLog("select the default printer");
+           _Q_LOG("select the default printer");
    }
    if(-1 == selected_printer){
-       qLog("the printer isn't selected,select the first printer");
+       _Q_LOG("the printer isn't selected,select the first printer");
        selected_printer = 0;
    }
    return selected_printer;
@@ -190,69 +120,12 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
 
 int DeviceManager::getDeviceModel(const QString& devicename)
 {
-//    const char* value;
-//    cups_dest_t *dests;
-//    int num_dests;
-//    num_dests = cupsGetDests(&dests);
-//    cups_dest_t* dest;
-//    dest = cupsGetDest(devicename.toLatin1() ,NULL ,num_dests ,dests);
-//    if(!dest)
-//        return VopDevice::Device_invalid;
-//    value = cupsGetOption("printer-make-and-model", dest->num_options, dest->options);
-//    int model =  VopDevice::getDeviceModel(value);
-//    cupsFreeDests(num_dests ,dests);
-//    return model;
-
-    if(devicename.isEmpty())
-        return Device::Device_invalid;
-
-    QString str("LANG=en lpstat -l -p ");
-    str += devicename;
-    str += QString(" 2>>/tmp/AltoVOP.log |awk '/Interface/{printf $NF}' ");
-    qLog("file name cmd:");// + str);
-    QString filename;
-    filename = getStringFromShell(str);
-    if(filename.isEmpty())
-        return Device::Device_invalid;
-    QFile fn(filename);
-    if(!fn.exists())
-        return Device::Device_invalid;
-
-    str = QString("awk -F\\\" '/\\*NickName/{print $2}'  ");
-    str += filename;
-    str += QString(" 2>>/tmp/AltoVOP.log ");
-    qLog("make and model cmd:");// + str);
     QString makeAndModel;
-    makeAndModel = getStringFromShell(str);
+    makeAndModel = get_device_model(devicename);
+    if(makeAndModel.isEmpty())
+        return Device::Device_invalid;
+    _Q_LOG(devicename + " make and model is " + makeAndModel);
     return Device::getDeviceModel(makeAndModel.toLatin1());
-}
-
-QMutex DeviceManager::mutex;
-QString DeviceManager::getStringFromShell(const QString& cmd ,int mode)
-{
-    QMutexLocker locker(&mutex);
-    QString str;
-    QString tmp_file("/tmp/lpstattmpfile123456789");
-    QString _cmd(cmd);
-    _cmd += ">";
-    _cmd += tmp_file;
-    _cmd += "&&chmod 666 ";
-    _cmd += tmp_file;
-    _cmd += " 2>>/tmp/AltoVOP.log";
-    if(!system(_cmd.toLatin1())){
-        QFile fl(tmp_file);
-        if(fl.open(QFile::ReadOnly)){
-            QTextStream in(&fl);
-            if(mode)
-                str = in.readAll();
-            else
-                str = in.readLine();
-            fl.close();
-            fl.remove();
-        }
-    }
-    qLog("result shell cmd:" + str);
-    return str;
 }
 
 int DeviceManager::get_deviceStatus()
@@ -369,16 +242,7 @@ void DeviceManager::emit_cmd_plus(int cmd)
 {
     if(device_app)
         device_app->emit_cmd_plus(cmd);
-}/*
-
-void DeviceManager::emit_cmd(int cmd)
-{
-    if(device_app){
-        if(device_app->emit_cmd(cmd)){
-//            messagebox_exec(tr("The machine is busy, please try later..."));
-        }
-    }
-}*/
+}
 
 void DeviceManager::set_tmp_passwd(const char* p)
 {

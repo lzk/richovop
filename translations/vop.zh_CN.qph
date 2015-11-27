@@ -3,63 +3,18 @@
 <QPH language="zh_CN">
 
 	<phrase>
-		<source>IDS_Menu_Exit</source>
-		<target>退出</target>
+		<source>IDS_SIZE_16K</source>
+		<target>16K</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_Tab_Copy</source>
-		<target>复印</target>
+		<source>IDS_DPI_300</source>
+		<target>300 x 300</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_Tab_Setting</source>
-		<target>设定</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_Tab_About</source>
-		<target>关于</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MW_Refresh</source>
-		<target>刷新</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_ScanningMode</source>
-		<target>扫描模式</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_SM_Photo</source>
-		<target>照片</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_SM_Text</source>
-		<target>文本</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_Density</source>
-		<target>浓度</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_Default</source>
-		<target>默认</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_DocumentSize</source>
-		<target>原稿大小</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_OutputSize</source>
-		<target>输出纸张大小</target>
+		<source>IDS_DPI_600</source>
+		<target>600 x 600</target>
 	</phrase>
 
 	<phrase>
@@ -73,23 +28,18 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_SIZE_B5</source>
-		<target>B5 (182 x 257mm)</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_SIZE_Letter</source>
-		<target>Letter (8.5 x 11")</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_SIZE_Executive</source>
-		<target>Executive (7.25 x 10.5")</target>
-	</phrase>
-
-	<phrase>
 		<source>IDS_SIZE_A6</source>
 		<target>A6 (105 x 148mm)</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Tab_About_</source>
+		<target>关于</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SIZE_B5</source>
+		<target>B5 (182 x 257mm)</target>
 	</phrase>
 
 	<phrase>
@@ -98,13 +48,189 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_SIZE_16K</source>
-		<target>16K</target>
+		<source>IDS_SIZE_Executive</source>
+		<target>Executive (7.25 x 10.5")</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_Nin1Copy</source>
-		<target>N合1复印</target>
+		<source>IDS_ST_Apply</source>
+		<target>应用</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_ModifyPasswd</source>
+		<target>管理员密码修改</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_KB_Backspace</source>
+		<target>退格</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_IDCardCopy</source>
+		<target>身份证
+复印</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_KB_Clear</source>
+		<target>清除</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_ConfirmPassword</source>
+		<target>确认密码</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_Communication</source>
+		<target>打印机通信失败</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Copies</source>
+		<target>份数</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Copies_coma</source>
+		<target>份数:</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_CopiesSettingKeyboard</source>
+		<target>份数值设定键盘</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_COPY</source>
+		<target>复制</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Copy_Settings</source>
+		<target>复印</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Copy_BTN</source>
+		<target>复印</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_Copying</source>
+		<target>复印中</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Default</source>
+		<target>默认</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Density</source>
+		<target>浓度</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_DocumentSize</source>
+		<target>原稿大小</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_MediaType</source>
+		<target>介质类型</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_MediaType_</source>
+		<target>介质类型</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_DPI</source>
+		<target>DPI</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_EDIT</source>
+		<target>编辑</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_EncryptionType</source>
+		<target>加密类型</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_AcquireInformation</source>
+		<target>获取信息失败</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_ConnectAccessPoint</source>
+		<target>连接无线热点失败</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_FixErrorFirst</source>
+		<target>请先解决问题，稍后再试一次</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_GetInfo</source>
+		<target>获得打印机信息。</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_Authentication</source>
+		<target>认证错误，请重新输入密码。</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_JAM</source>
+		<target>JAM：请打开上盖并取出卡纸。</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_KeyIndex</source>
+		<target>密钥索引</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_AdministratorAuthentication</source>
+		<target>管理员权限认证</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_Login</source>
+		<target>登录</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_MachineBusy</source>
+		<target>机器正在工作中，请稍后再试。</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_Printering</source>
+		<target>机器正在打印，请稍后再试</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_ManualSetup</source>
+		<target>手动安装</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_NewPassword</source>
+		<target>新密码</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_No</source>
+		<target>否</target>
 	</phrase>
 
 	<phrase>
@@ -128,54 +254,8 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_DPI</source>
-		<target>DPI</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_DPI_300</source>
-		<target>300 x 300</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_DPI_600</source>
-		<target>600 x 600</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_IDCardCopy_old</source>
-		<target>身份证
-复印</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_Scaling</source>
-		<target>缩放</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_ScalingSettingKeyboard</source>
-		<target>缩放数值设置键盘</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_Copies</source>
-		<target>份数</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_CopiesSettingKeyboard</source>
-		<target>份数值设定键盘</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_KB_Backspace</source>
-		<target>退格</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_KB_Clear</source>
-		<target>清除</target>
+		<source>IDS_CP_Nin1Copy</source>
+		<target>N合1复印</target>
 	</phrase>
 
 	<phrase>
@@ -184,43 +264,8 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_MediaType_</source>
-		<target>介质类型</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_DPI_300dpi</source>
-		<target>300x300 dpi</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_DPI_600dpi</source>
-		<target>600x600 dpi</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_Apply</source>
-		<target>应用</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_WifiSetup</source>
-		<target>Wi-Fi安装</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_SearchWifi</source>
-		<target>搜索Wi-Fi</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_ManualSetup</source>
-		<target>手动安装</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_SSID</source>
-		<target>网络名称</target>
+		<source>IDS_CP_OutputSize</source>
+		<target>输出纸张大小</target>
 	</phrase>
 
 	<phrase>
@@ -229,103 +274,8 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_ST_WepKey</source>
-		<target>WEP密钥</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_EncryptionType</source>
-		<target>加密类型</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_NoSecurity</source>
-		<target>不使用</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_WEP</source>
-		<target>WEP</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_WPA2-PSK-AES</source>
-		<target>WPA2-PSK-AES</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_MixedModePSK</source>
-		<target>混合模式PSK</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_KeyIndex</source>
-		<target>密钥索引</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_No</source>
-		<target>否</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_Copying</source>
-		<target>复印中</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_PlaceNextPage</source>
-		<target>放置下一页</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_TurnCardOver</source>
-		<target>翻转卡片，并放在扫描板上</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_Printering</source>
-		<target>机器正在打印，请稍后再试</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_FixErrorFirst</source>
-		<target>请先解决问题，稍后再试一次</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ERR_JAM</source>
-		<target>JAM：请打开上盖并取出卡纸。</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ERR_Malfunction</source>
-		<target>故障：请复位机器。如果故障依旧，然后与服务人员联系。</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ERR_AcquireInformation</source>
-		<target>获取信息失败</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ERR_Communication</source>
-		<target>打印机通信失败</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ERR_ConnectAccessPoint</source>
-		<target>连接无线热点失败</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_EDIT</source>
-		<target>编辑</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_COPY</source>
-		<target>复制</target>
+		<source>IDS_ST_PasswordsDifferent</source>
+		<target>输入密码不一致，请重新输入。</target>
 	</phrase>
 
 	<phrase>
@@ -334,13 +284,138 @@
 	</phrase>
 
 	<phrase>
+		<source>IDS_SM_Photo</source>
+		<target>照片</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_Password</source>
+		<target>密码</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ERR_Malfunction</source>
+		<target>故障：请复位机器。如果故障依旧，然后与服务人员联系。</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Scaling</source>
+		<target>缩放</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_Scaling_coma</source>
+		<target>缩放:</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_ScalingSettingKeyboard</source>
+		<target>缩放数值设置键盘</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_CP_ScanningMode</source>
+		<target>扫描模式</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_PlaceNextPage</source>
+		<target>放置下一页</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_SearchWifi</source>
+		<target>搜索Wi-Fi</target>
+	</phrase>
+
+	<phrase>
 		<source>IDS_SELECT_ALL</source>
 		<target>全选</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_MediaType</source>
-		<target>介质类型</target>
+		<source>IDS_MSG_SendInfo</source>
+		<target>发送打印机信息。</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_SetInfo</source>
+		<target>设定打印机信息。</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_SSID</source>
+		<target>网络名称</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Tab_About</source>
+		<target>关于</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Tab_Copy</source>
+		<target>复印</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Tab_Setting</source>
+		<target>设定</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SM_Text</source>
+		<target>文本</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_TurnCardOver</source>
+		<target>翻转卡片，并放在扫描板上</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_UTILITY_NAME</source>
+		<target>Ricoh Virtual Panel</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_WepKey</source>
+		<target>WEP密钥</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_WifiSettings</source>
+		<target>Wi-Fi安装</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_WifiSetup</source>
+		<target>Wi-Fi安装</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MSG_WirelessDisabled</source>
+		<target>无线单元禁用</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MT_Label</source>
+		<target>标签</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SIZE_Letter</source>
+		<target>Letter (8.5 x 11")</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_MixedModePSK</source>
+		<target>混合模式PSK</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ST_NoSecurity</source>
+		<target>不使用</target>
 	</phrase>
 
 	<phrase>
@@ -349,8 +424,18 @@
 	</phrase>
 
 	<phrase>
+		<source>IDS_Menu_Exit</source>
+		<target>退出</target>
+	</phrase>
+
+	<phrase>
 		<source>IDS_MT_Recycled</source>
 		<target>再生纸</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_MW_Refresh</source>
+		<target>刷新</target>
 	</phrase>
 
 	<phrase>
@@ -364,90 +449,44 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_MT_Label</source>
-		<target>标签</target>
+		<source>IDS_ST_WEP</source>
+		<target>WEP</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_MSG_WirelessDisabled</source>
-		<target>无线单元禁用</target>
+		<source>IDS_ST_WPA2-PSK-AES</source>
+		<target>WPA2-PSK-AES</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_MSG_GetInfo</source>
-		<target>获得打印机信息。</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_SetInfo</source>
-		<target>设定打印机信息。</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_SendInfo</source>
-		<target>发送打印机信息。</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_MSG_MachineBusy</source>
-		<target>机器正在工作中，请稍后再试。</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_ModifyPasswd</source>
-		<target>管理员密码修改</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_NewPassword</source>
-		<target>新密码</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_ConfirmPassword</source>
-		<target>确认密码</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_PasswordsDifferent</source>
-		<target>输入密码不一致，请重新输入。</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_Password</source>
-		<target>密码</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_Login</source>
-		<target>登陆</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ERR_Authentication</source>
-		<target>认证错误，请重新输入密码。</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_CP_IDCardCopy</source>
-		<target>身份证
-复印</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ST_AdministratorAuthentication</source>
-		<target>管理者权限认证</target>
-	</phrase>
-
-	<phrase>
-		<source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
-		<target>正在执行另一个RICOH Pinter，请将其关闭后，重新启动本工具。</target>
+		<source>WPA-PSK-TKIP</source>
+		<target>WPA-PSK-TKIP</target>
 	</phrase>
 
 	<phrase>
 		<source>IDS_NOT_ENOUGH_SPACE</source>
 		<target>硬盘空间不足，操作无法进行。
 请释放硬盘空间后再试。</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_EXIT_CONFIRM</source>
+		<target></target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_OK</source>
+		<target>确定</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_Cancel</source>
+		<target>取消</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
+		<target>正在执行另一个RICOH Printer，请将其关闭后，重新启动本工具。</target>
 	</phrase>
 
 </QPH>

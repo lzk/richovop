@@ -6,12 +6,9 @@
 #include <QApplication>
 #include<QTranslator>
 #include <QLocale>
-#include<QMessageBox>
-#include "app/log.h"
-
-#include <QLocalSocket>
- #include <QLocalServer>
 #include <QFile>
+#include "app/log.h"
+#include "app/linux_api.h"
 
 #ifdef STATIC_BUILD
 #include <QtPlugin>
@@ -22,37 +19,10 @@ Q_IMPORT_PLUGIN(qgif)
 Q_IMPORT_PLUGIN(qico)
 #endif
 
-
 MainWindow* gMainWindow;
-QLocalServer* m_localServer;
-bool isRunning(const QString& serverName)
-{
-    bool running = true;
-    QLocalSocket socket;
-    socket.connectToServer(serverName);
-    if (!socket.waitForConnected()) {
-        Log::init();
-        qLog(socket.errorString());
-        if(QFile::exists(serverName))
-            QFile::remove(serverName);
-
-        m_localServer = new QLocalServer(qApp);
-        if (!m_localServer->listen(serverName)) {
-            if (m_localServer->serverError() == QAbstractSocket::AddressInUseError
-                    && QFile::exists(serverName)) { //make sure listening success
-                QFile::remove(serverName);
-                m_localServer->listen(serverName);
-            }
-        }
-        (void)system(("chmod a+w " + serverName).toLatin1() + " 2>/dev/null");
-        running = false;
-    }
-    return running;
-}
-
 void quit(int)
 {
-    qLog("ctrl+c quit");
+    _Q_LOG("SIGINT quit");
     if(qApp)
         qApp->quit();
 }
@@ -81,10 +51,16 @@ int main(int argc, char *argv[])
     a.installTranslator(&trans);
     a.installTranslator(&qtTranslator);
 
+    init_log_file();
+//    if(is_running(QApplication::applicationDirPath() ,"RICOH Printer")){//QApplication::applicationName())){
     if(isRunning("/tmp/lock_Ricoh_Alto_VOP")){
+        _Q_LOG("");
+        _Q_LOG("another launcher is running");
+        _Q_LOG("");
         MainWindow::messagebox_exec(a.translate("MainWindow" ,"IDS_ANOTHER_LAUNCHER_RUNNING"));
         return 0;
     }
+    init_log();
 
     QFile file(":/styles/default.qss");
     if(file.open(QFile::ReadOnly)){

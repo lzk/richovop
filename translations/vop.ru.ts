@@ -25,8 +25,12 @@
     </message>
     <message>
         <location filename="../copiessettingkeyboard.ui" line="240"/>
+        <source>IDS_CP_Copies_coma</source>
+        <translation>Копии:</translation>
+    </message>
+    <message>
         <source>IDS_CP_Copies</source>
-        <translation>Копии</translation>
+        <translation type="obsolete">Копии</translation>
     </message>
 </context>
 <context>
@@ -50,37 +54,37 @@
 <context>
     <name>MainWidget</name>
     <message>
-        <location filename="../mainwidget.ui" line="113"/>
+        <location filename="../mainwidget.ui" line="118"/>
         <source>IDS_MW_Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="168"/>
-        <location filename="../mainwidget.cpp" line="133"/>
-        <location filename="../mainwidget.cpp" line="141"/>
+        <location filename="../mainwidget.ui" line="173"/>
+        <location filename="../mainwidget.cpp" line="134"/>
+        <location filename="../mainwidget.cpp" line="142"/>
         <source>IDS_Tab_Copy</source>
         <translation>Копия</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="173"/>
-        <location filename="../mainwidget.cpp" line="142"/>
-        <location filename="../mainwidget.cpp" line="157"/>
+        <location filename="../mainwidget.ui" line="178"/>
+        <location filename="../mainwidget.cpp" line="143"/>
+        <location filename="../mainwidget.cpp" line="158"/>
         <source>IDS_Tab_Setting</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="178"/>
-        <location filename="../mainwidget.cpp" line="162"/>
+        <location filename="../mainwidget.ui" line="183"/>
+        <location filename="../mainwidget.cpp" line="163"/>
         <source>IDS_Tab_About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="197"/>
+        <location filename="../mainwidget.cpp" line="195"/>
         <source>IDS_MSG_SetInfo</source>
         <translation>Задание информации о принтере.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="209"/>
+        <location filename="../mainwidget.cpp" line="207"/>
         <source>IDS_MSG_GetInfo</source>
         <translation>Получение информации о принтере.</translation>
     </message>
@@ -91,36 +95,36 @@
 Освободите место на диске и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="266"/>
-        <location filename="../mainwidget.cpp" line="276"/>
+        <location filename="../mainwidget.cpp" line="273"/>
+        <location filename="../mainwidget.cpp" line="283"/>
         <source>IDS_ERR_Communication</source>
         <translation>Ошибка связи с принтером.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="278"/>
-        <location filename="../mainwidget.cpp" line="286"/>
+        <location filename="../mainwidget.cpp" line="285"/>
+        <location filename="../mainwidget.cpp" line="293"/>
         <source>IDS_ERR_AcquireInformation</source>
         <translation>Не удалось получить информацию.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="295"/>
+        <location filename="../mainwidget.cpp" line="302"/>
         <source>IDS_MSG_WirelessDisabled</source>
         <translation>Беспроводное соединение отключено</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="301"/>
+        <location filename="../mainwidget.cpp" line="308"/>
         <source>IDS_ERR_Authentication</source>
         <translation>Ошибка аутентификации, введите пароль повторно.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="256"/>
-        <location filename="../mainwidget.cpp" line="305"/>
+        <location filename="../mainwidget.cpp" line="263"/>
+        <location filename="../mainwidget.cpp" line="312"/>
         <source>IDS_MSG_MachineBusy</source>
         <translation>Устройство занято, повторите попытку позднее.</translation>
     </message>
     <message>
-        <location filename="../mainwidget.h" line="71"/>
-        <location filename="../mainwidget.h" line="75"/>
+        <location filename="../mainwidget.h" line="72"/>
+        <location filename="../mainwidget.h" line="76"/>
         <source>RICOH Printer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -134,14 +138,9 @@
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="85"/>
+        <location filename="../main.cpp" line="60"/>
         <source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
-        <translation>Сейчас работает другая RICOH Pinter. Закройте её и снова запустите эту утилиту.</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.h" line="27"/>
-        <source>RICOH Printer</source>
-        <translation type="unfinished"></translation>
+        <translation>Сейчас работает другая RICOH Printer. Закройте её и снова запустите эту утилиту.</translation>
     </message>
 </context>
 <context>
@@ -152,9 +151,13 @@
         <translation>Клавиатура установки масштаба</translation>
     </message>
     <message>
-        <location filename="../scalingsettingkeyboard.ui" line="26"/>
         <source>IDS_CP_Scaling</source>
-        <translation>Масштаб</translation>
+        <translation type="obsolete">Масштаб</translation>
+    </message>
+    <message>
+        <location filename="../scalingsettingkeyboard.ui" line="26"/>
+        <source>IDS_CP_Scaling_coma</source>
+        <translation>Масштаб:</translation>
     </message>
     <message>
         <location filename="../scalingsettingkeyboard.ui" line="42"/>
@@ -332,7 +335,7 @@
     <message>
         <location filename="../tabcopy.ui" line="959"/>
         <source>IDS_CP_IDCardCopy</source>
-        <translation>Копир.
+        <translation>Копир. 
 удостовер.</translation>
     </message>
     <message>
@@ -346,12 +349,12 @@
         <translation>По умолчанию</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="404"/>
+        <location filename="../tabcopy.cpp" line="399"/>
         <source>IDS_MSG_TurnCardOver</source>
         <translation>Переверните удостоверение, чтобы скопировать обратную сторону</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="406"/>
+        <location filename="../tabcopy.cpp" line="401"/>
         <source>IDS_MSG_PlaceNextPage</source>
         <translation>Поместите следующую страницу</translation>
     </message>
@@ -573,22 +576,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tabsetting.cpp" line="409"/>
+        <location filename="../tabsetting.cpp" line="421"/>
         <source>IDS_MSG_Printering</source>
         <translation>Устройство печатает, попробуйте позднее...</translation>
     </message>
     <message>
-        <location filename="../tabsetting.cpp" line="413"/>
+        <location filename="../tabsetting.cpp" line="425"/>
         <source>IDS_MSG_MachineBusy</source>
         <translation>Устройство занято, повторите попытку позднее.</translation>
     </message>
     <message>
-        <location filename="../tabsetting.cpp" line="416"/>
+        <location filename="../tabsetting.cpp" line="428"/>
         <source>IDS_ERR_JAM</source>
         <translation>ЗАМЯТИЕ：откройте крышку и выньте бумагу</translation>
     </message>
     <message>
-        <location filename="../tabsetting.cpp" line="578"/>
+        <location filename="../tabsetting.cpp" line="591"/>
         <source>IDS_ST_PasswordsDifferent</source>
         <translation>Указанные пароли разные, повторите ввод.</translation>
     </message>
