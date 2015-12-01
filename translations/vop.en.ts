@@ -54,26 +54,26 @@
 <context>
     <name>MainWidget</name>
     <message>
-        <location filename="../mainwidget.ui" line="118"/>
+        <location filename="../mainwidget.ui" line="113"/>
         <source>IDS_MW_Refresh</source>
         <translation>Refresh</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="173"/>
+        <location filename="../mainwidget.ui" line="168"/>
         <location filename="../mainwidget.cpp" line="134"/>
         <location filename="../mainwidget.cpp" line="142"/>
         <source>IDS_Tab_Copy</source>
         <translation>Copy</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="178"/>
+        <location filename="../mainwidget.ui" line="173"/>
         <location filename="../mainwidget.cpp" line="143"/>
         <location filename="../mainwidget.cpp" line="158"/>
         <source>IDS_Tab_Setting</source>
         <translation>Setting</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="183"/>
+        <location filename="../mainwidget.ui" line="178"/>
         <location filename="../mainwidget.cpp" line="163"/>
         <source>IDS_Tab_About</source>
         <translation>About</translation>
@@ -133,7 +133,6 @@ Try again after freeing hard disk space.</translation>
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.ui" line="42"/>
-        <location filename="../mainwindow.cpp" line="54"/>
         <source>IDS_Menu_Exit</source>
         <translation>Exit</translation>
     </message>
@@ -141,6 +140,11 @@ Try again after freeing hard disk space.</translation>
         <location filename="../main.cpp" line="60"/>
         <source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
         <translation>Another RICOH Printer is currently running, please close it, then launch this tool again.</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="54"/>
+        <source>IDS_EXIT_CONFIRM</source>
+        <translation>Do you want to exit?</translation>
     </message>
 </context>
 <context>

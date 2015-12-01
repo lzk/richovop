@@ -90,7 +90,7 @@ private:
     void wifi_update(QString,QString,int);
     void result_wifi_getAplist();
     bool setting_confirmPasswd();
-    bool cmd_result_validate(int err);
+    bool cmd_status_validate(int err);
 };
 
 

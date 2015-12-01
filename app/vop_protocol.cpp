@@ -140,9 +140,42 @@ int VopProtocol::getStatusFromDeviceID(char* device_id)
     if(DecodeStatusFromDeviceID(device_id ,status))
         err = ERR_decode_status;
     else{
-        int _status = get_deviceStatus();
-        C_LOG("get_deviceStatus correct:%#.2x" ,_status);
-        switch(_status){
+        PRINTER_STATUS sts = get_status();
+        C_LOG("get_deviceStatus correct:%#.2x" ,sts.PrinterStatus);
+        if(sts.TonelStatusLevelK & 0x80){
+            _Q_LOG("Tonel not installed");
+        }else{
+            C_LOG("Tonel has been installed, status:%d" ,sts.TonelStatusLevelK);
+        }
+        switch(sts.PaperTrayStatus){
+        case 0:            _Q_LOG("paper tray status: ready");            break;
+        case 0xff:
+            _Q_LOG("paper tray status: tray no installed");            break;
+        case 0xfe:
+            _Q_LOG("paper tray status: out of page");            break;
+        default:            break;
+        }
+        switch(sts.job){
+        case 0:            _Q_LOG("executing job: unknow job");            break;
+        case 1:            _Q_LOG("executing job: print job");            break;
+        case 2:            _Q_LOG("executing job: normal copy job");            break;
+        case 3:            _Q_LOG("executing job: scan job");            break;
+        case 4:            _Q_LOG("executing job: fax job");            break;
+        case 5:            _Q_LOG("executing job: ifax job");            break;
+        case 6:            _Q_LOG("executing job: report job");            break;
+        case 7:            _Q_LOG("executing job: n in 1 copy job");            break;
+        case 8:            _Q_LOG("executing job: id card copy job");            break;
+        case 9:            _Q_LOG("executing job: id card copy mode");            break;
+        default:            _Q_LOG("executing job: print job");            break;
+        }
+
+//        QString owner_name;
+//        owner_name.setRawData((const QChar*)sts.OwnerName ,16);
+//        _Q_LOG("owner name:" + owner_name);
+//        QString docu_name;
+//        docu_name.setRawData((const QChar*)sts.DocuName ,16);
+//        _Q_LOG("docu name:" + docu_name);
+        switch(sts.PrinterStatus){
         case PSTATUS_Ready:
             err = STATUS_ready;
             break;
@@ -150,7 +183,10 @@ int VopProtocol::getStatusFromDeviceID(char* device_id)
             err = STATUS_sleep;
             break;
         case PSTATUS_CopyScanNextPage:
-            err = STATUS_CopyScanNextPage;
+            if(sts.job == 8)
+                err = STATUS_IDCardCopyTurnCardOver;
+            else
+                err = STATUS_CopyScanNextPage;
             break;
 
         case PSTATUS_Printing:

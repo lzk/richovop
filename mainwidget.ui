@@ -22,11 +22,11 @@ max-height:50;
 min-width:100;
 max-width:100;
 }
-QComboBox
+/*QComboBox
 {
 min-width:240px;
 max-width:240px;
-}
+}*/
 
 #tab_3
 ,#tab_4
@@ -99,6 +99,18 @@ border: 1px solid darkgray;
             </property>
             <item>
              <widget class="QComboBox" name="comboBox_deviceList">
+              <property name="minimumSize">
+               <size>
+                <width>240</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>240</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="focusPolicy">
                <enum>Qt::NoFocus</enum>
               </property>

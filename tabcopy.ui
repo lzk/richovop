@@ -93,12 +93,12 @@ min-height:50;
 max-height:50;
 background-color:white;
 }
-
+/*
 #TabCopy QComboBox
 {
 min-width:180px;
 max-width:180px;
-}
+}*/
 
 #TabCopy QToolButton
 {
@@ -147,11 +147,24 @@ border:none;
 
 #TabCopy QPushButton
 {
-	min-width:80;
-	max-width:80;
+	min-width:70;
+	max-width:70;
 	min-height:25;
 	max-height:25;
 }
+#scaling_plus,
+#copies_plus,
+#density_plus
+{
+font:20px;
+}
+#scaling_minus,
+#copies_minus,
+#density_minus
+{
+font:25px;
+}
+
 
 #TabCopy #btn_default
 {
@@ -236,6 +249,9 @@ border:none;
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <property name="spacing">
+               <number>20</number>
+              </property>
               <item>
                <spacer name="horizontalSpacer_11">
                 <property name="orientation">
@@ -339,6 +355,9 @@ border:none;
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <property name="spacing">
+               <number>20</number>
+              </property>
               <item>
                <spacer name="horizontalSpacer_9">
                 <property name="orientation">
@@ -592,6 +611,9 @@ border:none;
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <property name="spacing">
+               <number>20</number>
+              </property>
               <item>
                <spacer name="horizontalSpacer_7">
                 <property name="orientation">
@@ -734,6 +756,18 @@ border:none;
           </item>
           <item>
            <widget class="QComboBox" name="combo_documentType">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
             </property>
@@ -773,6 +807,18 @@ border:none;
           </item>
           <item>
            <widget class="QComboBox" name="combo_documentSize">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
             </property>
@@ -812,6 +858,18 @@ border:none;
           </item>
           <item>
            <widget class="QComboBox" name="combo_outputSize">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
             </property>
@@ -866,6 +924,18 @@ border:none;
           </item>
           <item>
            <widget class="QComboBox" name="combo_nIn1Copy">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
             </property>
@@ -900,6 +970,18 @@ border:none;
           </item>
           <item>
            <widget class="QComboBox" name="combo_dpi">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
             </property>

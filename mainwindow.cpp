@@ -51,7 +51,7 @@ void MainWindow::slots_exit()
 #include <QCloseEvent>
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    int ret = messagebox_exec(tr("IDS_Menu_Exit")+"?                                    ",QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
+    int ret = messagebox_exec(tr("IDS_EXIT_CONFIRM")+"                                    ",QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
 //    int ret = mainWidget->messagebox_exec(tr("IDS_Menu_Exit")+"?" ,QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
     switch (ret) {
     case QMessageBox::Ok:

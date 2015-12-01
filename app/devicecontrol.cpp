@@ -167,6 +167,7 @@ bool DeviceContrl::cmd_status_validate(int& err)
     case STATUS_busy_scanningOrCoping:
     case STATUS_jam:
     case STATUS_CopyScanNextPage:
+    case STATUS_IDCardCopyTurnCardOver:
 
     case ERR_communication:
     case ERR_library:
@@ -226,7 +227,7 @@ void DeviceContrl::slots_cmd_plus(int cmd)
     _Q_LOG("");
     _Q_LOG("");
     if(isUsbDevice() && scanner_locked()){
-        err = STATUS_busy_scanningOrCoping;
+        err = ERR_sane_scanning;
         _Q_LOG("err: usb device scanner locked");
     }
 

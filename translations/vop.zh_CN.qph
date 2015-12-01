@@ -471,7 +471,7 @@
 
 	<phrase>
 		<source>IDS_EXIT_CONFIRM</source>
-		<target></target>
+		<target>您想要退出吗？</target>
 	</phrase>
 
 	<phrase>

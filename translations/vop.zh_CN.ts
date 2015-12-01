@@ -54,26 +54,26 @@
 <context>
     <name>MainWidget</name>
     <message>
-        <location filename="../mainwidget.ui" line="118"/>
+        <location filename="../mainwidget.ui" line="113"/>
         <source>IDS_MW_Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="173"/>
+        <location filename="../mainwidget.ui" line="168"/>
         <location filename="../mainwidget.cpp" line="134"/>
         <location filename="../mainwidget.cpp" line="142"/>
         <source>IDS_Tab_Copy</source>
         <translation>复印</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="178"/>
+        <location filename="../mainwidget.ui" line="173"/>
         <location filename="../mainwidget.cpp" line="143"/>
         <location filename="../mainwidget.cpp" line="158"/>
         <source>IDS_Tab_Setting</source>
         <translation>设定</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="183"/>
+        <location filename="../mainwidget.ui" line="178"/>
         <location filename="../mainwidget.cpp" line="163"/>
         <source>IDS_Tab_About</source>
         <translation>关于</translation>
@@ -133,7 +133,6 @@
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.ui" line="42"/>
-        <location filename="../mainwindow.cpp" line="54"/>
         <source>IDS_Menu_Exit</source>
         <translation>退出</translation>
     </message>
@@ -141,6 +140,11 @@
         <location filename="../main.cpp" line="60"/>
         <source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
         <translation>正在执行另一个RICOH Printer，请将其关闭后，重新启动本工具。</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="54"/>
+        <source>IDS_EXIT_CONFIRM</source>
+        <translation>您想要退出吗？</translation>
     </message>
 </context>
 <context>

@@ -366,8 +366,8 @@ void TabCopy::slots_cmd_result(int cmd ,int err)
     case DeviceContrl::CMD_COPY:
         if(!err){
             copy_data->this_copy = true;
-            if(IsIDCardCopyMode(pCopyPara))
-                copy_data->idCard_mode = true;
+//            if(IsIDCardCopyMode(pCopyPara))
+//                copy_data->idCard_mode = true;
         }
         break;
     default:
@@ -382,26 +382,27 @@ void TabCopy::cmdResult_getDeviceStatus(int err)
         case STATUS_ready:
         case STATUS_sleep:
         case STATUS_TonerEnd:
-            copy_data->status = true;
             copy_data->this_copy = false;
-            if(copy_data->idCard_mode){
-                copy_data->idCard_mode = false;
+//            if(copy_data->idCard_mode){
+//                copy_data->idCard_mode = false;
                 if(IsIDCardCopyMode(pCopyPara))
                     on_IDCardCopy_clicked();
-            }
+//            }
+            copy_data->status = true;
+            main_widget->messagebox_hide();
+            break;
+        case STATUS_CopyScanNextPage:
+            copy_data->status = false;
+            main_widget->messagebox_show(tr("IDS_MSG_PlaceNextPage"));
+            break;
+        case STATUS_IDCardCopyTurnCardOver:
+            copy_data->status = false;
+            main_widget->messagebox_show(tr("IDS_MSG_TurnCardOver"));
             break;
         default:
             copy_data->status = false;
-            break;
-        }
-        if(STATUS_CopyScanNextPage == err){
-            if(copy_data->idCard_mode){
-                main_widget->messagebox_show(tr("IDS_MSG_TurnCardOver"));
-            }else{
-                main_widget->messagebox_show(tr("IDS_MSG_PlaceNextPage"));
-            }
-        }else{
             main_widget->messagebox_hide();
+            break;
         }
     }else{
         switch(err){
@@ -409,8 +410,10 @@ void TabCopy::cmdResult_getDeviceStatus(int err)
         case STATUS_sleep:
         case STATUS_busy_printing:
         case STATUS_busy_scanningOrCoping:
+        case ERR_sane_scanning:
         case STATUS_jam:
         case STATUS_CopyScanNextPage:
+        case STATUS_IDCardCopyTurnCardOver:
         case STATUS_TonerEnd:
         case STATUS_other:
             copy_data->status = true;
@@ -419,7 +422,7 @@ void TabCopy::cmdResult_getDeviceStatus(int err)
             copy_data->status = false;
             break;
         }
-        copy_data->idCard_mode = false;
+//        copy_data->idCard_mode = false;
         main_widget->messagebox_hide();
     }
 

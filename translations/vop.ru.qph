@@ -69,7 +69,7 @@
 
 	<phrase>
 		<source>IDS_CP_IDCardCopy</source>
-		<target>Копир. 
+		<target>Копир.
 удостовер.</target>
 	</phrase>
 
@@ -471,7 +471,7 @@
 
 	<phrase>
 		<source>IDS_EXIT_CONFIRM</source>
-		<target></target>
+		<target>Выйти?</target>
 	</phrase>
 
 	<phrase>

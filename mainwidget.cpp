@@ -62,8 +62,8 @@ void MainWidget::createActions()
 
 void MainWidget::initializeUi()
 {
-    ui->comboBox_deviceList->setView(new QListView);
-    ui->comboBox_deviceList->view()->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+//    ui->comboBox_deviceList->setView(new QListView);
+//    ui->comboBox_deviceList->view()->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     tab_copy = new TabCopy(this ,device_manager);
     tab_setting = new TabSetting(this ,device_manager);
@@ -259,6 +259,7 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     //handle err message box
     switch(err){
     case ERR_printer_have_jobs:
+    case ERR_sane_scanning:
         if(DeviceContrl::CMD_DEVICE_status != cmd){
             messagebox_exec(tr("IDS_MSG_MachineBusy"));
         }
@@ -327,7 +328,8 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     switch(cmd)
     {
     case DeviceContrl::CMD_COPY:
-        donot_cmd_times = 2;
+//        if(!err)
+            donot_cmd_times = 2;
         break;
     default:
         break;

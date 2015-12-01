@@ -67,8 +67,8 @@ void TabSetting::init_wifi()
 
     ui->btn_apply_mp->setEnabled(false);
     ui->spinBox_PSaveTime->setValue(1);
-    ui->cb_ssid->setView(new QListView);
-    ui->cb_ssid->view()->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+//    ui->cb_ssid->setView(new QListView);
+//    ui->cb_ssid->view()->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     connect(ui->radioButton_searchWifi ,SIGNAL(toggled(bool)) ,this ,SLOT(slots_wifi_radiobutton(bool)));
     connect(ui->le_ssid,SIGNAL(textChanged(QString)) ,this ,SLOT(slots_wifi_textChanged(QString)));
@@ -414,7 +414,7 @@ void TabSetting::on_checkBox_tonerEnd_toggled(bool checked)
     }
 }
 
-bool TabSetting::cmd_result_validate(int err)
+bool TabSetting::cmd_status_validate(int err)
 {
     switch(err){
     case STATUS_busy_printing:
@@ -422,6 +422,7 @@ bool TabSetting::cmd_result_validate(int err)
         break;
     case STATUS_busy_scanningOrCoping:
     case STATUS_CopyScanNextPage:
+    case STATUS_IDCardCopyTurnCardOver:
         main_widget->messagebox_exec(tr("IDS_MSG_MachineBusy"));
         break;
     case STATUS_jam:
@@ -439,7 +440,7 @@ void TabSetting::slots_cmd_result(int cmd ,int err)
     switch(cmd)
     {
     case DeviceContrl::CMD_PRN_TonerEnd_Get:
-        if(cmd_result_validate(err)){
+        if(cmd_status_validate(err)){
         cmdst_tonerEnd para = device_manager->printer_getTonerEnd();
         disable_emit = true;
         if(para)
@@ -451,7 +452,7 @@ void TabSetting::slots_cmd_result(int cmd ,int err)
         break;
 
     case DeviceContrl::CMD_WIFI_apply_plus:
-        if(cmd_result_validate(err)){
+        if(cmd_status_validate(err)){
             //clear passwd
             wifi_ms_password.clear();
             wifi_sw_password.clear();
@@ -463,7 +464,7 @@ void TabSetting::slots_cmd_result(int cmd ,int err)
         }
         break;
     case DeviceContrl::CMD_PASSWD_set_plus:
-        if(cmd_result_validate(err)){
+        if(cmd_status_validate(err)){
 //            ui->le_confirmPassword->clear();
 //            ui->le_newPassword->clear();
         }else if(ERR_Password_incorrect == err){//password incorrect
@@ -471,11 +472,11 @@ void TabSetting::slots_cmd_result(int cmd ,int err)
         }
         break;
     case DeviceContrl::CMD_WIFI_refresh_plus:
-        if(cmd_result_validate(err))
+        if(cmd_status_validate(err))
             result_wifi_getAplist();
         break;
     case DeviceContrl::CMD_PRN_PowerSave_Get:
-        if(cmd_result_validate(err)){
+        if(cmd_status_validate(err)){
             cmdst_PSave_time para = device_manager->printer_getPSaveTime();
             disable_emit = true;
             ui->spinBox_PSaveTime->setValue(para);
@@ -489,7 +490,7 @@ void TabSetting::slots_cmd_result(int cmd ,int err)
         }
         break;
     case DeviceContrl::CMD_IPv4_Get:
-        if(cmd_result_validate(err)){
+        if(cmd_status_validate(err)){
             net_info_st info = device_manager->net_getIpv4info();
             if(4 == info.IPAddressMode)
                 ui->ipa_rb_stable->setChecked(true);
@@ -510,7 +511,7 @@ void TabSetting::slots_cmd_result(int cmd ,int err)
         }
         break;
     case DeviceContrl::CMD_IPv6_Get:
-        if(cmd_result_validate(err)){
+        if(cmd_status_validate(err)){
             net_ipv6_st info = device_manager->net_getIpv6info();
             ui->ipv6_cb_dhcp->setChecked(!!info.DHCPv6);
             ui->ipv6_cb_UMA->setChecked(!!info.UseManualAddress);

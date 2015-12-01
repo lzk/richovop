@@ -86,6 +86,7 @@ enum{
     ERR_decode_device = -5,
     ERR_printer_have_jobs = -6,
     ERR_WIFI_SET_SSID = -7,
+    ERR_sane_scanning = -8,
     ERR_vop_cannot_support = -10,
 
     //status self defined
@@ -95,6 +96,7 @@ enum{
     STATUS_busy_scanningOrCoping,
     STATUS_jam,
     STATUS_CopyScanNextPage,
+    STATUS_IDCardCopyTurnCardOver,
     STATUS_TonerEnd,
     STATUS_other,
 };

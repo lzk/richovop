@@ -37,10 +37,11 @@ max-height:600;
 min-width:150;
 max-width:150;
 }
+/*
 #pageWidget QComboBox{
 min-width:200;
 max-width:200;
-}
+}*/
 #pageWidget QLineEdit{
 min-width:200;
 max-width:200;
@@ -49,11 +50,12 @@ max-width:200;
 min-width:100;
 max-width:100;
 }
+/*
 #pageWidget #cb_keyIndex{
 min-width:100;
 max-width:100;
 }
-/*#pageWidget #cb_ssid{
+#pageWidget #cb_ssid{
 min-width:250;
 max-width:250;
 }*/
@@ -291,6 +293,18 @@ max-width:40;
                 </item>
                 <item row="1" column="1">
                  <widget class="QComboBox" name="cb_encryptionType">
+                  <property name="minimumSize">
+                   <size>
+                    <width>204</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>204</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
                   <property name="focusPolicy">
                    <enum>Qt::NoFocus</enum>
                   </property>
@@ -360,6 +374,18 @@ max-width:40;
                   </property>
                   <item>
                    <widget class="QComboBox" name="cb_ssid">
+                    <property name="minimumSize">
+                     <size>
+                      <width>204</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>204</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
                     <property name="focusPolicy">
                      <enum>Qt::NoFocus</enum>
                     </property>
@@ -427,6 +453,18 @@ max-width:40;
                 </item>
                 <item row="2" column="1">
                  <widget class="QComboBox" name="cb_keyIndex">
+                  <property name="minimumSize">
+                   <size>
+                    <width>100</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>100</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
                   <property name="focusPolicy">
                    <enum>Qt::NoFocus</enum>
                   </property>

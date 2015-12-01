@@ -54,26 +54,26 @@
 <context>
     <name>MainWidget</name>
     <message>
-        <location filename="../mainwidget.ui" line="118"/>
+        <location filename="../mainwidget.ui" line="113"/>
         <source>IDS_MW_Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="173"/>
+        <location filename="../mainwidget.ui" line="168"/>
         <location filename="../mainwidget.cpp" line="134"/>
         <location filename="../mainwidget.cpp" line="142"/>
         <source>IDS_Tab_Copy</source>
         <translation>Копия</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="178"/>
+        <location filename="../mainwidget.ui" line="173"/>
         <location filename="../mainwidget.cpp" line="143"/>
         <location filename="../mainwidget.cpp" line="158"/>
         <source>IDS_Tab_Setting</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="183"/>
+        <location filename="../mainwidget.ui" line="178"/>
         <location filename="../mainwidget.cpp" line="163"/>
         <source>IDS_Tab_About</source>
         <translation>О программе</translation>
@@ -133,7 +133,6 @@
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.ui" line="42"/>
-        <location filename="../mainwindow.cpp" line="54"/>
         <source>IDS_Menu_Exit</source>
         <translation>Выход</translation>
     </message>
@@ -141,6 +140,11 @@
         <location filename="../main.cpp" line="60"/>
         <source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
         <translation>Сейчас работает другая RICOH Printer. Закройте её и снова запустите эту утилиту.</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="54"/>
+        <source>IDS_EXIT_CONFIRM</source>
+        <translation>Выйти?</translation>
     </message>
 </context>
 <context>
@@ -335,7 +339,7 @@
     <message>
         <location filename="../tabcopy.ui" line="959"/>
         <source>IDS_CP_IDCardCopy</source>
-        <translation>Копир. 
+        <translation>Копир.
 удостовер.</translation>
     </message>
     <message>
