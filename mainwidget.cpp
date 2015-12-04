@@ -328,7 +328,7 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     switch(cmd)
     {
     case DeviceContrl::CMD_COPY:
-//        if(!err)
+        if(!err)
             donot_cmd_times = 2;
         break;
     default:
@@ -379,7 +379,7 @@ QMessageBox::StandardButton MainWidget::messagebox_exec(const QString &text,
         mb->hide();
     }
     mb->setText(title);
-    mb->setIconPixmap(QPixmap(":/images/printer.ico"));
+    mb->setIconPixmap(QPixmap(":/images/printer4848.png"));
     mb->setInformativeText(text);
     mb->setStandardButtons(buttons);
     mb->setDefaultButton(defaultButton);
@@ -408,7 +408,7 @@ void MainWidget::messagebox_show(const QString &text,
     }
 //    if(!mb->isVisible()){
         mb->setText(title);
-        mb->setIconPixmap(QPixmap(":/images/printer.ico"));
+        mb->setIconPixmap(QPixmap(":/images/printer4848.png"));
         mb->setInformativeText(text);
         mb->setStandardButtons(buttons);
         mb->setDefaultButton(defaultButton);

@@ -8,6 +8,7 @@
 #include <QWidget>
 #include <QTimer>
 #include <QMessageBox>
+#include "version.h"
 
 class QProgressDialog;
 class DeviceManager;
@@ -69,11 +70,11 @@ public:
     QMessageBox::StandardButton messagebox_exec(const QString &text,
                                                 QMessageBox::StandardButtons buttons = QMessageBox::Ok,
                                                QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
-                                                QString title = "<h3>" + tr("RICOH Printer") + "</h3>");
+                                                QString title = "<h3>" + QString(vop_name) + "</h3>");
     void messagebox_show(const QString &text,
                          QMessageBox::StandardButtons buttons = QMessageBox::NoButton,
                         QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
-                         QString title = "<h3>" + tr("RICOH Printer") + "</h3>");
+                         QString title = "<h3>" + QString(vop_name) + "</h3>");
     void messagebox_hide(){if(msgBox_info.isVisible())msgBox_info.hide();}
 
 signals:

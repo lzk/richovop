@@ -8,5 +8,7 @@
         <file>translations/qt_ru.qm</file>
         <file>translations/qt_zh_CN.qm</file>
         <file>images/printer.ico</file>
+        <file>images/printer4848.png</file>
+        <file>images/RICOH_logo_171x055_A.GIF</file>
     </qresource>
 </RCC>

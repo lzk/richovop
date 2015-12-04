@@ -368,6 +368,8 @@ void TabCopy::slots_cmd_result(int cmd ,int err)
             copy_data->this_copy = true;
 //            if(IsIDCardCopyMode(pCopyPara))
 //                copy_data->idCard_mode = true;
+        }else if(err == STATUS_TonerEnd){
+            main_widget->messagebox_exec(tr("ResStr_Toner_End") + "\n" + tr("ResStr_Please_Replace_Toner"));
         }
         break;
     default:

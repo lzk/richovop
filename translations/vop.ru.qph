@@ -489,5 +489,15 @@
 		<target>Сейчас работает другая RICOH Printer. Закройте её и снова запустите эту утилиту.</target>
 	</phrase>
 
+	<phrase>
+		<source>ResStr_Toner_End</source>
+		<target>Нет тонера</target>
+	</phrase>
+
+	<phrase>
+		<source>ResStr_Please_Replace_Toner</source>
+		<target>Замените тонер</target>
+	</phrase>
+
 </QPH>
 

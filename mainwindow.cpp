@@ -8,6 +8,7 @@
 #include <QDesktopWidget>
 #include <QScrollArea>
 #include <QMdiArea>
+#include "version.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -91,10 +92,10 @@ QMessageBox::StandardButton MainWindow::messagebox_exec(const QString &text,
 {
     QMessageBox msgbox;
     QMessageBox* mb = & msgbox;
-    mb->setWindowIcon(QIcon(":/images/printer.ico"));
-    mb->setWindowTitle("RICOH Printer");
+    mb->setWindowIcon(QIcon(":/images/printer4848.png"));
+    mb->setWindowTitle(vop_name);
     mb->setText(text);
-    mb->setIconPixmap(QPixmap(":/images/printer.ico"));
+    mb->setIconPixmap(QPixmap(":/images/printer4848.png"));
 
 //    mb->setText(title);
 //    mb->setInformativeText(text);

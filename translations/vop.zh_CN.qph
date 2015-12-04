@@ -489,5 +489,15 @@
 		<target>正在执行另一个RICOH Printer，请将其关闭后，重新启动本工具。</target>
 	</phrase>
 
+	<phrase>
+		<source>ResStr_Toner_End</source>
+		<target>墨粉空</target>
+	</phrase>
+
+	<phrase>
+		<source>ResStr_Please_Replace_Toner</source>
+		<target>请更换鼓粉盒</target>
+	</phrase>
+
 </QPH>
 

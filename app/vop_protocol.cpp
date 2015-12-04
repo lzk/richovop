@@ -211,7 +211,7 @@ int VopProtocol::getStatusFromDeviceID(char* device_id)
             break;
         case PSTATUS_TonerEnd1:
         case PSTATUS_TonerEnd2:
-        case PSTATUS_TonerNearEnd:
+        case PSTATUS_WasteTonerFull:
             err = STATUS_TonerEnd;
             break;
         default:

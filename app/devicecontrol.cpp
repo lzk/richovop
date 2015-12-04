@@ -184,6 +184,30 @@ bool DeviceContrl::cmd_status_validate(int& err)
     return valid;
 }
 
+bool DeviceContrl::cmd_status_validate_copy(int& err)
+{
+    bool valid = true;
+    err = protocol->cmd(VopProtocol::CMD_GetStatus);
+    if(err > 0){
+        valid = false;
+    }
+    switch(err){
+    case STATUS_TonerEnd:
+
+    case ERR_communication:
+    case ERR_library:
+    case ERR_decode_status:
+    case ERR_wifi_have_not_been_inited:
+    case  ERR_decode_device:
+    case  ERR_vop_cannot_support:
+        valid = false;
+        _Q_LOG("err: status is invalid");
+        break;
+    default:
+        break;
+    }
+    return valid;
+}
 int DeviceContrl::cmd_setting_confirm()
 {
     int err = 0;
@@ -257,9 +281,9 @@ void DeviceContrl::slots_cmd_plus(int cmd)
 
         case CMD_COPY:
             _Q_LOG("exec control cmd: copy");
-//            if(!cmd_status_validate(err)){
-//                break;
-//            }
+            if(!cmd_status_validate_copy(err)){
+                break;
+            }
             err = protocol->cmd(VopProtocol::CMD_COPY);
             break;
 

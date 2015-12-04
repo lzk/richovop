@@ -37,9 +37,9 @@ int main(int argc, char *argv[])
 //    qputenv("LANG" ,QLocale::system().uiLanguages().first().toLatin1());
 //    qputenv("LANGUAGE" ,QLocale::system().name().toLatin1());
     QApplication a(argc, argv);
-    a.setWindowIcon(QIcon(":/images/printer.ico"));
-//    a.setApplicationName("RICOH Printer");
-//    a.setOrganizationName("RICOH Printer");
+    a.setWindowIcon(QIcon(":/images/printer4848.png"));
+//    a.setApplicationName(vop_name);
+//    a.setOrganizationName(vop_name);
 
     QTranslator trans;
 //    if(!trans.load(QLocale(QLocale::system().uiLanguages().first()), "vop", ".", ":/translations"))
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     a.installTranslator(&qtTranslator);
 
     init_log_file();
-//    if(is_running(QApplication::applicationDirPath() ,"RICOH Printer")){//QApplication::applicationName())){
+//    if(is_running(QApplication::applicationDirPath() ,vop_name)){//QApplication::applicationName())){
     if(isRunning("/tmp/lock_Ricoh_Alto_VOP")){
         _Q_LOG("");
         _Q_LOG("another launcher is running");

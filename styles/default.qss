@@ -14,3 +14,17 @@ QDialog  {    border:1px solid gray;}
 /*QAbstractItemView{
     show-decoration-selected: 0;
 }*/
+/*
+QPushButton
+{
+    min-width:50px;
+    min-height:27px;
+}
+QPushButton:!enabled
+{
+        margin:2px;
+        border-radius: 3px;
+        border: none;
+        background-color: gray;
+}
+*/
