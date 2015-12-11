@@ -9,6 +9,7 @@
 #include <QFile>
 #include "app/log.h"
 #include "app/linux_api.h"
+//#include "version.h"
 
 #ifdef STATIC_BUILD
 #include <QtPlugin>
@@ -26,6 +27,14 @@ void quit(int)
     if(qApp)
         qApp->quit();
 }
+
+static bool g_region_paper_is_A4;
+bool paper_is_A4()
+{
+    return g_region_paper_is_A4;
+}
+
+
 
 #include <sys/wait.h>
 int main(int argc, char *argv[])
@@ -62,6 +71,8 @@ int main(int argc, char *argv[])
     }
     init_log();
 
+    g_region_paper_is_A4 = region_paper_is_A4();
+    C_LOG("is A4:%d" ,g_region_paper_is_A4);
     QFile file(":/styles/default.qss");
     if(file.open(QFile::ReadOnly)){
         QString stylesheet = file.readAll();

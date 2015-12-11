@@ -46,6 +46,8 @@ MainWidget::MainWidget(QWidget *parent) :
             widget->setFocusPolicy(Qt::NoFocus);
         }
     }
+
+    updateUi();
 }
 
 MainWidget::~MainWidget()

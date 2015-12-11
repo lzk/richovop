@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="zh_CN">
+<TS version="2.1" language="zh_CN">
 <context>
     <name>CopiesSettingKeyboard</name>
     <message>
@@ -59,66 +59,66 @@
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="180"/>
-        <location filename="../mainwidget.cpp" line="134"/>
-        <location filename="../mainwidget.cpp" line="142"/>
+        <location filename="../mainwidget.ui" line="156"/>
+        <location filename="../mainwidget.cpp" line="136"/>
+        <location filename="../mainwidget.cpp" line="144"/>
         <source>IDS_Tab_Copy</source>
         <translation>复印</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="185"/>
-        <location filename="../mainwidget.cpp" line="143"/>
-        <location filename="../mainwidget.cpp" line="158"/>
+        <location filename="../mainwidget.ui" line="161"/>
+        <location filename="../mainwidget.cpp" line="145"/>
+        <location filename="../mainwidget.cpp" line="160"/>
         <source>IDS_Tab_Setting</source>
         <translation>设定</translation>
     </message>
     <message>
-        <location filename="../mainwidget.ui" line="190"/>
-        <location filename="../mainwidget.cpp" line="163"/>
+        <location filename="../mainwidget.ui" line="166"/>
+        <location filename="../mainwidget.cpp" line="165"/>
         <source>IDS_Tab_About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="195"/>
+        <location filename="../mainwidget.cpp" line="197"/>
         <source>IDS_MSG_SetInfo</source>
         <translation>设定打印机信息。</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="207"/>
+        <location filename="../mainwidget.cpp" line="209"/>
         <source>IDS_MSG_GetInfo</source>
         <translation>获得打印机信息。</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="234"/>
+        <location filename="../mainwidget.cpp" line="236"/>
         <source>IDS_NOT_ENOUGH_SPACE</source>
         <translation>硬盘空间不足，操作无法进行。
 请释放硬盘空间后再试。</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="274"/>
-        <location filename="../mainwidget.cpp" line="284"/>
+        <location filename="../mainwidget.cpp" line="276"/>
+        <location filename="../mainwidget.cpp" line="286"/>
         <source>IDS_ERR_Communication</source>
         <translation>打印机通信失败</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="286"/>
-        <location filename="../mainwidget.cpp" line="294"/>
+        <location filename="../mainwidget.cpp" line="288"/>
+        <location filename="../mainwidget.cpp" line="296"/>
         <source>IDS_ERR_AcquireInformation</source>
         <translation>获取信息失败</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="303"/>
+        <location filename="../mainwidget.cpp" line="305"/>
         <source>IDS_MSG_WirelessDisabled</source>
         <translation>无线单元禁用</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="309"/>
+        <location filename="../mainwidget.cpp" line="311"/>
         <source>IDS_ERR_Authentication</source>
         <translation>认证错误，请重新输入密码。</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="264"/>
-        <location filename="../mainwidget.cpp" line="313"/>
+        <location filename="../mainwidget.cpp" line="266"/>
+        <location filename="../mainwidget.cpp" line="315"/>
         <source>IDS_MSG_MachineBusy</source>
         <translation>机器正在工作中，请稍后再试。</translation>
     </message>
@@ -131,7 +131,7 @@
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="60"/>
+        <location filename="../main.cpp" line="69"/>
         <source>IDS_ANOTHER_LAUNCHER_RUNNING</source>
         <translation>正在执行另一个RICOH Printer，请将其关闭后，重新启动本工具。</translation>
     </message>
@@ -176,193 +176,208 @@
 <context>
     <name>TabCopy</name>
     <message>
-        <location filename="../tabcopy.ui" line="251"/>
+        <location filename="../tabcopy.ui" line="249"/>
         <source>IDS_CP_Copies</source>
         <translation>份数</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="357"/>
+        <location filename="../tabcopy.ui" line="355"/>
         <source>IDS_CP_Scaling</source>
         <translation>缩放</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="463"/>
+        <location filename="../tabcopy.ui" line="461"/>
         <source>IDS_CP_Density</source>
         <translation>浓度</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="707"/>
+        <location filename="../tabcopy.ui" line="705"/>
         <source>IDS_CP_ScanningMode</source>
         <translation>扫描模式</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="732"/>
+        <location filename="../tabcopy.ui" line="730"/>
         <source>IDS_SM_Photo</source>
         <translation>照片</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="745"/>
+        <location filename="../tabcopy.ui" line="743"/>
         <source>IDS_SM_Text</source>
         <translation>文本</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="765"/>
+        <location filename="../tabcopy.ui" line="763"/>
         <source>IDS_CP_MediaType</source>
         <translation>介质类型</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="788"/>
+        <location filename="../tabcopy.ui" line="786"/>
         <source>IDS_MT_Plain</source>
         <translation>普通纸</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="793"/>
+        <location filename="../tabcopy.ui" line="791"/>
         <source>IDS_MT_Recycled</source>
         <translation>再生纸</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="798"/>
+        <location filename="../tabcopy.ui" line="796"/>
         <source>IDS_MT_Thick</source>
         <translation>普通厚纸</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="803"/>
+        <location filename="../tabcopy.ui" line="801"/>
         <source>IDS_MT_Thin</source>
         <translation>普通薄纸</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="808"/>
+        <location filename="../tabcopy.ui" line="806"/>
         <source>IDS_MT_Label</source>
         <translation>标签</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="816"/>
+        <location filename="../tabcopy.ui" line="814"/>
         <source>IDS_CP_DocumentSize</source>
         <translation>原稿大小</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="839"/>
-        <location filename="../tabcopy.ui" line="890"/>
+        <location filename="../tabcopy.ui" line="837"/>
+        <location filename="../tabcopy.ui" line="888"/>
         <source>IDS_SIZE_Letter</source>
         <translation>Letter (8.5 x 11&quot;)</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="844"/>
-        <location filename="../tabcopy.ui" line="895"/>
+        <location filename="../tabcopy.ui" line="842"/>
+        <location filename="../tabcopy.ui" line="893"/>
         <source>IDS_SIZE_A4</source>
         <translation>A4 (210 x 297mm)</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="849"/>
-        <location filename="../tabcopy.ui" line="900"/>
+        <location filename="../tabcopy.ui" line="847"/>
+        <location filename="../tabcopy.ui" line="898"/>
         <source>IDS_SIZE_A5</source>
         <translation>A5 (148 x 210mm)</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="854"/>
-        <location filename="../tabcopy.ui" line="910"/>
+        <location filename="../tabcopy.ui" line="852"/>
+        <location filename="../tabcopy.ui" line="908"/>
         <source>IDS_SIZE_B5</source>
         <translation>B5 (182 x 257mm)</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="859"/>
-        <location filename="../tabcopy.ui" line="920"/>
+        <location filename="../tabcopy.ui" line="857"/>
+        <location filename="../tabcopy.ui" line="918"/>
         <source>IDS_SIZE_Executive</source>
         <translation>Executive (7.25 x 10.5&quot;)</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="867"/>
+        <location filename="../tabcopy.ui" line="865"/>
         <source>IDS_CP_OutputSize</source>
         <translation>输出纸张大小</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="905"/>
+        <location filename="../tabcopy.ui" line="903"/>
         <source>IDS_SIZE_A6</source>
         <translation>A6 (105 x 148mm)</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="915"/>
+        <location filename="../tabcopy.ui" line="913"/>
         <source>IDS_SIZE_B6</source>
         <translation>B6 (128 x 182mm)</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="925"/>
+        <location filename="../tabcopy.ui" line="923"/>
         <source>IDS_SIZE_16K</source>
         <translation>16K</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="933"/>
+        <location filename="../tabcopy.ui" line="931"/>
         <source>IDS_CP_Nin1Copy</source>
         <translation>N合1复印</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="956"/>
+        <location filename="../tabcopy.ui" line="954"/>
         <source>IDS_Nin1_1</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="961"/>
+        <location filename="../tabcopy.ui" line="959"/>
         <source>IDS_Nin1_2</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="966"/>
+        <location filename="../tabcopy.ui" line="964"/>
         <source>IDS_Nin1_4</source>
         <translation>4</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="971"/>
+        <location filename="../tabcopy.ui" line="969"/>
         <source>IDS_Nin1_9</source>
         <translation>9</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="979"/>
+        <location filename="../tabcopy.ui" line="977"/>
         <source>IDS_CP_DPI</source>
         <translation>DPI</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="1002"/>
+        <location filename="../tabcopy.ui" line="1000"/>
         <source>IDS_DPI_300</source>
         <translation>300 x 300</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="1007"/>
+        <location filename="../tabcopy.ui" line="1005"/>
         <source>IDS_DPI_600</source>
         <translation>600 x 600</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="1053"/>
+        <location filename="../tabcopy.ui" line="1051"/>
         <source>IDS_CP_IDCardCopy</source>
         <translation>身份证
 复印</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="1063"/>
+        <location filename="../tabcopy.ui" line="1061"/>
         <source>IDS_Tab_Copy</source>
         <translation>复印</translation>
     </message>
     <message>
-        <location filename="../tabcopy.ui" line="1103"/>
+        <location filename="../tabcopy.ui" line="1101"/>
         <source>IDS_CP_Default</source>
         <translation>默认</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="372"/>
+        <location filename="../tabcopy.cpp" line="388"/>
+        <source>IDS_MSG_Printering</source>
+        <translation>机器正在打印，请稍后再试</translation>
+    </message>
+    <message>
+        <location filename="../tabcopy.cpp" line="393"/>
+        <source>IDS_MSG_MachineBusy</source>
+        <translation>机器正在工作中，请稍后再试。</translation>
+    </message>
+    <message>
+        <location filename="../tabcopy.cpp" line="396"/>
+        <source>IDS_ERR_JAM</source>
+        <translation>JAM：请打开上盖并取出卡纸。</translation>
+    </message>
+    <message>
+        <location filename="../tabcopy.cpp" line="399"/>
         <source>ResStr_Toner_End</source>
         <translation>墨粉空</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="372"/>
+        <location filename="../tabcopy.cpp" line="399"/>
         <source>ResStr_Please_Replace_Toner</source>
         <translation>请更换鼓粉盒</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="402"/>
+        <location filename="../tabcopy.cpp" line="426"/>
         <source>IDS_MSG_TurnCardOver</source>
         <translation>翻转卡片，并放在扫描板上</translation>
     </message>
     <message>
-        <location filename="../tabcopy.cpp" line="398"/>
+        <location filename="../tabcopy.cpp" line="422"/>
         <source>IDS_MSG_PlaceNextPage</source>
         <translation>放置下一页</translation>
     </message>

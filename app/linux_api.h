@@ -13,6 +13,7 @@ QStringList get_printers();
 QString get_device_uri(const QString& devicename);
 QString get_printer_jobs(const QString& devicename);
 QString get_printer_status(const QString& devicename);
+bool region_paper_is_A4();
 
 #endif // LINUX_API
 

@@ -345,3 +345,14 @@ void logout(const QString& msg)
         file.close();
     }
 }
+
+bool region_paper_is_A4()
+{
+    QString str("locale -k LC_PAPER  ");
+    str += " 2>>";
+    str += log_file;
+    str += "|awk '{if($1==\"height=297\" || $1==\"width=210\"){print \"A4\"}}' ";
+    QString result;
+    result = getStringFromShell(str);
+    return !result.compare("A4");
+}

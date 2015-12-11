@@ -77,10 +77,10 @@ void MainWindow::slots_desktopResized(int )
            resize(400 ,300);
 //           showFullScreen();
     }else{
-        showNormal();
 //        resize(926,660);
         setFixedSize(926,660);
     }
+    showNormal();
     move((screenrect.width() - width())/2,
          (screenrect.size().height() - height())/2);
     update();

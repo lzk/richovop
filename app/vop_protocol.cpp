@@ -145,7 +145,7 @@ int VopProtocol::getStatusFromDeviceID(char* device_id)
         if(sts.TonelStatusLevelK & 0x80){
             _Q_LOG("Tonel not installed");
         }else{
-            C_LOG("Tonel has been installed, status:%d" ,sts.TonelStatusLevelK);
+            C_LOG("Tonel has been installed, level:%d" ,sts.TonelStatusLevelK);
         }
         switch(sts.PaperTrayStatus){
         case 0:            _Q_LOG("paper tray status: ready");            break;

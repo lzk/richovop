@@ -10,6 +10,8 @@
 #include "app/devicemanager.h"
 #include "app/devicedata.h"
 
+extern bool paper_is_A4();
+
 //static const char* output_size_list[] =
 //{
 //    QT_TRANSLATE_NOOP_UTF8("TabCopy" ,"IDS_SIZE_Letter") ,//"Letter (8.5 * 11)" ,
@@ -171,7 +173,10 @@ void TabCopy::updateCopy()
 
     QStringList sl(stringlist_output_size);
     if(IsIDCardCopyMode(pCopyPara)){
-        sl.removeFirst();
+        if(paper_is_A4())
+            sl.removeFirst();//only A4
+        else
+            sl.removeLast();//only letter
         sl.removeLast();
         sl.removeLast();
         sl.removeLast();
@@ -303,7 +308,10 @@ void TabCopy::slots_copy_combo(int value)
         GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
     }    else if(sd == ui->combo_outputSize){
         if(IsIDCardCopyMode(pCopyPara)){
-            pCopyPara->paperSize = 1;//only A4
+            if(paper_is_A4())
+                pCopyPara->paperSize = 1;//only A4
+            else
+                pCopyPara->paperSize = 0;//only letter
         }else{
             if(1 == pCopyPara->nUp){
                 if(value > 3)                value += 2;
@@ -364,17 +372,36 @@ void TabCopy::slots_cmd_result(int cmd ,int err)
         cmdResult_getDeviceStatus(err);
         break;
     case DeviceContrl::CMD_COPY:
-        if(!err){
+        if(cmd_err_handler(err)){
             copy_data->this_copy = true;
-//            if(IsIDCardCopyMode(pCopyPara))
-//                copy_data->idCard_mode = true;
-        }else if(err == STATUS_TonerEnd){
-            main_widget->messagebox_exec(tr("ResStr_Toner_End") + "\n" + tr("ResStr_Please_Replace_Toner"));
         }
         break;
     default:
         break;
     }
+}
+
+bool TabCopy::cmd_err_handler(int err)
+{
+    switch(err){
+    case STATUS_busy_printing:
+        main_widget->messagebox_exec(tr("IDS_MSG_Printering"));
+        break;
+    case STATUS_busy_scanningOrCoping:
+    case STATUS_CopyScanNextPage:
+    case STATUS_IDCardCopyTurnCardOver:
+        main_widget->messagebox_exec(tr("IDS_MSG_MachineBusy"));
+        break;
+    case STATUS_jam:
+        main_widget->messagebox_exec(tr("IDS_ERR_JAM"));
+        break;
+    case STATUS_TonerEnd:
+        main_widget->messagebox_exec(tr("ResStr_Toner_End") + "\n" + tr("ResStr_Please_Replace_Toner"));
+        break;
+    default:
+        break;
+    }
+    return !err;
 }
 
 void TabCopy::cmdResult_getDeviceStatus(int err)
@@ -385,11 +412,8 @@ void TabCopy::cmdResult_getDeviceStatus(int err)
         case STATUS_sleep:
         case STATUS_TonerEnd:
             copy_data->this_copy = false;
-//            if(copy_data->idCard_mode){
-//                copy_data->idCard_mode = false;
                 if(IsIDCardCopyMode(pCopyPara))
                     on_IDCardCopy_clicked();
-//            }
             copy_data->status = true;
             main_widget->messagebox_hide();
             break;
@@ -424,35 +448,9 @@ void TabCopy::cmdResult_getDeviceStatus(int err)
             copy_data->status = false;
             break;
         }
-//        copy_data->idCard_mode = false;
         main_widget->messagebox_hide();
     }
 
-//    switch(err){
-//    case STATUS_ready:
-//    case STATUS_sleep:
-//    case STATUS_TonerEnd:
-//        copy_data->status = true;
-//        copy_data->this_copy = false;
-//        if(copy_data->idCard_mode){
-//            copy_data->idCard_mode = false;
-//            if(IsIDCardCopyMode(pCopyPara))
-//                on_IDCardCopy_clicked();
-//        }
-//        break;
-//    default:
-//        copy_data->status = false;
-//        break;
-//    }
-//    if(copy_data->this_copy && STATUS_CopyScanNextPage == err){
-//        if(copy_data->idCard_mode){
-//            main_widget->messagebox_show(tr("IDS_MSG_TurnCardOver"));
-//        }else{
-//            main_widget->messagebox_show(tr("IDS_MSG_PlaceNextPage"));
-//        }
-//    }else{
-//        main_widget->messagebox_hide();
-//    }
     ui->copy->setEnabled(copy_data->status);
 }
 
@@ -473,10 +471,10 @@ void TabCopy::on_IDCardCopy_clicked()
         SetIDCardCopyMode(pCopyPara);
         pCopyPara->dpi = 1;//600 * 600
         pCopyPara->scale = 100;
-        pCopyPara->paperSize = 1;//A4
-//        if(3 == pCopyPara->paperSize || 5 == pCopyPara->paperSize){
-//            pCopyPara->paperSize = 0;
-//        }
+        if(paper_is_A4())
+            pCopyPara->paperSize = 1;//only A4
+        else
+            pCopyPara->paperSize = 0;//only letter
     }
     updateCopy();
 }

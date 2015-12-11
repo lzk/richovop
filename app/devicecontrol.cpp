@@ -193,6 +193,11 @@ bool DeviceContrl::cmd_status_validate_copy(int& err)
     }
     switch(err){
     case STATUS_TonerEnd:
+    case STATUS_busy_printing:
+    case STATUS_busy_scanningOrCoping:
+    case STATUS_jam:
+    case STATUS_CopyScanNextPage:
+    case STATUS_IDCardCopyTurnCardOver:
 
     case ERR_communication:
     case ERR_library:

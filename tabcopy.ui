@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>658</width>
+    <width>648</width>
     <height>561</height>
    </rect>
   </property>
@@ -150,9 +150,9 @@ QPushButton
 {
 	min-width:70;
 	max-width:70;
-	min-height:25;
+/*	min-height:25;
 	max-height:25;
- /*border-radius: 5px;
+ border-radius: 5px;
 border: 1px solid #c8c8c8;
 	background-color: white;*/
 }
@@ -165,12 +165,9 @@ QPushButton:!enabled
 	background-color: gray;
 }
 */
-/*#scaling_plus,
+#scaling_plus,
 #copies_plus,
-#density_plus
-{
-font:20px;
-}*/
+#density_plus,
 #scaling_minus,
 #copies_minus,
 #density_minus

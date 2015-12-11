@@ -80,9 +80,6 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
     int default_printer = -1;
     devices.clear();
 
-    //get default printer
-    QString default_printer_name = get_default_printer();
-
     QStringList printers = get_printers();
     if(printers.isEmpty()){
         _Q_LOG("there is no printer");
@@ -103,7 +100,11 @@ int DeviceManager::getDeviceList(QStringList& printerNames)
        _Q_LOG("there is no printer");
        return -1;
    }
-   default_printer = devices.indexOf(default_printer_name);
+
+   //get default printer
+   QString default_printer_name = get_default_printer();
+
+   default_printer = devices.indexOf(default_printer_name);   
    selected_printer = devices.indexOf(selected_devicename);
    if(-1 != selected_printer)
        _Q_LOG("the selected printer is founded");

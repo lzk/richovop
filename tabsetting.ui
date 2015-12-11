@@ -228,9 +228,6 @@ max-width:40;
                 <layout class="QHBoxLayout" name="horizontalLayout_2">
                  <item>
                   <widget class="QRadioButton" name="radioButton_searchWifi">
-                   <property name="focusPolicy">
-                    <enum>Qt::NoFocus</enum>
-                   </property>
                    <property name="text">
                     <string>IDS_ST_SearchWifi</string>
                    </property>
@@ -241,9 +238,6 @@ max-width:40;
                  </item>
                  <item>
                   <widget class="QRadioButton" name="radioButton_manualSetup">
-                   <property name="focusPolicy">
-                    <enum>Qt::NoFocus</enum>
-                   </property>
                    <property name="text">
                     <string>IDS_ST_ManualSetup</string>
                    </property>

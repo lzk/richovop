@@ -42,6 +42,7 @@ private:
 
     void updateCopy();
     void cmdResult_getDeviceStatus(int err);
+    bool cmd_err_handler(int err);
 
 public slots:
    void slots_cmd_result(int ,int);

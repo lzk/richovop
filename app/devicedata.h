@@ -4,7 +4,6 @@
 struct CopyData
 {
     bool status;
-//    bool idCard_mode;
     bool this_copy;
 };
 

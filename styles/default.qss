@@ -3,7 +3,7 @@
 
 /*.QWidget {   background-color: white;}*/
 
-/*QWidget{font:13px; color:#4c4c4c}*/
+QWidget{font:13px; color:#4c4c4c}
 
 QDialog  {    border:1px solid gray;}
 
@@ -11,9 +11,13 @@ QDialog  {    border:1px solid gray;}
 
 
 /* Make the entire row selected in item views. */
-/*QAbstractItemView{
+
+/*
+QAbstractItemView{
     show-decoration-selected: 0;
-}*/
+}
+*/
+
 /*
 QPushButton
 {
