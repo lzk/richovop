@@ -1,34 +1,22 @@
 
-/*QMainWindow{background-color: white;}*/
-
-/*.QWidget {   background-color: white;}*/
-
-QWidget{font:13px; color:#4c4c4c}
+QWidget{font:13px; /*color:#4c4c4c*/}
 
 QDialog  {    border:1px solid gray;}
 
-/*QComboBox QAbstractItemView{    background-color:white;  }*/
-
-
-/* Make the entire row selected in item views. */
-
-/*
-QAbstractItemView{
-    show-decoration-selected: 0;
-}
-*/
-
-/*
-QPushButton
+.QFrame
+,QListWidget
+,QTabWidget::pane
 {
+border: 1px solid darkgray;
+}
+
+/*QPushButton{
     min-width:50px;
     min-height:27px;
 }
-QPushButton:!enabled
-{
+QPushButton:!enabled{
         margin:2px;
         border-radius: 3px;
         border: none;
         background-color: gray;
-}
-*/
+}*/

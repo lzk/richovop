@@ -11,17 +11,20 @@
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true">#listWidget{
-min-width:130;
-max-width:130;
-min-height:120;
-max-height:120;
-	background-color: rgb(255, 255, 255);
+   <string notr="true">
+#listWidget{
+	min-width:130;
+	max-width:130;
+	min-height:120;
+	max-height:120;
+	background-color: white;
 }
 
 #stackedWidget,
-#pageWidget,#page2Widget,
-#page3Widget,#page4Widget,
+#pageWidget
+,#page2Widget,
+#page3Widget
+,#page4Widget,
 #page5Widget
 {
 min-width:600;
@@ -37,28 +40,17 @@ max-height:600;
 min-width:150;
 max-width:150;
 }
-/*
-#pageWidget QComboBox{
-min-width:200;
-max-width:200;
-}*/
+
 #pageWidget QLineEdit{
 min-width:200;
 max-width:200;
 }
+
 #pageWidget QPushButton{
 min-width:100;
 max-width:100;
 }
-/*
-#pageWidget #cb_keyIndex{
-min-width:100;
-max-width:100;
-}
-#pageWidget #cb_ssid{
-min-width:250;
-max-width:250;
-}*/
+
 /*page2*/
 #page2Widget QLabel{
 min-width:150;

@@ -19,122 +19,119 @@
 ,#density
 ,#ScaningMode
 {
-background-color: rgb(219, 219, 219);
+	background-color: rgb(219, 219, 219);
 }
 #bg_scaling
 ,#bg_scaningMode
 ,#bg_density
 ,#bg_copies
 {
-min-width:250px;
-max-width:250px;
-min-height:120px;
-max-height:120px;
+	min-width:250px;
+	max-width:250px;
+	min-height:120px;
+	max-height:120px;
 }
 #bg_scaling:!enabled
 {
 /*background-color: rgb(190, 190, 190);*/
-background-color: rgb(230, 230, 230);
+	background-color: rgb(230, 230, 230);
 }
 #label_scaling
 ,#label_scaningMode
 ,#label_density
 ,#label_copies
 {
-font: 20px;
-color: #4c4c4c;
-padding-left:1px;
-max-height:1em;
+	font: 20px;
+	padding-left:1px;
+	max-height:1em;
 }
 #scaling
 ,#copies
 {
-font:40px;
-color: #4c4c4c;
+	font:40px;
 }
+
 #density
 {
-min-width:130px;
-max-width:130px;
-min-height:52px;
-max-height:52px;
+	min-width:130px;
+	max-width:130px;
+	min-height:52px;
+	max-height:52px;
 }
+
 #density1
 ,#density2
-,#density3,
-#density4
+,#density3
+,#density4
 ,#density5
 {
-min-width:20;
-max-width:20;
-min-height:10;
-max-height:10;
-background-color:gray;
-border:1px solid gray;
+	min-width:20;
+	max-width:20;
+	background-color:gray;
+	border:1px solid gray;
+}
+
+#density1
+{
+	min-height:10;
+	max-height:10;
 }
 #density2
 {
-min-height:20;
-max-height:20;
+	min-height:20;
+	max-height:20;
 }
 #density3
 {
-min-height:30;
-max-height:30;
+	min-height:30;
+	max-height:30;
+	background-color:white;
 }
 #density4
 {
-min-height:40;
-max-height:40;
-background-color:white;
+	min-height:40;
+	max-height:40;
+	background-color:white;
 }
 #density5
 {
-min-height:50;
-max-height:50;
-background-color:white;
+	min-height:50;
+	max-height:50;
+	background-color:white;
 }
-/*
-#TabCopy QComboBox
-{
-min-width:180px;
-max-width:180px;
-}*/
 
-QToolButton
+#IDCardCopy,
+#copy
 {
- border-radius: 50px;
-min-width:100px;
-max-width:100px;
-min-height:100px;
-max-height:100px;
+	min-width:100px;
+	max-width:100px;
+	min-height:100px;
+	max-height:100px;
 	background-color: #f0eeeb; 
-border: 1px solid #c8c8c8;
-font:16px;
-	color: #4c4c4c;
 }
 
+#IDCardCopy
+{
+ 	border-radius: 50px;
+	font:16px;
+	border: 1px solid #c8c8c8;
+}
 #IDCardCopy:pressed
 {
 	background-color:gray;
-}
-#IDCardCopy:!enabled
-{
-	background-color:gray;
-}
+} 
 
 #copy
 {
-font:20px;
-min-width:100px;
-max-width:100px;
- border-radius: 10px;
-border:none;
+	font:20px;
+	 border-radius: 10px;
+	border:none;
 }
 
 #copy:!enabled
 {
 	background-color:#9d9b98;
+	color: #4c4c4c;
 }
 #copy:enabled:!pressed
 {
@@ -146,25 +143,6 @@ border:none;
 	background-color:#9d9b98;
 }
 
-QPushButton
-{
-	min-width:70;
-	max-width:70;
-/*	min-height:25;
-	max-height:25;
- border-radius: 5px;
-border: 1px solid #c8c8c8;
-	background-color: white;*/
-}
-/*
-QPushButton:!enabled
-{
-	margin:2px;
-	border-radius: 3px;
-	border: none;
-	background-color: gray;
-}
-*/
 #scaling_plus,
 #copies_plus,
 #density_plus,
@@ -172,9 +150,12 @@ QPushButton:!enabled
 #copies_minus,
 #density_minus
 {
-font:bold 20px;
+	min-width:70;
+	max-width:70;
+	min-height:25;
+	max-height:25;
+	font:bold 20px;
 }
-
 
 #btn_default
 {

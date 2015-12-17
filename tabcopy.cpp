@@ -434,14 +434,15 @@ void TabCopy::cmdResult_getDeviceStatus(int err)
         switch(err){
         case STATUS_ready:
         case STATUS_sleep:
-        case STATUS_busy_printing:
-        case STATUS_busy_scanningOrCoping:
-        case ERR_sane_scanning:
-        case STATUS_jam:
-        case STATUS_CopyScanNextPage:
-        case STATUS_IDCardCopyTurnCardOver:
         case STATUS_TonerEnd:
-        case STATUS_other:
+//        case STATUS_busy_printing:
+//        case STATUS_busy_scanningOrCoping:
+//        case STATUS_jam:
+//        case STATUS_CopyScanNextPage:
+//        case STATUS_IDCardCopyTurnCardOver:
+//        case STATUS_other:
+//        case ERR_printer_have_jobs:
+//        case ERR_sane_scanning:
             copy_data->status = true;
             break;
         default:

@@ -364,9 +364,9 @@ void MainWidget::on_refresh_clicked()
 void MainWidget::on_comboBox_deviceList_activated(int index)
 {
     if(device_manager->selectDevice(index)){
-        emit signals_deviceChanged(device_manager->get_deviceName());
-        updateUi();
     }
+    emit signals_deviceChanged(device_manager->get_deviceName());
+    updateUi();
 }
 
 QMessageBox::StandardButton MainWidget::messagebox_exec(const QString &text,
