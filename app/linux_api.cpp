@@ -95,6 +95,8 @@ bool is_running(const QString& program_dir ,const QString& program_name)
     QString result = getStringFromShell(cmd);
     _Q_LOG("shell cmd:" + cmd);
     _Q_LOG("result:" + result);
+    if(result.isEmpty())
+        return false;
     return !!result.compare("1");
 }
 
@@ -238,14 +240,16 @@ QString get_device_uri(const QString& devicename)
     return device_uri;
 }
 
-QString get_printer_jobs(const QString& devicename)
+bool get_printer_jobs(const QString& devicename)
 {
-    QString str("LANG=en lpstat -o ");
+    QString str("LANG=en lpstat -l -o ");
     str += devicename;
     str += " 2>>";
     str += log_file;
+    str += "|grep -w ";
+    str += devicename;
     QString printer_jobs = getStringFromShell(str);
-    return printer_jobs;
+    return !printer_jobs.isEmpty();
 }
 
 QString get_printer_status(const QString& devicename)

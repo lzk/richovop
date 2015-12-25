@@ -264,10 +264,7 @@ void DeviceContrl::slots_cmd_plus(int cmd)
         err = DeviceContrl::openPrinter();
 
     if(isUsbDevice() && !err){
-        QString printer_jobs = get_printer_jobs(current_devicename);
-//        QString printer_status = get_printer_status(current_devicename);
-        if(printer_jobs.isEmpty()
-//                &&  !printer_status.compare("idle.")
+        if(!get_printer_jobs(current_devicename)
                 ){
             err = ERR_ACK;
         }else{

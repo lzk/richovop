@@ -9,7 +9,7 @@
 #include <QFile>
 #include "app/log.h"
 #include "app/linux_api.h"
-//#include "version.h"
+#include "version.h"
 
 #ifdef STATIC_BUILD
 #include <QtPlugin>
