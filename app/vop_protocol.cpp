@@ -355,7 +355,7 @@ static int vop_getCmdDirect(int cmd ,int sub_cmd ,int& direct ,int& data_buffer_
     return ret;
 }
 
-static const copycmdset default_copy_parameter =
+static copycmdset default_copy_parameter =
 {
 //    .Density   = 3,
 //    .copyNum   = 1,
@@ -371,6 +371,7 @@ static const copycmdset default_copy_parameter =
     100,//UINT16 scale          ; // 8  -   25~400, disabled for 2/4/9up
 };
 
+extern bool paper_is_A4();
 VopProtocol::VopProtocol(DeviceManager* dm)
     :
       device_manager(dm),
@@ -386,6 +387,10 @@ VopProtocol::VopProtocol(DeviceManager* dm)
       ip_info(new net_info_st),
       ipv6_info(new net_ipv6_st)
 {
+    if(!paper_is_A4()){//letter
+        default_copy_parameter.paperSize = 0;
+        default_copy_parameter.orgSize = 3;
+    }
     memcpy(copy_parameter ,&default_copy_parameter ,sizeof(default_copy_parameter));
     memset(wifi_parameter ,0 ,sizeof(cmdst_wifi_get));
     memset(wifi_aplist ,0 ,sizeof(*wifi_aplist));

@@ -92,10 +92,10 @@ QMessageBox::StandardButton MainWindow::messagebox_exec(const QString &text,
 {
     QMessageBox msgbox;
     QMessageBox* mb = & msgbox;
-    mb->setWindowIcon(QIcon(":/images/printer4848.png"));
+    mb->setWindowIcon(QIcon(":/printer.png"));
     mb->setWindowTitle(vop_name);
     mb->setText(text);
-    mb->setIconPixmap(QPixmap(":/images/printer4848.png"));
+    mb->setIconPixmap(QPixmap(":/printer.png"));
 
 //    mb->setText(title);
 //    mb->setInformativeText(text);

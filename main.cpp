@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 //    qputenv("LANG" ,QLocale::system().uiLanguages().first().toLatin1());
 //    qputenv("LANGUAGE" ,QLocale::system().name().toLatin1());
     QApplication a(argc, argv);
-    a.setWindowIcon(QIcon(":/images/printer4848.png"));
+    a.setWindowIcon(QIcon(":/printer.png"));
 //    a.setApplicationName(vop_name);
 //    a.setOrganizationName(vop_name);
 
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     init_log();
 
     g_region_paper_is_A4 = region_paper_is_A4();
-    C_LOG("is A4:%d" ,g_region_paper_is_A4);
+    C_LOG("region default paper size is A4:%d" ,g_region_paper_is_A4);
     QFile file(":/styles/default.qss");
     if(file.open(QFile::ReadOnly)){
         QString stylesheet = file.readAll();

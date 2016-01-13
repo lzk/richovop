@@ -38,15 +38,6 @@ MainWidget::MainWidget(QWidget *parent) :
     retranslateUi();
 
     initialize();
-    QList<QWidget*> widgets = findChildren<QWidget*>();
-    foreach(QWidget* widget ,widgets){
-        if(qobject_cast<QAbstractButton*>(widget)
-                || qobject_cast<QComboBox*>(widget)
-                ){
-            widget->setFocusPolicy(Qt::NoFocus);
-        }
-    }
-
     updateUi();
 }
 
@@ -90,6 +81,17 @@ void MainWidget::retranslateUi()
 
 void MainWidget::initialize()
 {
+    QList<QWidget*> widgets = findChildren<QWidget*>();
+    foreach(QWidget* widget ,widgets){
+        if(qobject_cast<QAbstractButton*>(widget)
+                || qobject_cast<QComboBox*>(widget)
+                ){
+            widget->setFocusPolicy(Qt::NoFocus);
+        }
+    }
+
+    ui->comboBox_deviceList->installEventFilter(this);
+
     connect(&timer ,SIGNAL(timeout()) ,this ,SLOT(slots_timeout()));
 //    timer.setInterval(1000);
     timer.start(1000);
@@ -381,7 +383,7 @@ QMessageBox::StandardButton MainWidget::messagebox_exec(const QString &text,
         mb->hide();
     }
     mb->setText(title);
-    mb->setIconPixmap(QPixmap(":/images/printer4848.png"));
+    mb->setIconPixmap(QPixmap(":/printer.png"));
     mb->setInformativeText(text);
     mb->setStandardButtons(buttons);
     mb->setDefaultButton(defaultButton);
@@ -410,7 +412,7 @@ void MainWidget::messagebox_show(const QString &text,
     }
 //    if(!mb->isVisible()){
         mb->setText(title);
-        mb->setIconPixmap(QPixmap(":/images/printer4848.png"));
+        mb->setIconPixmap(QPixmap(":/printer.png"));
         mb->setInformativeText(text);
         mb->setStandardButtons(buttons);
         mb->setDefaultButton(defaultButton);

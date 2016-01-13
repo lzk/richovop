@@ -815,11 +815,6 @@
             </property>
             <item>
              <property name="text">
-              <string>IDS_SIZE_Letter</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
               <string>IDS_SIZE_A4</string>
              </property>
             </item>
@@ -835,7 +830,27 @@
             </item>
             <item>
              <property name="text">
+              <string>IDS_SIZE_Letter</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>IDS_SIZE_Executive</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>IDS_SIZE_A6</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>IDS_SIZE_B6</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>IDS_SIZE_16K</string>
              </property>
             </item>
            </widget>

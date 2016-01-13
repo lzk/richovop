@@ -24,22 +24,27 @@ extern bool paper_is_A4();
 //    QT_TRANSLATE_NOOP_UTF8("TabCopy" ,"IDS_SIZE_16K"),//"16K (185 * 260mm)"
 //};
 
-static const int document_size[] =
-{1 ,2 ,4 ,0 ,6};// A4 A5 B5 Letter Executive
-
+static const int uiToOrgSize[] =
+//{3 ,0 ,1 ,6 ,2 ,5 ,4 ,7};
+{0 ,1 ,2 ,3 ,4 ,6 ,5 ,7};
+static const int orgSizeToUi[] =
+//{1 ,2 ,4 ,0 ,6 ,5 ,3 ,7};// A4 A5 B5 Letter Executive
+{0 ,1 ,2 ,3 ,4 ,6 ,5 ,7};
+static const int orgSizeToOutputSize[] =
+{1 ,2 ,4 ,0 ,6 ,5 ,3 ,7};
 static const int output_size[][2] =
 {
-  {216, 279},//Letter
-    {210,297},//A4
-    {148,210},//A5
-    {105,148},//A6
-    {182,257},//B5
-    {128 ,182},//B6
-    {184 ,267},//Executive
-    {185 ,260}//16K
+  {216, 279},//Letter 0
+    {210,297},//A4 1
+    {148,210},//A5 2
+    {105,148},//A6 3
+    {182,257},//B5 4
+    {128 ,182},//B6 5
+    {184 ,267},//Executive 6
+    {185 ,260}//16K 7
 };
 
-#define _GetSizeScaling(ds ,os ,index)  ((output_size[os][index] - 8.2) / (output_size[document_size[ds]][index] - 8.2) + 0.005)
+#define _GetSizeScaling(ds ,os ,index)  ((output_size[os][index] - 8.2) / (output_size[orgSizeToOutputSize[ds]][index] - 8.2) + 0.005)
 #define GetSizeScaling(ds ,os ,scaling) \
 { \
     double  scaling_width = _GetSizeScaling(ds ,os ,0);  \
@@ -226,9 +231,8 @@ void TabCopy::updateCopy()
         ui->combo_nIn1Copy->setCurrentIndex(0);
     }
     ui->combo_documentType->setCurrentIndex(pCopyPara->mediaType);
-    int docSize =pCopyPara->orgSize;
-    if(docSize == 3)    docSize = 0;
-    else if(docSize != 4) docSize ++;
+    int docSize = pCopyPara->orgSize <= 7 ?pCopyPara->orgSize :0;
+    docSize = orgSizeToUi[docSize];
     ui->combo_documentSize->setCurrentIndex(docSize);
     ui->combo_dpi->setCurrentIndex(pCopyPara->dpi);
 
@@ -290,12 +294,7 @@ void TabCopy::slots_copy_combo(int value)
     else if(sd == ui->combo_dpi)
         pCopyPara->dpi = value;
     else if(sd == ui->combo_documentSize) {
-        if(0 == value)//letter
-            pCopyPara->orgSize = 3;
-        else if(4 != value)
-            pCopyPara->orgSize = value - 1;
-        else
-            pCopyPara->orgSize = value;
+       pCopyPara->orgSize =  uiToOrgSize[value];
 //        if(!pCopyPara->nUp)
             GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
     }else if(sd == ui->combo_nIn1Copy){//disable when IsIDCardCopyMode
@@ -460,6 +459,7 @@ void TabCopy::on_copy_clicked()
     copy_data->status = false;
     ui->copy->setEnabled(copy_data->status);
     device_manager->copy_set_para(pCopyPara);
+   C_LOG("copy set scale:%d\torgSize:%d" ,pCopyPara->scale ,pCopyPara->orgSize);
     device_manager->emit_cmd_plus(DeviceContrl::CMD_COPY);
 }
 
