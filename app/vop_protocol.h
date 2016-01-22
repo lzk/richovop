@@ -98,6 +98,7 @@ enum{
     STATUS_CopyScanNextPage,
     STATUS_IDCardCopyTurnCardOver,
     STATUS_TonerEnd,
+    STATUS_TonerNearEnd,
     STATUS_other,
 };
 

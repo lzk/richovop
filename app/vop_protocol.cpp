@@ -211,9 +211,11 @@ int VopProtocol::getStatusFromDeviceID(char* device_id)
             break;
         case PSTATUS_TonerEnd1:
         case PSTATUS_TonerEnd2:
-        case PSTATUS_TonerNearEnd:
         case PSTATUS_WasteTonerFull:
             err = STATUS_TonerEnd;
+            break;
+        case PSTATUS_TonerNearEnd:
+            err =STATUS_TonerNearEnd;
             break;
         default:
             err = STATUS_other;
@@ -499,6 +501,9 @@ const char* VopProtocol::getErrString(int err)
         break;
     case STATUS_TonerEnd:
         str = STR_PREFIX("VOP ACK status: toner end");
+        break;
+    case STATUS_TonerNearEnd:
+        str = STR_PREFIX("VOP ACK status: toner near end");
         break;
     case STATUS_other:
         str = STR_PREFIX("VOP ACK status: other status");

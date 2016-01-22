@@ -409,6 +409,7 @@ void TabCopy::cmdResult_getDeviceStatus(int err)
         switch(err){
         case STATUS_ready:
         case STATUS_sleep:
+        case STATUS_TonerNearEnd:
         case STATUS_TonerEnd:
             copy_data->this_copy = false;
                 if(IsIDCardCopyMode(pCopyPara))
@@ -433,6 +434,7 @@ void TabCopy::cmdResult_getDeviceStatus(int err)
         switch(err){
         case STATUS_ready:
         case STATUS_sleep:
+        case STATUS_TonerNearEnd:
         case STATUS_TonerEnd:
 //        case STATUS_busy_printing:
 //        case STATUS_busy_scanningOrCoping:
