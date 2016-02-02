@@ -33,7 +33,7 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_Tab_About_</source>
+		<source>IDS_Tab_About</source>
 		<target>About</target>
 	</phrase>
 
@@ -139,12 +139,12 @@ Copy</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_MediaType</source>
+		<source>IDS_CP_MediaType_</source>
 		<target>Media Type</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_MediaType_</source>
+		<source>IDS_CP_MediaType</source>
 		<target>Media Type</target>
 	</phrase>
 
@@ -375,7 +375,7 @@ Copy</target>
 
 	<phrase>
 		<source>IDS_UTILITY_NAME</source>
-		<target>Ricoh Virtual Panel</target>
+		<target>RICOH Printer</target>
 	</phrase>
 
 	<phrase>
@@ -497,6 +497,11 @@ Try again after freeing hard disk space.</target>
 	<phrase>
 		<source>ResStr_Please_Replace_Toner</source>
 		<target>Please Replace Toner</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_WIRELESS_DISABLED_MSG</source>
+		<target>Wireless feature of the printer is disabled, press and hold power key for 1 second to enable Wireless.</target>
 	</phrase>
 
 </QPH>

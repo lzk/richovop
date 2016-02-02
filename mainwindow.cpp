@@ -86,6 +86,7 @@ void MainWindow::slots_desktopResized(int )
     update();
 }
 
+#include <QAbstractButton>
 QMessageBox::StandardButton MainWindow::messagebox_exec(const QString &text,
                                                 QMessageBox::StandardButtons buttons,
                                                QMessageBox::StandardButton defaultButton)
@@ -102,6 +103,14 @@ QMessageBox::StandardButton MainWindow::messagebox_exec(const QString &text,
 
     mb->setStandardButtons(buttons);
     mb->setDefaultButton(defaultButton);
+    QAbstractButton* ab = mb->button(QMessageBox::Cancel);
+    if(ab){
+        ab->setText(tr("IDS_Cancel"));
+    }
+    ab = mb->button(QMessageBox::Ok);
+    if(ab){
+        ab->setText(tr("IDS_OK"));
+    }
 //    mb->setWindowFlags(Qt::FramelessWindowHint);
 #if 1
     mb->show();//show first before get real size

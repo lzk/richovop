@@ -304,7 +304,7 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
         }
         break;
     case ERR_wifi_have_not_been_inited:
-        messagebox_exec(tr("IDS_MSG_WirelessDisabled"));
+        messagebox_exec(tr("IDS_WIRELESS_DISABLED_MSG"));
         break;
     case ERR_Password_incorrect :
 //        if(     (DeviceContrl::CMD_WIFI_apply_plus == cmd)

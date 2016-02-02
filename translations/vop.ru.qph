@@ -33,7 +33,7 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_Tab_About_</source>
+		<source>IDS_Tab_About</source>
 		<target>О программе</target>
 	</phrase>
 
@@ -139,12 +139,12 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_MediaType</source>
+		<source>IDS_CP_MediaType_</source>
 		<target>Тип носителя</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_MediaType_</source>
+		<source>IDS_CP_MediaType</source>
 		<target>Тип носителя</target>
 	</phrase>
 
@@ -375,7 +375,7 @@
 
 	<phrase>
 		<source>IDS_UTILITY_NAME</source>
-		<target>Ricoh Virtual Panel</target>
+		<target>RICOH Printer</target>
 	</phrase>
 
 	<phrase>
@@ -481,7 +481,7 @@
 
 	<phrase>
 		<source>IDS_Cancel</source>
-		<target>Отмена</target>
+		<target>Отменить</target>
 	</phrase>
 
 	<phrase>
@@ -497,6 +497,11 @@
 	<phrase>
 		<source>ResStr_Please_Replace_Toner</source>
 		<target>Замените тонер</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_WIRELESS_DISABLED_MSG</source>
+		<target>Беспроводное соединение с принтером отключено. Нажмите кнопку питания и удерживайте ее в течение 1 секунды, чтобы включить беспроводную связь.</target>
 	</phrase>
 
 </QPH>

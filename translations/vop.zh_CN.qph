@@ -33,7 +33,7 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_Tab_About_</source>
+		<source>IDS_Tab_About</source>
 		<target>关于</target>
 	</phrase>
 
@@ -139,12 +139,12 @@
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_MediaType</source>
+		<source>IDS_CP_MediaType_</source>
 		<target>介质类型</target>
 	</phrase>
 
 	<phrase>
-		<source>IDS_CP_MediaType_</source>
+		<source>IDS_CP_MediaType</source>
 		<target>介质类型</target>
 	</phrase>
 
@@ -375,7 +375,7 @@
 
 	<phrase>
 		<source>IDS_UTILITY_NAME</source>
-		<target>Ricoh Virtual Panel</target>
+		<target>RICOH Printer</target>
 	</phrase>
 
 	<phrase>
@@ -497,6 +497,11 @@
 	<phrase>
 		<source>ResStr_Please_Replace_Toner</source>
 		<target>请更换鼓粉盒</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_WIRELESS_DISABLED_MSG</source>
+		<target>打印机无线功能已关闭，按电源键保持1秒钟可开启。</target>
 	</phrase>
 
 </QPH>
