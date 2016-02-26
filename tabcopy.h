@@ -37,8 +37,10 @@ private:
 
     QStringList stringlist_output_size;
     copycmdset* pCopyPara;
-    copycmdset copyPara;
     struct CopyData* copy_data;
+
+private:
+    copycmdset copyPara;
 
     void updateCopy();
     void cmdResult_getDeviceStatus(int err);

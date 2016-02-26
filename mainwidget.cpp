@@ -216,11 +216,14 @@ void MainWidget::slots_progressBar(int cmd ,int value)
             break;
         //do not show progress bar
         case DeviceContrl::CMD_DEVICE_status:
+        case DeviceContrl::CMD_PRN_GetRegion:
         default:
             break;
         }
     }else{
-        if(cmd != DeviceContrl::CMD_DEVICE_status){
+        if(cmd != DeviceContrl::CMD_DEVICE_status
+                && cmd != DeviceContrl::CMD_PRN_GetRegion
+                ){
             progressDialog->setValue(value);
         }
     }
@@ -299,6 +302,7 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
             break;
         //do not show err msg
         case DeviceContrl::CMD_DEVICE_status:
+        case DeviceContrl::CMD_PRN_GetRegion:
         default:
             break;
         }
@@ -335,6 +339,9 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
         if(!err)
             donot_cmd_times = 2;
         break;
+    case DeviceContrl::CMD_PRN_GetRegion:
+        setEnabled(true);
+        break;
     default:
         break;
     }
@@ -369,6 +376,11 @@ void MainWidget::on_comboBox_deviceList_activated(int index)
     }
     emit signals_deviceChanged(device_manager->get_deviceName());
     updateUi();
+//    if(!have_got_region_from_FW){
+    if(-1 != index){
+        device_manager->emit_cmd_plus(DeviceContrl::CMD_PRN_GetRegion);
+        setEnabled(false);
+    }
 }
 
 QMessageBox::StandardButton MainWidget::messagebox_exec(const QString &text,

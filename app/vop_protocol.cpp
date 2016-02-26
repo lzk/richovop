@@ -323,6 +323,7 @@ static int vop_getCmdDirect(int cmd ,int sub_cmd ,int& direct ,int& data_buffer_
         case 0x0f:  direct = 1;data_buffer_size = 1; break;//set power off time
         case 0x11:  direct = 0;data_buffer_size = 1; break;//get toner end
         case 0x12:  direct = 1;data_buffer_size = 1; break;//set toner end
+        case 0x23:  direct = 0;data_buffer_size = 1; break;//get region
         }
         break;
     case _LS_NETCMD:
@@ -373,7 +374,7 @@ static copycmdset default_copy_parameter =
     100,//UINT16 scale          ; // 8  -   25~400, disabled for 2/4/9up
 };
 
-extern bool paper_is_A4();
+extern bool g_region_paper_is_A4;
 VopProtocol::VopProtocol(DeviceManager* dm)
     :
       device_manager(dm),
@@ -387,12 +388,9 @@ VopProtocol::VopProtocol(DeviceManager* dm)
       pSaveTime(new cmdst_PSave_time),
       powerOffTime(new cmdst_powerOff_time),
       ip_info(new net_info_st),
-      ipv6_info(new net_ipv6_st)
+      ipv6_info(new net_ipv6_st),
+      region(new cmdst_region)
 {
-    if(!paper_is_A4()){//letter
-        default_copy_parameter.paperSize = 0;
-        default_copy_parameter.orgSize = 3;
-    }
     memcpy(copy_parameter ,&default_copy_parameter ,sizeof(default_copy_parameter));
     memset(wifi_parameter ,0 ,sizeof(cmdst_wifi_get));
     memset(wifi_aplist ,0 ,sizeof(*wifi_aplist));
@@ -403,6 +401,7 @@ VopProtocol::VopProtocol(DeviceManager* dm)
     memset(powerOffTime ,0 ,sizeof(cmdst_powerOff_time));
     memset(ip_info ,0 ,sizeof(net_info_st));
     memset(ipv6_info ,0 ,sizeof(net_ipv6_st));
+    memset(region ,0 ,sizeof(cmdst_region));
 
 }
 
@@ -547,6 +546,7 @@ int VopProtocol::get_deviceStatus()
 #define vop_setv4(buffer)               vop_cmd(_LS_NETCMD ,0x01 ,buffer ,sizeof(*buffer))
 #define vop_getv6(buffer)               vop_cmd(_LS_NETCMD ,0x02 ,buffer ,sizeof(*buffer))
 #define vop_setv6(buffer)               vop_cmd(_LS_NETCMD ,0x03 ,buffer ,sizeof(*buffer))
+#define vop_getRegion(buffer)               vop_cmd(_LS_PRNCMD ,0x23 ,buffer ,sizeof(*buffer))
 
 #define     MAGIC_NUM           0x1A2B3C4D
 #define change_32bit_edian(x) (((x) << 24 & 0xff000000) | (((x) << 8) & 0x00ff0000) | (((x) >> 8) & 0x0000ff00) | (((x) >> 24) & 0xff))
@@ -606,6 +606,18 @@ int VopProtocol::vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size)
         err = -1;
     delete buffer;
     return err;
+}
+
+void VopProtocol::copy_update_defaultPara()
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    if(!g_region_paper_is_A4){//letter
+        default_copy_parameter.paperSize = 0;
+        default_copy_parameter.orgSize = 3;
+    }else{
+        default_copy_parameter.paperSize = 1;
+        default_copy_parameter.orgSize = 0;
+    }
 }
 
 void VopProtocol::copy_set_defaultPara(copycmdset* p)
@@ -708,6 +720,12 @@ void VopProtocol::printer_setPowerOffTime(cmdst_powerOff_time* p)
     memcpy(powerOffTime ,p ,sizeof(*p));
 }
 
+cmdst_region VopProtocol::printer_getRegion()
+{
+    QMutexLocker locker(&device_manager->mutex_ctrl);
+    return *region;
+}
+
 void VopProtocol::passwd_set(const char* p)
 {
     QMutexLocker locker(&device_manager->mutex_ctrl);
@@ -767,6 +785,7 @@ static const char* get_cmd_string(int cmd)
     case VopProtocol::CMD_NET_SetV4:        return "net set v4";
     case VopProtocol::CMD_NET_GetV6:        return "net get v6";
     case VopProtocol::CMD_NET_SetV6:        return "net set v6";
+    case VopProtocol::CMD_PRN_GetRegion:        return "printer get region";
     default:return "none";
     }
 }
@@ -866,6 +885,10 @@ int VopProtocol::cmd(int _cmd)
         err = vop_setv6(ipv6_info);
     }
         break;
+    case CMD_PRN_GetRegion:{
+    err = vop_getRegion(region);
+}
+    break;
     default:
         break;
     }

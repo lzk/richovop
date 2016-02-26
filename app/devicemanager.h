@@ -30,6 +30,7 @@ public:
 
     int get_deviceStatus();
 
+    void copy_update_defaultPara();
     void copy_set_defaultPara(copycmdset* p);
     void copy_set_para(copycmdset* p);
     copycmdset copy_get_para();
@@ -50,6 +51,7 @@ public:
     void net_setIpv4info(net_info_st* p);
     net_ipv6_st net_getIpv6info();
     void net_setIpv6info(net_ipv6_st* p);
+    cmdst_region printer_getRegion();
 
     void passwd_set(const char*);
 

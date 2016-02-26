@@ -10,7 +10,10 @@
 #include "app/devicemanager.h"
 #include "app/devicedata.h"
 
-extern bool paper_is_A4();
+//#include <QSettings>
+extern bool system_paper_is_A4();
+extern bool g_region_paper_is_A4;
+bool have_got_region_from_FW = false;
 
 //static const char* output_size_list[] =
 //{
@@ -178,7 +181,7 @@ void TabCopy::updateCopy()
 
     QStringList sl(stringlist_output_size);
     if(IsIDCardCopyMode(pCopyPara)){
-        if(paper_is_A4())
+        if(g_region_paper_is_A4)
             sl.removeFirst();//only A4
         else
             sl.removeLast();//only letter
@@ -307,7 +310,7 @@ void TabCopy::slots_copy_combo(int value)
         GetSizeScaling(pCopyPara->orgSize ,pCopyPara->paperSize ,pCopyPara->scale);
     }    else if(sd == ui->combo_outputSize){
         if(IsIDCardCopyMode(pCopyPara)){
-            if(paper_is_A4())
+            if(g_region_paper_is_A4)
                 pCopyPara->paperSize = 1;//only A4
             else
                 pCopyPara->paperSize = 0;//only letter
@@ -375,6 +378,45 @@ void TabCopy::slots_cmd_result(int cmd ,int err)
             copy_data->this_copy = true;
         }
         break;
+    case DeviceContrl::CMD_PRN_GetRegion:{
+        //set default region
+//        QSettings settings(QApplication::applicationDirPath() +"/settings.conf",QSettings::NativeFormat);
+        if(!err){
+            if(!have_got_region_from_FW){
+                have_got_region_from_FW = true;
+            }
+            _Q_LOG("get region from FW success");
+            cmdst_region region = device_manager->printer_getRegion();
+            g_region_paper_is_A4 = (1 != region);//North America
+            device_manager->copy_update_defaultPara();
+            updateCopy();
+//            settings.beginGroup("copy");
+//            settings.setValue("default paper size" ,g_region_paper_is_A4 ?1 :0);
+//            settings.endGroup();
+        }else{
+//            settings.beginGroup("copy");
+//            int setting_paper_size = settings.value("default paper size" ,2).toInt();
+//            settings.endGroup();
+//            if(2 == setting_paper_size){
+//                g_region_paper_is_A4 = system_paper_is_A4();
+//            }else{
+//                g_region_paper_is_A4 = setting_paper_size;
+//            }
+            _Q_LOG("get region from FW fail");
+            if(!have_got_region_from_FW){
+                _Q_LOG("get system local region");
+                g_region_paper_is_A4 = system_paper_is_A4();
+                device_manager->copy_update_defaultPara();
+                updateCopy();
+            }
+        }
+        static bool b_init = true;
+        if(b_init){
+            b_init = false;
+            on_btn_default_clicked();
+        }
+        break;
+    }
     default:
         break;
     }
@@ -474,7 +516,7 @@ void TabCopy::on_IDCardCopy_clicked()
         SetIDCardCopyMode(pCopyPara);
         pCopyPara->dpi = 1;//600 * 600
         pCopyPara->scale = 100;
-        if(paper_is_A4())
+        if(g_region_paper_is_A4)
             pCopyPara->paperSize = 1;//only A4
         else
             pCopyPara->paperSize = 0;//only letter

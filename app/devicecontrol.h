@@ -58,6 +58,7 @@ public:
         CMD_IPv4_Set,
         CMD_IPv6_Get,
         CMD_IPv6_Set,
+        CMD_PRN_GetRegion,
         CMD_STATUS_COMPLETE,
 
         CMD_MAX,

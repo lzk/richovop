@@ -352,7 +352,7 @@ void logout(const QString& msg)
 
 bool region_paper_is_A4()
 {
-    return true;
+//    return true;
     QString str("locale -k LC_PAPER  ");
     str += " 2>>";
     str += log_file;

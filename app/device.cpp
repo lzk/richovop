@@ -32,7 +32,7 @@ int Device::write_no_read(char* wrBuffer ,int wrSize)
         //porting from windows
         char buffer[2048];
         err = get_device_id(buffer ,sizeof(buffer));
-        if(1 != err){
+        if(ERR_ACK != err){
             char inBuffer[522];
             char outBuffer[12];
             memset(inBuffer ,0 ,sizeof(inBuffer));

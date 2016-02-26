@@ -167,6 +167,7 @@ typedef UINT8  cmdst_wifi_status;
 typedef UINT8  cmdst_tonerEnd;
 typedef UINT8  cmdst_PSave_time;
 typedef UINT8  cmdst_powerOff_time;
+typedef UINT8  cmdst_region;
 
 typedef struct net_info_st
 {
@@ -284,6 +285,7 @@ public:
         CMD_NET_SetV4,
         CMD_NET_GetV6,
         CMD_NET_SetV6,
+        CMD_PRN_GetRegion,
     };
 public:
     VopProtocol(DeviceManager* dm);
@@ -296,6 +298,7 @@ public:
     PRINTER_STATUS get_status();
     int get_deviceStatus();
 
+    void copy_update_defaultPara();
     void copy_set_defaultPara(copycmdset* p);
     void copy_set_para(copycmdset* p);
     copycmdset copy_get_para();
@@ -315,6 +318,7 @@ public:
     void net_setV4(net_info_st*);
     net_ipv6_st net_getV6();
     void net_setV6(net_ipv6_st*);
+    cmdst_region printer_getRegion();
 
     void passwd_set(const char*);
 
@@ -333,6 +337,7 @@ private:
     cmdst_powerOff_time* powerOffTime;
     net_info_st* ip_info;
     net_ipv6_st* ipv6_info;
+    cmdst_region* region;
 
     int vop_cmd(int cmd ,int sub_cmd, void* data ,int data_size);
 # if 0

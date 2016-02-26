@@ -10,6 +10,7 @@
 #include "usbdevice.h"
 #include "netdevice.h"
 #include "linux_api.h"
+#include <QTime>
 
 Device* DeviceContrl::device = NULL;
 QString DeviceContrl::current_devicename = QString();
@@ -260,6 +261,8 @@ void DeviceContrl::slots_cmd_plus(int cmd)
         _Q_LOG("err: usb device scanner locked");
     }
 
+    QTime time;
+    time.start();
     if(!err)
         err = DeviceContrl::openPrinter();
 
@@ -458,11 +461,17 @@ void DeviceContrl::slots_cmd_plus(int cmd)
                 set_passwd_confirmed(true);
             }
             break;
+        case CMD_PRN_GetRegion:{
+            _Q_LOG("exec control cmd: get region");
+            err = protocol->cmd(VopProtocol::CMD_PRN_GetRegion);
+            break;
+        }
         default:
             break;
         }
         DeviceContrl::closePrinter();
     }
+    C_LOG("elapsed time:%d" , time.elapsed());
     emit signals_progress(cmd ,80);
     set_cmdStatus(CMD_STATUS_COMPLETE);
     emit signals_cmd_result(cmd ,err);

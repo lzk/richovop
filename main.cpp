@@ -28,10 +28,11 @@ void quit(int)
         qApp->quit();
 }
 
-static bool g_region_paper_is_A4;
-bool paper_is_A4()
+bool g_region_paper_is_A4;
+static bool g_system_paper_is_A4;
+bool system_paper_is_A4()
 {
-    return g_region_paper_is_A4;
+    return g_system_paper_is_A4;
 }
 
 
@@ -71,7 +72,8 @@ int main(int argc, char *argv[])
     }
     init_log();
 
-    g_region_paper_is_A4 = region_paper_is_A4();
+    g_system_paper_is_A4 = region_paper_is_A4();
+    g_region_paper_is_A4 = g_system_paper_is_A4;
     C_LOG("region default paper size is A4:%d" ,g_region_paper_is_A4);
     QFile file(":/styles/default.qss");
     if(file.open(QFile::ReadOnly)){

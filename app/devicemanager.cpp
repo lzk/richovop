@@ -144,6 +144,11 @@ copycmdset DeviceManager::copy_get_para()
     return protocol->copy_get_para();
 }
 
+void DeviceManager::copy_update_defaultPara()
+{
+    protocol->copy_update_defaultPara();
+}
+
 void DeviceManager::copy_set_defaultPara(copycmdset* p)
 {
     protocol->copy_set_defaultPara(p);
@@ -232,6 +237,11 @@ net_ipv6_st DeviceManager::net_getIpv6info()
 void DeviceManager::net_setIpv6info(net_ipv6_st* p)
 {
     protocol->net_setV6(p);
+}
+
+cmdst_region DeviceManager::printer_getRegion()
+{
+    return protocol->printer_getRegion();
 }
 
 DeviceApp* DeviceManager::deviceApp()
