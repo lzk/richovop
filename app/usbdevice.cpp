@@ -13,6 +13,7 @@ static void (*hLLD_closePrinter)(void) = NULL;
 static int (*hLLD_write)(char *buffer, size_t bufsize) = NULL;
 static int (*hLLD_read)(char *buffer, size_t bufsize) = NULL;
 static int (*hLLD_get_device_id)(char *buffer, size_t bufsize) = NULL;
+static int (*hLLD_get_device_status)(int busno, int dev_addr) = NULL;
 
 UsbDevice::UsbDevice()
 {
@@ -24,6 +25,7 @@ UsbDevice::UsbDevice()
         hLLD_write  = (int (*)(char *, size_t ))dlsym(hLLD, "USBWrite");
         hLLD_read  = (int (*)(char *, size_t ))dlsym(hLLD, "USBRead");
         hLLD_get_device_id  = (int (*)(char *, size_t ))dlsym(hLLD, "get_device_id");
+        hLLD_get_device_status = (int (*)(int ,int))dlsym(hLLD ,"get_device_status");
     }else{
         _Q_LOG("can not open usb backend.");
         _Q_LOG(QString("dlerror:") + dlerror());
@@ -103,4 +105,24 @@ int UsbDevice::attach_driver()
 {
 
     return ERR_ACK;
+}
+
+#include "linux_api.h"
+#include <QSettings>
+bool UsbDevice::is_device_scanning()
+{
+    if(!scanner_locked())
+        return false;
+    if(!hLLD_get_device_status)
+        return true;
+
+    int bus_NO , device_address;
+    QSettings settings("/tmp/.alto_used",QSettings::NativeFormat);
+    bus_NO = settings.value("Bus_Number" ,0).toInt();
+    device_address = settings.value("Device_Address" ,0).toInt();
+    if(!bus_NO || !device_address)
+        return false;
+    if(hLLD_get_device_status(bus_NO ,device_address))
+        return true;
+    return false;
 }

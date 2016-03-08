@@ -782,11 +782,6 @@
               <string>IDS_MT_Thin</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>IDS_MT_Label</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item>

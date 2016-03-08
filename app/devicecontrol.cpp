@@ -256,7 +256,8 @@ void DeviceContrl::slots_cmd_plus(int cmd)
 
     _Q_LOG("");
     _Q_LOG("");
-    if(isUsbDevice() && scanner_locked()){
+//    if(isUsbDevice() && scanner_locked()){
+    if(isUsbDevice() && UsbDevice::is_device_scanning()){
         err = ERR_sane_scanning;
         _Q_LOG("err: usb device scanner locked");
     }
@@ -462,7 +463,11 @@ void DeviceContrl::slots_cmd_plus(int cmd)
             }
             break;
         case CMD_PRN_GetRegion:{
-            _Q_LOG("exec control cmd: get region");
+            _Q_LOG("exec control cmd: get region");            
+            err = protocol->cmd(VopProtocol::CMD_GetStatus);
+            if(err == ERR_communication
+                    || err == ERR_library)
+                break;
             err = protocol->cmd(VopProtocol::CMD_PRN_GetRegion);
             break;
         }

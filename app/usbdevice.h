@@ -18,6 +18,7 @@ public:
     virtual  int get_driver();
     virtual  int attach_driver();
 
+    static bool is_device_scanning();
 };
 
 #endif // USBDEVICE_H

@@ -290,6 +290,18 @@ alto_libusb_strerror (int errcode)
   return "Unknown libusb-1.0 error code";
 }
 
+/*O - 0: free, 1 : busy*/
+int get_device_status(int busno, int dev_addr)
+{
+    if(busno == libusb_get_bus_number(g_device) && dev_addr == libusb_get_device_address(g_device))
+    {
+//        printf ("get_device_status: Device is busy\n");
+        return 1;
+    }
+//    printf ("get_device_status: Device is free\n");
+    return 0;
+}
+
 int /* O - 0 on success, -1 on error */
 get_device_id(char *buffer, /* I - String buffer */
 size_t bufsize) /* I - Number of bytes in buffer */
