@@ -256,16 +256,22 @@ void DeviceContrl::slots_cmd_plus(int cmd)
 
     _Q_LOG("");
     _Q_LOG("");
+
+    QTime time;
+    time.start();
+
+    err = DeviceContrl::openPrinter();
+    if(err){
+        set_cmdStatus(CMD_STATUS_COMPLETE);
+        emit signals_cmd_result(cmd ,err);
+        return;
+    }
+
 //    if(isUsbDevice() && scanner_locked()){
     if(isUsbDevice() && UsbDevice::is_device_scanning()){
         err = ERR_sane_scanning;
         _Q_LOG("err: usb device scanner locked");
     }
-
-    QTime time;
-    time.start();
-    if(!err)
-        err = DeviceContrl::openPrinter();
 
     if(isUsbDevice() && !err){
         if(!get_printer_jobs(current_devicename)
@@ -274,7 +280,6 @@ void DeviceContrl::slots_cmd_plus(int cmd)
         }else{
             _Q_LOG("err: printer have jobs");
             err = ERR_printer_have_jobs;
-            DeviceContrl::closePrinter();
         }
     }
 
@@ -302,10 +307,10 @@ void DeviceContrl::slots_cmd_plus(int cmd)
             if(err){
                 break;
             }
-            err = cmd_wifi_status();
-            if(err){
-                break;
-            }
+//            err = cmd_wifi_status();
+//            if(err){
+//                break;
+//            }
             if(isNetDevice())
                 err = protocol->cmd(VopProtocol::CMD_WIFI_apply_noread);
             else
@@ -474,8 +479,8 @@ void DeviceContrl::slots_cmd_plus(int cmd)
         default:
             break;
         }
-        DeviceContrl::closePrinter();
     }
+    DeviceContrl::closePrinter();
     C_LOG("elapsed time:%d" , time.elapsed());
     emit signals_progress(cmd ,80);
     set_cmdStatus(CMD_STATUS_COMPLETE);
