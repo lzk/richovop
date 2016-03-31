@@ -1,8 +1,23 @@
 # USB devices (usbfs replacement)
-SUBSYSTEM=="usb",ATTR{idVendor}=="17ef" , ATTR{idProduct}=="562f", MODE="0666"
-SUBSYSTEM=="usb_device",ATTR{idVendor}=="17ef" , ATTR{idProduct}=="562f", MODE="0666"
 
-SUBSYSTEM=="usb",SYSFS{idVendor}=="17ef" , SYSFS{idProduct}=="562f", MODE="0666"
-SUBSYSTEM=="usb_device",SYSFS{idVendor}=="17ef" , SYSFS{idProduct}=="562f", MODE="0666"
+# Ricoh
 
+SUBSYSTEM=="usb",ATTR{idVendor}=="05ca" , ATTR{idProduct}=="0453", MODE="0666"
+SUBSYSTEM=="usb_device",ATTR{idVendor}=="05ca" , ATTR{idProduct}=="0453", MODE="0666"
+SUBSYSTEM=="usb",SYSFS{idVendor}=="05ca" , SYSFS{idProduct}=="0453", MODE="0666"
+SUBSYSTEM=="usb_device",SYSFS{idVendor}=="05ca" , SYSFS{idProduct}=="0453", MODE="0666"
 
+SUBSYSTEM=="usb",ATTR{idVendor}=="05ca" , ATTR{idProduct}=="0454", MODE="0666"
+SUBSYSTEM=="usb_device",ATTR{idVendor}=="05ca" , ATTR{idProduct}=="0454", MODE="0666"
+SUBSYSTEM=="usb",SYSFS{idVendor}=="05ca" , SYSFS{idProduct}=="0454", MODE="0666"
+SUBSYSTEM=="usb_device",SYSFS{idVendor}=="05ca" , SYSFS{idProduct}=="0454", MODE="0666"
+
+SUBSYSTEM=="usb",ATTR{idVendor}=="05ca" , ATTR{idProduct}=="0455", MODE="0666"
+SUBSYSTEM=="usb_device",ATTR{idVendor}=="05ca" , ATTR{idProduct}=="0455", MODE="0666"
+SUBSYSTEM=="usb",SYSFS{idVendor}=="05ca" , SYSFS{idProduct}=="0455", MODE="0666"
+SUBSYSTEM=="usb_device",SYSFS{idVendor}=="05ca" , SYSFS{idProduct}=="0455", MODE="0666"
+
+SUBSYSTEM=="usb",ATTR{idVendor}=="05ca" , ATTR{idProduct}=="0456", MODE="0666"
+SUBSYSTEM=="usb_device",ATTR{idVendor}=="05ca" , ATTR{idProduct}=="0456", MODE="0666"
+SUBSYSTEM=="usb",SYSFS{idVendor}=="05ca" , SYSFS{idProduct}=="0456", MODE="0666"
+SUBSYSTEM=="usb_device",SYSFS{idVendor}=="05ca" , SYSFS{idProduct}=="0456", MODE="0666"
