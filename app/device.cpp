@@ -119,21 +119,23 @@ int Device::getDeviceModel(const char* printer_info)
 {
     int device = Device_invalid;
     QString str(printer_info);
-    if(str.startsWith("RICOH SP 150SU v")){
+    if(str.startsWith("RICOH SP 150SU v")
+            || !str.compare("RICOH SP 150SU")){
         device = Device_3in1;
-    }else if(str.startsWith("RICOH SP 150SUw v")){
+    }else if(str.startsWith("RICOH SP 150SUw v")
+             ||!str.compare("RICOH SP 150SUw")){
         device = Device_3in1_wifi;
-    }else if(str.startsWith("RICOH SP 150 v")){
+    }else if(str.startsWith("RICOH SP 150 v")
+             ||!str.compare("RICOH SP 150")){
         device = Device_sfp;
-    }else if(str.startsWith("RICOH SP 150w v")){
+    }else if(str.startsWith("RICOH SP 150w v")
+             ||!str.compare("RICOH SP 150w")){
         device = Device_sfp_wifi;
-    }else  if(!str.compare("RICOH SP 150SU")){
-        device = Device_3in1;
-    }else if(!str.compare("RICOH SP 150SUw")){
+    }else if(str.startsWith("RICOH SP 151SUw v")
+             ||!str.compare("RICOH SP 151SUw")){
         device = Device_3in1_wifi;
-    }else if(!str.compare("RICOH SP 150")){
-        device = Device_sfp;
-    }else if(!str.compare("RICOH SP 150w")){
+    }else if(str.startsWith("RICOH SP 151w v")
+             ||!str.compare("RICOH SP 151w")){
         device = Device_sfp_wifi;
     }
 /*    else if(str.startsWith("Lenovo M7208W v")){

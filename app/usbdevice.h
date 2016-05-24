@@ -19,6 +19,7 @@ public:
     virtual  int attach_driver();
 
     static bool is_device_scanning();
+    static bool is_Airprint_scanning();
 };
 
 #endif // USBDEVICE_H

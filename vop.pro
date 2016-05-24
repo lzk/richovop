@@ -36,8 +36,6 @@ SOURCES += main.cpp \
 HEADERS  += mainwindow.h \
     mainwidget.h \
     app/vop_protocol.h \
-    lib/usb.h \
-    lib/NetDevice.h \
     app/deviceapp.h \
     copiessettingkeyboard.h \
     scalingsettingkeyboard.h \

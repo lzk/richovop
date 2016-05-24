@@ -126,3 +126,21 @@ bool UsbDevice::is_device_scanning()
         return true;
     return false;
 }
+
+bool UsbDevice::is_Airprint_scanning()
+{
+    if(!airprint_scanner_locked())
+        return false;
+    if(!hLLD_get_device_status)
+        return true;
+
+    int bus_NO , device_address;
+    QSettings settings("/tmp/.alto_airprint_used",QSettings::NativeFormat);
+    bus_NO = settings.value("Bus_Number" ,0).toInt();
+    device_address = settings.value("Device_Address" ,0).toInt();
+    if(!bus_NO || !device_address)
+        return false;
+    if(hLLD_get_device_status(bus_NO ,device_address))
+        return true;
+    return false;
+}

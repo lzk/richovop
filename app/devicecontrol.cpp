@@ -268,9 +268,12 @@ void DeviceContrl::slots_cmd_plus(int cmd)
     }
 
 //    if(isUsbDevice() && scanner_locked()){
-    if(isUsbDevice() && UsbDevice::is_device_scanning()){
-        err = ERR_sane_scanning;
-        _Q_LOG("err: usb device scanner locked");
+    if(isUsbDevice()){
+        if(UsbDevice::is_device_scanning()
+            || UsbDevice::is_Airprint_scanning()){
+            err = ERR_sane_scanning;
+            _Q_LOG("err: usb device scanner locked");
+        }
     }
 
     if(isUsbDevice() && !err){

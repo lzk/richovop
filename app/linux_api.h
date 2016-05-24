@@ -5,6 +5,7 @@
 
 bool device_no_space(const char* path);
 bool scanner_locked();
+bool airprint_scanner_locked();
 bool is_running(const QString& program_dir ,const QString& program_name);
 bool isRunning(const QString& serverName);
 QString get_device_model(const QString& devicename);

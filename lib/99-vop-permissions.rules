@@ -21,3 +21,13 @@ SUBSYSTEM=="usb",ATTR{idVendor}=="05ca" , ATTR{idProduct}=="0456", MODE="0666"
 SUBSYSTEM=="usb_device",ATTR{idVendor}=="05ca" , ATTR{idProduct}=="0456", MODE="0666"
 SUBSYSTEM=="usb",SYSFS{idVendor}=="05ca" , SYSFS{idProduct}=="0456", MODE="0666"
 SUBSYSTEM=="usb_device",SYSFS{idVendor}=="05ca" , SYSFS{idProduct}=="0456", MODE="0666"
+
+SUBSYSTEM=="usb",ATTR{idVendor}=="05ca" , ATTR{idProduct}=="045c", MODE="0666"
+SUBSYSTEM=="usb_device",ATTR{idVendor}=="05ca" , ATTR{idProduct}=="045c", MODE="0666"
+SUBSYSTEM=="usb",SYSFS{idVendor}=="05ca" , SYSFS{idProduct}=="045c", MODE="0666"
+SUBSYSTEM=="usb_device",SYSFS{idVendor}=="05ca" , SYSFS{idProduct}=="045c", MODE="0666"
+
+SUBSYSTEM=="usb",ATTR{idVendor}=="05ca" , ATTR{idProduct}=="045d", MODE="0666"
+SUBSYSTEM=="usb_device",ATTR{idVendor}=="05ca" , ATTR{idProduct}=="045d", MODE="0666"
+SUBSYSTEM=="usb",SYSFS{idVendor}=="05ca" , SYSFS{idProduct}=="045d", MODE="0666"
+SUBSYSTEM=="usb_device",SYSFS{idVendor}=="05ca" , SYSFS{idProduct}=="045d", MODE="0666"

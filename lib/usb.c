@@ -110,7 +110,7 @@ int fetch_interface_value(const char *str, char *if_str)
 
 int URI_convert(const char* uri, char* new_uri)
 {
-	char vid[8], pid[8], serial[256], if_str[8];
+        char vid[8], pid[8], serial[256], if_str[8];
 	char uri_con[1024];
 	int inf = 0;
 	if(uri == NULL || new_uri == NULL)
@@ -173,6 +173,11 @@ int URI_convert(const char* uri, char* new_uri)
 			strcat(uri_con, "150SUw");
 		else if((strlen(pid) == 3 && (!strcmp(pid, "455"))) || (strlen(pid) == 4 && (!strcmp(pid, "0455"))))
 			strcat(uri_con, "150w");
+                // for support  151SUw and 151w(Ricom AirPrint)
+                else if((strlen(pid) == 3 && (!strncasecmp(pid, "45c", 3))) || (strlen(pid) == 4 && (!strncasecmp(pid, "045c", 4))))
+                        strcat(uri_con, "151SUw");
+                else if((strlen(pid) == 3 && (!strncasecmp(pid, "45d", 3))) || (strlen(pid) == 4 && (!strncasecmp(pid, "045d", 4))))
+                        strcat(uri_con, "151w");
 		else
 		{
 #ifdef ALTO_DEBUG
@@ -876,6 +881,14 @@ int print_device(libusb_device *dev, int level, char *host, char *resource)
 			{
 				g_interface = 0;
 			}
+                        else if(strstr(resource, "SP 151SU") != NULL)
+                        {
+                                g_interface = 1;
+                        }
+                        else if(strstr(resource, "SP 151") != NULL)
+                        {
+                                g_interface = 0;
+                        }
 			else
 			{
 				g_interface = 1;
@@ -903,6 +916,14 @@ int print_device(libusb_device *dev, int level, char *host, char *resource)
                                 g_interface = 1;
                         }
                         else if(strstr(resource, "SP 150") != NULL)
+                        {
+                                g_interface = 0;
+                        }
+                        else if(strstr(resource, "SP 151SU") != NULL)
+                        {
+                                g_interface = 1;
+                        }
+                        else if(strstr(resource, "SP 151") != NULL)
                         {
                                 g_interface = 0;
                         }

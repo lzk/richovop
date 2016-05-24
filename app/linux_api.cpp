@@ -10,6 +10,7 @@
 static QString log_file;
 static QString tmp_file;
 const char* lock_scan_file = "/tmp/.alto_lock";
+const char* lock_airprint_file = "/tmp/.alto_airprint_lock";
 
 bool device_no_space(const char* path)
 {
@@ -20,6 +21,22 @@ bool device_no_space(const char* path)
     }
 //    C_LOG("device space:%d K" ,t_space_size);
     return t_space_size < MAX_SPACE;
+}
+
+bool airprint_scanner_locked()
+{
+    bool locked = false;
+    int altolock = open(lock_airprint_file ,O_WRONLY|O_CREAT ,0666);
+    fchmod(altolock ,0666);
+    if(altolock < 0){
+        locked = true;
+        _Q_LOG("can not open lock file");
+    }else{
+        int ret = flock(altolock ,LOCK_EX | LOCK_NB);
+        close(altolock);
+        locked = !!ret;
+    }
+    return locked;
 }
 
 bool scanner_locked()
