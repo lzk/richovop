@@ -36,7 +36,7 @@ bool system_paper_is_A4()
 }
 
 
-
+#include "ricohmessagebox.h"
 #include <sys/wait.h>
 int main(int argc, char *argv[])
 {
@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
 //    qputenv("LANGUAGE" ,QLocale::system().name().toLatin1());
     QApplication a(argc, argv);
     a.setWindowIcon(QIcon(":/printer.png"));
-//    a.setApplicationName(vop_name);
-//    a.setOrganizationName(vop_name);
+    a.setApplicationName(vop_name);
+    a.setOrganizationName(vop_name);
 
     QTranslator trans;
 //    if(!trans.load(QLocale(QLocale::system().uiLanguages().first()), "vop", ".", ":/translations"))
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
         _Q_LOG("");
         _Q_LOG("another launcher is running");
         _Q_LOG("");
-        MainWindow::messagebox_exec(a.translate("MainWindow" ,"IDS_ANOTHER_LAUNCHER_RUNNING"));
+        RicohMessageBox::app_messagebox_exec(a.translate("MainWindow" ,"IDS_ANOTHER_LAUNCHER_RUNNING"));
         return 0;
     }
     init_log();

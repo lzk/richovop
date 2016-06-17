@@ -31,7 +31,9 @@ SOURCES += main.cpp \
     app/netdevice.cpp \
     app/device.cpp \
     app/linux_api.cpp \
-    app/devicedata.cpp
+    app/devicedata.cpp \
+    logo_icon.cpp \
+    ricohmessagebox.cpp
 
 HEADERS  += mainwindow.h \
     mainwidget.h \
@@ -51,7 +53,9 @@ HEADERS  += mainwindow.h \
     app/netdevice.h \
     app/device.h \
     app/linux_api.h \
-    app/devicedata.h
+    app/devicedata.h \
+    logo_icon.h \
+    ricohmessagebox.h
 
 FORMS    += mainwindow.ui \
     mainwidget.ui \
@@ -60,7 +64,8 @@ FORMS    += mainwindow.ui \
     dialoglogin.ui \
     tabsetting.ui \
     tabcopy.ui \
-    tababout.ui
+    tababout.ui \
+    logo_icon.ui
 
 RESOURCES += \
     vop.qrc

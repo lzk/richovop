@@ -3,12 +3,16 @@
 #define VERSION_DEFINE 1
 #include "version.h"
 
+#include <QSettings>
+#include <QDateTime>
+#include <QDebug>
 TabAbout::TabAbout(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TabAbout)
 {
     ui->setupUi(this);
 
+    watched_poptime();
     ui->label->setText(
                 QString().sprintf("<html><head/><body>"
                                   "<p><span style=\" font-size:18pt;\">%s</span></p>"
@@ -24,33 +28,39 @@ TabAbout::~TabAbout()
     delete ui;
 }
 
-#include <QMouseEvent>
-bool TabAbout::eventFilter(QObject *obj, QEvent *event)
+void TabAbout::on_checkBox_toggled(bool checked)
 {
-    QEvent::Type type = event->type();
-    switch(type){
-    case QEvent::MouseButtonPress:
-        if (obj == ui->label){
-            QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-            if(Qt::LeftButton == mouseEvent->button()
-                    && mouseEvent->x() > 130 && mouseEvent->y() > 280
-                    && mouseEvent->x() < 180 && mouseEvent->y() < 330
-                    )        {
-                slots_about_update();
-            }
-//            return true;
-        }
-        break;
-    default:
-        break;
+    QSettings settings;
+//    QSettings settings(QApplication::applicationDirPath() +"/settings.conf",QSettings::NativeFormat);
+    if(checked){
+//        qDebug()<<"setting popup time"<<QTime::currentTime();
+        settings.setValue("app/popup time" ,QDateTime::currentMSecsSinceEpoch() + 2592000000);//(1000*60*60*24*30));//30day
+    }else{
+        settings.setValue("app/popup time" ,0);
     }
-    return QWidget::eventFilter(obj, event);
 }
 
-//#include <QDesktopServices>
-//#include<QUrl>
-void TabAbout::slots_about_update()
+void TabAbout::watched_poptime()
 {
-//    if(!QDesktopServices::openUrl(QUrl("http://www.lenovo.com"))){
-//    }
+    QSettings settings;
+//    QSettings settings(QApplication::applicationDirPath() +"/settings.conf",QSettings::NativeFormat);
+    qint64 currenttime = settings.value("app/popup time").toLongLong();
+    disconnect(ui->checkBox ,SIGNAL(toggled(bool)) ,this ,SLOT(on_checkBox_toggled(bool)));
+    if(currenttime == 0){
+        ui->checkBox->setChecked(false);
+    }else{
+        if(currenttime > QDateTime::currentMSecsSinceEpoch()){
+            ui->checkBox->setChecked(true);
+        }else{
+            ui->checkBox->setChecked(false);
+            on_checkBox_toggled(false);
+//            qDebug()<<"popup time coming!"<<QTime::currentTime();
+        }
+    }
+    connect(ui->checkBox ,SIGNAL(toggled(bool)) ,this ,SLOT(on_checkBox_toggled(bool)));
+}
+
+bool TabAbout::get_poptime_checked()
+{
+    return ui->checkBox->isChecked();
 }

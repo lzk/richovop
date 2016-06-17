@@ -133,10 +133,10 @@ int Device::getDeviceModel(const char* printer_info)
         device = Device_sfp_wifi;
     }else if(str.startsWith("RICOH SP 151SUw v")
              ||!str.compare("RICOH SP 151SUw")){
-        device = Device_3in1_wifi;
+        device = AirPrint_3in1_wifi;
     }else if(str.startsWith("RICOH SP 151w v")
              ||!str.compare("RICOH SP 151w")){
-        device = Device_sfp_wifi;
+        device = AirPrint_sfp_wifi;
     }
 /*    else if(str.startsWith("Lenovo M7208W v")){
         device = Device_3in1_wifi;

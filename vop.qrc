@@ -7,5 +7,9 @@
         <file>translations/qt_ru.qm</file>
         <file>translations/qt_zh_CN.qm</file>
         <file alias="printer.png">images/ALTO_icon_48.png</file>
+        <file alias="tonner_sales.png">images/supply1.png</file>
+        <file alias="portal_site.png">images/supply2.png</file>
+        <file alias="supply.png">images/supply.png</file>
+        <file alias="logo.gif">images/RICOH_logo_171x055.gif</file>
     </qresource>
 </RCC>

@@ -21,9 +21,6 @@ public:
     ~MainWindow();
 
     void refresh();
-    static QMessageBox::StandardButton messagebox_exec(const QString &text,
-                                                QMessageBox::StandardButtons buttons = QMessageBox::Ok,
-                                               QMessageBox::StandardButton defaultButton = QMessageBox::NoButton);
 
 protected:
     virtual void closeEvent(QCloseEvent *);

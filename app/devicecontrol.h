@@ -59,6 +59,7 @@ public:
         CMD_IPv6_Get,
         CMD_IPv6_Set,
         CMD_PRN_GetRegion,
+        CMD_Device_GetFirstStatus,
         CMD_STATUS_COMPLETE,
 
         CMD_MAX,

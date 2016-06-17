@@ -504,5 +504,15 @@
 		<target>Беспроводное соединение с принтером отключено. Нажмите кнопку питания и удерживайте ее в течение 1 секунды, чтобы включить беспроводную связь.</target>
 	</phrase>
 
+	<phrase>
+		<source>ResStr_Toner_Near_End</source>
+		<target>Тонер скоро закончится</target>
+	</phrase>
+
+	<phrase>
+		<source>ResStr_Close</source>
+		<target>Закрыть</target>
+	</phrase>
+
 </QPH>
 

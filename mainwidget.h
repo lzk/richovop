@@ -7,8 +7,8 @@
 
 #include <QWidget>
 #include <QTimer>
-#include <QMessageBox>
 #include "version.h"
+#include "ricohmessagebox.h"
 
 class QProgressDialog;
 class DeviceManager;
@@ -19,19 +19,6 @@ class QListWidget;
 namespace Ui {
 class MainWidget;
 }
-
-class MessageBox:public QMessageBox
-{
-public:
-    MessageBox(){
-        QWidget* label = findChild<QWidget*>("qt_msgbox_label");
-        if(label){
-//            label->setMinimumSize(400,300);
-            label->setMinimumWidth(400);
-        }
-    }
-};
-
 class MainWidget : public QWidget
 {
     Q_OBJECT
@@ -53,8 +40,10 @@ private:
     TabAbout* tab_about;
 //    QAction* action_refresh;
     QProgressDialog* progressDialog;
-    MessageBox msgBox;
-    MessageBox msgBox_info;
+    TonerMessageBox* msgBox_toner;
+    RicohMessageBox* msgBox_info;
+//    MessageBox msgBox;
+//    MessageBox msgBox_info;
     QTimer timer;
     int model;
     bool no_space;
@@ -67,15 +56,9 @@ private:
     void initialize();
 
 public:
-    QMessageBox::StandardButton messagebox_exec(const QString &text,
-                                                QMessageBox::StandardButtons buttons = QMessageBox::Ok,
-                                               QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
-                                                QString title = "<h3>" + QString(vop_name) + "</h3>");
-    void messagebox_show(const QString &text,
-                         QMessageBox::StandardButtons buttons = QMessageBox::NoButton,
-                        QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
-                         QString title = "<h3>" + QString(vop_name) + "</h3>");
-    void messagebox_hide(){if(msgBox_info.isVisible())msgBox_info.hide();}
+    void messagebox_exec(const QString &text);
+    void messagebox_show(const QString &text);
+    void messagebox_hide();
 
 signals:
    void signals_deviceChanged(const QString&);
@@ -91,6 +74,7 @@ private slots:
     void on_comboBox_deviceList_activated(int index);
 
     void on_tabWidget_currentChanged(int index);
+    void on_button_logo_clicked();
 };
 
 #endif // MAINWIDGET_H

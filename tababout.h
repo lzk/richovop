@@ -15,13 +15,14 @@ public:
     explicit TabAbout(QWidget *parent = 0);
     ~TabAbout();
 
-protected:
-    bool eventFilter(QObject *obj, QEvent *event);
+    void watched_poptime();
+    bool get_poptime_checked();
+
+private slots:
+    void on_checkBox_toggled(bool checked);
 
 private:
     Ui::TabAbout *ui;
-
-    void slots_about_update();
 };
 
 #endif // TABABOUT_H

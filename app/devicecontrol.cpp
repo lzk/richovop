@@ -112,6 +112,8 @@ void DeviceContrl::slots_deviceChanged(const QString& devicename)
                          || device_uri.startsWith("lpd://")
                          || device_uri.startsWith("ipp://")
                          || device_uri.startsWith("lpr://")
+                         || device_uri.startsWith("http://")
+                         || device_uri.startsWith("https://")
              //            || device_uri.startsWith("mdns://")
                  ){
             device = net_device;
@@ -290,6 +292,10 @@ void DeviceContrl::slots_cmd_plus(int cmd)
         switch(cmd){
         case CMD_DEVICE_status:
             _Q_LOG("exec control cmd: get device status");
+            err = protocol->cmd(VopProtocol::CMD_GetStatus);
+            break;
+        case CMD_Device_GetFirstStatus:
+            _Q_LOG("exec control cmd: get first device status");
             err = protocol->cmd(VopProtocol::CMD_GetStatus);
             break;
 

@@ -504,5 +504,15 @@
 		<target>打印机无线功能已关闭，按电源键保持1秒钟可开启。</target>
 	</phrase>
 
+	<phrase>
+		<source>ResStr_Toner_Near_End</source>
+		<target>墨粉将空</target>
+	</phrase>
+
+	<phrase>
+		<source>ResStr_Close</source>
+		<target>关闭</target>
+	</phrase>
+
 </QPH>
 

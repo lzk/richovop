@@ -14,6 +14,8 @@ public:
         Device_3in1_wifi = 2,
         Device_sfp = 3,
         Device_sfp_wifi = 4,
+        AirPrint_3in1_wifi,
+        AirPrint_sfp_wifi,
 
     };
     virtual void init(char*) = 0;

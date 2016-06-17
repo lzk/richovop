@@ -24,9 +24,14 @@ extern QMainWindow* gMainWindow;
 #include "tabsetting.h"
 #include "tababout.h"
 
+#include "logo_icon.h"
+#include "ricohmessagebox.h"
+
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainWidget),
+    msgBox_toner(NULL),
+    msgBox_info(NULL),
     model(Device::Device_3in1_wifi),
     no_space(false),
     donot_cmd_times(0)
@@ -43,6 +48,8 @@ MainWidget::MainWidget(QWidget *parent) :
 
 MainWidget::~MainWidget()
 {
+    if(msgBox_toner)    delete msgBox_toner;
+    if(msgBox_info)    delete msgBox_info;
     delete ui;
     delete device_manager;
 }
@@ -55,6 +62,13 @@ void MainWidget::createActions()
 
 void MainWidget::initializeUi()
 {
+//    Logo_icon widget;
+//    QPixmap pixmap(widget.size());
+//    widget.render(&pixmap);
+////    QPixmap pixmap = widget.grab();
+//    ui->button_logo->setIcon(QIcon(pixmap));
+//    ui->button_logo->setIconSize(QSize(80 ,20));
+
 //    ui->comboBox_deviceList->setView(new QListView);
 //    ui->comboBox_deviceList->view()->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
@@ -104,8 +118,10 @@ void MainWidget::initialize()
     progressDialog->setModal(true);
 //    progressDialog->setWindowModality(Qt::WindowModal);
 
-    msgBox.setWindowTitle(" ");
-    msgBox_info.setWindowTitle(" ");
+//    msgBox.setWindowTitle(" ");
+//    msgBox_info.setWindowTitle(" ");
+    msgBox_toner = new TonerMessageBox;
+    msgBox_info = new RicohMessageBox;
 }
 
 bool MainWidget::eventFilter(QObject *obj, QEvent *event)
@@ -139,6 +155,7 @@ void MainWidget::updateUi()
 //            ui->tabWidget->addTab(tab_setting ,tr("IDS_Tab_Setting"));
         break;
     case Device::Device_3in1_wifi:
+    case Device::AirPrint_3in1_wifi:
         listWidget->item(0)->setHidden(false);
 #ifdef FUTURE_SUPPORT
         listWidget->item(4)->setHidden(false);
@@ -154,6 +171,7 @@ void MainWidget::updateUi()
 //#endif
         break;
     case Device::Device_sfp_wifi:
+    case Device::AirPrint_sfp_wifi:
         listWidget->item(0)->setHidden(false);
 #ifdef FUTURE_SUPPORT
         listWidget->item(4)->setHidden(false);
@@ -217,12 +235,14 @@ void MainWidget::slots_progressBar(int cmd ,int value)
         //do not show progress bar
         case DeviceContrl::CMD_DEVICE_status:
         case DeviceContrl::CMD_PRN_GetRegion:
+        case DeviceContrl::CMD_Device_GetFirstStatus:
         default:
             break;
         }
     }else{
         if(cmd != DeviceContrl::CMD_DEVICE_status
                 && cmd != DeviceContrl::CMD_PRN_GetRegion
+                && cmd != DeviceContrl::CMD_Device_GetFirstStatus
                 ){
             progressDialog->setValue(value);
         }
@@ -247,12 +267,19 @@ void MainWidget::slots_timeout()
             if(donot_cmd_times){
                donot_cmd_times --;
             }else{
-                if(model == Device::Device_3in1_wifi || model == Device::Device_3in1)
+                switch(model){
+                case Device::Device_3in1_wifi:
+                case Device::Device_3in1:
+                case Device::AirPrint_3in1_wifi:
                     device_manager->emit_cmd_plus(DeviceContrl::CMD_DEVICE_status);
+                default:
+                    break;
+                }
             }
         }
     }
 
+    tab_about->watched_poptime();
     count ++;
     if(count >= 300)
         count = 0;
@@ -340,7 +367,23 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
             donot_cmd_times = 2;
         break;
     case DeviceContrl::CMD_PRN_GetRegion:
-        setEnabled(true);
+//        setEnabled(true);
+        ui->widget_devicelist->setEnabled(true);
+        ui->tabWidget->setEnabled(true);
+        break;
+    case DeviceContrl::CMD_Device_GetFirstStatus:
+        switch(err){
+        case STATUS_TonerNearEnd:
+            msgBox_toner->messagebox_show(tr("ResStr_Toner_Near_End"));
+            break;
+        case STATUS_TonerEnd:
+            msgBox_toner->messagebox_show(tr("ResStr_Toner_End"));
+            break;
+        default:
+//            msgBox_toner->messagebox_show(tr("ResStr_Toner_Near_End"));
+            msgBox_toner->close();
+            break;
+        }
         break;
     default:
         break;
@@ -379,67 +422,29 @@ void MainWidget::on_comboBox_deviceList_activated(int index)
 //    if(!have_got_region_from_FW){
     if(-1 != index){
         device_manager->emit_cmd_plus(DeviceContrl::CMD_PRN_GetRegion);
-        setEnabled(false);
+//        setEnabled(false);
+        ui->widget_devicelist->setEnabled(false);
+        ui->tabWidget->setEnabled(false);
     }
+    msgBox_toner->close();
+    if(!tab_about->get_poptime_checked())
+        device_manager->emit_cmd_plus(DeviceContrl::CMD_Device_GetFirstStatus);
 }
 
-QMessageBox::StandardButton MainWidget::messagebox_exec(const QString &text,
-          QMessageBox::StandardButtons buttons ,
-         QMessageBox::StandardButton defaultButton,
-         QString title )
+void MainWidget::messagebox_exec(const QString &text)
 {
-    MessageBox* mb;
-    mb = &msgBox;
-//    mb->setParent(this);
-    if(mb->isVisible()){
-        mb->hide();
-    }
-    mb->setText(title);
-    mb->setIconPixmap(QPixmap(":/printer.png"));
-    mb->setInformativeText(text);
-    mb->setStandardButtons(buttons);
-    mb->setDefaultButton(defaultButton);
-    mb->setWindowFlags(Qt::FramelessWindowHint);
-#if 1
-    mb->show();//show first before get real size
-//    QPoint widget_pos = mapToGlobal(pos());
-//    mb->move(widget_pos.x() + (width() - mb->width())/2,
-//         widget_pos.y() + (height() - mb->height())/2 - 50);
-    mb->move((QApplication::desktop()->width() - mb->width())/2,
-          (QApplication::desktop()->height() - mb->height())/2);
-#endif
-    return (QMessageBox::StandardButton)mb->exec();
+    RicohMessageBox::messagebox_exec(text);
 }
 
-void MainWidget::messagebox_show(const QString &text,
-          QMessageBox::StandardButtons buttons ,
-         QMessageBox::StandardButton defaultButton,
-         QString title )
+void MainWidget::messagebox_show(const QString &text)
 {
-    MessageBox* mb;
-    mb = &msgBox_info;
-    if(!text.compare(mb->informativeText()) && mb->isVisible()){
-//        mb->hide();
-        return;
-    }
-//    if(!mb->isVisible()){
-        mb->setText(title);
-        mb->setIconPixmap(QPixmap(":/printer.png"));
-        mb->setInformativeText(text);
-        mb->setStandardButtons(buttons);
-        mb->setDefaultButton(defaultButton);
-        mb->setWindowFlags(Qt::FramelessWindowHint);
-        mb->setModal(false);
-        mb->adjustSize();
-        mb->show();//show first before get real size
-#if 1
-//        QPoint widget_pos = mapToGlobal(pos());
-//        mb->move(widget_pos.x() + (width() - mb->width())/2,
-//             widget_pos.y() + (height() - mb->height())/2 - 50);
-        mb->move((QApplication::desktop()->width() - mb->width())/2,
-              (QApplication::desktop()->height() - mb->height())/2);
-#endif
-//    }
+    msgBox_info->messagebox_show(text);
+}
+
+void MainWidget::messagebox_hide()
+{
+    if(msgBox_info->isVisible())
+        msgBox_info->hide();
 }
 
 void MainWidget::on_tabWidget_currentChanged(int)
@@ -456,3 +461,11 @@ void MainWidget::on_tabWidget_currentChanged(int)
         device_manager->emit_cmd_plus(DeviceContrl::CMD_DEVICE_status);
     }
 }
+#include <QDesktopServices>
+#include<QUrl>
+void MainWidget::on_button_logo_clicked()
+{
+    if(!QDesktopServices::openUrl(QUrl("http://www.ricoh.com/printers/sp150/support/gateway/"))){
+    }
+}
+

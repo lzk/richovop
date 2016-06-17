@@ -48,12 +48,13 @@ void MainWindow::slots_exit()
 {
     qApp->quit();
 }
-
+#include "ricohmessagebox.h"
 #include <QCloseEvent>
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    int ret = messagebox_exec(tr("IDS_EXIT_CONFIRM")+"                                    ",QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
-//    int ret = mainWidget->messagebox_exec(tr("IDS_Menu_Exit")+"?" ,QMessageBox::Ok | QMessageBox::Cancel ,QMessageBox::Ok);
+    int ret = RicohMessageBox::app_messagebox_exec(tr("IDS_EXIT_CONFIRM")+"                                    "
+                                                   ,QMessageBox::Ok | QMessageBox::Cancel
+                                                   ,QMessageBox::Ok);
     switch (ret) {
     case QMessageBox::Ok:
         event->accept();
@@ -84,43 +85,4 @@ void MainWindow::slots_desktopResized(int )
     move((screenrect.width() - width())/2,
          (screenrect.size().height() - height())/2);
     update();
-}
-
-#include <QAbstractButton>
-QMessageBox::StandardButton MainWindow::messagebox_exec(const QString &text,
-                                                QMessageBox::StandardButtons buttons,
-                                               QMessageBox::StandardButton defaultButton)
-{
-    QMessageBox msgbox;
-    QMessageBox* mb = & msgbox;
-    mb->setWindowIcon(QIcon(":/printer.png"));
-    mb->setWindowTitle(vop_name);
-    mb->setText(text);
-    mb->setIconPixmap(QPixmap(":/printer.png"));
-
-//    mb->setText(title);
-//    mb->setInformativeText(text);
-
-    mb->setStandardButtons(buttons);
-    mb->setDefaultButton(defaultButton);
-    QAbstractButton* ab = mb->button(QMessageBox::Cancel);
-    if(ab){
-        ab->setText(tr("IDS_Cancel"));
-    }
-    ab = mb->button(QMessageBox::Ok);
-    if(ab){
-        ab->setText(tr("IDS_OK"));
-    }
-//    mb->setWindowFlags(Qt::FramelessWindowHint);
-#if 1
-    mb->show();//show first before get real size
-//    QPoint widget_pos = mapToGlobal(pos());
-//    mb->move(widget_pos.x() + (width() - mb->width())/2,
-//         widget_pos.y() + (height() - mb->height())/2 - 50);
-    mb->move((QApplication::desktop()->width() - mb->width())/2,
-          (QApplication::desktop()->height() - mb->height())/2);
-//    mb->raise();
-//    mb->activateWindow();
-#endif
-    return (QMessageBox::StandardButton)mb->exec();
 }

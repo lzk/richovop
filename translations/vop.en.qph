@@ -504,5 +504,15 @@ Try again after freeing hard disk space.</target>
 		<target>Wireless feature of the printer is disabled, press and hold power key for 1 second to enable Wireless.</target>
 	</phrase>
 
+	<phrase>
+		<source>ResStr_Toner_Near_End</source>
+		<target>Toner Near End</target>
+	</phrase>
+
+	<phrase>
+		<source>ResStr_Close</source>
+		<target>Close</target>
+	</phrase>
+
 </QPH>
 
