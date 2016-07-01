@@ -75,6 +75,8 @@ private slots:
 
     void on_tabWidget_currentChanged(int index);
     void on_button_logo_clicked();
+
+    void msgBox_toner_button_pressed();
 };
 
 #endif // MAINWIDGET_H

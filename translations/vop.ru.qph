@@ -505,6 +505,11 @@
 	</phrase>
 
 	<phrase>
+		<source>ResStr_Toner_End_2</source>
+		<target>Нет тонера</target>
+	</phrase>
+
+	<phrase>
 		<source>ResStr_Toner_Near_End</source>
 		<target>Тонер скоро закончится</target>
 	</phrase>
@@ -512,6 +517,16 @@
 	<phrase>
 		<source>ResStr_Close</source>
 		<target>Закрыть</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SupplyOrder</source>
+		<target>Заказать картридж</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_DoNotShowThePopUpFor30Days</source>
+		<target>Не показывать предупреждение в течение 30 дней</target>
 	</phrase>
 
 </QPH>

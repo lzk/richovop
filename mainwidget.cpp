@@ -27,6 +27,9 @@ extern QMainWindow* gMainWindow;
 #include "logo_icon.h"
 #include "ricohmessagebox.h"
 
+#include <QSettings>
+#include <QDate>
+#include <QDebug>
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainWidget),
@@ -121,6 +124,8 @@ void MainWidget::initialize()
 //    msgBox.setWindowTitle(" ");
 //    msgBox_info.setWindowTitle(" ");
     msgBox_toner = new TonerMessageBox;
+    connect(msgBox_toner ,SIGNAL(buttonClicked(QAbstractButton*))
+            ,this ,SLOT(msgBox_toner_button_pressed()));
     msgBox_info = new RicohMessageBox;
 }
 
@@ -372,6 +377,7 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
         ui->tabWidget->setEnabled(true);
         break;
     case DeviceContrl::CMD_Device_GetFirstStatus:
+//        qDebug()<<"CMD_Device_GetFirstStatus:"<<err;
         switch(err){
         case STATUS_TonerNearEnd:
             msgBox_toner->messagebox_show(tr("ResStr_Toner_Near_End"));
@@ -426,9 +432,15 @@ void MainWidget::on_comboBox_deviceList_activated(int index)
         ui->widget_devicelist->setEnabled(false);
         ui->tabWidget->setEnabled(false);
     }
+
     msgBox_toner->close();
-    if(!tab_about->get_poptime_checked())
-        device_manager->emit_cmd_plus(DeviceContrl::CMD_Device_GetFirstStatus);
+    if(!tab_about->get_poptime_checked()){
+        QSettings settings;
+        QDate date = settings.value("app/message box shown date").toDate();
+        if(date != QDate::currentDate()){
+            device_manager->emit_cmd_plus(DeviceContrl::CMD_Device_GetFirstStatus);
+        }
+    }
 }
 
 void MainWidget::messagebox_exec(const QString &text)
@@ -467,5 +479,12 @@ void MainWidget::on_button_logo_clicked()
 {
     if(!QDesktopServices::openUrl(QUrl("http://www.ricoh.com/printers/sp150/support/gateway/"))){
     }
+}
+
+void MainWidget::msgBox_toner_button_pressed()
+{
+//    qDebug()<<"button click";
+    QSettings settings;
+    settings.setValue("app/message box shown date" ,QDate::currentDate());
 }
 

@@ -211,9 +211,9 @@ Try again after freeing hard disk space.</translation>
 <context>
     <name>TabAbout</name>
     <message>
-        <location filename="../tababout.ui" line="43"/>
-        <source>Do not show the Pop Up for 30 days</source>
-        <translation type="unfinished"></translation>
+        <location filename="../tababout.ui" line="46"/>
+        <source>IDS_DoNotShowThePopUpFor30Days</source>
+        <translation>Do not show the Pop Up for 30 days</translation>
     </message>
 </context>
 <context>
@@ -668,8 +668,8 @@ Copy</translation>
     <name>TonerMessageBox</name>
     <message>
         <location filename="../ricohmessagebox.cpp" line="122"/>
-        <source>Supply Order</source>
-        <translation type="unfinished"></translation>
+        <source>IDS_SupplyOrder</source>
+        <translation>Supply Order</translation>
     </message>
     <message>
         <location filename="../ricohmessagebox.cpp" line="127"/>

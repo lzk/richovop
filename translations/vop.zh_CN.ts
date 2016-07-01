@@ -211,9 +211,9 @@
 <context>
     <name>TabAbout</name>
     <message>
-        <location filename="../tababout.ui" line="43"/>
-        <source>Do not show the Pop Up for 30 days</source>
-        <translation type="unfinished"></translation>
+        <location filename="../tababout.ui" line="46"/>
+        <source>IDS_DoNotShowThePopUpFor30Days</source>
+        <translation>30天不显示碳粉用尽警告</translation>
     </message>
 </context>
 <context>
@@ -668,8 +668,8 @@
     <name>TonerMessageBox</name>
     <message>
         <location filename="../ricohmessagebox.cpp" line="122"/>
-        <source>Supply Order</source>
-        <translation type="unfinished"></translation>
+        <source>IDS_SupplyOrder</source>
+        <translation>订购耗材</translation>
     </message>
     <message>
         <location filename="../ricohmessagebox.cpp" line="127"/>

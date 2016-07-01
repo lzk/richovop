@@ -119,7 +119,7 @@ TonerMessageBox::TonerMessageBox(QWidget *parent) :
     setStandardButtons(QMessageBox::Help| QMessageBox::Close);
     QAbstractButton* ab = button(QMessageBox::Help);
     if(ab){
-        ab->setText(tr("Supply Order"));
+        ab->setText(tr("IDS_SupplyOrder"));
         connect(ab ,SIGNAL(clicked()) ,this ,SLOT(button_pressed()));
     }
     ab = button(QMessageBox::Close);

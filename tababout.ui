@@ -43,7 +43,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>Do not show the Pop Up for 30 days</string>
+         <string>IDS_DoNotShowThePopUpFor30Days</string>
         </property>
        </widget>
       </item>

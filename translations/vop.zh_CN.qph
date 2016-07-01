@@ -505,6 +505,11 @@
 	</phrase>
 
 	<phrase>
+		<source>ResStr_Toner_End_2</source>
+		<target>墨粉空</target>
+	</phrase>
+
+	<phrase>
 		<source>ResStr_Toner_Near_End</source>
 		<target>墨粉将空</target>
 	</phrase>
@@ -512,6 +517,16 @@
 	<phrase>
 		<source>ResStr_Close</source>
 		<target>关闭</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SupplyOrder</source>
+		<target>订购耗材</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_DoNotShowThePopUpFor30Days</source>
+		<target>30天不显示碳粉用尽警告</target>
 	</phrase>
 
 </QPH>

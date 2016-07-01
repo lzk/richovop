@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>MainWidget</class>
  <widget class="QWidget" name="MainWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>601</width>
+    <height>125</height>
+   </rect>
+  </property>
   <property name="styleSheet">
    <string notr="true">
 #widget_main
@@ -142,13 +150,6 @@ top:-0.5em;
             <width>80</width>
             <height>20</height>
            </size>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label">
-          <property name="pixmap">
-           <pixmap resource="vop.qrc">:/logo.gif</pixmap>
           </property>
          </widget>
         </item>

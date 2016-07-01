@@ -505,6 +505,11 @@ Try again after freeing hard disk space.</target>
 	</phrase>
 
 	<phrase>
+		<source>ResStr_Toner_End_2</source>
+		<target>Toner End</target>
+	</phrase>
+
+	<phrase>
 		<source>ResStr_Toner_Near_End</source>
 		<target>Toner Near End</target>
 	</phrase>
@@ -512,6 +517,16 @@ Try again after freeing hard disk space.</target>
 	<phrase>
 		<source>ResStr_Close</source>
 		<target>Close</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_SupplyOrder</source>
+		<target>Supply Order</target>
+	</phrase>
+
+	<phrase>
+		<source>IDS_DoNotShowThePopUpFor30Days</source>
+		<target>Do not show the Pop Up for 30 days</target>
 	</phrase>
 
 </QPH>
