@@ -901,12 +901,22 @@ int print_device(libusb_device *dev, int level, char *host, char *resource)
 		}
 
 	} else {
-
+            //edit by jacky for bug 62533
+            char str_serial[256];
+            memset(str_serial ,0 ,256);
+            char* str_serial_p = strstr(resource ,"serial=");
+            if(str_serial_p){
+                str_serial_p += strlen("serial=");
+                strcpy(str_serial ,str_serial_p);
+                str_serial_p = strchr(str_serial ,'&');
+                if(str_serial_p)
+                    *str_serial_p = 0;
+            }
 		if ((strcmp(devhost, host) == 0 && strstr(resource, devProduct) != NULL
-				&& strstr(resource, devserialNumber) != NULL)
+                                && !strcmp(str_serial, devserialNumber))
 				|| (strcasecmp(devhost, devVID) == 0
 						&& strcasecmp(devProduct, devPID) == 0
-						&& strstr(resource, devserialNumber) != NULL)) {
+                                                && !strcmp(str_serial, devserialNumber))) {
 			//libusb_set_debug (usb_ctx, 3); 
 			g_dev_h = udev;
 			g_device = dev;

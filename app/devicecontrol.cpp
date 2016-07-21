@@ -477,11 +477,10 @@ void DeviceContrl::slots_cmd_plus(int cmd)
             }
             break;
         case CMD_PRN_GetRegion:{
-            _Q_LOG("exec control cmd: get region");            
-            err = protocol->cmd(VopProtocol::CMD_GetStatus);
-            if(err == ERR_communication
-                    || err == ERR_library)
+            _Q_LOG("exec control cmd: get region");
+            if(!cmd_status_validate(err)){
                 break;
+            }
             err = protocol->cmd(VopProtocol::CMD_PRN_GetRegion);
             break;
         }

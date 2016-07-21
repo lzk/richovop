@@ -299,7 +299,10 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
     switch(err){
     case ERR_printer_have_jobs:
     case ERR_sane_scanning:
-        if(DeviceContrl::CMD_DEVICE_status != cmd){
+        if(cmd != DeviceContrl::CMD_DEVICE_status
+                && cmd != DeviceContrl::CMD_PRN_GetRegion
+                && cmd != DeviceContrl::CMD_Device_GetFirstStatus
+                ){
             messagebox_exec(tr("IDS_MSG_MachineBusy"));
         }
         break;
@@ -335,6 +338,7 @@ void MainWidget::slots_cmd_result(int cmd ,int err)
         //do not show err msg
         case DeviceContrl::CMD_DEVICE_status:
         case DeviceContrl::CMD_PRN_GetRegion:
+        case DeviceContrl::CMD_Device_GetFirstStatus:
         default:
             break;
         }
